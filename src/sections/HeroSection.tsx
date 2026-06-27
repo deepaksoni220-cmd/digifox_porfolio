@@ -42,9 +42,9 @@ export const HeroSection: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-center sm:items-end gap-6 sm:gap-0 px-5 sm:px-10 md:px-16 pb-7 sm:pb-8 md:pb-10 w-full relative z-30 text-center sm:text-left">
+        <div className="flex flex-col sm:flex-row justify-between items-center sm:items-end gap-6 sm:gap-0 px-5 sm:px-10 md:px-16 pb-7 sm:pb-8 md:pb-10 w-full max-w-7xl mx-auto relative z-30 text-center sm:text-left">
           <FadeIn delay={0.35} y={20} className="!w-auto">
-            <p className="text-[#D7E2EA] font-light uppercase tracking-wide leading-snug text-[clamp(0.85rem,1.4vw,1.5rem)] max-w-xs sm:max-w-[220px] md:max-w-[260px] mx-auto sm:mx-0">
+            <p className="ml-10 sm:ml-20 text-[#D7E2EA] font-light uppercase tracking-wide leading-snug text-[clamp(0.85rem,1.4vw,1.5rem)] max-w-xs sm:max-w-[220px] md:max-w-[260px] text-left sm:text-left">
               a 3d studio driven by crafting striking and unforgettable projects
             </p>
           </FadeIn>
@@ -63,9 +63,10 @@ export const HeroSection: React.FC = () => {
       >
         <Magnet padding={150} strength={3}>
           <img 
-            src="https://shrug-person-78902957.figma.site/_components/v2/d24c01ad3a56fc65e942a1f501eb73db42d7cf9a/Rectangle_40443.81459862.png" 
+            src="/banner.png" 
             alt="Digifox 5D 3D Portrait" 
             className="w-full h-auto object-contain pointer-events-none"
+            style={{ aspectRatio: '1450/1570' }}
           />
         </Magnet>
       </FadeIn>

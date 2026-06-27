@@ -84,7 +84,7 @@ const ServiceRow: React.FC<{ service: (typeof SERVICES)[0]; index: number }> = (
     <div ref={rowRef}>
       <DrawLine />
       <motion.div
-        className="relative w-full flex flex-col items-center text-center py-10 sm:py-12 md:py-14 cursor-default overflow-hidden"
+        className="group relative w-full flex flex-col items-center text-center py-6 sm:py-8 md:py-10 cursor-default overflow-hidden"
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
@@ -102,7 +102,7 @@ const ServiceRow: React.FC<{ service: (typeof SERVICES)[0]; index: number }> = (
         <motion.div variants={itemVariants}>
           <motion.span
             className="font-black leading-none select-none block"
-            style={{ fontSize: 'clamp(2rem, 5vw, 72px)' }}
+            style={{ fontSize: 'clamp(1.5rem, 4vw, 56px)' }}
             animate={{ color: hovered ? service.accent : 'rgba(12,12,12,0.18)' }}
             transition={{ duration: 0.3 }}
           >
@@ -114,7 +114,7 @@ const ServiceRow: React.FC<{ service: (typeof SERVICES)[0]; index: number }> = (
         <motion.div className="flex items-center justify-center gap-0 mt-2" variants={itemVariants}>
           <h3
             className="font-black uppercase tracking-tight leading-none"
-            style={{ fontSize: 'clamp(1.5rem, 3.2vw, 2.8rem)' }}
+            style={{ fontSize: 'clamp(1.25rem, 2.5vw, 2.2rem)' }}
           >
             {service.name}
           </h3>
@@ -131,11 +131,9 @@ const ServiceRow: React.FC<{ service: (typeof SERVICES)[0]; index: number }> = (
 
         {/* Description */}
         <motion.p
-          className="font-light leading-relaxed text-center text-[#0C0C0C]/55 mt-3 max-w-lg mx-auto"
+          className="font-light leading-relaxed text-center text-[#0C0C0C] opacity-70 group-hover:opacity-100 transition-opacity duration-300 mt-3 max-w-lg mx-auto"
           style={{ fontSize: 'clamp(0.85rem, 1.4vw, 1.1rem)' }}
           variants={itemVariants}
-          animate={hovered ? { opacity: 1 } : { opacity: 0.7 }}
-          transition={{ duration: 0.3 }}
         >
           {service.description}
         </motion.p>
@@ -162,7 +160,7 @@ const AnimatedHeading: React.FC = () => {
     <h2
       ref={ref}
       className="font-black uppercase text-center leading-none overflow-hidden w-full"
-      style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}
+      style={{ fontSize: 'clamp(2.5rem, 8vw, 100px)' }}
       aria-label="Services"
     >
       {letters.map((letter, i) => (
@@ -186,7 +184,7 @@ const ScrollStrip: React.FC = () => {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const width = useTransform(scrollYProgress, [0, 0.5], ['0%', '100%']);
   return (
-    <div ref={ref} className="w-full max-w-3xl mx-auto h-px bg-[#0c0c0c]/10 mt-4 mb-14 sm:mb-18 md:mb-24 overflow-hidden">
+    <div ref={ref} className="w-full max-w-3xl mx-auto h-px bg-[#0c0c0c]/10 mt-4 mb-10 sm:mb-12 md:mb-16 overflow-hidden">
       <motion.div className="h-full bg-[#0c0c0c]/30" style={{ width }} />
     </div>
   );
@@ -196,7 +194,7 @@ export const ServicesSection: React.FC = () => {
   return (
     <section
       id="services"
-      className="bg-[#FFFFFF] text-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] py-20 sm:py-24 md:py-32 relative z-10 overflow-hidden flex flex-col items-center"
+      className="bg-[#FFFFFF] text-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] py-16 sm:py-20 md:py-24 relative z-10 overflow-hidden flex flex-col items-center"
     >
       {/* ── Centered inner wrapper ── */}
       <div className="w-full max-w-3xl px-5 sm:px-10 md:px-16 flex flex-col items-center">

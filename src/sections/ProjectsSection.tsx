@@ -102,7 +102,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     >
       <motion.div
         style={{ scale, y, opacity, transformOrigin: "top center" }}
-        className="w-full max-w-6xl mx-auto rounded-[32px] md:rounded-[48px] border border-[#D7E2EA]/20 bg-[#111111] overflow-hidden"
+        className="w-full max-w-6xl mx-auto rounded-[32px] md:rounded-[48px] border border-[#D7E2EA]/10 bg-[#111111] overflow-hidden"
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
@@ -154,7 +154,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <div className="grid grid-cols-2 sm:flex sm:flex-col gap-3 sm:gap-4 w-full sm:w-[38%]">
             {/* Small image */}
             <div
-              className="overflow-hidden rounded-2xl sm:rounded-3xl w-full"
+              className="overflow-hidden rounded-2xl sm:rounded-3xl w-full bg-[#F0F2F5]"
               style={{ height: "clamp(100px, 14vw, 210px)" }}
             >
               <motion.img
@@ -166,7 +166,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </div>
             {/* Taller image */}
             <div
-              className="overflow-hidden rounded-2xl sm:rounded-3xl w-full"
+              className="overflow-hidden rounded-2xl sm:rounded-3xl w-full bg-[#F0F2F5]"
               style={{ height: "clamp(130px, 20vw, 310px)" }}
             >
               <motion.img
@@ -179,7 +179,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
 
           {/* Right column — 60% */}
-          <div className="overflow-hidden rounded-2xl sm:rounded-3xl w-full sm:w-[62%]" style={{ height: "clamp(220px, 36vw, 530px)" }}>
+          <div className="overflow-hidden rounded-2xl sm:rounded-3xl w-full sm:w-[62%] bg-[#F0F2F5]" style={{ height: "clamp(220px, 36vw, 530px)" }}>
             <motion.img
               style={{ scale: imgScale }}
               src={project.images.right}

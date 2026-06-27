@@ -37,9 +37,11 @@ export const AboutSection: React.FC = () => {
           />
         </div>
 
-        <FadeIn delay={0.2} y={30}>
-          <ContactButton />
-        </FadeIn>
+        <div className="w-full flex justify-end mt-2 sm:mt-4">
+          <FadeIn delay={0.2} y={30}>
+            <ContactButton />
+          </FadeIn>
+        </div>
       </div>
     </section>
   );

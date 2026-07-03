@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Preloader } from './components/Preloader';
 import { HeroSection } from './sections/HeroSection';
 import { MarqueeSection } from './sections/MarqueeSection';
 import { AboutSection } from './sections/AboutSection';
+import { PortfolioLinksSection } from './sections/PortfolioLinksSection';
 import { ServicesSection } from './sections/ServicesSection';
 import { ProjectsSection } from './sections/ProjectsSection';
 import { FooterSection } from './sections/FooterSection';
+import { AdminPage } from './pages/AdminPage';
 
-function App() {
+function Portfolio() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -36,10 +39,22 @@ function App() {
       <HeroSection />
       <MarqueeSection />
       <AboutSection />
+      <PortfolioLinksSection />
       <ServicesSection />
       <ProjectsSection />
       <FooterSection />
     </main>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Portfolio />} />
+        <Route path="/admin" element={<AdminPage />} />
+      </Routes>
+    </Router>
   );
 }
 

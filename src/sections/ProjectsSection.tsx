@@ -2,54 +2,11 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 import { LiveProjectButton } from '../components/LiveProjectButton';
 import { FadeIn } from '../components/FadeIn';
+import { Media } from '../components/Media';
 
-const PROJECTS = [
-  {
-    number: "01",
-    category: "Client Project",
-    name: "Nextlevel Studio",
-    year: "2024",
-    tags: ["3D Modeling", "Branding", "Web Design"],
-    images: {
-      leftTop:
-        "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055344_5eff02e0-87a5-41ce-b64f-eb08da8f33db.png&w=1280&q=85",
-      leftBottom:
-        "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055431_11d841fd-8b41-46a5-82e4-b04f2407a7d8.png&w=1280&q=85",
-      right:
-        "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055451_e317bf2d-28d4-48cc-86b0-6f72f25b6327.png&w=1280&q=85",
-    },
-  },
-  {
-    number: "02",
-    category: "Personal Work",
-    name: "Aura Brand Identity",
-    year: "2024",
-    tags: ["Branding", "Motion Design", "Identity"],
-    images: {
-      leftTop:
-        "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055654_911201c5-36d9-4bc6-bac7-331adfce159f.png&w=1280&q=85",
-      leftBottom:
-        "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055723_5ceda0b8-d9c2-4665-b2e3-83ba19ba76d1.png&w=1280&q=85",
-      right:
-        "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055753_adc5dcbd-a8e6-49c0-b43a-9b030d835cea.png&w=1280&q=85",
-    },
-  },
-  {
-    number: "03",
-    category: "Client Project",
-    name: "Solaris Digital",
-    year: "2025",
-    tags: ["Rendering", "3D Modeling", "Visual FX"],
-    images: {
-      leftTop:
-        "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055759_963cfb0b-4bd1-4b0f-9d0a-09bd6cf95b2f.png&w=1280&q=85",
-      leftBottom:
-        "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_060108_438f781a-9846-4dcc-89ab-c4e6cb830f5b.png&w=1280&q=85",
-      right:
-        "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055818_9d062121-ad7e-46b9-999a-1a6a692ef1ee.png&w=1280&q=85",
-    },
-  },
-];
+import siteData from '../data.json';
+
+const PROJECTS = siteData.projects;
 
 /* ─── Individual Project Card ─────────────────────────────────────────────── */
 interface ProjectCardProps {
@@ -152,40 +109,50 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 p-4 sm:p-6 md:p-8">
           {/* Left column — 40% */}
           <div className="grid grid-cols-2 sm:flex sm:flex-col gap-3 sm:gap-4 w-full sm:w-[38%]">
-            {/* Small image */}
             <div
               className="overflow-hidden rounded-2xl sm:rounded-3xl w-full bg-[#F0F2F5]"
               style={{ height: "clamp(100px, 14vw, 210px)" }}
             >
-              <motion.img
+              <motion.div
                 style={{ scale: imgScale }}
-                src={project.images.leftTop}
-                alt={`${project.name} image 1`}
-                className="w-full h-full object-cover"
-              />
+                className="w-full h-full"
+              >
+                <Media
+                  src={project.images.leftTop}
+                  alt={`${project.name} image 1`}
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
             </div>
-            {/* Taller image */}
             <div
               className="overflow-hidden rounded-2xl sm:rounded-3xl w-full bg-[#F0F2F5]"
               style={{ height: "clamp(130px, 20vw, 310px)" }}
             >
-              <motion.img
+              <motion.div
                 style={{ scale: imgScale }}
-                src={project.images.leftBottom}
-                alt={`${project.name} image 2`}
-                className="w-full h-full object-cover"
-              />
+                className="w-full h-full"
+              >
+                <Media
+                  src={project.images.leftBottom}
+                  alt={`${project.name} image 2`}
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
             </div>
           </div>
 
           {/* Right column — 60% */}
           <div className="overflow-hidden rounded-2xl sm:rounded-3xl w-full sm:w-[62%] bg-[#F0F2F5]" style={{ height: "clamp(220px, 36vw, 530px)" }}>
-            <motion.img
+            <motion.div
               style={{ scale: imgScale }}
-              src={project.images.right}
-              alt={`${project.name} main image`}
-              className="w-full h-full object-cover"
-            />
+              className="w-full h-full"
+            >
+              <Media
+                src={project.images.right}
+                alt={`${project.name} main image`}
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
           </div>
         </div>
 

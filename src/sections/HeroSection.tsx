@@ -2,6 +2,8 @@ import React from 'react';
 import { FadeIn } from '../components/FadeIn';
 import { ContactButton } from '../components/ContactButton';
 import { Magnet } from '../components/Magnet';
+import { Media } from '../components/Media';
+import siteData from '../data.json';
 
 export const HeroSection: React.FC = () => {
   return (
@@ -62,8 +64,8 @@ export const HeroSection: React.FC = () => {
         className="absolute left-1/2 -translate-x-1/2 z-10 w-[280px] sm:w-[360px] md:w-[440px] lg:w-[520px] top-1/2 -translate-y-1/2 sm:top-auto sm:translate-y-0 sm:bottom-0 pointer-events-auto"
       >
         <Magnet padding={150} strength={3}>
-          <img 
-            src="/banner.png" 
+          <Media 
+            src={siteData.hero.banner} 
             alt="Digifox 5D 3D Portrait" 
             className="w-full h-auto object-contain pointer-events-none"
             style={{ aspectRatio: '1450/1570' }}

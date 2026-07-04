@@ -36,9 +36,9 @@ export const HeroSection: React.FC = () => {
       >
         
         {/* Heading */}
-        <div className="overflow-hidden w-full px-6 sm:px-0">
+        <div className="w-full px-6 sm:px-0 relative z-30">
           <FadeIn delay={0.15} y={40} className="w-full">
-            <h1 className="hero-heading font-black uppercase tracking-tight leading-none whitespace-normal sm:whitespace-nowrap w-full text-center text-[8vw] sm:text-[5.5vw] md:text-[6vw] lg:text-[7vw]">
+            <h1 className="hero-heading font-black uppercase tracking-tight leading-none whitespace-normal sm:whitespace-nowrap w-full text-center text-5xl sm:text-[5.5vw] md:text-[6vw] lg:text-[7vw] mt-10 sm:mt-0">
               Hi, we are digifox 5d
             </h1>
           </FadeIn>
@@ -62,7 +62,7 @@ export const HeroSection: React.FC = () => {
       <FadeIn 
         delay={0.6} 
         y={30} 
-        className="absolute left-1/2 -translate-x-1/2 z-10 w-[280px] sm:w-[360px] md:w-[440px] lg:w-[520px] bottom-0 pointer-events-auto"
+        className="absolute left-1/2 -translate-x-1/2 z-10 w-[300px] sm:w-[360px] md:w-[440px] lg:w-[520px] top-[48%] -translate-y-1/2 sm:top-auto sm:translate-y-0 sm:bottom-0 pointer-events-auto"
       >
         <Magnet padding={150} strength={3}>
           <Media 

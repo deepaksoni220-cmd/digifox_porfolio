@@ -10,9 +10,10 @@ export const HeroSection: React.FC = () => {
     <section className="h-screen flex flex-col relative overflow-x-clip">
       {/* Navbar */}
       <FadeIn delay={0} y={-20} className="w-full flex justify-center z-50">
-        <nav className="fixed top-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-4 sm:gap-8 md:gap-12 px-6 py-3 sm:px-12 sm:py-4 md:px-16 md:py-5 bg-[#0C0C0C]/65 backdrop-blur-md border border-[#D7E2EA]/15 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] z-50 whitespace-nowrap">
+        <nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-2 min-[375px]:gap-3 sm:gap-8 md:gap-12 px-4 py-2.5 sm:px-12 sm:py-4 md:px-16 md:py-5 bg-[#0C0C0C]/65 backdrop-blur-md border border-[#D7E2EA]/15 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] z-50 whitespace-nowrap w-[90%] max-w-[fit-content] overflow-x-auto overflow-y-hidden no-scrollbar">
           {[
             { name: "About", href: "#about" },
+            { name: "Portfolio", href: "#portfolio" },
             { name: "Our Studio", href: "#services" },
             { name: "Projects", href: "#projects" },
             { name: "Contact", href: "#contact" }
@@ -20,7 +21,7 @@ export const HeroSection: React.FC = () => {
             <a 
               key={item.name} 
               href={item.href}
-              className="text-[#D7E2EA]/85 font-semibold uppercase tracking-widest text-[11px] sm:text-sm md:text-base hover:text-white transition-colors duration-200"
+              className="text-[#D7E2EA]/85 font-semibold uppercase tracking-widest text-[9px] min-[375px]:text-[10px] sm:text-sm md:text-base hover:text-white transition-colors duration-200"
             >
               {item.name}
             </a>
@@ -61,7 +62,7 @@ export const HeroSection: React.FC = () => {
       <FadeIn 
         delay={0.6} 
         y={30} 
-        className="absolute left-1/2 -translate-x-1/2 z-10 w-[280px] sm:w-[360px] md:w-[440px] lg:w-[520px] top-1/2 -translate-y-1/2 sm:top-auto sm:translate-y-0 sm:bottom-0 pointer-events-auto"
+        className="absolute left-1/2 -translate-x-1/2 z-10 w-[280px] sm:w-[360px] md:w-[440px] lg:w-[520px] bottom-0 pointer-events-auto"
       >
         <Magnet padding={150} strength={3}>
           <Media 

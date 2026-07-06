@@ -198,7 +198,7 @@ export const ProjectsSection: React.FC = () => {
             className="hero-heading font-black uppercase tracking-tight leading-none text-center"
             style={{ fontSize: "clamp(3rem, 12vw, 160px)" }}
           >
-            Projects
+            What we do
           </h2>
         </FadeIn>
 
@@ -207,7 +207,7 @@ export const ProjectsSection: React.FC = () => {
             className="text-center text-[#D7E2EA]/70 font-light mt-8 max-w-xl mx-auto"
             style={{ fontSize: "clamp(0.9rem, 1.5vw, 1.15rem)" }}
           >
-            A selection of 3D, branding and motion projects crafted with precision and intent.
+            A selection of 3D, branding, webdesign and marketing projects crafted with precision and increase convertions and sale for every business with a solid digital marketing.
           </p>
         </FadeIn>
       </div>

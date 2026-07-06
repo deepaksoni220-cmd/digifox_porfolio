@@ -6,7 +6,7 @@ import { Magnet } from '../components/Magnet';
 
 export const FooterSection: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  const email = "hello@digifox5d.com";
+  const email = "digifox5d@icloud.com";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(email);
@@ -28,11 +28,11 @@ export const FooterSection: React.FC = () => {
     {
       icon: (
         <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+          <path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z"/>
         </svg>
       ),
-      url: "https://twitter.com",
-      label: "Twitter"
+      url: "https://www.facebook.com/profile.php?id=61566704511590",
+      label: "Facebook"
     },
     {
       icon: (
@@ -42,7 +42,7 @@ export const FooterSection: React.FC = () => {
           <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
         </svg>
       ),
-      url: "https://instagram.com",
+      url: "https://www.instagram.com/digi_fox.world/",
       label: "Instagram"
     },
     {
@@ -53,17 +53,8 @@ export const FooterSection: React.FC = () => {
           <circle cx="4" cy="4" r="2"></circle>
         </svg>
       ),
-      url: "https://linkedin.com",
+      url: "https://www.linkedin.com/in/deepak-soni220/",
       label: "LinkedIn"
-    },
-    {
-      icon: (
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-        </svg>
-      ),
-      url: "https://github.com",
-      label: "GitHub"
     }
   ];
 

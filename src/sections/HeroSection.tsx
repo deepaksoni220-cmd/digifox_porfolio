@@ -15,7 +15,7 @@ export const HeroSection: React.FC = () => {
             { name: "About", href: "#about" },
             { name: "Portfolio", href: "#portfolio" },
             { name: "Our Studio", href: "#services" },
-            { name: "Projects", href: "#projects" },
+            { name: "What we do", href: "#projects" },
             { name: "Contact", href: "#contact" }
           ].map((item) => (
             <a 
@@ -39,7 +39,7 @@ export const HeroSection: React.FC = () => {
         <div className="w-full px-6 sm:px-0 relative z-30">
           <FadeIn delay={0.15} y={40} className="w-full">
             <h1 className="hero-heading font-black uppercase tracking-tight leading-none whitespace-normal sm:whitespace-nowrap w-full text-center text-5xl sm:text-[5.5vw] md:text-[6vw] lg:text-[7vw] mt-10 sm:mt-0">
-              Hi, we are digifox 5d
+              I'm Digifox
             </h1>
           </FadeIn>
         </div>

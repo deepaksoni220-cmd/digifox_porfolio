@@ -42,13 +42,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   // Card Y nudge upward as next cards stack on top
   const y = useTransform(sectionProgress, [scaleStart, scaleEnd], [0, -24]);
 
-  // Dim older cards slightly
-  const opacity = useTransform(
-    sectionProgress,
-    [scaleStart, scaleEnd],
-    [1, index < totalCards - 1 ? 0.55 : 1]
-  );
-
   const stickyTop = 80 + index * 28;
 
   return (
@@ -58,7 +51,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       style={{ position: "sticky", top: `${stickyTop}px` }}
     >
       <motion.div
-        style={{ scale, y, opacity, transformOrigin: "top center" }}
+        style={{ scale, y, transformOrigin: "top center" }}
         className="w-full max-w-6xl mx-auto rounded-[32px] md:rounded-[48px] border border-[#D7E2EA]/10 bg-[#111111] overflow-hidden"
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -110,7 +103,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           {/* Left column — 40% */}
           <div className="grid grid-cols-2 sm:flex sm:flex-col gap-3 sm:gap-4 w-full sm:w-[38%]">
             <div
-              className="overflow-hidden rounded-2xl sm:rounded-3xl w-full bg-[#F0F2F5]"
+              className="overflow-hidden rounded-2xl sm:rounded-3xl w-full bg-transparent"
               style={{ height: "clamp(100px, 14vw, 210px)" }}
             >
               <motion.div
@@ -125,7 +118,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               </motion.div>
             </div>
             <div
-              className="overflow-hidden rounded-2xl sm:rounded-3xl w-full bg-[#F0F2F5]"
+              className="overflow-hidden rounded-2xl sm:rounded-3xl w-full bg-transparent"
               style={{ height: "clamp(130px, 20vw, 310px)" }}
             >
               <motion.div
@@ -142,7 +135,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
 
           {/* Right column — 60% */}
-          <div className="overflow-hidden rounded-2xl sm:rounded-3xl w-full sm:w-[62%] bg-[#F0F2F5]" style={{ height: "clamp(220px, 36vw, 530px)" }}>
+          <div className="overflow-hidden rounded-2xl sm:rounded-3xl w-full sm:w-[62%] bg-transparent" style={{ height: "clamp(220px, 36vw, 530px)" }}>
             <motion.div
               style={{ scale: imgScale }}
               className="w-full h-full"

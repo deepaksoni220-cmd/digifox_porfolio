@@ -22,9 +22,9 @@
         "Wordpress website"
       ],
       "images": {
-        "leftTop": "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055344_5eff02e0-87a5-41ce-b64f-eb08da8f33db.png&w=1280&q=85",
-        "leftBottom": "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055431_11d841fd-8b41-46a5-82e4-b04f2407a7d8.png&w=1280&q=85",
-        "right": "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055451_e317bf2d-28d4-48cc-86b0-6f72f25b6327.png&w=1280&q=85"
+        "leftTop": "/image-1783410239129-219199306.png",
+        "leftBottom": "/image-1783410241951-476749916.png",
+        "right": "/image-1783410247197-709768053.png"
       }
     },
     {
@@ -38,9 +38,9 @@
         "Lead Generations"
       ],
       "images": {
-        "leftTop": "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055610_39a5dfbf-504f-402a-9e79-8ab3475753df.png&w=1280&q=85",
-        "leftBottom": "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055708_d106db0b-ddf7-418e-990c-b26a629b36ed.png&w=1280&q=85",
-        "right": "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055627_523d248b-30eb-485a-a309-c183a696c561.png&w=1280&q=85"
+        "leftTop": "/image-1783410254442-628879957.png",
+        "leftBottom": "/image-1783410257485-349952853.png",
+        "right": "/image-1783410259998-849902526.png"
       }
     },
     {
@@ -54,9 +54,9 @@
         "Ad Creatives"
       ],
       "images": {
-        "leftTop": "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055759_963cfb0b-4bd1-4b0f-9d0a-09bd6cf95b2f.png&w=1280&q=85",
-        "leftBottom": "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_060108_438f781a-9846-4dcc-89ab-c4e6cb830f5b.png&w=1280&q=85",
-        "right": "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260412_055818_9d062121-ad7e-46b9-999a-1a6a692ef1ee.png&w=1280&q=85"
+        "leftTop": "/image-1783410267224-784110222.png",
+        "leftBottom": "/image-1783410269704-748233280.png",
+        "right": "/image-1783410290845-641261162.png"
       }
     }
   ],

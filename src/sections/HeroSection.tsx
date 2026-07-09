@@ -3,11 +3,17 @@ import { FadeIn } from '../components/FadeIn';
 import { ContactButton } from '../components/ContactButton';
 import { Magnet } from '../components/Magnet';
 import { Media } from '../components/Media';
+import SoftAurora from '../components/SoftAurora';
 import siteData from '../data.json';
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="h-screen flex flex-col relative overflow-x-clip">
+    <section className="h-screen flex flex-col relative overflow-x-clip bg-[#0C0C0C]">
+      {/* Background Aurora */}
+      <div className="absolute inset-0 z-0 opacity-80 pointer-events-none">
+        <SoftAurora />
+      </div>
+
       {/* Navbar */}
       <FadeIn delay={0} y={-20} className="w-full flex justify-center z-50">
         <nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-2 min-[375px]:gap-3 sm:gap-8 md:gap-12 px-4 py-2.5 sm:px-12 sm:py-4 md:px-16 md:py-5 bg-[#0C0C0C]/65 backdrop-blur-md border border-[#D7E2EA]/15 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] z-50 whitespace-nowrap w-[90%] max-w-[fit-content] overflow-x-auto overflow-y-hidden no-scrollbar">

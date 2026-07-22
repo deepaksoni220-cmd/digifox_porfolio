@@ -62,7 +62,8 @@ export const FooterSection: React.FC = () => {
     { name: "About", href: "#about" },
     { name: "Our Studio", href: "#services" },
     { name: "Projects", href: "#projects" },
-    { name: "Contact", href: "#contact" }
+    { name: "Contact", href: "#contact" },
+    { name: "Basic vs Exclusive", href: "/basic_vs_exclusive" }
   ];
 
   return (

@@ -54,7 +54,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Portfolio />} />
         <Route path="/admin" element={<AdminPage />} />
-        <Route path="/premium" element={<PremiumLandingPage />} />
+        <Route path="/basic_vs_exclusive" element={<PremiumLandingPage />} />
       </Routes>
     </Router>
   );

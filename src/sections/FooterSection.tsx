@@ -131,7 +131,11 @@ export const FooterSection: React.FC = () => {
                 <li key={link.name}>
                   <motion.a
                     href={link.href}
-                    className="inline-flex items-center gap-1.5 text-sm sm:text-base font-light text-[#D7E2EA]/70 hover:text-white transition-colors duration-200"
+                    className={`inline-flex items-center gap-1.5 text-sm sm:text-base transition-colors duration-200 ${
+                      link.name === "Basic vs Exclusive"
+                        ? "font-bold text-white hover:text-[#3b82f6]"
+                        : "font-light text-[#D7E2EA]/70 hover:text-white"
+                    }`}
                     whileHover={{ x: 6 }}
                   >
                     <span className="text-[#D7E2EA]/30">/</span> {link.name}

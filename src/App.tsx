@@ -10,6 +10,7 @@ import { ServicesSection } from './sections/ServicesSection';
 import { ProjectsSection } from './sections/ProjectsSection';
 import { FooterSection } from './sections/FooterSection';
 import { AdminPage } from './pages/AdminPage';
+import { PremiumLandingPage } from './pages/PremiumLandingPage';
 
 function Portfolio() {
   const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +54,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Portfolio />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/premium" element={<PremiumLandingPage />} />
       </Routes>
     </Router>
   );

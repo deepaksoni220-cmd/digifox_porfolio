@@ -43,8 +43,14 @@ export const StoryAgitationSection: React.FC = () => {
                 {/* Basic Website Video */}
                 <div className="flex-1 w-full flex flex-col gap-4">
                   <div className="aspect-video bg-[#111111] rounded-3xl border border-white/5 flex items-center justify-center overflow-hidden relative shadow-lg">
-                    {/* Placeholder for Basic Website Video */}
-                    <span className="text-[#D7E2EA]/40 font-medium text-lg sm:text-xl">Basic Website Video</span>
+                    <video 
+                      src="/basicweb.mp4" 
+                      controls 
+                      loop 
+                      muted 
+                      playsInline 
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
                   </div>
                   <p className="text-center text-white/50 font-medium text-lg">Basic Website</p>
                 </div>
@@ -57,8 +63,14 @@ export const StoryAgitationSection: React.FC = () => {
                 {/* Animated Website Video */}
                 <div className="flex-1 w-full flex flex-col gap-4">
                   <div className="aspect-video bg-[#0C0C0C] rounded-3xl border border-[#3b82f6]/50 flex items-center justify-center overflow-hidden relative shadow-[0_0_50px_rgba(59,130,246,0.15)]">
-                    {/* Placeholder for Animated Website Video */}
-                    <span className="text-[#3b82f6]/60 font-medium text-lg sm:text-xl">Premium 2D/3D Video</span>
+                    <video 
+                      src="/2dweb.mp4" 
+                      controls 
+                      loop 
+                      muted 
+                      playsInline 
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
                   </div>
                   <p className="text-center text-[#3b82f6] font-bold text-lg">Exclusive 2D/3D Animated Website</p>
                 </div>

@@ -118,7 +118,7 @@ export const StoryAgitationSection: React.FC = () => {
         <div className="py-8 sm:py-16">
           <FadeIn delay={0.1} y={30}>
             <h2 className="font-black text-white text-[clamp(1.5rem,3vw,2.5rem)] leading-tight mb-4 text-center">
-              Why an exclusive website gets more ROAS for your business
+              Why an exclusive website gets more ROAS for your business over a basic website
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-12 max-w-4xl mx-auto">
               <div className="bg-[#111111] p-8 rounded-3xl border border-[#3b82f6]/20 text-center flex flex-col items-center justify-center shadow-lg hover:border-[#3b82f6]/50 transition-colors duration-300">

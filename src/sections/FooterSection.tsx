@@ -59,10 +59,10 @@ export const FooterSection: React.FC = () => {
   ];
 
   const navLinks = [
-    { name: "About", href: "#about" },
-    { name: "Our Studio", href: "#services" },
-    { name: "Projects", href: "#projects" },
-    { name: "Contact", href: "#contact" },
+    { name: "About", href: "/#about" },
+    { name: "Our Studio", href: "/#services" },
+    { name: "Projects", href: "/#projects" },
+    { name: "Contact", href: "/#contact" },
     { name: "Basic vs Exclusive", href: "/basic_vs_exclusive" }
   ];
 
@@ -200,7 +200,7 @@ export const FooterSection: React.FC = () => {
             <div className="flex items-center gap-3 justify-center md:justify-start">
               <MapPin size={16} className="text-[#D7E2EA]/40 shrink-0" />
               <span className="text-xs sm:text-sm font-light text-[#D7E2EA]/70">
-                Based in India
+                Based in India, works all over world
               </span>
             </div>
 

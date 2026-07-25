@@ -114,6 +114,33 @@ export const StoryAgitationSection: React.FC = () => {
           </FadeIn>
         </div>
 
+        {/* Section 2.5: ROAS Stats */}
+        <div className="py-8 sm:py-16">
+          <FadeIn delay={0.1} y={30}>
+            <h2 className="font-black text-white text-[clamp(1.5rem,3vw,2.5rem)] leading-tight mb-4 text-center">
+              Why an exclusive website gets more ROAS for your business
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-12 max-w-4xl mx-auto">
+              <div className="bg-[#111111] p-8 rounded-3xl border border-[#3b82f6]/20 text-center flex flex-col items-center justify-center shadow-lg hover:border-[#3b82f6]/50 transition-colors duration-300">
+                <span className="text-5xl font-black text-[#3b82f6] mb-3 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">2x</span>
+                <span className="text-white font-semibold text-lg">More Conversions & Sales</span>
+              </div>
+              <div className="bg-[#111111] p-8 rounded-3xl border border-[#3b82f6]/20 text-center flex flex-col items-center justify-center shadow-lg hover:border-[#3b82f6]/50 transition-colors duration-300">
+                <span className="text-5xl font-black text-[#3b82f6] mb-3 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">200%</span>
+                <span className="text-white font-semibold text-lg">Time Spent on Website</span>
+              </div>
+              <div className="bg-[#111111] p-8 rounded-3xl border border-[#3b82f6]/20 text-center flex flex-col items-center justify-center shadow-lg hover:border-[#3b82f6]/50 transition-colors duration-300">
+                <span className="text-5xl font-black text-[#3b82f6] mb-3 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">50%</span>
+                <span className="text-white font-semibold text-lg">Lower Bounce Rate</span>
+              </div>
+              <div className="bg-[#111111] p-8 rounded-3xl border border-[#3b82f6]/20 text-center flex flex-col items-center justify-center shadow-lg hover:border-[#3b82f6]/50 transition-colors duration-300">
+                <span className="text-5xl font-black text-[#3b82f6] mb-3 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">&lt; 3s</span>
+                <span className="text-white font-semibold text-lg">Lightning Fast Load Time</span>
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+
         {/* Section 3 */}
         <div>
           <FadeIn delay={0.1} y={30}>

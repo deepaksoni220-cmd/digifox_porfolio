@@ -30,3 +30,9 @@ html, body, #root, .main-wrapper {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Hide video audio controls */
+video::-webkit-media-controls-mute-button,
+video::-webkit-media-controls-volume-slider {
+  display: none !important;
+}

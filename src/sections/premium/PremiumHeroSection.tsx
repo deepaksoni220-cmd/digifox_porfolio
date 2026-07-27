@@ -19,11 +19,11 @@ export const PremiumHeroSection: React.FC = () => {
           </h2>
         </FadeIn>
 
-        <FadeIn delay={0.2} y={30} className="mb-8 w-full">
+        <div className="mb-8 w-full animate-lcp-fast">
           <h1 className="font-black tracking-tight leading-[1.1] text-white text-[clamp(2.5rem,6vw,5rem)] max-w-5xl mx-auto">
             Your Website Decides Whether They Become Customers.
           </h1>
-        </FadeIn>
+        </div>
 
         <FadeIn delay={0.3} y={30} className="mb-10 w-full">
           <p className="text-[#D7E2EA] font-light text-lg sm:text-xl md:text-2xl leading-relaxed max-w-3xl mx-auto">

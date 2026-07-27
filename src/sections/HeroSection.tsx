@@ -44,11 +44,11 @@ export const HeroSection: React.FC = () => {
         
         {/* Heading */}
         <div className="w-full px-6 sm:px-0 relative z-30">
-          <FadeIn delay={0.15} y={40} className="w-full">
+          <div className="w-full animate-lcp-fast">
             <h1 className="hero-heading font-black uppercase tracking-tight leading-none whitespace-normal sm:whitespace-nowrap w-full text-center text-5xl sm:text-[5.5vw] md:text-[6vw] lg:text-[7vw] mt-10 sm:mt-0">
               I'm Digifox
             </h1>
-          </FadeIn>
+          </div>
         </div>
 
         {/* Bottom Bar */}
@@ -66,11 +66,7 @@ export const HeroSection: React.FC = () => {
       </div>
 
       {/* Centered Portrait with Magnet effect */}
-      <FadeIn 
-        delay={0.6} 
-        y={30} 
-        className="absolute left-1/2 -translate-x-1/2 z-10 w-[300px] sm:w-[360px] md:w-[440px] lg:w-[520px] top-[48%] -translate-y-1/2 sm:top-auto sm:translate-y-0 sm:bottom-0 pointer-events-auto"
-      >
+      <div className="absolute left-1/2 -translate-x-1/2 z-10 w-[300px] sm:w-[360px] md:w-[440px] lg:w-[520px] top-[48%] -translate-y-1/2 sm:top-auto sm:translate-y-0 sm:bottom-0 pointer-events-auto animate-lcp-fast">
         <Magnet padding={150} strength={3}>
           <Media 
             src={siteData.hero.banner} 
@@ -79,7 +75,7 @@ export const HeroSection: React.FC = () => {
             style={{ aspectRatio: '1450/1570' }}
           />
         </Magnet>
-      </FadeIn>
+      </div>
     </section>
   );
 };

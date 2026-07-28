@@ -58,7 +58,7 @@ export const StoryAgitationSection: React.FC = () => {
               <p className="pt-4">That's over <strong className="text-[var(--text-strong)]">$9,000 every month</strong> bringing people to your website.</p>
               <p className="font-medium text-[var(--text-strong)] pt-4">Now ask yourself...</p>
               <p className="font-bold text-2xl text-[var(--text-strong)] leading-snug">Does your website deserve that investment and giving basic 1% conversions over visitors?</p>
-              <p>Or is it reducing the return on everything else you're spending?</p>
+              <p>A fully custom brand exclusive website may double your sales.</p>
             </div>
             
             <div className="mt-10">

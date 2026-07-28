@@ -18,7 +18,7 @@ export const HeroSection: React.FC = () => {
 
       {/* Navbar */}
       <FadeIn delay={0} y={-20} className="w-full flex justify-center z-50">
-        <nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-2 min-[375px]:gap-3 sm:gap-8 md:gap-12 px-4 py-2.5 sm:px-12 sm:py-4 md:px-16 md:py-5 bg-[var(--bg-base)]/65 backdrop-blur-md border border-[var(--border-strong)] rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] z-50 whitespace-nowrap w-[90%] max-w-[fit-content] overflow-x-auto overflow-y-hidden no-scrollbar">
+        <nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-1.5 min-[375px]:gap-2 sm:gap-6 md:gap-10 px-3 py-2 sm:px-10 sm:py-3.5 md:px-12 md:py-4 bg-[var(--bg-base)]/65 backdrop-blur-md border border-[var(--border-strong)] rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] z-50 whitespace-nowrap w-[95%] sm:w-[90%] max-w-[fit-content] overflow-x-auto overflow-y-hidden no-scrollbar">
           {[
             { name: "About", href: "#about" },
             { name: "Portfolio", href: "#portfolio" },
@@ -29,7 +29,7 @@ export const HeroSection: React.FC = () => {
             <a 
               key={item.name} 
               href={item.href}
-              className="text-[var(--text-secondary)] font-semibold uppercase tracking-widest text-[9px] min-[375px]:text-[10px] sm:text-sm md:text-base hover:text-[var(--text-strong)] transition-colors duration-200"
+              className="text-[var(--text-secondary)] font-semibold uppercase tracking-widest text-[8px] min-[375px]:text-[9px] sm:text-[13px] md:text-sm hover:text-[var(--text-strong)] transition-colors duration-200"
             >
               {item.name}
             </a>

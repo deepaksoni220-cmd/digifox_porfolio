@@ -30,7 +30,7 @@ export const ThemeToggle: React.FC = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-full bg-[var(--border-subtle)] hover:bg-[var(--border-strong)] text-[var(--text-primary)] transition-colors flex items-center justify-center relative overflow-hidden w-9 h-9 border border-[var(--border-subtle)] ml-2"
+      className="p-1.5 sm:p-2 rounded-full bg-[var(--border-subtle)] hover:bg-[var(--border-strong)] text-[var(--text-primary)] transition-colors flex items-center justify-center relative overflow-hidden w-7 h-7 sm:w-9 sm:h-9 border border-[var(--border-subtle)] shrink-0"
       aria-label="Toggle theme"
     >
       <motion.div

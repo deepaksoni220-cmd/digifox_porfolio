@@ -6,7 +6,6 @@ import { SEOMeta } from './components/SEOMeta';
 import { Preloader } from './components/Preloader';
 import { HeroSection } from './sections/HeroSection';
 import { MarqueeSection } from './sections/MarqueeSection';
-import { TrustLogosSection } from './sections/premium/TrustLogosSection';
 import { AboutSection } from './sections/AboutSection';
 import { PortfolioLinksSection } from './sections/PortfolioLinksSection';
 import { VideoComparisonSection } from './sections/VideoComparisonSection';
@@ -48,7 +47,6 @@ function Portfolio() {
       </AnimatePresence>
       <HeroSection />
       <MarqueeSection />
-      <TrustLogosSection />
       <AboutSection />
       <PortfolioLinksSection />
       <VideoComparisonSection />

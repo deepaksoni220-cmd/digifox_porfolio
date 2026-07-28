@@ -45,9 +45,9 @@ const DrawLine: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-10% 0px' });
   return (
-    <div ref={ref} className="relative h-px w-full bg-[var(--bg-base)]/10 overflow-hidden">
+    <div ref={ref} className="relative h-px w-full bg-[var(--text-primary)]/10 overflow-hidden">
       <motion.div
-        className="absolute inset-0 bg-[var(--bg-base)]/30"
+        className="absolute inset-0 bg-[var(--text-primary)]/30"
         initial={{ scaleX: 0, originX: 0 }}
         animate={isInView ? { scaleX: 1 } : {}}
         transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
@@ -101,10 +101,11 @@ const ServiceRow: React.FC<{ service: (typeof SERVICES)[0]; index: number }> = (
         {/* Number */}
         <motion.div variants={itemVariants}>
           <motion.span
-            className="font-black leading-none select-none block"
-            style={{ fontSize: 'clamp(1.5rem, 4vw, 56px)' }}
-            animate={{ color: hovered ? service.accent : 'rgba(12,12,12,0.18)' }}
-            transition={{ duration: 0.3 }}
+            className={`font-black leading-none select-none block transition-all duration-300 ${hovered ? 'opacity-100' : 'text-[var(--text-primary)] opacity-20'}`}
+            style={{ 
+              fontSize: 'clamp(1.5rem, 4vw, 56px)',
+              color: hovered ? service.accent : undefined
+            }}
           >
             {service.number}
           </motion.span>
@@ -184,8 +185,8 @@ const ScrollStrip: React.FC = () => {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const width = useTransform(scrollYProgress, [0, 0.5], ['0%', '100%']);
   return (
-    <div ref={ref} className="w-full max-w-3xl mx-auto h-px bg-[var(--bg-base)]/10 mt-4 mb-10 sm:mb-12 md:mb-16 overflow-hidden">
-      <motion.div className="h-full bg-[var(--bg-base)]/30" style={{ width }} />
+    <div ref={ref} className="w-full max-w-3xl mx-auto h-px bg-[var(--text-primary)]/10 mt-4 mb-10 sm:mb-12 md:mb-16 overflow-hidden">
+      <motion.div className="h-full bg-[var(--text-primary)]/30" style={{ width }} />
     </div>
   );
 };
@@ -194,7 +195,7 @@ export const ServicesSection: React.FC = () => {
   return (
     <section
       id="services"
-      className="bg-[#FFFFFF] text-[var(--text-strong)] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] py-16 sm:py-20 md:py-24 relative z-10 overflow-hidden flex flex-col items-center"
+      className="bg-[var(--bg-surface)] text-[var(--text-strong)] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] py-16 sm:py-20 md:py-24 relative z-10 overflow-hidden flex flex-col items-center"
     >
       {/* ── Centered inner wrapper ── */}
       <div className="w-full max-w-3xl px-5 sm:px-10 md:px-16 flex flex-col items-center">
@@ -202,11 +203,11 @@ export const ServicesSection: React.FC = () => {
         {/* Label */}
         <FadeIn delay={0} y={0} className="w-full flex flex-col items-center">
           <div className="flex items-center gap-4 justify-center mb-6">
-            <div className="h-px w-10 bg-[var(--bg-base)]/20" />
+            <div className="h-px w-10 bg-[var(--text-primary)]/20" />
             <span className="uppercase tracking-[0.3em] text-[var(--text-secondary)] text-xs sm:text-sm font-medium text-center">
               What I Do
             </span>
-            <div className="h-px w-10 bg-[var(--bg-base)]/20" />
+            <div className="h-px w-10 bg-[var(--text-primary)]/20" />
           </div>
         </FadeIn>
 

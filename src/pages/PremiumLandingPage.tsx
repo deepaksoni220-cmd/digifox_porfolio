@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { SEOMeta } from '../components/SEOMeta';
 import { FooterSection } from '../sections/FooterSection';
 import { PremiumHeroSection } from '../sections/premium/PremiumHeroSection';
 import { VideoComparisonSection } from '../sections/VideoComparisonSection';
@@ -18,6 +19,11 @@ export const PremiumLandingPage: React.FC = () => {
 
   return (
     <main className="main-wrapper relative bg-[var(--bg-base)] text-[var(--text-primary)] font-['Kanit'] min-h-screen">
+      <SEOMeta 
+        title="Premium 3D & 2D Animated Websites | Digifox"
+        description="Stop losing customers to outdated websites. We build fully custom, exclusive 2D and 3D animated websites designed to double your ROAS and boost conversions."
+        url="https://digifox.world/basic_vs_exclusive"
+      />
       <PremiumHeroSection />
       <VideoComparisonSection />
       <TrustLogosSection />

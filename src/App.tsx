@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import { HelmetProvider } from 'react-helmet-async';
+import { SEOMeta } from './components/SEOMeta';
 import { Preloader } from './components/Preloader';
 import { HeroSection } from './sections/HeroSection';
 import { MarqueeSection } from './sections/MarqueeSection';
@@ -36,6 +38,11 @@ function Portfolio() {
 
   return (
     <main className="main-wrapper relative">
+      <SEOMeta 
+        title="Digifox | Best Digital Marketing & Web Design Agency"
+        description="Digifox builds stunning 3D websites, Shopify stores, SEO, and performance marketing solutions that help businesses grow faster."
+        url="https://digifox.world/"
+      />
       <AnimatePresence>
         {isLoading && <Preloader key="preloader" />}
       </AnimatePresence>
@@ -54,13 +61,15 @@ function Portfolio() {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Portfolio />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/basic_vs_exclusive" element={<PremiumLandingPage />} />
-      </Routes>
-    </Router>
+    <HelmetProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Portfolio />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/basic_vs_exclusive" element={<PremiumLandingPage />} />
+        </Routes>
+      </Router>
+    </HelmetProvider>
   );
 }
 

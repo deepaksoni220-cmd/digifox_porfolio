@@ -1,5 +1,4 @@
 import { FadeIn } from '../../components/FadeIn';
-import { VideoComparisonSection } from '../VideoComparisonSection';
 
 export const StoryAgitationSection: React.FC = () => {
   return (
@@ -36,10 +35,6 @@ export const StoryAgitationSection: React.FC = () => {
               </a>
             </div>
 
-            {/* Video Comparison */}
-            <div className="mt-24 relative w-screen max-w-7xl left-1/2 -translate-x-1/2 px-0">
-              <VideoComparisonSection />
-            </div>
           </FadeIn>
         </div>
 

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { FooterSection } from '../sections/FooterSection';
 import { PremiumHeroSection } from '../sections/premium/PremiumHeroSection';
+import { VideoComparisonSection } from '../sections/VideoComparisonSection';
 import { TrustLogosSection } from '../sections/premium/TrustLogosSection';
 import { StoryAgitationSection } from '../sections/premium/StoryAgitationSection';
 import { ComparisonSection } from '../sections/premium/ComparisonSection';
@@ -18,6 +19,7 @@ export const PremiumLandingPage: React.FC = () => {
   return (
     <main className="main-wrapper relative bg-[var(--bg-base)] text-[var(--text-primary)] font-['Kanit'] min-h-screen">
       <PremiumHeroSection />
+      <VideoComparisonSection />
       <TrustLogosSection />
       <StoryAgitationSection />
       <ComparisonSection />

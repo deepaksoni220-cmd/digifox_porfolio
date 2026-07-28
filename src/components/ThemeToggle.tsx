@@ -5,13 +5,15 @@ export const ThemeToggle: React.FC = () => {
   const [isLight, setIsLight] = useState(false);
 
   useEffect(() => {
-    // Check local storage or system preference on mount
     const savedTheme = localStorage.getItem('theme');
-    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
     
-    if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
+    // Default to light mode if no preference is saved
+    if (savedTheme === 'light' || !savedTheme) {
       setIsLight(true);
       document.documentElement.classList.add('light');
+    } else {
+      setIsLight(false);
+      document.documentElement.classList.remove('light');
     }
   }, []);
 

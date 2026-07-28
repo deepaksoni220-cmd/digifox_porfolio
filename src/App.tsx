@@ -12,6 +12,7 @@ import { VideoComparisonSection } from './sections/VideoComparisonSection';
 import { ServicesSection } from './sections/ServicesSection';
 import { ProjectsSection } from './sections/ProjectsSection';
 import { FooterSection } from './sections/FooterSection';
+import { ContactButton } from './components/ContactButton';
 import { AdminPage } from './pages/AdminPage';
 import { PremiumLandingPage } from './pages/PremiumLandingPage';
 
@@ -66,6 +67,13 @@ function App() {
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/basic_vs_exclusive" element={<PremiumLandingPage />} />
         </Routes>
+        
+        {/* Floating Let's Connect Button */}
+        <ContactButton 
+          className="!fixed bottom-6 right-6 z-[100] !px-6 !py-4 shadow-2xl animate-bounce-slow"
+        >
+          Let's Connect
+        </ContactButton>
       </Router>
     </HelmetProvider>
   );

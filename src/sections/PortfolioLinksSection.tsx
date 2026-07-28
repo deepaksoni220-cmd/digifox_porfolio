@@ -17,7 +17,7 @@ export const PortfolioLinksSection: React.FC = () => {
   );
 
   return (
-    <section id="portfolio" className="py-20 px-5 sm:px-10 md:px-16 bg-[#080808] text-white">
+    <section id="portfolio" className="py-20 px-5 sm:px-10 md:px-16 bg-[#080808] text-[var(--text-strong)]">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
         
         <div className="mb-10 text-center">
@@ -36,7 +36,7 @@ export const PortfolioLinksSection: React.FC = () => {
               className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                 activeCategory === category 
                   ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)]' 
-                  : 'bg-[#1A1A1A] text-gray-400 hover:text-white hover:bg-[#2A2A2A]'
+                  : 'bg-[var(--bg-surface-elevated)] text-gray-400 hover:text-[var(--text-strong)] hover:bg-[#2A2A2A]'
               }`}
             >
               {category}
@@ -87,7 +87,7 @@ export const PortfolioLinksSection: React.FC = () => {
                   <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-2 block">
                     {item.category}
                   </span>
-                  <h3 className="text-xl font-bold text-white group-hover:text-gray-300 transition-colors">
+                  <h3 className="text-xl font-bold text-[var(--text-strong)] group-hover:text-gray-300 transition-colors">
                     {item.title}
                   </h3>
                 </div>

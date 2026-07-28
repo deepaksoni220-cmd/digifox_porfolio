@@ -52,28 +52,28 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     >
       <motion.div
         style={{ scale, y, transformOrigin: "top center" }}
-        className="w-full max-w-6xl mx-auto rounded-[32px] md:rounded-[48px] border border-[#D7E2EA]/10 bg-[#111111] overflow-hidden"
+        className="w-full max-w-6xl mx-auto rounded-[32px] md:rounded-[48px] border border-[var(--border-strong)] bg-[var(--bg-surface)] overflow-hidden"
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1], delay: 0.05 }}
       >
         {/* ── Card Header ─────────────────────────────────────────────── */}
-        <div className="flex items-start justify-between px-6 sm:px-8 md:px-10 pt-6 sm:pt-8 md:pt-10 pb-4 sm:pb-6 border-b border-[#D7E2EA]/10">
+        <div className="flex items-start justify-between px-6 sm:px-8 md:px-10 pt-6 sm:pt-8 md:pt-10 pb-4 sm:pb-6 border-b border-[var(--border-strong)]">
           {/* Left: number + info */}
           <div className="flex items-baseline gap-4 sm:gap-6">
             <span
-              className="font-black leading-none text-[#D7E2EA]/15 select-none"
+              className="font-black leading-none text-[var(--text-primary)]/15 select-none"
               style={{ fontSize: "clamp(3rem, 8vw, 7rem)" }}
             >
               {project.number}
             </span>
             <div className="flex flex-col gap-1">
-              <span className="uppercase tracking-[0.2em] text-[#D7E2EA]/50 font-medium text-xs sm:text-sm">
+              <span className="uppercase tracking-[0.2em] text-[var(--text-primary)]/50 font-medium text-xs sm:text-sm">
                 {project.category} · {project.year}
               </span>
               <h3
-                className="font-black uppercase tracking-tight leading-none text-[#D7E2EA]"
+                className="font-black uppercase tracking-tight leading-none text-[var(--text-primary)]"
                 style={{ fontSize: "clamp(1.2rem, 3vw, 2.6rem)" }}
               >
                 {project.name}
@@ -83,7 +83,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-[10px] sm:text-xs uppercase tracking-widest border border-[#D7E2EA]/20 text-[#D7E2EA]/60 rounded-full px-3 py-1"
+                    className="text-[10px] sm:text-xs uppercase tracking-widest border border-[#D7E2EA]/20 text-[var(--text-primary)]/60 rounded-full px-3 py-1"
                   >
                     {tag}
                   </span>
@@ -171,7 +171,7 @@ export const ProjectsSection: React.FC = () => {
     <section
       id="projects"
       ref={sectionRef}
-      className="relative z-20 bg-[#0C0C0C] text-[#D7E2EA] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14"
+      className="relative z-20 bg-[var(--bg-base)] text-[var(--text-primary)] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14"
     >
       {/* ── Section Header ──────────────────────────────────────────── */}
       <div className="px-5 sm:px-10 md:px-16 pt-20 sm:pt-28 md:pt-36 pb-12 sm:pb-16 md:pb-20 flex flex-col items-center w-full">
@@ -179,7 +179,7 @@ export const ProjectsSection: React.FC = () => {
         <FadeIn delay={0} y={20} className="w-full flex flex-col items-center">
           <div className="flex items-center gap-4 mb-6 justify-center">
             <div className="h-px w-10 bg-[#D7E2EA]/30" />
-            <span className="uppercase tracking-[0.3em] text-[#D7E2EA]/50 text-xs sm:text-sm font-medium">
+            <span className="uppercase tracking-[0.3em] text-[var(--text-primary)]/50 text-xs sm:text-sm font-medium">
               Selected Works
             </span>
             <div className="h-px w-10 bg-[#D7E2EA]/30" />
@@ -197,7 +197,7 @@ export const ProjectsSection: React.FC = () => {
 
         <FadeIn delay={0.2} y={20} className="w-full flex flex-col items-center">
           <p
-            className="text-center text-[#D7E2EA]/70 font-light mt-8 max-w-xl mx-auto"
+            className="text-center text-[var(--text-primary)]/70 font-light mt-8 max-w-xl mx-auto"
             style={{ fontSize: "clamp(0.9rem, 1.5vw, 1.15rem)" }}
           >
             A selection of 3D, branding, webdesign and marketing projects crafted with precision and increase convertions and sale for every business with a solid digital marketing.

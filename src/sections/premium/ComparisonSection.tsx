@@ -14,10 +14,10 @@ const COMPARISON_DATA = [
 
 export const ComparisonSection: React.FC = () => {
   return (
-    <section className="py-24 sm:py-32 bg-[#111111]">
+    <section className="py-24 sm:py-32 bg-[var(--bg-surface)]">
       <div className="max-w-5xl mx-auto px-6 sm:px-10">
         <FadeIn delay={0.1} y={30} className="text-center mb-16">
-          <h2 className="font-black text-white text-[clamp(2rem,4vw,3.5rem)] leading-tight">
+          <h2 className="font-black text-[var(--text-strong)] text-[clamp(2rem,4vw,3.5rem)] leading-tight">
             Traditional Website vs DigiFox Experience
           </h2>
         </FadeIn>
@@ -27,10 +27,10 @@ export const ComparisonSection: React.FC = () => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr>
-                  <th className="p-6 text-lg sm:text-xl font-bold text-[#D7E2EA]/70 border-b border-white/10 w-1/2">
+                  <th className="p-6 text-lg sm:text-xl font-bold text-[var(--text-primary)]/70 border-b border-[var(--border-strong)] w-1/2">
                     Traditional Website
                   </th>
-                  <th className="p-6 text-lg sm:text-xl font-bold text-[#3b82f6] border-b border-white/10 w-1/2 bg-[#3b82f6]/5 rounded-t-xl">
+                  <th className="p-6 text-lg sm:text-xl font-bold text-[#3b82f6] border-b border-[var(--border-strong)] w-1/2 bg-[#3b82f6]/5 rounded-t-xl">
                     DigiFox Premium Website
                   </th>
                 </tr>
@@ -38,11 +38,11 @@ export const ComparisonSection: React.FC = () => {
               <tbody>
                 {COMPARISON_DATA.map((row, i) => (
                   <tr key={i} className="group">
-                    <td className="p-6 text-[#D7E2EA]/50 font-light border-b border-white/5 group-hover:bg-white/[0.02] transition-colors">
+                    <td className="p-6 text-[var(--text-primary)]/50 font-light border-b border-[var(--border-subtle)] group-hover:bg-white/[0.02] transition-colors">
                       <span className="inline-block mr-3 text-red-500/50">✕</span>
                       {row.traditional}
                     </td>
-                    <td className="p-6 text-white font-medium border-b border-white/5 bg-[#3b82f6]/5 group-hover:bg-[#3b82f6]/10 transition-colors">
+                    <td className="p-6 text-[var(--text-strong)] font-medium border-b border-[var(--border-subtle)] bg-[#3b82f6]/5 group-hover:bg-[#3b82f6]/10 transition-colors">
                       <span className="inline-block mr-3 text-[#3b82f6]">✓</span>
                       {row.premium}
                     </td>
@@ -55,7 +55,7 @@ export const ComparisonSection: React.FC = () => {
           <div className="mt-16 text-center">
             <a
               href="/#portfolio"
-              className="inline-block px-8 py-4 bg-[#3b82f6] hover:bg-[#2563eb] text-white font-semibold rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+              className="inline-block px-8 py-4 bg-[#3b82f6] hover:bg-[#2563eb] text-[var(--text-strong)] font-semibold rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(59,130,246,0.3)]"
             >
               Explore Our Interactive Demo
             </a>

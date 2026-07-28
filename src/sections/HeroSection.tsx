@@ -3,11 +3,12 @@ import { FadeIn } from '../components/FadeIn';
 import { ContactButton } from '../components/ContactButton';
 import { Magnet } from '../components/Magnet';
 import { Media } from '../components/Media';
+import { ThemeToggle } from '../components/ThemeToggle';
 import siteData from '../data.json';
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="h-screen flex flex-col relative overflow-x-clip bg-[#0C0C0C]">
+    <section className="h-screen flex flex-col relative overflow-x-clip bg-[var(--bg-base)]">
       
       {/* Static Aurora Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -17,7 +18,7 @@ export const HeroSection: React.FC = () => {
 
       {/* Navbar */}
       <FadeIn delay={0} y={-20} className="w-full flex justify-center z-50">
-        <nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-2 min-[375px]:gap-3 sm:gap-8 md:gap-12 px-4 py-2.5 sm:px-12 sm:py-4 md:px-16 md:py-5 bg-[#0C0C0C]/65 backdrop-blur-md border border-[#D7E2EA]/15 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] z-50 whitespace-nowrap w-[90%] max-w-[fit-content] overflow-x-auto overflow-y-hidden no-scrollbar">
+        <nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-2 min-[375px]:gap-3 sm:gap-8 md:gap-12 px-4 py-2.5 sm:px-12 sm:py-4 md:px-16 md:py-5 bg-[var(--bg-base)]/65 backdrop-blur-md border border-[var(--border-strong)] rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] z-50 whitespace-nowrap w-[90%] max-w-[fit-content] overflow-x-auto overflow-y-hidden no-scrollbar">
           {[
             { name: "About", href: "#about" },
             { name: "Portfolio", href: "#portfolio" },
@@ -28,11 +29,12 @@ export const HeroSection: React.FC = () => {
             <a 
               key={item.name} 
               href={item.href}
-              className="text-[#D7E2EA]/85 font-semibold uppercase tracking-widest text-[9px] min-[375px]:text-[10px] sm:text-sm md:text-base hover:text-white transition-colors duration-200"
+              className="text-[var(--text-secondary)] font-semibold uppercase tracking-widest text-[9px] min-[375px]:text-[10px] sm:text-sm md:text-base hover:text-[var(--text-strong)] transition-colors duration-200"
             >
               {item.name}
             </a>
           ))}
+          <ThemeToggle />
         </nav>
       </FadeIn>
 
@@ -54,7 +56,7 @@ export const HeroSection: React.FC = () => {
         {/* Bottom Bar */}
         <div className="flex flex-col sm:flex-row justify-between items-center sm:items-end gap-6 sm:gap-0 px-5 sm:px-10 md:px-16 pb-7 sm:pb-8 md:pb-10 w-full max-w-7xl mx-auto relative z-30 text-center sm:text-left">
           <FadeIn delay={0.35} y={20} className="!w-auto">
-            <p className="ml-10 sm:ml-20 text-[#D7E2EA] font-light uppercase tracking-wide leading-snug text-[clamp(0.85rem,1.4vw,1.5rem)] max-w-xs sm:max-w-[220px] md:max-w-[260px] text-left sm:text-left">
+            <p className="ml-10 sm:ml-20 text-[var(--text-primary)] font-light uppercase tracking-wide leading-snug text-[clamp(0.85rem,1.4vw,1.5rem)] max-w-xs sm:max-w-[220px] md:max-w-[260px] text-left sm:text-left">
               a 3d studio driven by crafting striking and unforgettable projects
             </p>
           </FadeIn>

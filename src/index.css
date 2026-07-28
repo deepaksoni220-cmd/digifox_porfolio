@@ -2,8 +2,41 @@
 
 @theme {
   --font-sans: 'Kanit', sans-serif;
-  --color-dark-bg: #0C0C0C;
-  --color-light-text: #D7E2EA;
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-surface-elevated: var(--bg-surface-elevated);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-strong: var(--text-strong);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+}
+
+:root {
+  /* Dark Mode (Default) */
+  --bg-base: #0C0C0C;
+  --bg-surface: #111111;
+  --bg-surface-elevated: #1a1a1a;
+  --text-primary: #D7E2EA;
+  --text-secondary: rgba(215, 226, 234, 0.7);
+  --text-strong: #ffffff;
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --accent: #3b82f6;
+}
+
+:root.light {
+  /* Light Mode */
+  --bg-base: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #F1F5F9;
+  --text-primary: #334155;
+  --text-secondary: #64748B;
+  --text-strong: #0F172A;
+  --border-subtle: rgba(0, 0, 0, 0.05);
+  --border-strong: rgba(0, 0, 0, 0.15);
+  --accent: #2563EB;
 }
 
 @layer base {
@@ -15,9 +48,10 @@
 }
 
 html, body, #root, .main-wrapper {
-  background-color: var(--color-dark-bg);
-  color: var(--color-light-text);
+  background-color: var(--bg-base);
+  color: var(--text-primary);
   font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .main-wrapper {

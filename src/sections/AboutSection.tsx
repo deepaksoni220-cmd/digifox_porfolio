@@ -7,7 +7,7 @@ import siteData from '../data.json';
 
 export const AboutSection: React.FC = () => {
   return (
-    <section id="about" className="min-h-screen relative flex flex-col items-center justify-center px-5 sm:px-10 md:px-16 py-20 bg-[#0C0C0C] overflow-hidden">
+    <section id="about" className="min-h-screen relative flex flex-col items-center justify-center px-5 sm:px-10 md:px-16 py-20 bg-[var(--bg-base)] overflow-hidden">
       {/* Decorative 3D Images */}
       <FadeIn delay={0.1} x={-80} y={0} duration={0.9} className="absolute top-[4%] left-[1%] sm:left-[2%] md:left-[4%] z-0 w-fit">
         <Media src={siteData.about.icons.topLeft} alt="Moon icon" className="w-[120px] sm:w-[160px] md:w-[210px] object-contain pointer-events-none" />
@@ -35,7 +35,7 @@ export const AboutSection: React.FC = () => {
         <div className="mb-16 sm:mb-20 md:mb-24 flex justify-center w-full">
           <AnimatedText 
             text="With more than five years of experience in design, we focus on branding, web design, and user experience, we truly enjoy working with businesses that aim to stand out and present their best image. Let's build something incredible together!"
-            className="text-[#D7E2EA] font-medium text-center leading-relaxed max-w-[560px] text-[clamp(1rem,2vw,1.35rem)]"
+            className="text-[var(--text-primary)] font-medium text-center leading-relaxed max-w-[560px] text-[clamp(1rem,2vw,1.35rem)]"
           />
         </div>
 

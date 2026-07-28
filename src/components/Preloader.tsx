@@ -27,7 +27,7 @@ export const Preloader: React.FC = () => {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#0C0C0C] text-[#D7E2EA] overflow-hidden"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[var(--bg-base)] text-[var(--text-primary)] overflow-hidden"
       initial={{ y: 0 }}
       exit={{ y: '-100%' }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
@@ -52,7 +52,7 @@ export const Preloader: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.5 }}
         >
-          <div className="text-sm font-light tracking-[0.2em] uppercase text-[#D7E2EA]/50">
+          <div className="text-sm font-light tracking-[0.2em] uppercase text-[var(--text-primary)]/50">
             Loading
           </div>
           <div className="font-black text-[clamp(3rem,8vw,5rem)] leading-none">

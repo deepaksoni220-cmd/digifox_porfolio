@@ -67,7 +67,7 @@ export const FooterSection: React.FC = () => {
   ];
 
   return (
-    <footer id="contact" className="relative z-20 bg-[#0C0C0C] text-[#D7E2EA] border-t border-[#D7E2EA]/10 pt-24 pb-12 overflow-hidden flex flex-col items-center">
+    <footer id="contact" className="relative z-20 bg-[var(--bg-base)] text-[var(--text-primary)] border-t border-[var(--border-strong)] pt-24 pb-12 overflow-hidden flex flex-col items-center">
       
       {/* Decorative Radial glow in background */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-t from-[#B600A8]/10 to-transparent rounded-full blur-[120px] pointer-events-none z-0" />
@@ -77,7 +77,7 @@ export const FooterSection: React.FC = () => {
         {/* Large Premium CTA */}
         <div className="mb-20 text-center w-full flex flex-col items-center">
           <FadeIn delay={0} y={40} className="w-full flex flex-col items-center">
-            <span className="uppercase tracking-[0.25em] text-[#D7E2EA]/40 text-xs sm:text-sm font-medium block mb-4 text-center">
+            <span className="uppercase tracking-[0.25em] text-[var(--text-primary)]/40 text-xs sm:text-sm font-medium block mb-4 text-center">
               Have an idea?
             </span>
           </FadeIn>
@@ -89,7 +89,7 @@ export const FooterSection: React.FC = () => {
         </div>
 
         {/* Main Grid Content */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 pb-16 border-b border-[#D7E2EA]/10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 pb-16 border-b border-[var(--border-strong)]">
           
           {/* Brand Info — Column 5 */}
           <div className="md:col-span-5 flex flex-col items-center md:items-start text-center md:text-left justify-between gap-6 md:gap-0">
@@ -97,7 +97,7 @@ export const FooterSection: React.FC = () => {
               <h3 className="font-black uppercase tracking-wider text-xl sm:text-2xl mb-4">
                 Digifox 5D
               </h3>
-              <p className="text-[#D7E2EA]/70 font-light leading-relaxed max-w-sm mb-6 text-sm sm:text-base mx-auto md:mx-0">
+              <p className="text-[var(--text-primary)]/70 font-light leading-relaxed max-w-sm mb-6 text-sm sm:text-base mx-auto md:mx-0">
                 A 3D studio and visual design agency driven by crafting striking, interactive, and unforgettable digital experiences.
               </p>
             </div>
@@ -110,7 +110,7 @@ export const FooterSection: React.FC = () => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full border border-[#D7E2EA]/20 flex items-center justify-center text-[#D7E2EA]/70 hover:text-white hover:border-white transition-colors duration-300"
+                  className="w-10 h-10 rounded-full border border-[#D7E2EA]/20 flex items-center justify-center text-[var(--text-primary)]/70 hover:text-[var(--text-strong)] hover:border-white transition-colors duration-300"
                   whileHover={{ scale: 1.12, y: -4 }}
                   whileTap={{ scale: 0.95 }}
                   aria-label={social.label}
@@ -123,7 +123,7 @@ export const FooterSection: React.FC = () => {
 
           {/* Navigation Links — Column 3 */}
           <div className="md:col-span-3 md:col-start-7 flex flex-col items-center md:items-start text-center md:text-left">
-            <h4 className="uppercase tracking-widest text-[#D7E2EA]/40 text-xs font-semibold mb-6">
+            <h4 className="uppercase tracking-widest text-[var(--text-primary)]/40 text-xs font-semibold mb-6">
               Navigation
             </h4>
             <ul className="space-y-4 flex flex-col items-center md:items-start">
@@ -133,12 +133,12 @@ export const FooterSection: React.FC = () => {
                     href={link.href}
                     className={`inline-flex items-center gap-1.5 text-sm sm:text-base transition-colors duration-200 ${
                       link.name === "Basic vs Exclusive"
-                        ? "font-bold text-white hover:text-[#3b82f6]"
-                        : "font-light text-[#D7E2EA]/70 hover:text-white"
+                        ? "font-bold text-[var(--text-strong)] hover:text-[#3b82f6]"
+                        : "font-light text-[var(--text-primary)]/70 hover:text-[var(--text-strong)]"
                     }`}
                     whileHover={{ x: 6 }}
                   >
-                    <span className="text-[#D7E2EA]/30">/</span> {link.name}
+                    <span className="text-[var(--text-primary)]/30">/</span> {link.name}
                   </motion.a>
                 </li>
               ))}
@@ -148,15 +148,15 @@ export const FooterSection: React.FC = () => {
           {/* Contact Details — Column 3 */}
           <div className="md:col-span-3 md:col-start-10 flex flex-col items-center md:items-start gap-6">
             <div className="w-full flex flex-col items-center md:items-start">
-              <h4 className="uppercase tracking-widest text-[#D7E2EA]/40 text-xs font-semibold mb-4 text-center md:text-left">
+              <h4 className="uppercase tracking-widest text-[var(--text-primary)]/40 text-xs font-semibold mb-4 text-center md:text-left">
                 Get in Touch
               </h4>
               
               {/* Interactive Email Box */}
-              <div className="w-full max-w-sm group relative flex items-center justify-between gap-3 bg-[#111111] border border-[#D7E2EA]/15 rounded-xl px-4 py-3 hover:border-[#D7E2EA]/30 transition-colors duration-300">
+              <div className="w-full max-w-sm group relative flex items-center justify-between gap-3 bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-4 py-3 hover:border-[#D7E2EA]/30 transition-colors duration-300">
                 <div className="flex items-center gap-2.5 overflow-hidden">
-                  <Mail size={16} className="text-[#D7E2EA]/50 group-hover:text-white transition-colors duration-300 shrink-0" />
-                  <a href={`mailto:${email}`} className="text-xs sm:text-sm font-light tracking-wide text-[#D7E2EA]/80 group-hover:text-white transition-colors duration-300 truncate">
+                  <Mail size={16} className="text-[var(--text-primary)]/50 group-hover:text-[var(--text-strong)] transition-colors duration-300 shrink-0" />
+                  <a href={`mailto:${email}`} className="text-xs sm:text-sm font-light tracking-wide text-[var(--text-primary)]/80 group-hover:text-[var(--text-strong)] transition-colors duration-300 truncate">
                     {email}
                   </a>
                 </div>
@@ -164,7 +164,7 @@ export const FooterSection: React.FC = () => {
                 {/* Copy Button */}
                 <button 
                   onClick={handleCopy}
-                  className="shrink-0 text-[#D7E2EA]/45 hover:text-white transition-colors duration-200 cursor-pointer"
+                  className="shrink-0 text-[var(--text-primary)]/45 hover:text-[var(--text-strong)] transition-colors duration-200 cursor-pointer"
                   title="Copy email to clipboard"
                   aria-label="Copy email"
                 >
@@ -198,14 +198,14 @@ export const FooterSection: React.FC = () => {
 
             {/* Location */}
             <div className="flex items-center gap-3 justify-center md:justify-start">
-              <MapPin size={16} className="text-[#D7E2EA]/40 shrink-0" />
-              <span className="text-xs sm:text-sm font-light text-[#D7E2EA]/70">
+              <MapPin size={16} className="text-[var(--text-primary)]/40 shrink-0" />
+              <span className="text-xs sm:text-sm font-light text-[var(--text-primary)]/70">
                 Based in India, works all over world
               </span>
             </div>
 
             {/* Pulse Live Status indicator */}
-            <div className="flex items-center gap-3 bg-[#111111]/40 border border-[#D7E2EA]/5 rounded-xl px-4 py-3 self-center md:self-start">
+            <div className="flex items-center gap-3 bg-[var(--bg-surface)]/40 border border-[#D7E2EA]/5 rounded-xl px-4 py-3 self-center md:self-start">
               <span className="relative flex h-2.5 w-2.5 shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
@@ -223,9 +223,9 @@ export const FooterSection: React.FC = () => {
         <div className="flex flex-col sm:flex-row justify-between items-center pt-8 gap-6 relative z-10">
           
           {/* Copyright text */}
-          <div className="text-xs sm:text-sm font-light text-[#D7E2EA]/40 text-center sm:text-left order-2 sm:order-1">
+          <div className="text-xs sm:text-sm font-light text-[var(--text-primary)]/40 text-center sm:text-left order-2 sm:order-1">
             <p>© {currentYear} Digifox 5D. All rights reserved.</p>
-            <p className="mt-1 flex items-center justify-center sm:justify-start gap-1 text-[10px] text-[#D7E2EA]/30">
+            <p className="mt-1 flex items-center justify-center sm:justify-start gap-1 text-[10px] text-[var(--text-primary)]/30">
               <Globe size={10} /> Crafted with React, Tailwind & Framer Motion
             </p>
           </div>
@@ -235,7 +235,7 @@ export const FooterSection: React.FC = () => {
             <Magnet padding={50} strength={2}>
               <motion.button
                 onClick={scrollToTop}
-                className="w-12 h-12 rounded-full bg-[#111111] border border-[#D7E2EA]/15 text-[#D7E2EA] flex items-center justify-center hover:border-white transition-colors duration-300 cursor-pointer shadow-lg"
+                className="w-12 h-12 rounded-full bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[var(--text-primary)] flex items-center justify-center hover:border-white transition-colors duration-300 cursor-pointer shadow-lg"
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
                 title="Scroll back to top"

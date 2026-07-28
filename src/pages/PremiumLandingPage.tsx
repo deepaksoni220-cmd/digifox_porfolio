@@ -16,7 +16,7 @@ export const PremiumLandingPage: React.FC = () => {
   }, []);
 
   return (
-    <main className="main-wrapper relative bg-[#0C0C0C] text-[#D7E2EA] font-['Kanit'] min-h-screen">
+    <main className="main-wrapper relative bg-[var(--bg-base)] text-[var(--text-primary)] font-['Kanit'] min-h-screen">
       <PremiumHeroSection />
       <TrustLogosSection />
       <StoryAgitationSection />

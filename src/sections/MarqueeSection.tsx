@@ -38,7 +38,7 @@ export const MarqueeSection: React.FC = () => {
   return (
     <section 
       ref={sectionRef} 
-      className="bg-[#0C0C0C] pt-24 sm:pt-32 md:pt-40 pb-10 overflow-hidden flex flex-col gap-2 sm:gap-3"
+      className="bg-[var(--bg-base)] pt-24 sm:pt-32 md:pt-40 pb-10 overflow-hidden flex flex-col gap-2 sm:gap-3"
     >
       {/* Row 1 */}
       <div 
@@ -48,7 +48,7 @@ export const MarqueeSection: React.FC = () => {
         {ROW_1_TRIPLED.map((src, idx) => (
           <div
             key={`r1-${idx}`}
-            className="marquee-item shrink-0 w-[280px] h-[180px] sm:w-[350px] sm:h-[225px] md:w-[420px] md:h-[270px] bg-[#1A1A1A] rounded-xl overflow-hidden"
+            className="marquee-item shrink-0 w-[280px] h-[180px] sm:w-[350px] sm:h-[225px] md:w-[420px] md:h-[270px] bg-[var(--bg-surface-elevated)] rounded-xl overflow-hidden"
           >
             <Media
               src={src}
@@ -67,7 +67,7 @@ export const MarqueeSection: React.FC = () => {
         {ROW_2_TRIPLED.map((src, idx) => (
           <div
             key={`r2-${idx}`}
-            className="marquee-item shrink-0 w-[280px] h-[180px] sm:w-[350px] sm:h-[225px] md:w-[420px] md:h-[270px] bg-[#1A1A1A] rounded-xl overflow-hidden"
+            className="marquee-item shrink-0 w-[280px] h-[180px] sm:w-[350px] sm:h-[225px] md:w-[420px] md:h-[270px] bg-[var(--bg-surface-elevated)] rounded-xl overflow-hidden"
           >
             <Media
               src={src}

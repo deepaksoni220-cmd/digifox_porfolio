@@ -66,18 +66,18 @@ export const AdminPage: React.FC = () => {
     setUploading(false);
   };
 
-  if (loading) return <div className="p-10 text-white bg-black min-h-screen">Loading CMS...</div>;
-  if (!data) return <div className="p-10 text-white bg-black min-h-screen">Failed to connect to local CMS server. Did you run `node server/local-cms.js`?</div>;
+  if (loading) return <div className="p-10 text-[var(--text-strong)] bg-black min-h-screen">Loading CMS...</div>;
+  if (!data) return <div className="p-10 text-[var(--text-strong)] bg-black min-h-screen">Failed to connect to local CMS server. Did you run `node server/local-cms.js`?</div>;
 
   return (
-    <div className="p-10 text-white bg-black min-h-screen font-sans">
+    <div className="p-10 text-[var(--text-strong)] bg-black min-h-screen font-sans">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-10">
           <h1 className="text-4xl font-bold">Local Content Manager</h1>
           <button 
             onClick={handleSave} 
             disabled={saving || uploading}
-            className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded font-bold"
+            className="bg-blue-600 hover:bg-blue-500 text-[var(--text-strong)] px-6 py-2 rounded font-bold"
           >
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
@@ -93,7 +93,7 @@ export const AdminPage: React.FC = () => {
                 type="text" 
                 value={data.hero.banner} 
                 onChange={(e) => setData({ ...data, hero: { ...data.hero, banner: e.target.value } })}
-                className="bg-gray-800 text-white p-2 rounded flex-1 border border-gray-700"
+                className="bg-gray-800 text-[var(--text-strong)] p-2 rounded flex-1 border border-gray-700"
               />
               <label className="bg-gray-700 hover:bg-gray-600 cursor-pointer px-4 py-2 rounded flex items-center justify-center">
                 {uploading ? 'Uploading...' : 'Upload New'}
@@ -138,7 +138,7 @@ export const AdminPage: React.FC = () => {
                     newArr[index] = e.target.value;
                     setData({ ...data, marquee: newArr });
                   }}
-                  className="w-full bg-gray-900 text-xs p-1 rounded border border-gray-700 text-white"
+                  className="w-full bg-gray-900 text-xs p-1 rounded border border-gray-700 text-[var(--text-strong)]"
                 />
                 <button 
                   onClick={() => {
@@ -146,7 +146,7 @@ export const AdminPage: React.FC = () => {
                     newArr.splice(index, 1);
                     setData({ ...data, marquee: newArr });
                   }}
-                  className="absolute -top-2 -right-2 bg-red-600 text-white w-6 h-6 rounded-full text-xs hidden group-hover:block"
+                  className="absolute -top-2 -right-2 bg-red-600 text-[var(--text-strong)] w-6 h-6 rounded-full text-xs hidden group-hover:block"
                 >
                   X
                 </button>
@@ -167,7 +167,7 @@ export const AdminPage: React.FC = () => {
                     type="text" 
                     value={data.about.icons[pos]} 
                     onChange={(e) => setData({ ...data, about: { ...data.about, icons: { ...data.about.icons, [pos]: e.target.value } } })}
-                    className="bg-gray-800 text-white p-2 rounded flex-1 border border-gray-700 text-xs"
+                    className="bg-gray-800 text-[var(--text-strong)] p-2 rounded flex-1 border border-gray-700 text-xs"
                   />
                   <label className="bg-gray-700 hover:bg-gray-600 cursor-pointer px-3 py-2 rounded text-xs flex items-center">
                     Upload
@@ -199,7 +199,7 @@ export const AdminPage: React.FC = () => {
                   ] 
                 });
               }}
-              className="bg-green-600 hover:bg-green-500 text-white px-4 py-1 text-sm rounded font-bold"
+              className="bg-green-600 hover:bg-green-500 text-[var(--text-strong)] px-4 py-1 text-sm rounded font-bold"
             >
               + Add Link
             </button>
@@ -213,7 +213,7 @@ export const AdminPage: React.FC = () => {
                     newArr.splice(index, 1);
                     setData({ ...data, portfolioLinks: newArr });
                   }}
-                  className="absolute -top-3 -right-3 bg-red-600 text-white w-6 h-6 rounded-full text-xs hidden group-hover:block z-10"
+                  className="absolute -top-3 -right-3 bg-red-600 text-[var(--text-strong)] w-6 h-6 rounded-full text-xs hidden group-hover:block z-10"
                 >
                   X
                 </button>
@@ -243,7 +243,7 @@ export const AdminPage: React.FC = () => {
                         const newArr = [...data.portfolioLinks];
                         newArr[index].title = e.target.value;
                         setData({ ...data, portfolioLinks: newArr });
-                      }} className="w-full bg-gray-900 p-2 rounded text-sm text-white" />
+                      }} className="w-full bg-gray-900 p-2 rounded text-sm text-[var(--text-strong)]" />
                     </div>
                     <div>
                       <label className="block text-xs text-gray-400 mb-1">Category</label>
@@ -254,7 +254,7 @@ export const AdminPage: React.FC = () => {
                           newArr[index].category = e.target.value;
                           setData({ ...data, portfolioLinks: newArr });
                         }} 
-                        className="w-full bg-gray-900 p-2 rounded text-sm text-white border-r-8 border-transparent"
+                        className="w-full bg-gray-900 p-2 rounded text-sm text-[var(--text-strong)] border-r-8 border-transparent"
                       >
                         <option value="WordPress Website">WordPress Website</option>
                         <option value="Shopify Website">Shopify Website</option>
@@ -267,7 +267,7 @@ export const AdminPage: React.FC = () => {
                         const newArr = [...data.portfolioLinks];
                         newArr[index].url = e.target.value;
                         setData({ ...data, portfolioLinks: newArr });
-                      }} className="w-full bg-gray-900 p-2 rounded text-sm text-white" />
+                      }} className="w-full bg-gray-900 p-2 rounded text-sm text-[var(--text-strong)]" />
                     </div>
                   </div>
                 </div>
@@ -278,7 +278,7 @@ export const AdminPage: React.FC = () => {
             <button 
               onClick={handleSave}
               disabled={saving}
-              className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded font-bold transition-colors disabled:opacity-50"
+              className="bg-blue-600 hover:bg-blue-500 text-[var(--text-strong)] px-6 py-2 rounded font-bold transition-colors disabled:opacity-50"
             >
               {saving ? 'Saving...' : 'Save Portfolio Links'}
             </button>
@@ -301,7 +301,7 @@ export const AdminPage: React.FC = () => {
                       const newArr = [...data.projects];
                       newArr[index].name = e.target.value;
                       setData({ ...data, projects: newArr });
-                    }} className="w-full bg-gray-900 p-2 rounded text-sm text-white" />
+                    }} className="w-full bg-gray-900 p-2 rounded text-sm text-[var(--text-strong)]" />
                   </div>
                   <div>
                     <label className="block text-xs text-gray-400 mb-1">Category</label>
@@ -309,7 +309,7 @@ export const AdminPage: React.FC = () => {
                       const newArr = [...data.projects];
                       newArr[index].category = e.target.value;
                       setData({ ...data, projects: newArr });
-                    }} className="w-full bg-gray-900 p-2 rounded text-sm text-white" />
+                    }} className="w-full bg-gray-900 p-2 rounded text-sm text-[var(--text-strong)]" />
                   </div>
                 </div>
 

@@ -6,6 +6,7 @@ import { HeroSection } from './sections/HeroSection';
 import { MarqueeSection } from './sections/MarqueeSection';
 import { AboutSection } from './sections/AboutSection';
 import { PortfolioLinksSection } from './sections/PortfolioLinksSection';
+import { VideoComparisonSection } from './sections/VideoComparisonSection';
 import { ServicesSection } from './sections/ServicesSection';
 import { ProjectsSection } from './sections/ProjectsSection';
 import { FooterSection } from './sections/FooterSection';
@@ -41,6 +42,7 @@ function Portfolio() {
       <MarqueeSection />
       <AboutSection />
       <PortfolioLinksSection />
+      <VideoComparisonSection />
       <ServicesSection />
       <ProjectsSection />
       <FooterSection />

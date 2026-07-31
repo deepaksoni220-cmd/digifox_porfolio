@@ -70,7 +70,7 @@ export const FooterSection: React.FC = () => {
     <footer id="contact" className="relative z-20 bg-[var(--bg-base)] text-[var(--text-primary)] border-t border-[var(--border-strong)] pt-24 pb-12 overflow-hidden flex flex-col items-center">
       
       {/* Decorative Radial glow in background */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-t from-[#B600A8]/10 to-transparent rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-t from-[#B600A8]/10 to-transparent rounded-full blur-[120px] pointer-events-none z-0 transform-gpu" />
 
       <div className="w-full max-w-6xl px-5 sm:px-10 md:px-16 relative z-10 flex flex-col">
         

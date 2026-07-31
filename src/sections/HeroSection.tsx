@@ -12,13 +12,13 @@ export const HeroSection: React.FC = () => {
       
       {/* Static Aurora Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#e100ff] rounded-full mix-blend-screen filter blur-[150px] opacity-30"></div>
-        <div className="absolute top-[10%] right-[-10%] w-[60%] h-[60%] bg-[#3b82f6] rounded-full mix-blend-screen filter blur-[150px] opacity-20"></div>
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#e100ff] rounded-full mix-blend-screen filter blur-[150px] opacity-30 transform-gpu"></div>
+        <div className="absolute top-[10%] right-[-10%] w-[60%] h-[60%] bg-[#3b82f6] rounded-full mix-blend-screen filter blur-[150px] opacity-20 transform-gpu"></div>
       </div>
 
       {/* Navbar */}
       <FadeIn delay={0} y={-20} className="w-full flex justify-center z-50">
-        <nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-1.5 min-[375px]:gap-2 sm:gap-6 md:gap-10 px-3 py-2 sm:px-10 sm:py-3.5 md:px-12 md:py-4 bg-[var(--bg-base)]/65 backdrop-blur-md border border-[var(--border-strong)] rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] z-50 whitespace-nowrap w-[95%] sm:w-[90%] max-w-[fit-content] overflow-x-auto overflow-y-hidden no-scrollbar">
+        <nav className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-1.5 min-[375px]:gap-2 sm:gap-6 md:gap-10 px-3 py-2 sm:px-10 sm:py-3.5 md:px-12 md:py-4 bg-[var(--bg-base)]/65 backdrop-blur-md border border-[var(--border-strong)] rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] z-50 whitespace-nowrap w-[95%] sm:w-[90%] max-w-[fit-content] overflow-x-auto overflow-y-hidden no-scrollbar transform-gpu">
           {[
             { name: "About", href: "#about" },
             { name: "Portfolio", href: "#portfolio" },

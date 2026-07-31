@@ -42,7 +42,7 @@ export const MarqueeSection: React.FC = () => {
     >
       {/* Row 1 */}
       <div 
-        className="flex gap-2 sm:gap-3 will-change-transform whitespace-nowrap"
+        className="flex gap-2 sm:gap-3 will-change-transform transform-gpu whitespace-nowrap"
         style={{ transform: `translateX(${scrollOffset - 200}px)` }}
       >
         {ROW_1_TRIPLED.map((src, idx) => (
@@ -61,7 +61,7 @@ export const MarqueeSection: React.FC = () => {
 
       {/* Row 2 */}
       <div 
-        className="flex gap-2 sm:gap-3 will-change-transform whitespace-nowrap"
+        className="flex gap-2 sm:gap-3 will-change-transform transform-gpu whitespace-nowrap"
         style={{ transform: `translateX(${-(scrollOffset - 200)}px)` }}
       >
         {ROW_2_TRIPLED.map((src, idx) => (

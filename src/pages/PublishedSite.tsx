@@ -55,7 +55,7 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
         title={data.hero.title}
         description={data.hero.subtitle}
       />
-      <main className="w-full min-h-screen bg-black overflow-hidden">
+      <main className="w-full min-h-screen bg-gradient-to-br from-blue-900 via-blue-950 to-black overflow-hidden">
         <PreviewRenderer data={data} fullScreen={true} logoUrl={logoUrl} />
       </main>
     </>

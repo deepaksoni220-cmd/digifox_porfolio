@@ -16,10 +16,10 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScre
   const isPortfolio = data.websiteType === "Portfolio";
 
   // Determine wrapper classes
-  let wrapperClasses = `w-full bg-[var(--bg-base)] text-[var(--text-primary)] font-['Kanit'] relative overflow-hidden `;
+  let wrapperClasses = `w-full ${fullScreen ? 'bg-transparent' : 'bg-[var(--bg-base)]'} text-[var(--text-primary)] font-['Kanit'] relative overflow-hidden `;
   if (isMobileApp) {
     if (fullScreen) {
-       wrapperClasses = `w-full min-h-screen bg-black flex items-center justify-center font-['Kanit'] relative`;
+       wrapperClasses = `w-full min-h-screen bg-transparent flex items-center justify-center font-['Kanit'] relative`;
     } else {
        wrapperClasses = `w-full h-[800px] bg-[var(--bg-surface)] flex items-center justify-center font-['Kanit'] relative rounded-3xl`;
     }

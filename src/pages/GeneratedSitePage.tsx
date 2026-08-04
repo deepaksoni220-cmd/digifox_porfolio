@@ -28,7 +28,7 @@ export const GeneratedSitePage: React.FC = () => {
   }
 
   return (
-    <main className="w-full min-h-screen">
+    <main className="w-full min-h-screen bg-gradient-to-br from-blue-900 via-blue-950 to-black">
       <PreviewRenderer data={data} fullScreen={true} logoUrl={logoUrl} />
     </main>
   );

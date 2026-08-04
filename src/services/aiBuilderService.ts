@@ -110,9 +110,11 @@ export const generateWebsite = async (
   }
 
   try {
-    const parsed = JSON.parse(jsonString);
+    const cleanString = jsonString.replace(/```json/gi, '').replace(/```/g, '').trim();
+    const parsed = JSON.parse(cleanString);
     return parsed as GeneratedWebsiteData;
   } catch (e) {
+    console.error("Raw AI Response:", jsonString);
     throw new Error("Failed to parse JSON response from AI.");
   }
 };

@@ -3,10 +3,12 @@ export interface GeneratedWebsiteData {
     title: string;
     subtitle: string;
     ctaText: string;
+    imagePrompt: string;
   };
   about: {
     heading: string;
     description: string;
+    imagePrompt: string;
   };
   services: {
     title: string;
@@ -31,8 +33,8 @@ You MUST reply strictly with valid JSON matching this schema, and nothing else. 
 
 Schema:
 {
-  "hero": { "title": "...", "subtitle": "...", "ctaText": "..." },
-  "about": { "heading": "...", "description": "..." },
+  "hero": { "title": "...", "subtitle": "...", "ctaText": "...", "imagePrompt": "A highly detailed, photorealistic image description for a hero background (e.g. 'A sleek luxury coffee shop interior at golden hour, cinematic lighting')" },
+  "about": { "heading": "...", "description": "...", "imagePrompt": "A highly detailed image description for the about section (e.g. 'A professional team working in a modern glass office, 8k resolution, photorealistic')" },
   "services": [
     { "title": "...", "description": "...", "icon": "emoji" }, // exactly 3 services
     { "title": "...", "description": "...", "icon": "emoji" },

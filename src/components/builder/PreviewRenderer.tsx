@@ -27,8 +27,19 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data }) => {
       </nav>
 
       {/* Hero Section */}
-      <section id="hero" className="min-h-screen flex items-center justify-center relative p-10 text-center">
-        <div className="absolute inset-0 opacity-10 pointer-events-none ai-theme-bg mix-blend-screen filter blur-[150px]"></div>
+      <section id="hero" className="min-h-screen flex items-center justify-center relative p-10 text-center overflow-hidden">
+        {data.hero.imagePrompt ? (
+          <div className="absolute inset-0 z-0">
+            <img 
+              src={`https://image.pollinations.ai/prompt/${encodeURIComponent(data.hero.imagePrompt)}?width=1920&height=1080&nologo=true`} 
+              alt="Hero Background" 
+              className="w-full h-full object-cover opacity-30"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--bg-base)]"></div>
+          </div>
+        ) : (
+          <div className="absolute inset-0 opacity-10 pointer-events-none ai-theme-bg mix-blend-screen filter blur-[150px]"></div>
+        )}
         
         <FadeIn delay={0.2} y={30} className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
           <motion.h1 
@@ -50,12 +61,26 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data }) => {
 
       {/* About Section */}
       <section id="about" className="py-32 px-10 bg-[var(--bg-surface)]">
-        <FadeIn delay={0.1} y={40} className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold uppercase tracking-widest ai-theme-primary mb-8">{data.about.heading}</h2>
-          <p className="text-xl sm:text-2xl leading-relaxed font-light text-[var(--text-strong)]/90">
-            {data.about.description}
-          </p>
-        </FadeIn>
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
+          <FadeIn delay={0.1} y={40} className="flex-1">
+            <h2 className="text-4xl font-bold uppercase tracking-widest ai-theme-primary mb-8">{data.about.heading}</h2>
+            <p className="text-xl sm:text-2xl leading-relaxed font-light text-[var(--text-strong)]/90">
+              {data.about.description}
+            </p>
+          </FadeIn>
+          
+          {data.about.imagePrompt && (
+            <FadeIn delay={0.3} y={40} className="flex-1 w-full">
+              <div className="relative rounded-3xl overflow-hidden aspect-video sm:aspect-square md:aspect-[4/3] shadow-2xl">
+                <img 
+                  src={`https://image.pollinations.ai/prompt/${encodeURIComponent(data.about.imagePrompt)}?width=800&height=600&nologo=true`} 
+                  alt="About Us" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </FadeIn>
+          )}
+        </div>
       </section>
 
       {/* Services Section */}

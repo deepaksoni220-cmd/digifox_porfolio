@@ -1,4 +1,5 @@
 export interface GeneratedWebsiteData {
+  websiteType: string;
   hero: {
     title: string;
     subtitle: string;
@@ -10,10 +11,12 @@ export interface GeneratedWebsiteData {
     description: string;
     imagePrompt: string;
   };
-  services: {
+  items: {
     title: string;
     description: string;
     icon: string;
+    price?: string; // For e-commerce
+    imagePrompt?: string; // For portfolio/ecommerce
   }[];
   contact: {
     heading: string;
@@ -74,18 +77,19 @@ You MUST reply strictly with valid JSON matching this schema, and nothing else. 
 
 Schema:
 {
+  "websiteType": "The specific type of website provided in the instructions",
   "hero": { "title": "...", "subtitle": "...", "ctaText": "...", "imagePrompt": "A highly detailed, photorealistic image description for a hero background (e.g. 'A sleek luxury coffee shop interior at golden hour, cinematic lighting')" },
   "about": { "heading": "...", "description": "...", "imagePrompt": "A highly detailed image description for the about section (e.g. 'A professional team working in a modern glass office, 8k resolution, photorealistic')" },
-  "services": [
-    { "title": "...", "description": "...", "icon": "emoji" }, // exactly 3 services
-    { "title": "...", "description": "...", "icon": "emoji" },
-    { "title": "...", "description": "...", "icon": "emoji" }
+  "items": [
+    { "title": "...", "description": "...", "icon": "emoji", "price": "Optional, for e-commerce (e.g. '$49.99')", "imagePrompt": "Optional, for portfolios or products" }, 
+    { "title": "...", "description": "...", "icon": "emoji", "price": "...", "imagePrompt": "..." },
+    { "title": "...", "description": "...", "icon": "emoji", "price": "...", "imagePrompt": "..." }
   ],
   "contact": { "heading": "...", "buttonText": "..." },
   "theme": { "primaryColor": "#hex", "secondaryColor": "#hex" }
 }`;
 
-export const generateWebsite = async (chatHistory: ChatMessage[]): Promise<GeneratedWebsiteData> => {
+export const generateWebsite = async (chatHistory: ChatMessage[], websiteType: string): Promise<GeneratedWebsiteData> => {
   const contents = chatHistory.map(msg => ({
     role: msg.role === 'user' ? 'user' : 'model',
     parts: [{ text: msg.text }]
@@ -94,7 +98,7 @@ export const generateWebsite = async (chatHistory: ChatMessage[]): Promise<Gener
   // Append the final instruction to generate the JSON
   contents.push({
     role: 'user',
-    parts: [{ text: "Great, please generate the final JSON layout based on our discussion." }]
+    parts: [{ text: `Great, please generate the final JSON layout based on our discussion. The website type is: ${websiteType}. Make sure to set "websiteType" in the JSON to exactly "${websiteType}".` }]
   });
 
   const body = {

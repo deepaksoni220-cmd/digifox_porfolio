@@ -82,7 +82,7 @@ export const AiBuilderPage: React.FC = () => {
     }
 
     try {
-      const result = await generateWebsite(finalHistory);
+      const result = await generateWebsite(finalHistory, websiteType);
       setPreviewData(result);
       sessionStorage.setItem("generatedSite", JSON.stringify(result));
       if (logoUrl) {

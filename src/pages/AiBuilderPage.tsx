@@ -29,6 +29,7 @@ export const AiBuilderPage: React.FC = () => {
     try {
       const result = await generateWebsite(prompt, apiKey, provider);
       setPreviewData(result);
+      sessionStorage.setItem("generatedSite", JSON.stringify(result));
     } catch (err: any) {
       setError(err.message || "Failed to generate website. Check your API key and try again.");
     } finally {
@@ -114,9 +115,19 @@ export const AiBuilderPage: React.FC = () => {
 
         {/* Preview Area */}
         <div className="w-full">
-          <h2 className="text-2xl font-black uppercase tracking-widest mb-6 border-b border-[var(--border-strong)] pb-4">
-            Live Preview
-          </h2>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b border-[var(--border-strong)] pb-4 gap-4">
+            <h2 className="text-2xl font-black uppercase tracking-widest">
+              Live Preview
+            </h2>
+            {previewData && !isLoading && (
+              <button 
+                onClick={() => window.open('/generated-site', '_blank')}
+                className="bg-[var(--text-strong)] text-[var(--bg-base)] px-6 py-2 rounded-full font-bold uppercase tracking-wider text-sm transition-transform hover:scale-105"
+              >
+                Open Full Screen ↗
+              </button>
+            )}
+          </div>
           
           <AnimatePresence mode="wait">
             {isLoading ? (

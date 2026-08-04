@@ -5,11 +5,14 @@ import { FadeIn } from '../FadeIn';
 
 interface PreviewRendererProps {
   data: GeneratedWebsiteData;
+  fullScreen?: boolean;
 }
 
-export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data }) => {
+export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScreen = false }) => {
   return (
-    <div className="w-full bg-[var(--bg-base)] text-[var(--text-primary)] font-['Kanit'] relative h-[800px] border-4 border-gray-800 rounded-3xl shadow-2xl shadow-black/50 overflow-hidden">
+    <div className={`w-full bg-[var(--bg-base)] text-[var(--text-primary)] font-['Kanit'] relative overflow-hidden ${
+      fullScreen ? 'min-h-screen' : 'h-[800px] border-4 border-gray-800 rounded-3xl shadow-2xl shadow-black/50'
+    }`}>
       
       {/* Dynamic Theme Styles */}
       <style>{`
@@ -19,7 +22,7 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data }) => {
       `}</style>
 
       {/* Simulated Navbar (Fixed to top of preview) */}
-      <nav className="absolute top-4 left-1/2 -translate-x-1/2 flex items-center justify-center gap-4 sm:gap-6 px-6 sm:px-8 py-3 bg-[var(--bg-base)]/90 backdrop-blur-md border border-[var(--border-strong)] rounded-full z-[100] shadow-lg text-xs sm:text-sm uppercase tracking-wider font-semibold">
+      <nav className={`${fullScreen ? 'fixed' : 'absolute'} top-4 left-1/2 -translate-x-1/2 flex items-center justify-center gap-4 sm:gap-6 px-6 sm:px-8 py-3 bg-[var(--bg-base)]/90 backdrop-blur-md border border-[var(--border-strong)] rounded-full z-[100] shadow-lg text-xs sm:text-sm uppercase tracking-wider font-semibold`}>
         <a href="#hero" className="hover:text-[var(--text-strong)] transition-colors">Home</a>
         <a href="#about" className="hover:text-[var(--text-strong)] transition-colors">About</a>
         <a href="#services" className="hover:text-[var(--text-strong)] transition-colors">Services</a>
@@ -29,7 +32,7 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data }) => {
       {/* Floating WhatsApp Button (Fixed to bottom right of preview) */}
       <button 
         onClick={() => window.open(`https://wa.me/918696755996?text=Hi, I'm interested in the ${data.hero.title} website!`, '_blank')}
-        className="absolute bottom-6 right-6 z-[100] bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95"
+        className={`${fullScreen ? 'fixed' : 'absolute'} bottom-6 right-6 z-[100] bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95`}
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
@@ -37,7 +40,7 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data }) => {
       </button>
 
       {/* Scrollable Content Container */}
-      <div className="w-full h-full overflow-y-auto overflow-x-hidden scroll-smooth pb-20">
+      <div className={`w-full ${fullScreen ? '' : 'h-full overflow-y-auto'} overflow-x-hidden scroll-smooth pb-20`}>
         
         {/* Hero Section */}
         <section id="hero" className="min-h-screen flex items-center justify-center relative p-10 text-center overflow-hidden">

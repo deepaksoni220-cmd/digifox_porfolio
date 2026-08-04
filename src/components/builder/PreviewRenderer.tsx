@@ -87,12 +87,12 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScre
             {data.hero.imagePrompt ? (
               <div className="absolute inset-0 z-0 bg-gray-900">
                 <img 
-                  src={`https://image.pollinations.ai/prompt/${encodeURIComponent(data.hero.imagePrompt)}?width=1920&height=1080&nologo=true`} 
+                  src={`https://image.pollinations.ai/prompt/${encodeURIComponent(data.hero.imagePrompt)}?width=1920&height=1080&nologo=true&model=flux&enhance=true`} 
                   alt="Hero Background" 
-                  className="w-full h-full object-cover opacity-50"
+                  className="w-full h-full object-cover opacity-60"
                   onError={(e) => { e.currentTarget.style.display = 'none'; }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-black/50 to-black/50"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent backdrop-blur-[2px]"></div>
               </div>
             ) : (
               <div className="absolute inset-0 opacity-10 pointer-events-none ai-theme-bg mix-blend-screen filter blur-[150px]"></div>
@@ -130,7 +130,7 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScre
                 <FadeIn delay={0.3} y={40} className="flex-1 w-full">
                   <div className="relative rounded-3xl overflow-hidden aspect-video shadow-2xl">
                     <img 
-                      src={`https://image.pollinations.ai/prompt/${encodeURIComponent(data.about.imagePrompt)}?width=800&height=600&nologo=true`} 
+                      src={`https://image.pollinations.ai/prompt/${encodeURIComponent(data.about.imagePrompt)}?width=800&height=600&nologo=true&model=flux&enhance=true`} 
                       alt="About Us" 
                       className="w-full h-full object-cover"
                       onError={(e) => { e.currentTarget.style.display = 'none'; }}
@@ -161,7 +161,7 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScre
                         <div className="aspect-square bg-[var(--bg-base)] relative overflow-hidden">
                           {item.imagePrompt ? (
                             <img 
-                              src={`https://image.pollinations.ai/prompt/${encodeURIComponent(item.imagePrompt)}?width=400&height=400&nologo=true`} 
+                              src={`https://image.pollinations.ai/prompt/${encodeURIComponent(item.imagePrompt)}?width=400&height=400&nologo=true&model=flux&enhance=true`} 
                               alt={item.title} 
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                               onError={(e) => { e.currentTarget.style.display = 'none'; }}
@@ -187,7 +187,7 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScre
                       <div className="group relative rounded-3xl overflow-hidden aspect-[4/5] shadow-lg cursor-pointer h-full">
                         {item.imagePrompt ? (
                           <img 
-                            src={`https://image.pollinations.ai/prompt/${encodeURIComponent(item.imagePrompt)}?width=600&height=800&nologo=true`} 
+                            src={`https://image.pollinations.ai/prompt/${encodeURIComponent(item.imagePrompt)}?width=600&height=800&nologo=true&model=flux&enhance=true`} 
                             alt={item.title} 
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                             onError={(e) => { e.currentTarget.style.display = 'none'; }}

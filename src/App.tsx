@@ -14,8 +14,8 @@ import { ProjectsSection } from './sections/ProjectsSection';
 import { FooterSection } from './sections/FooterSection';
 import { ContactButton } from './components/ContactButton';
 import { AdminPage } from './pages/AdminPage';
-import BasicVsExclusivePage from './pages/BasicVsExclusivePage';
-import AiBuilderPage from './pages/AiBuilderPage';
+import { PremiumLandingPage } from './pages/PremiumLandingPage';
+import { AiBuilderPage } from './pages/AiBuilderPage';
 import { GeneratedSitePage } from './pages/GeneratedSitePage';
 
 function Portfolio() {
@@ -74,7 +74,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Portfolio />} />
           <Route path="/admin" element={<AdminPage />} />
-          <Route path="/basic_vs_exclusive" element={<BasicVsExclusivePage />} />
+          <Route path="/basic_vs_exclusive" element={<PremiumLandingPage />} />
           <Route path="/ai-builder" element={<AiBuilderPage />} />
           <Route path="/generated-site" element={<GeneratedSitePage />} />
         </Routes>

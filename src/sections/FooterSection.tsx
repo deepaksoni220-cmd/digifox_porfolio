@@ -63,7 +63,8 @@ export const FooterSection: React.FC = () => {
     { name: "Our Studio", href: "/#services" },
     { name: "Projects", href: "/#projects" },
     { name: "Contact", href: "/#contact" },
-    { name: "Basic vs Exclusive", href: "/basic_vs_exclusive" }
+    { name: "Basic vs Exclusive", href: "/basic_vs_exclusive" },
+    { name: "AI Website Builder", href: "/ai-builder" }
   ];
 
   return (
@@ -132,7 +133,7 @@ export const FooterSection: React.FC = () => {
                   <motion.a
                     href={link.href}
                     className={`inline-flex items-center gap-1.5 text-sm sm:text-base transition-colors duration-200 ${
-                      link.name === "Basic vs Exclusive"
+                      link.name === "Basic vs Exclusive" || link.name === "AI Website Builder"
                         ? "font-bold text-[var(--text-strong)] hover:text-[#3b82f6]"
                         : "font-light text-[var(--text-primary)]/70 hover:text-[var(--text-strong)]"
                     }`}

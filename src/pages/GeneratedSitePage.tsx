@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { GeneratedWebsiteData } from '../services/aiBuilderService';
+import type { GeneratedWebsiteData } from '../services/aiBuilderService';
 import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 
 export const GeneratedSitePage: React.FC = () => {

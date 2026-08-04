@@ -33,8 +33,8 @@ export interface ChatMessage {
   text: string;
 }
 
-// Hardcoded API Key for seamless visitor experience
-const GEMINI_API_KEY = "AIzaSyC_VXUooaB-zIGyGuW2KbhzHlbeBAp23sY";
+// Use environment variable to prevent API key leaks on GitHub
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 const PLAN_SYSTEM_PROMPT = `You are an expert web design consultant. 
@@ -43,6 +43,10 @@ Ask clarifying questions, suggest color themes, and propose a 4-section structur
 Keep your responses very brief, conversational, and encouraging. Never output JSON in this phase, just talk to the user.`;
 
 export const planWebsite = async (chatHistory: ChatMessage[]): Promise<string> => {
+  if (!GEMINI_API_KEY) {
+    throw new Error("Missing Gemini API Key. Please add VITE_GEMINI_API_KEY to your .env.local file.");
+  }
+  
   // Format history for Gemini API
   const contents = chatHistory.map(msg => ({
     role: msg.role === 'user' ? 'user' : 'model',
@@ -90,6 +94,10 @@ Schema:
 }`;
 
 export const generateWebsite = async (chatHistory: ChatMessage[], websiteType: string): Promise<GeneratedWebsiteData> => {
+  if (!GEMINI_API_KEY) {
+    throw new Error("Missing Gemini API Key. Please add VITE_GEMINI_API_KEY to your .env.local file.");
+  }
+
   const contents = chatHistory.map(msg => ({
     role: msg.role === 'user' ? 'user' : 'model',
     parts: [{ text: msg.text }]

@@ -63,7 +63,7 @@ export const Preloader: React.FC = () => {
 
       {/* Decorative Background Elements */}
       <motion.div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-t from-[#B600A8]/20 to-transparent rounded-full blur-[120px] pointer-events-none z-0 transform-gpu"
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[radial-gradient(ellipse_at_center,_rgba(182,0,168,0.2)_0%,_transparent_70%)] rounded-full pointer-events-none z-0 transform-gpu"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.5, ease: 'easeOut' }}

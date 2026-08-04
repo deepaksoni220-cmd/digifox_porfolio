@@ -15,6 +15,7 @@ import { FooterSection } from './sections/FooterSection';
 import { ContactButton } from './components/ContactButton';
 import { AdminPage } from './pages/AdminPage';
 import { PremiumLandingPage } from './pages/PremiumLandingPage';
+import { AiBuilderPage } from './pages/AiBuilderPage';
 
 function Portfolio() {
   const [isLoading, setIsLoading] = useState(true);
@@ -73,6 +74,7 @@ function App() {
           <Route path="/" element={<Portfolio />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/basic_vs_exclusive" element={<PremiumLandingPage />} />
+          <Route path="/ai-builder" element={<AiBuilderPage />} />
         </Routes>
       </Router>
     </HelmetProvider>

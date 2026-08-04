@@ -6,7 +6,7 @@ export const FinalCtaSection: React.FC = () => {
     <section className="py-24 sm:py-32 bg-[var(--bg-surface)] border-t border-[var(--border-strong)] relative overflow-hidden">
       
       {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#3b82f6]/20 rounded-full blur-[120px] pointer-events-none transform-gpu"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(ellipse_at_center,_rgba(59,130,246,0.2)_0%,_transparent_70%)] rounded-full pointer-events-none transform-gpu"></div>
 
       <div className="max-w-4xl mx-auto px-6 sm:px-10 text-center relative z-10">
         

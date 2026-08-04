@@ -12,8 +12,8 @@ export const HeroSection: React.FC = () => {
       
       {/* Static Aurora Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#e100ff] rounded-full mix-blend-screen filter blur-[150px] opacity-30 transform-gpu"></div>
-        <div className="absolute top-[10%] right-[-10%] w-[60%] h-[60%] bg-[#3b82f6] rounded-full mix-blend-screen filter blur-[150px] opacity-20 transform-gpu"></div>
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[radial-gradient(ellipse_at_center,_rgba(225,0,255,0.3)_0%,_transparent_70%)] transform-gpu"></div>
+        <div className="absolute top-[10%] right-[-10%] w-[60%] h-[60%] bg-[radial-gradient(ellipse_at_center,_rgba(59,130,246,0.2)_0%,_transparent_70%)] transform-gpu"></div>
       </div>
 
       {/* Navbar */}

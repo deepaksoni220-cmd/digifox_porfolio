@@ -29,13 +29,14 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data }) => {
       {/* Hero Section */}
       <section id="hero" className="min-h-screen flex items-center justify-center relative p-10 text-center overflow-hidden">
         {data.hero.imagePrompt ? (
-          <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 z-0 bg-gray-900">
             <img 
               src={`https://image.pollinations.ai/prompt/${encodeURIComponent(data.hero.imagePrompt)}?width=1920&height=1080&nologo=true`} 
               alt="Hero Background" 
-              className="w-full h-full object-cover opacity-30"
+              className="w-full h-full object-cover opacity-50"
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--bg-base)]"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-black/50"></div>
           </div>
         ) : (
           <div className="absolute inset-0 opacity-10 pointer-events-none ai-theme-bg mix-blend-screen filter blur-[150px]"></div>
@@ -46,11 +47,11 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data }) => {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-5xl sm:text-7xl font-black uppercase tracking-tighter text-[var(--text-strong)] leading-none mb-6"
+            className="text-5xl sm:text-7xl font-black uppercase tracking-tighter text-white drop-shadow-2xl leading-none mb-6"
           >
             {data.hero.title}
           </motion.h1>
-          <p className="text-xl sm:text-2xl text-[var(--text-primary)]/80 font-light mb-10 max-w-2xl">
+          <p className="text-xl sm:text-2xl text-white/90 font-medium drop-shadow-md mb-10 max-w-2xl">
             {data.hero.subtitle}
           </p>
           <button className="px-10 py-4 rounded-full ai-theme-bg text-white font-bold text-lg uppercase tracking-widest hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.2)]">
@@ -76,6 +77,7 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data }) => {
                   src={`https://image.pollinations.ai/prompt/${encodeURIComponent(data.about.imagePrompt)}?width=800&height=600&nologo=true`} 
                   alt="About Us" 
                   className="w-full h-full object-cover"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
                 />
               </div>
             </FadeIn>

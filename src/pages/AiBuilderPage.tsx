@@ -281,7 +281,7 @@ export const AiBuilderPage: React.FC = () => {
                 <button 
                   onClick={handlePublish}
                   disabled={isPublishing}
-                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-bold uppercase tracking-wider text-sm transition-transform hover:scale-105 shadow-[0_0_15px_rgba(34,197,94,0.3)] disabled:opacity-50"
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-bold uppercase tracking-wider text-sm transition-transform hover:scale-105 shadow-[0_0_15px_rgba(59,130,246,0.3)] disabled:opacity-50"
                 >
                   {isPublishing ? "Publishing..." : "Publish to Web 🚀"}
                 </button>
@@ -296,9 +296,9 @@ export const AiBuilderPage: React.FC = () => {
           </div>
           
           {publishedUrl && (
-            <div className="mb-6 bg-green-500/10 border border-green-500/30 text-green-400 p-4 rounded-xl flex items-center justify-between">
+            <div className="mb-6 bg-blue-500/10 border border-blue-500/30 text-blue-400 p-4 rounded-xl flex items-center justify-between">
               <span className="font-medium">Your website is live!</span>
-              <a href={publishedUrl} target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-green-300">
+              <a href={publishedUrl} target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-300">
                 {publishedUrl}
               </a>
             </div>

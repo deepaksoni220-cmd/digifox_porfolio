@@ -8,6 +8,9 @@ export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [currentInput, setCurrentInput] = useState("");
   
+  const [websiteType, setWebsiteType] = useState("Local Business");
+  const [logoUrl, setLogoUrl] = useState("");
+
   const [isPlanning, setIsPlanning] = useState(false);
   const [isBuilding, setIsBuilding] = useState(false);
   const [error, setError] = useState("");
@@ -21,11 +24,29 @@ export const AiBuilderPage: React.FC = () => {
     }
   }, [chatHistory]);
 
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handlePlan = async () => {
     if (!currentInput.trim()) return;
 
     setError("");
-    const userMsg: ChatMessage = { role: 'user', text: currentInput.trim() };
+    
+    // Add website type context if this is the first message
+    let messageText = currentInput.trim();
+    if (chatHistory.length === 0) {
+      messageText = `I want to build a ${websiteType} website. ${messageText}`;
+    }
+
+    const userMsg: ChatMessage = { role: 'user', text: messageText };
     const updatedHistory = [...chatHistory, userMsg];
     
     setChatHistory(updatedHistory);
@@ -64,6 +85,11 @@ export const AiBuilderPage: React.FC = () => {
       const result = await generateWebsite(finalHistory);
       setPreviewData(result);
       sessionStorage.setItem("generatedSite", JSON.stringify(result));
+      if (logoUrl) {
+        sessionStorage.setItem("generatedLogo", logoUrl);
+      } else {
+        sessionStorage.removeItem("generatedLogo");
+      }
     } catch (err: any) {
       setError(err.message || "Failed to generate website layout.");
     } finally {
@@ -91,6 +117,41 @@ export const AiBuilderPage: React.FC = () => {
               <p className="text-[var(--text-primary)]/70 text-lg max-w-2xl">
                 Discuss your vision with our AI architect. Once you're happy with the plan, click Build to instantly generate a beautifully animated one-page website.
               </p>
+            </div>
+
+            {/* Configuration Row */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-2">
+              <div className="flex-1 flex flex-col gap-2">
+                <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Website Type</label>
+                <select 
+                  value={websiteType}
+                  onChange={(e) => setWebsiteType(e.target.value)}
+                  disabled={chatHistory.length > 0}
+                  className="bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none disabled:opacity-50"
+                >
+                  <option value="Local Business">Local Business</option>
+                  <option value="Portfolio">Portfolio</option>
+                  <option value="Factory / Manufacturing">Factory / Manufacturing</option>
+                  <option value="E-Commerce Store">E-Commerce Store</option>
+                  <option value="Mobile Web App">Mobile Web App</option>
+                </select>
+              </div>
+
+              <div className="flex-1 flex flex-col gap-2">
+                <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Company Logo (Optional)</label>
+                <div className="relative flex items-center">
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    onChange={handleLogoUpload}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  />
+                  <div className="w-full bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-secondary)] flex justify-between items-center hover:border-[#3b82f6] transition-colors">
+                    <span className="truncate">{logoUrl ? "Logo Uploaded!" : "Choose an image file..."}</span>
+                    {logoUrl && <img src={logoUrl} alt="Logo" className="h-6 w-auto object-contain rounded" />}
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Chat UI */}
@@ -217,7 +278,7 @@ export const AiBuilderPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full"
               >
-                <PreviewRenderer data={previewData} />
+                <PreviewRenderer data={previewData} logoUrl={logoUrl} />
               </motion.div>
             ) : (
               <motion.div 

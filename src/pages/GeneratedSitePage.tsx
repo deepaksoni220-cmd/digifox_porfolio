@@ -4,12 +4,15 @@ import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 
 export const GeneratedSitePage: React.FC = () => {
   const [data, setData] = useState<GeneratedWebsiteData | null>(null);
+  const [logoUrl, setLogoUrl] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const saved = sessionStorage.getItem("generatedSite");
+    const savedLogo = sessionStorage.getItem("generatedLogo");
     if (saved) {
       try {
         setData(JSON.parse(saved));
+        if (savedLogo) setLogoUrl(savedLogo);
       } catch (e) {
         console.error("Failed to parse saved site data");
       }
@@ -26,7 +29,7 @@ export const GeneratedSitePage: React.FC = () => {
 
   return (
     <main className="w-full min-h-screen">
-      <PreviewRenderer data={data} fullScreen={true} />
+      <PreviewRenderer data={data} fullScreen={true} logoUrl={logoUrl} />
     </main>
   );
 };

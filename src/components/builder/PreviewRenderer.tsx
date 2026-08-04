@@ -6,9 +6,10 @@ import { FadeIn } from '../FadeIn';
 interface PreviewRendererProps {
   data: GeneratedWebsiteData;
   fullScreen?: boolean;
+  logoUrl?: string;
 }
 
-export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScreen = false }) => {
+export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScreen = false, logoUrl }) => {
   return (
     <div className={`w-full bg-[var(--bg-base)] text-[var(--text-primary)] font-['Kanit'] relative overflow-hidden ${
       fullScreen ? 'min-h-screen' : 'h-[800px] border-4 border-gray-800 rounded-3xl shadow-2xl shadow-black/50'
@@ -22,11 +23,16 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScre
       `}</style>
 
       {/* Simulated Navbar (Fixed to top of preview) */}
-      <nav className={`${fullScreen ? 'fixed' : 'absolute'} top-4 left-1/2 -translate-x-1/2 flex items-center justify-center gap-4 sm:gap-6 px-6 sm:px-8 py-3 bg-[var(--bg-base)]/90 backdrop-blur-md border border-[var(--border-strong)] rounded-full z-[100] shadow-lg text-xs sm:text-sm uppercase tracking-wider font-semibold`}>
-        <a href="#hero" className="hover:text-[var(--text-strong)] transition-colors">Home</a>
-        <a href="#about" className="hover:text-[var(--text-strong)] transition-colors">About</a>
-        <a href="#services" className="hover:text-[var(--text-strong)] transition-colors">Services</a>
-        <a href="#contact" className="hover:text-[var(--text-strong)] transition-colors">Contact</a>
+      <nav className={`${fullScreen ? 'fixed' : 'absolute'} top-4 left-1/2 -translate-x-1/2 flex items-center justify-between w-max gap-6 px-6 sm:px-8 py-3 bg-[var(--bg-base)]/90 backdrop-blur-md border border-[var(--border-strong)] rounded-full z-[100] shadow-lg text-xs sm:text-sm uppercase tracking-wider font-semibold`}>
+        {logoUrl && (
+          <img src={logoUrl} alt="Logo" className="h-6 sm:h-8 w-auto object-contain border-r border-[var(--border-strong)] pr-4 mr-2" />
+        )}
+        <div className="flex gap-4 sm:gap-6 items-center">
+          <a href="#hero" className="hover:text-[var(--text-strong)] transition-colors">Home</a>
+          <a href="#about" className="hover:text-[var(--text-strong)] transition-colors">About</a>
+          <a href="#services" className="hover:text-[var(--text-strong)] transition-colors">Services</a>
+          <a href="#contact" className="hover:text-[var(--text-strong)] transition-colors">Contact</a>
+        </div>
       </nav>
 
       {/* Floating WhatsApp Button (Fixed to bottom right of preview) */}
@@ -134,7 +140,10 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScre
           </FadeIn>
           
           <div className="w-full max-w-6xl border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
-            <div className="text-white font-bold text-2xl uppercase tracking-widest">{data.hero.title}</div>
+            <div className="flex items-center gap-4">
+              {logoUrl && <img src={logoUrl} alt="Logo" className="h-10 w-auto object-contain" />}
+              <div className="text-white font-bold text-2xl uppercase tracking-widest">{data.hero.title}</div>
+            </div>
             <div className="flex gap-6 text-white/50 text-sm font-semibold uppercase tracking-wider">
               <a href="#hero" className="hover:text-white transition-colors">Home</a>
               <a href="#about" className="hover:text-white transition-colors">About</a>

@@ -69,29 +69,41 @@ function Portfolio() {
 }
 
 function App() {
-  const hostname = window.location.hostname;
-  
-  // Check if it's a subdomain (e.g., brandname.digifox.world or brandname.localhost)
-  // Exclude www, localhost (root), and digifox.world (root)
-  const isLocalSubdomain = hostname.endsWith('.localhost') && hostname !== 'localhost';
-  const isProdSubdomain = hostname.endsWith('.digifox.world') && hostname !== 'www.digifox.world' && hostname !== 'digifox.world';
-  
-  if (isLocalSubdomain || isProdSubdomain) {
-    let subdomain = '';
-    if (isLocalSubdomain) {
-      subdomain = hostname.replace('.localhost', '');
-    } else if (isProdSubdomain) {
-      subdomain = hostname.replace('.digifox.world', '');
+  const [subdomain, setSubdomain] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Check for admin bypass token
+    const params = new URLSearchParams(window.location.search);
+    const adminToken = params.get('admin');
+    if (adminToken) {
+      localStorage.setItem('adminBypassToken', adminToken);
+      // Clean up the URL
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
+
+    const hostname = window.location.hostname;
+    // Check if it's a subdomain (e.g., brandname.digifox.world or brandname.localhost)
+    // Exclude www, localhost (root), and digifox.world (root)
+    const isLocalSubdomain = hostname.endsWith('.localhost') && hostname !== 'localhost';
+    const isProdSubdomain = hostname.endsWith('.digifox.world') && hostname !== 'www.digifox.world' && hostname !== 'digifox.world';
     
-    // If it's a valid subdomain (not www), render the published site directly
-    if (subdomain && subdomain !== 'www') {
-      return (
-        <HelmetProvider>
-          <PublishedSite subdomain={subdomain} />
-        </HelmetProvider>
-      );
+    if (isLocalSubdomain || isProdSubdomain) {
+      let extractedSubdomain = '';
+      if (isLocalSubdomain) {
+        extractedSubdomain = hostname.replace('.localhost', '');
+      } else if (isProdSubdomain) {
+        extractedSubdomain = hostname.replace('.digifox.world', '');
+      }
+      setSubdomain(extractedSubdomain);
     }
+  }, []);
+
+  if (subdomain && subdomain !== 'www') {
+    return (
+      <HelmetProvider>
+        <PublishedSite subdomain={subdomain} />
+      </HelmetProvider>
+    );
   }
 
   return (

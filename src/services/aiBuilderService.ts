@@ -33,10 +33,19 @@ export interface ChatMessage {
   text: string;
 }
 
+const getHeaders = () => {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  const adminToken = localStorage.getItem('adminBypassToken');
+  if (adminToken) {
+    headers['x-admin-token'] = adminToken;
+  }
+  return headers;
+};
+
 export const planWebsite = async (chatHistory: ChatMessage[]): Promise<string> => {
   const response = await fetch('/api/generate', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getHeaders(),
     body: JSON.stringify({ action: 'plan', chatHistory })
   });
 
@@ -52,7 +61,7 @@ export const planWebsite = async (chatHistory: ChatMessage[]): Promise<string> =
 export const generateWebsite = async (chatHistory: ChatMessage[], websiteType: string): Promise<GeneratedWebsiteData> => {
   const response = await fetch('/api/generate', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getHeaders(),
     body: JSON.stringify({ action: 'build', chatHistory, websiteType })
   });
 

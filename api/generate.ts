@@ -1,10 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { kv } from '@vercel/kv';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS setup for local development testing
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-token');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -20,6 +21,34 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!GEMINI_API_KEY) {
     return res.status(500).json({ error: "Missing Gemini API Key. Please add VITE_GEMINI_API_KEY to your Vercel Environment Variables or .env.local file." });
   }
+
+  // --- RATE LIMITING ---
+  const adminToken = req.headers['x-admin-token'];
+  const isAdmin = adminToken && adminToken === process.env.ADMIN_BYPASS_TOKEN;
+
+  if (!isAdmin && action === 'build') {
+    const rawIp = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || 'unknown';
+    const cleanIp = Array.isArray(rawIp) ? rawIp[0] : rawIp.split(',')[0].trim();
+    
+    if (cleanIp !== 'unknown') {
+      const today = new Date().toISOString().split('T')[0];
+      const kvKey = `buildlimit:${cleanIp}:${today}`;
+      
+      try {
+        const currentUsage = await kv.get<number>(kvKey) || 0;
+        if (currentUsage >= 5) {
+          return res.status(429).json({ 
+            error: "You have reached your daily limit of 5 website builds. Please try again tomorrow." 
+          });
+        }
+        await kv.incr(kvKey);
+        await kv.expire(kvKey, 86400); // Expire in 24 hours
+      } catch (err) {
+        console.warn("KV Rate Limiting failed (is KV provisioned?), proceeding anyway", err);
+      }
+    }
+  }
+  // --- END RATE LIMITING ---
 
   const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 

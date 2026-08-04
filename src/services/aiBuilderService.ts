@@ -13,22 +13,63 @@ export interface GeneratedWebsiteData {
   services: {
     title: string;
     description: string;
-    icon: string; // Emoji or short text
+    icon: string;
   }[];
   contact: {
     heading: string;
     buttonText: string;
   };
   theme: {
-    primaryColor: string; // hex
-    secondaryColor: string; // hex
+    primaryColor: string;
+    secondaryColor: string;
   };
 }
 
-export type AiProvider = 'openai' | 'groq' | 'gemini';
+export interface ChatMessage {
+  role: 'user' | 'ai';
+  text: string;
+}
 
-const SYSTEM_PROMPT = `You are an expert web designer. 
-Generate a stunning, conversion-optimized one-page website layout based on the user's prompt.
+// Hardcoded API Key for seamless visitor experience
+const GEMINI_API_KEY = "AIzaSyC_VXUooaB-zIGyGuW2KbhzHlbeBAp23sY";
+const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+const PLAN_SYSTEM_PROMPT = `You are an expert web design consultant. 
+Your goal is to help the user plan a stunning one-page website layout. 
+Ask clarifying questions, suggest color themes, and propose a 4-section structure (Hero, About, Services, Contact). 
+Keep your responses very brief, conversational, and encouraging. Never output JSON in this phase, just talk to the user.`;
+
+export const planWebsite = async (chatHistory: ChatMessage[]): Promise<string> => {
+  // Format history for Gemini API
+  const contents = chatHistory.map(msg => ({
+    role: msg.role === 'user' ? 'user' : 'model',
+    parts: [{ text: msg.text }]
+  }));
+
+  const body = {
+    system_instruction: {
+      parts: [{ text: PLAN_SYSTEM_PROMPT }]
+    },
+    contents
+  };
+
+  const response = await fetch(ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Planning Error: ${errText}`);
+  }
+
+  const data = await response.json();
+  return data.candidates[0].content.parts[0].text;
+};
+
+const BUILD_SYSTEM_PROMPT = `You are an expert web designer. 
+Generate a stunning, conversion-optimized one-page website layout based on the user's planning conversation.
 You MUST reply strictly with valid JSON matching this schema, and nothing else. No markdown wrapping, no explanations.
 
 Schema:
@@ -44,70 +85,41 @@ Schema:
   "theme": { "primaryColor": "#hex", "secondaryColor": "#hex" }
 }`;
 
-export const generateWebsite = async (
-  prompt: string,
-  apiKey: string,
-  provider: AiProvider
-): Promise<GeneratedWebsiteData> => {
-  if (!apiKey) throw new Error("API Key is required.");
+export const generateWebsite = async (chatHistory: ChatMessage[]): Promise<GeneratedWebsiteData> => {
+  const contents = chatHistory.map(msg => ({
+    role: msg.role === 'user' ? 'user' : 'model',
+    parts: [{ text: msg.text }]
+  }));
+  
+  // Append the final instruction to generate the JSON
+  contents.push({
+    role: 'user',
+    parts: [{ text: "Great, please generate the final JSON layout based on our discussion." }]
+  });
 
-  let endpoint = "";
-  let headers: Record<string, string> = {
-    "Content-Type": "application/json",
+  const body = {
+    system_instruction: {
+      parts: [{ text: BUILD_SYSTEM_PROMPT }]
+    },
+    contents,
+    generationConfig: {
+      response_mime_type: "application/json"
+    }
   };
-  let body: any = {};
 
-  if (provider === 'openai' || provider === 'groq') {
-    endpoint = provider === 'openai' 
-      ? "https://api.openai.com/v1/chat/completions"
-      : "https://api.groq.com/openai/v1/chat/completions";
-      
-    headers["Authorization"] = `Bearer ${apiKey}`;
-    
-    body = {
-      model: provider === 'openai' ? "gpt-4o-mini" : "llama3-70b-8192",
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: `Prompt: ${prompt}\n\nGenerate the JSON.` }
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0.7,
-    };
-  } else if (provider === 'gemini') {
-    // Gemini API format
-    endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
-    body = {
-      system_instruction: {
-        parts: [{ text: SYSTEM_PROMPT }]
-      },
-      contents: [
-        { parts: [{ text: prompt }] }
-      ],
-      generationConfig: {
-        response_mime_type: "application/json"
-      }
-    };
-  }
-
-  const response = await fetch(endpoint, {
+  const response = await fetch(ENDPOINT, {
     method: "POST",
-    headers,
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
 
   if (!response.ok) {
     const errText = await response.text();
-    throw new Error(`API Error (${response.status}): ${errText}`);
+    throw new Error(`Generation Error: ${errText}`);
   }
 
   const data = await response.json();
-  let jsonString = "";
-
-  if (provider === 'openai' || provider === 'groq') {
-    jsonString = data.choices[0].message.content;
-  } else if (provider === 'gemini') {
-    jsonString = data.candidates[0].content.parts[0].text;
-  }
+  const jsonString = data.candidates[0].content.parts[0].text;
 
   try {
     const cleanString = jsonString.replace(/```json/gi, '').replace(/```/g, '').trim();

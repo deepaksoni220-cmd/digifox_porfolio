@@ -17,6 +17,7 @@ import { AdminPage } from './pages/AdminPage';
 import { PremiumLandingPage } from './pages/PremiumLandingPage';
 import { AiBuilderPage } from './pages/AiBuilderPage';
 import { GeneratedSitePage } from './pages/GeneratedSitePage';
+import { PublishedSite } from './pages/PublishedSite';
 
 function Portfolio() {
   const [isLoading, setIsLoading] = useState(true);
@@ -68,6 +69,31 @@ function Portfolio() {
 }
 
 function App() {
+  const hostname = window.location.hostname;
+  
+  // Check if it's a subdomain (e.g., brandname.digifox.world or brandname.localhost)
+  // Exclude www, localhost (root), and digifox.world (root)
+  const isLocalSubdomain = hostname.endsWith('.localhost') && hostname !== 'localhost';
+  const isProdSubdomain = hostname.endsWith('.digifox.world') && hostname !== 'www.digifox.world' && hostname !== 'digifox.world';
+  
+  if (isLocalSubdomain || isProdSubdomain) {
+    let subdomain = '';
+    if (isLocalSubdomain) {
+      subdomain = hostname.replace('.localhost', '');
+    } else if (isProdSubdomain) {
+      subdomain = hostname.replace('.digifox.world', '');
+    }
+    
+    // If it's a valid subdomain (not www), render the published site directly
+    if (subdomain && subdomain !== 'www') {
+      return (
+        <HelmetProvider>
+          <PublishedSite subdomain={subdomain} />
+        </HelmetProvider>
+      );
+    }
+  }
+
   return (
     <HelmetProvider>
       <Router>

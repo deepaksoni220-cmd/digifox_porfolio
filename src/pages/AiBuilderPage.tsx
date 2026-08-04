@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { generateWebsite, planWebsite, type GeneratedWebsiteData, type ChatMessage } from '../services/aiBuilderService';
+import { publishWebsite } from '../services/firebase';
 import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 import { SEOMeta } from '../components/SEOMeta';
 
@@ -15,6 +16,9 @@ export const AiBuilderPage: React.FC = () => {
   const [isBuilding, setIsBuilding] = useState(false);
   const [error, setError] = useState("");
   const [previewData, setPreviewData] = useState<GeneratedWebsiteData | null>(null);
+  
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [publishedUrl, setPublishedUrl] = useState("");
 
   const chatScrollRef = useRef<HTMLDivElement>(null);
 
@@ -94,6 +98,31 @@ export const AiBuilderPage: React.FC = () => {
       setError(err.message || "Failed to generate website layout.");
     } finally {
       setIsBuilding(false);
+    }
+  };
+
+  const handlePublish = async () => {
+    if (!previewData) return;
+    const subdomain = prompt("Enter a unique brand name for your subdomain (e.g. 'mybrand'):");
+    if (!subdomain) return;
+    
+    // clean subdomain
+    const cleanSubdomain = subdomain.trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+    if (!cleanSubdomain) {
+      alert("Invalid subdomain name. Only letters, numbers, and hyphens are allowed.");
+      return;
+    }
+
+    setIsPublishing(true);
+    try {
+      await publishWebsite(cleanSubdomain, previewData, logoUrl);
+      const url = `https://${cleanSubdomain}.digifox.world`;
+      setPublishedUrl(url);
+      alert(`Website published successfully at: ${url}`);
+    } catch (err: any) {
+      alert(err.message || "Failed to publish website");
+    } finally {
+      setIsPublishing(false);
     }
   };
 
@@ -248,14 +277,32 @@ export const AiBuilderPage: React.FC = () => {
               Live Preview
             </h2>
             {previewData && !isBuilding && (
-              <button 
-                onClick={() => window.open('/generated-site', '_blank')}
-                className="bg-[var(--text-strong)] text-[var(--bg-base)] px-6 py-2 rounded-full font-bold uppercase tracking-wider text-sm transition-transform hover:scale-105 shadow-xl"
-              >
-                Open Full Screen ↗
-              </button>
+              <div className="flex gap-4">
+                <button 
+                  onClick={handlePublish}
+                  disabled={isPublishing}
+                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-bold uppercase tracking-wider text-sm transition-transform hover:scale-105 shadow-[0_0_15px_rgba(34,197,94,0.3)] disabled:opacity-50"
+                >
+                  {isPublishing ? "Publishing..." : "Publish to Web 🚀"}
+                </button>
+                <button 
+                  onClick={() => window.open('/generated-site', '_blank')}
+                  className="bg-[var(--text-strong)] text-[var(--bg-base)] px-6 py-2 rounded-full font-bold uppercase tracking-wider text-sm transition-transform hover:scale-105 shadow-xl"
+                >
+                  Open Full Screen ↗
+                </button>
+              </div>
             )}
           </div>
+          
+          {publishedUrl && (
+            <div className="mb-6 bg-green-500/10 border border-green-500/30 text-green-400 p-4 rounded-xl flex items-center justify-between">
+              <span className="font-medium">Your website is live!</span>
+              <a href={publishedUrl} target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-green-300">
+                {publishedUrl}
+              </a>
+            </div>
+          )}
           
           <AnimatePresence mode="wait">
             {isBuilding ? (

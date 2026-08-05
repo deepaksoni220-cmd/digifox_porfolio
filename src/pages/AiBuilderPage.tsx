@@ -362,7 +362,7 @@ export const AiBuilderPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full"
               >
-                <PreviewRenderer data={previewData} logoUrl={logoUrl} />
+                <PreviewRenderer data={previewData} logoUrl={logoUrl} onDataChange={setPreviewData} />
               </motion.div>
             ) : (
               <motion.div 

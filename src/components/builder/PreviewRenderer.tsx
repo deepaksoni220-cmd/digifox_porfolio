@@ -1,16 +1,97 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import type { GeneratedWebsiteData } from '../../services/aiBuilderService';
 import { FadeIn } from '../FadeIn';
 import { ShoppingCart, LayoutGrid, Home, Settings, User } from 'lucide-react';
 
+const EditableField: React.FC<{
+  value: string;
+  onChange: (val: string) => void;
+  as?: any;
+  className?: string;
+  multiline?: boolean;
+}> = ({ value, onChange, as: Component = 'span', className = '', multiline = false }) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const elementRef = useRef<HTMLElement>(null);
+  const toolbarRef = useRef<HTMLDivElement>(null);
+
+  const handleBlur = (e: React.FocusEvent) => {
+    if (toolbarRef.current && toolbarRef.current.contains(e.relatedTarget as Node)) {
+       return; 
+    }
+    setIsFocused(false);
+    if (elementRef.current) {
+      if (elementRef.current.innerHTML !== value) {
+        onChange(elementRef.current.innerHTML);
+      }
+    }
+  };
+
+  const handleCommand = (cmd: string, val?: string) => {
+    document.execCommand(cmd, false, val);
+    if (elementRef.current) {
+      elementRef.current.focus();
+    }
+  };
+
+  return (
+    <div className="relative inline-block w-full max-w-full">
+      <Component
+        ref={elementRef}
+        contentEditable
+        suppressContentEditableWarning
+        onFocus={() => setIsFocused(true)}
+        onBlur={handleBlur}
+        className={`${className} outline-none focus:ring-2 focus:ring-blue-500/50 rounded transition-all cursor-text empty:before:content-['Empty...'] empty:before:text-gray-400`}
+        dangerouslySetInnerHTML={{ __html: value }}
+        onKeyDown={(e: React.KeyboardEvent) => {
+          if (!multiline && e.key === 'Enter') {
+            e.preventDefault();
+            elementRef.current?.blur();
+          }
+        }}
+      />
+      {isFocused && (
+        <div 
+          ref={toolbarRef}
+          tabIndex={-1}
+          className="absolute -top-12 left-1/2 -translate-x-1/2 z-[999] flex items-center gap-1 bg-gray-900 text-white p-1 rounded-lg shadow-xl"
+          onMouseDown={(e) => e.preventDefault()}
+        >
+          <button onMouseDown={(e) => { e.preventDefault(); handleCommand('bold'); }} className="p-2 hover:bg-gray-700 rounded text-sm font-bold w-8 h-8 flex items-center justify-center">B</button>
+          <button onMouseDown={(e) => { e.preventDefault(); handleCommand('italic'); }} className="p-2 hover:bg-gray-700 rounded text-sm italic w-8 h-8 flex items-center justify-center">I</button>
+          <button onMouseDown={(e) => { e.preventDefault(); handleCommand('underline'); }} className="p-2 hover:bg-gray-700 rounded text-sm underline w-8 h-8 flex items-center justify-center">U</button>
+          <div className="w-[1px] h-4 bg-gray-700 mx-1"></div>
+          <input 
+            type="color" 
+            className="w-6 h-6 rounded cursor-pointer border-0 p-0 m-0"
+            onChange={(e) => handleCommand('foreColor', e.target.value)}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
 interface PreviewRendererProps {
   data: GeneratedWebsiteData;
   fullScreen?: boolean;
   logoUrl?: string;
+  onDataChange?: (data: GeneratedWebsiteData) => void;
 }
 
-export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScreen = false, logoUrl }) => {
+export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScreen = false, logoUrl, onDataChange }) => {
+  const updateData = (path: string[], value: string) => {
+    if (!onDataChange) return;
+    const newData = JSON.parse(JSON.stringify(data));
+    let current = newData;
+    for (let i = 0; i < path.length - 1; i++) {
+      current = current[path[i]];
+    }
+    current[path[path.length - 1]] = value;
+    onDataChange(newData);
+  };
+
   const isMobileApp = data.websiteType === "Mobile Web App";
   const isEcommerce = data.websiteType === "E-Commerce Store";
   const isPortfolio = data.websiteType === "Portfolio";
@@ -105,13 +186,13 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScre
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className={`${isMobileApp ? 'text-4xl' : 'text-5xl sm:text-7xl'} font-black uppercase tracking-tighter text-white drop-shadow-2xl leading-none mb-6 mt-10`}
               >
-                {data.hero.title}
+                <EditableField value={data.hero.title} onChange={(val) => updateData(['hero', 'title'], val)} />
               </motion.h1>
               <p className={`${isMobileApp ? 'text-lg' : 'text-xl sm:text-2xl'} text-white/90 font-medium drop-shadow-md mb-10 max-w-2xl`}>
-                {data.hero.subtitle}
+                <EditableField value={data.hero.subtitle} multiline onChange={(val) => updateData(['hero', 'subtitle'], val)} />
               </p>
-              <button className={`${isMobileApp ? 'px-8 py-3 w-full max-w-[250px]' : 'px-10 py-4'} rounded-full ai-theme-bg text-white font-bold text-lg uppercase tracking-widest hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.2)]`}>
-                {data.hero.ctaText}
+              <button className={`${isMobileApp ? 'px-8 py-3 w-full max-w-[250px]' : 'px-10 py-4'} rounded-full ai-theme-bg text-white font-bold text-lg uppercase tracking-widest hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.2)] relative z-[999]`}>
+                <EditableField value={data.hero.ctaText} onChange={(val) => updateData(['hero', 'ctaText'], val)} />
               </button>
             </FadeIn>
           </section>
@@ -120,9 +201,11 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScre
           <section id="about" className={`${isMobileApp ? 'py-20 px-6' : 'py-32 px-10'} bg-[var(--bg-surface)]`}>
             <div className={`max-w-6xl mx-auto flex ${isMobileApp ? 'flex-col text-center' : 'flex-col md:flex-row items-center text-left'} gap-10 sm:gap-16`}>
               <FadeIn delay={0.1} y={40} className="flex-1">
-                <h2 className={`${isMobileApp ? 'text-3xl' : 'text-4xl'} font-bold uppercase tracking-widest ai-theme-primary mb-6`}>{data.about.heading}</h2>
+                <h2 className={`${isMobileApp ? 'text-3xl' : 'text-4xl'} font-bold uppercase tracking-widest ai-theme-primary mb-6`}>
+                  <EditableField value={data.about.heading} onChange={(val) => updateData(['about', 'heading'], val)} />
+                </h2>
                 <p className={`${isMobileApp ? 'text-lg' : 'text-xl sm:text-2xl'} leading-relaxed font-light text-[var(--text-strong)]/90`}>
-                  {data.about.description}
+                  <EditableField value={data.about.description} multiline onChange={(val) => updateData(['about', 'description'], val)} />
                 </p>
               </FadeIn>
               
@@ -171,10 +254,16 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScre
                           )}
                         </div>
                         <div className="p-6 flex flex-col flex-1">
-                          <h3 className="text-xl font-bold text-[var(--text-strong)] mb-2">{item.title}</h3>
-                          <p className="text-[var(--text-primary)]/70 text-sm mb-4 flex-1 line-clamp-2">{item.description}</p>
+                          <h3 className="text-xl font-bold text-[var(--text-strong)] mb-2">
+                            <EditableField value={item.title} onChange={(val) => updateData(['items', i.toString(), 'title'], val)} />
+                          </h3>
+                          <p className="text-[var(--text-primary)]/70 text-sm mb-4 flex-1 line-clamp-2">
+                            <EditableField value={item.description} multiline onChange={(val) => updateData(['items', i.toString(), 'description'], val)} />
+                          </p>
                           <div className="flex items-center justify-between mt-auto pt-4 border-t border-[var(--border-subtle)]">
-                            <span className="font-black text-xl ai-theme-primary">{item.price || '$99.99'}</span>
+                            <span className="font-black text-xl ai-theme-primary">
+                              <EditableField value={item.price || '$99.99'} onChange={(val) => updateData(['items', i.toString(), 'price'], val)} />
+                            </span>
                             <button className="bg-[var(--text-strong)] text-[var(--bg-base)] px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 hover:opacity-80 transition-opacity">
                               <ShoppingCart size={14} /> Add
                             </button>
@@ -196,8 +285,12 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScre
                           <div className="w-full h-full bg-[var(--bg-surface)] flex items-center justify-center text-8xl">{item.icon}</div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-8">
-                          <h3 className="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform">{item.title}</h3>
-                          <p className="text-white/80 text-sm opacity-0 group-hover:opacity-100 transition-opacity delay-100 line-clamp-3">{item.description}</p>
+                          <h3 className="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform">
+                            <EditableField value={item.title} onChange={(val) => updateData(['items', i.toString(), 'title'], val)} />
+                          </h3>
+                          <p className="text-white/80 text-sm opacity-0 group-hover:opacity-100 transition-opacity delay-100 line-clamp-3">
+                            <EditableField value={item.description} multiline onChange={(val) => updateData(['items', i.toString(), 'description'], val)} />
+                          </p>
                         </div>
                       </div>
 
@@ -205,8 +298,12 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScre
                     ) : (
                       <div className="p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[var(--text-strong)]/20 transition-all hover:-translate-y-2 h-full flex flex-col items-center text-center group">
                         <div className="text-5xl mb-6 group-hover:scale-110 transition-transform">{item.icon}</div>
-                        <h3 className="text-2xl font-bold text-[var(--text-strong)] mb-4">{item.title}</h3>
-                        <p className="text-[var(--text-primary)]/70">{item.description}</p>
+                        <h3 className="text-2xl font-bold text-[var(--text-strong)] mb-4">
+                          <EditableField value={item.title} onChange={(val) => updateData(['items', i.toString(), 'title'], val)} />
+                        </h3>
+                        <p className="text-[var(--text-primary)]/70">
+                          <EditableField value={item.description} multiline onChange={(val) => updateData(['items', i.toString(), 'description'], val)} />
+                        </p>
                       </div>
                     )}
                     
@@ -220,9 +317,11 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScre
           <section id="contact" className={`pt-24 ${isMobileApp ? 'pb-24 px-6' : 'pb-16 px-10'} bg-[#080808] border-t border-[var(--border-strong)] text-center relative overflow-hidden flex flex-col items-center`}>
             <div className="absolute inset-0 opacity-10 pointer-events-none ai-theme-bg mix-blend-screen filter blur-[100px] top-1/2"></div>
             <FadeIn delay={0.1} y={20} className="relative z-10 max-w-2xl mx-auto mb-20">
-              <h2 className={`${isMobileApp ? 'text-3xl mb-8' : 'text-4xl sm:text-5xl mb-10'} font-black text-white`}>{data.contact.heading}</h2>
-              <button className={`${isMobileApp ? 'px-8 py-4 w-full' : 'px-12 py-5'} rounded-full bg-white text-black font-black uppercase tracking-widest text-lg hover:scale-105 transition-transform`}>
-                {data.contact.buttonText}
+              <h2 className={`${isMobileApp ? 'text-3xl mb-8' : 'text-4xl sm:text-5xl mb-10'} font-black text-white`}>
+                <EditableField value={data.contact.heading} onChange={(val) => updateData(['contact', 'heading'], val)} />
+              </h2>
+              <button className={`${isMobileApp ? 'px-8 py-4 w-full' : 'px-12 py-5'} rounded-full bg-white text-black font-black uppercase tracking-widest text-lg hover:scale-105 transition-transform relative z-[999]`}>
+                <EditableField value={data.contact.buttonText} onChange={(val) => updateData(['contact', 'buttonText'], val)} />
               </button>
             </FadeIn>
             

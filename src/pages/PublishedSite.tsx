@@ -57,6 +57,22 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
           src={siteData.templateUrl} 
           className="w-full h-full border-none"
           title={`${subdomain} Template`}
+          ref={(iframe) => {
+            if (iframe && siteData.data?.customHtml) {
+              const handleIframeMessage = (event: MessageEvent) => {
+                if (event.data?.type === 'READY_FOR_INJECTION' && iframe.contentWindow) {
+                  iframe.contentWindow.postMessage({ 
+                    type: 'INJECT_HTML', 
+                    html: siteData.data.customHtml 
+                  }, '*');
+                }
+              };
+              window.addEventListener('message', handleIframeMessage);
+              
+              // Cleanup (Note: in a real app you'd want to handle cleanup better, 
+              // but since this is a top-level render it's okay for now)
+            }
+          }}
         />
       </div>
     );

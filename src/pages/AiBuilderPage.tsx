@@ -31,6 +31,22 @@ export const AiBuilderPage: React.FC = () => {
     }
   }, [chatHistory]);
 
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'EDITOR_UPDATE' && event.data.data) {
+        setPreviewData(prev => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            customHtml: event.data.data.html
+          };
+        });
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -119,7 +135,8 @@ export const AiBuilderPage: React.FC = () => {
 
     setIsPublishing(true);
     try {
-      await publishWebsite(cleanSubdomain, previewData, logoUrl);
+      // Pass previewData.previewUrl so PublishedSite knows it's an iframe template
+      await publishWebsite(cleanSubdomain, previewData, logoUrl, previewData?.previewUrl);
       
       const url = `https://${cleanSubdomain}.digifox.world`;
       setPublishedUrl(url);
@@ -360,9 +377,23 @@ export const AiBuilderPage: React.FC = () => {
                 key="preview"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="w-full"
+                className="w-full relative"
               >
-                <PreviewRenderer data={previewData} logoUrl={logoUrl} onDataChange={setPreviewData} />
+                {previewData.previewUrl ? (
+                  <iframe 
+                    ref={(el) => {
+                      if (el && previewData) {
+                        // Send current data to iframe on load or update
+                        el.contentWindow?.postMessage({ type: 'SYNC_DATA', data: previewData }, '*');
+                      }
+                    }}
+                    src={`${previewData.previewUrl}?editor=true`} 
+                    className="w-full h-[800px] border-4 border-gray-800 rounded-3xl shadow-2xl shadow-black/50 bg-white"
+                    title="Live Preview"
+                  />
+                ) : (
+                  <PreviewRenderer data={previewData} logoUrl={logoUrl} onDataChange={setPreviewData} />
+                )}
               </motion.div>
             ) : (
               <motion.div 

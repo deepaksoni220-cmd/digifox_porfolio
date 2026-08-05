@@ -15,10 +15,12 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
 // Save generated website to database
-export const publishWebsite = async (subdomain: string, data: GeneratedWebsiteData, logoUrl?: string) => {
+export const publishWebsite = async (subdomain: string, data: GeneratedWebsiteData | null, logoUrl?: string, templateUrl?: string) => {
   const siteRef = doc(db, "publishedSites", subdomain.toLowerCase());
   await setDoc(siteRef, {
-    data,
+    type: templateUrl ? 'html_template' : 'ai_generated',
+    data: data || null,
+    templateUrl: templateUrl || null,
     logoUrl: logoUrl || null,
     publishedAt: new Date().toISOString(),
   });

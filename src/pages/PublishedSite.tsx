@@ -1,29 +1,27 @@
 import React, { useEffect, useState } from 'react';
+
 import { getPublishedWebsite } from '../services/firebase';
 import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 import { SEOMeta } from '../components/SEOMeta';
 
 export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) => {
-  const [data, setData] = useState<any>(null);
-  const [logoUrl, setLogoUrl] = useState<string | undefined>(undefined);
+  const [siteData, setSiteData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!subdomain) return;
     const fetchSite = async () => {
       try {
-        const siteData = await getPublishedWebsite(subdomain);
-        if (siteData) {
-          setData(siteData.data);
-          if (siteData.logoUrl) {
-            setLogoUrl(siteData.logoUrl);
-          }
+        const result = await getPublishedWebsite(subdomain);
+        if (result) {
+          setSiteData(result);
         } else {
-          setError(true);
+          setError("Website not found");
         }
       } catch (err) {
         console.error(err);
-        setError(true);
+        setError("Failed to load website");
       } finally {
         setLoading(false);
       }
@@ -33,31 +31,47 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-[#3b82f6] border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-6">
+        <div className="w-16 h-16 border-4 border-[#3b82f6] border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-white font-['Kanit'] uppercase tracking-widest animate-pulse">Loading {subdomain}.digifox.world...</p>
       </div>
     );
   }
 
-  if (error || !data) {
+  if (error || !siteData) {
     return (
-      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center gap-4">
-        <h1 className="text-4xl font-bold uppercase tracking-widest">404 - Not Found</h1>
-        <p className="text-white/50">This website does not exist or has been removed.</p>
-        <a href="https://digifox.world" className="mt-8 text-[#3b82f6] hover:underline">Build your own website at Digifox.world</a>
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white font-['Kanit'] p-4 text-center">
+        <div className="text-6xl mb-6">🦊</div>
+        <h1 className="text-4xl font-black uppercase tracking-tight mb-4">Site Not Found</h1>
+        <p className="text-gray-400 max-w-md">{error || "This Digifox website doesn't exist yet."}</p>
+        <a href="https://digifox.world" className="mt-8 text-[#3b82f6] hover:underline">Build your own at digifox.world</a>
       </div>
     );
   }
 
+  // Handle HTML Templates (Aero, Voya, etc.)
+  if (siteData.type === 'html_template' && siteData.templateUrl) {
+    return (
+      <div className="w-full h-screen overflow-hidden bg-black">
+        <iframe 
+          src={siteData.templateUrl} 
+          className="w-full h-full border-none"
+          title={`${subdomain} Template`}
+        />
+      </div>
+    );
+  }
+
+  // Handle AI Generated Sites
   return (
     <>
       <SEOMeta 
-        title={data.hero.title}
-        description={data.hero.subtitle}
+        title={siteData.data?.hero?.title || "Digifox Site"}
+        description={siteData.data?.hero?.subtitle || ""}
       />
-      <main className="w-full min-h-screen bg-gradient-to-br from-blue-900 via-blue-950 to-black overflow-hidden">
-        <PreviewRenderer data={data} fullScreen={true} logoUrl={logoUrl} />
-      </main>
+      <div className="min-h-screen bg-black">
+        <PreviewRenderer data={siteData.data} logoUrl={siteData.logoUrl} />
+      </div>
     </>
   );
 };

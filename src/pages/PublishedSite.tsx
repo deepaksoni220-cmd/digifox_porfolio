@@ -60,14 +60,9 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
           ref={(iframe) => {
             if (iframe && siteData.data) {
               const handleIframeMessage = (event: MessageEvent) => {
-                if (event.data?.type === 'READY_FOR_INJECTION' && iframe.contentWindow) {
-                  if (siteData.data.customHtml) {
-                    iframe.contentWindow.postMessage({ 
-                      type: 'INJECT_HTML', 
-                      html: siteData.data.customHtml 
-                    }, '*');
-                  }
-                }
+                // We no longer inject raw HTML because it destroys the React DOM,
+                // GSAP animations, and Lenis scrolling on multi-page templates.
+                // We rely strictly on SYNC_DATA (structured data sync) instead!
                 
                 if (event.data?.type === 'REQUEST_SYNC' && event.source) {
                   (event.source as WindowProxy).postMessage({ type: 'SYNC_DATA', data: siteData.data }, '*');

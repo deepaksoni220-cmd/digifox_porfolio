@@ -119,6 +119,20 @@ export const AiBuilderPage: React.FC = () => {
           return prev;
         });
       }
+
+      if (event.data?.type === 'IMAGE_UPDATE' && event.data.originalSrc && event.data.newSrc) {
+        setPreviewData(prev => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            customImages: {
+              ...(prev.customImages || {}),
+              [event.data.originalSrc]: event.data.newSrc
+            }
+          };
+        });
+        setHasUnsavedChanges(true);
+      }
     };
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);

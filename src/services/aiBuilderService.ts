@@ -9,6 +9,7 @@ export interface GeneratedWebsiteData {
     phone?: string;
     email?: string;
   };
+  customImages?: Record<string, string>;
   hero: {
     title: string;
     subtitle: string;

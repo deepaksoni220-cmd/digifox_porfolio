@@ -14,6 +14,11 @@ export const AiBuilderPage: React.FC = () => {
 
   const [buildMode, setBuildMode] = useState("ai"); // 'ai', 'aero', 'voya', 'drinking 5d', 'bnrmlss 2', 'coin-site 2'
 
+  // Custom Data for Readymade Templates
+  const [customBrandName, setCustomBrandName] = useState("");
+  const [customAddress, setCustomAddress] = useState("");
+  const [customContact, setCustomContact] = useState("");
+
   const [isPlanning, setIsPlanning] = useState(false);
   const [isBuilding, setIsBuilding] = useState(false);
   const [error, setError] = useState("");
@@ -122,7 +127,23 @@ export const AiBuilderPage: React.FC = () => {
       if (buildMode === "ai") {
         await publishWebsite(cleanSubdomain, previewData!, logoUrl);
       } else {
-        const templateUrl = `/templates/${buildMode}/index.html`;
+        const queryParams = new URLSearchParams({
+          brand: customBrandName,
+          address: customAddress,
+          contact: customContact
+        }).toString();
+        
+        // Map templates to their live Vercel deployments
+        const liveTemplateUrls: Record<string, string> = {
+          'aero': 'https://digifox5donline.vercel.app',
+          'voya': 'https://voya-YOUR-LINK.vercel.app',
+          'drinking 5d': 'https://drinking-YOUR-LINK.vercel.app',
+          'bnrmlss 2': 'https://bnrmlss-YOUR-LINK.vercel.app',
+          'coin-site 2': 'https://coin-YOUR-LINK.vercel.app'
+        };
+        
+        const baseUrl = liveTemplateUrls[buildMode] || '';
+        const templateUrl = `${baseUrl}?${queryParams}`;
         await publishWebsite(cleanSubdomain, null, logoUrl, templateUrl);
       }
       
@@ -302,31 +323,74 @@ export const AiBuilderPage: React.FC = () => {
               </div>
             </div>
             ) : (
-              <div className="flex flex-col bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] shadow-xl w-full h-[500px] items-center justify-center p-10 text-center gap-6">
-                <div className="text-6xl mb-4">🧊</div>
-                <h3 className="text-2xl font-bold uppercase tracking-widest text-[var(--text-strong)]">
-                  {buildMode.toUpperCase()} Template Selected
-                </h3>
-                <p className="text-[var(--text-secondary)] text-lg max-w-md">
-                  You have selected a premium readymade template. You can preview or publish it instantly.
-                </p>
-                
-                <div className="flex gap-4 mt-4">
-                  <a 
-                    href={`/templates/${buildMode}/index.html`}
+              <div className="flex flex-col bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] shadow-xl w-full h-[500px] overflow-hidden">
+                <div className="flex-1 overflow-y-auto p-10 flex flex-col items-center justify-start text-center gap-6">
+                  <div className="text-6xl mb-2">🧊</div>
+                  <h3 className="text-2xl font-bold uppercase tracking-widest text-[var(--text-strong)]">
+                    {buildMode.toUpperCase()} Template Selected
+                  </h3>
+                  <p className="text-[var(--text-secondary)] text-sm max-w-md">
+                    Enter your details below to customize this premium template. These details will instantly populate the template when published!
+                  </p>
+                  
+                  <div className="w-full max-w-sm flex flex-col gap-4 text-left mt-2">
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Brand Name</label>
+                      <input 
+                        type="text" 
+                        value={customBrandName}
+                        onChange={(e) => setCustomBrandName(e.target.value)}
+                        placeholder="e.g. Digifox" 
+                        className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Business Address</label>
+                      <input 
+                        type="text" 
+                        value={customAddress}
+                        onChange={(e) => setCustomAddress(e.target.value)}
+                        placeholder="e.g. 123 Main St, NY" 
+                        className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">WhatsApp / Contact Number</label>
+                      <input 
+                        type="text" 
+                        value={customContact}
+                        onChange={(e) => setCustomContact(e.target.value)}
+                        placeholder="e.g. +1 555-1234" 
+                        className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4 mt-6">
+                    <a 
+                    href={
+                      {
+                        'aero': 'https://digifox5donline.vercel.app',
+                        'voya': 'https://voya-YOUR-LINK.vercel.app',
+                        'drinking 5d': 'https://drinking-YOUR-LINK.vercel.app',
+                        'bnrmlss 2': 'https://bnrmlss-YOUR-LINK.vercel.app',
+                        'coin-site 2': 'https://coin-YOUR-LINK.vercel.app'
+                      }[buildMode] || '#'
+                    }
                     target="_blank"
                     rel="noreferrer"
                     className="bg-[var(--bg-base)] border border-[var(--border-strong)] hover:border-[#3b82f6] text-[var(--text-strong)] px-8 py-3 rounded-full font-bold uppercase tracking-wider text-sm transition-all shadow-lg"
                   >
                     Preview Template ↗
                   </a>
-                  <button 
-                    onClick={handlePublish}
-                    disabled={isPublishing}
-                    className="bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white px-8 py-3 rounded-full font-bold uppercase tracking-wider text-sm transition-all shadow-[0_0_15px_rgba(59,130,246,0.3)] disabled:opacity-50"
-                  >
-                    {isPublishing ? "Publishing..." : "Publish Instantly 🚀"}
-                  </button>
+                    <button 
+                      onClick={handlePublish}
+                      disabled={isPublishing || !customBrandName}
+                      className="bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white px-8 py-3 rounded-full font-bold uppercase tracking-wider text-sm transition-all shadow-[0_0_15px_rgba(59,130,246,0.3)] disabled:opacity-50"
+                    >
+                      {isPublishing ? "Publishing..." : "Publish Custom Site 🚀"}
+                    </button>
+                  </div>
                 </div>
               </div>
             )}

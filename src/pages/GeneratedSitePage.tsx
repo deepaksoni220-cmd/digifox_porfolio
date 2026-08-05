@@ -19,6 +19,18 @@ export const GeneratedSitePage: React.FC = () => {
     }
   }, []);
 
+  // Listen for iframe requesting data
+  useEffect(() => {
+    if (!data) return;
+    const handleIframeMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'REQUEST_SYNC' && event.source) {
+        (event.source as WindowProxy).postMessage({ type: 'SYNC_DATA', data: data }, '*');
+      }
+    };
+    window.addEventListener('message', handleIframeMessage);
+    return () => window.removeEventListener('message', handleIframeMessage);
+  }, [data]);
+
   if (!data) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--bg-base)] text-[var(--text-strong)] uppercase tracking-widest font-bold">
@@ -29,7 +41,15 @@ export const GeneratedSitePage: React.FC = () => {
 
   return (
     <main className="w-full min-h-screen bg-gradient-to-br from-blue-900 via-blue-950 to-black">
-      <PreviewRenderer data={data} fullScreen={true} logoUrl={logoUrl} />
+      {data.previewUrl ? (
+        <iframe 
+          src={data.previewUrl} 
+          className="w-full h-screen border-none bg-white"
+          title="Full Screen Preview"
+        />
+      ) : (
+        <PreviewRenderer data={data} fullScreen={true} logoUrl={logoUrl} />
+      )}
     </main>
   );
 };

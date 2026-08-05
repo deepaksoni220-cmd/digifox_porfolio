@@ -6,7 +6,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     templateStyle: "aero",
     previewUrl: "http://localhost:1002",
     shortDescription: "3D minimalist dark aesthetic with floating objects and glowing elements.",
-    thumbnailUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
+    thumbnailUrl: "/templates/aero.png",
     hero: {
       title: "Aero",
       subtitle: "Experience the next generation of digital aesthetics.",
@@ -49,7 +49,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     templateStyle: "bnrmlss2",
     previewUrl: "https://digifox-storedemo-gqiq.vercel.app/",
     shortDescription: "Urban streetwear fashion e-commerce with moody underground aesthetic.",
-    thumbnailUrl: "https://images.unsplash.com/photo-1523398002811-999aa8e9ddaa?q=80&w=800&auto=format&fit=crop",
+    thumbnailUrl: "/templates/bnrmlss2.png",
     hero: {
       title: "Bnrmlss 2",
       subtitle: "Streetwear that defines the culture.",
@@ -95,7 +95,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     templateStyle: "drinking5d",
     previewUrl: "https://digifox-onlinestore.vercel.app/",
     shortDescription: "Premium beverage brand landing page with immersive 3D bottle physics.",
-    thumbnailUrl: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=800&auto=format&fit=crop",
+    thumbnailUrl: "/templates/drinking5d.png",
     hero: {
       title: "Drinking 5D",
       subtitle: "Elevate your beverage experience.",

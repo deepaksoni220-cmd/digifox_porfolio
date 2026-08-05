@@ -58,13 +58,19 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
           className="w-full h-full border-none"
           title={`${subdomain} Template`}
           ref={(iframe) => {
-            if (iframe && siteData.data?.customHtml) {
+            if (iframe && siteData.data) {
               const handleIframeMessage = (event: MessageEvent) => {
                 if (event.data?.type === 'READY_FOR_INJECTION' && iframe.contentWindow) {
-                  iframe.contentWindow.postMessage({ 
-                    type: 'INJECT_HTML', 
-                    html: siteData.data.customHtml 
-                  }, '*');
+                  if (siteData.data.customHtml) {
+                    iframe.contentWindow.postMessage({ 
+                      type: 'INJECT_HTML', 
+                      html: siteData.data.customHtml 
+                    }, '*');
+                  }
+                }
+                
+                if (event.data?.type === 'REQUEST_SYNC' && event.source) {
+                  (event.source as WindowProxy).postMessage({ type: 'SYNC_DATA', data: siteData.data }, '*');
                 }
               };
               window.addEventListener('message', handleIframeMessage);

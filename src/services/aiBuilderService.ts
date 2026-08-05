@@ -3,6 +3,11 @@ export interface GeneratedWebsiteData {
   templateStyle?: 'aero' | 'voya' | 'drinking5d' | 'bnrmlss2' | 'coinSite' | 'default';
   previewUrl?: string;
   customHtml?: string;
+  contactDetails?: {
+    address?: string;
+    phone?: string;
+    email?: string;
+  };
   hero: {
     title: string;
     subtitle: string;

@@ -23,7 +23,50 @@ export const AiBuilderPage: React.FC = () => {
   const [isPublishing, setIsPublishing] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState("");
 
+  // Sidebar Form State
+  const [sidebarLogo, setSidebarLogo] = useState("");
+  const [sidebarAddress, setSidebarAddress] = useState("");
+  const [sidebarPhone, setSidebarPhone] = useState("");
+  const [sidebarEmail, setSidebarEmail] = useState("");
+
   const chatScrollRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const updateIframeField = (field: string, value: string) => {
+    // 1. Update the local state so we have it saved for sync requests
+    setPreviewData(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        contactDetails: {
+          ...(prev.contactDetails || {}),
+          [field]: value
+        }
+      };
+    });
+
+    // 2. Push it instantly to the iframe
+    if (iframeRef.current?.contentWindow) {
+      iframeRef.current.contentWindow.postMessage({
+        type: 'UPDATE_FIELD',
+        field,
+        value
+      }, '*');
+    }
+  };
+
+  const handleSidebarLogo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const b64 = reader.result as string;
+        setSidebarLogo(b64);
+        updateIframeField('logo', b64);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   useEffect(() => {
     if (chatScrollRef.current) {
@@ -40,6 +83,16 @@ export const AiBuilderPage: React.FC = () => {
             ...prev,
             customHtml: event.data.data.html
           };
+        });
+      }
+      
+      if (event.data?.type === 'REQUEST_SYNC' && event.source) {
+        // Send the latest previewData (including customHtml and contactDetails) back to the iframe
+        setPreviewData(prev => {
+          if (prev) {
+            (event.source as WindowProxy).postMessage({ type: 'SYNC_DATA', data: prev }, '*');
+          }
+          return prev;
         });
       }
     };
@@ -380,17 +433,91 @@ export const AiBuilderPage: React.FC = () => {
                 className="w-full relative"
               >
                 {previewData.previewUrl ? (
-                  <iframe 
-                    ref={(el) => {
-                      if (el && previewData) {
-                        // Send current data to iframe on load or update
-                        el.contentWindow?.postMessage({ type: 'SYNC_DATA', data: previewData }, '*');
-                      }
-                    }}
-                    src={`${previewData.previewUrl}?editor=true`} 
-                    className="w-full h-[800px] border-4 border-gray-800 rounded-3xl shadow-2xl shadow-black/50 bg-white"
-                    title="Live Preview"
-                  />
+                  <div className="flex flex-col xl:flex-row gap-6">
+                    {/* Live Preview Iframe */}
+                    <div className="flex-[3]">
+                      <iframe 
+                        ref={iframeRef}
+                        src={`${previewData.previewUrl}?editor=true`} 
+                        className="w-full h-[800px] border-4 border-gray-800 rounded-3xl shadow-2xl shadow-black/50 bg-white"
+                        title="Live Preview"
+                      />
+                    </div>
+                    {/* Site Details Sidebar */}
+                    <div className="flex-[1] min-w-[300px] bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-3xl p-6 flex flex-col gap-6 h-fit sticky top-6 shadow-xl">
+                      <h3 className="text-xl font-bold uppercase tracking-widest border-b border-[var(--border-subtle)] pb-4">
+                        Site Details
+                      </h3>
+                      
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Logo</label>
+                        <div className="relative flex items-center">
+                          <input 
+                            type="file" 
+                            accept="image/*"
+                            onChange={handleSidebarLogo}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                          />
+                          <div className="w-full bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-secondary)] flex justify-between items-center hover:border-[#3b82f6] transition-colors">
+                            <span className="truncate">{sidebarLogo ? "Updated" : "Choose logo..."}</span>
+                            {sidebarLogo && <img src={sidebarLogo} alt="Logo" className="h-6 w-auto object-contain rounded" />}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Business Address</label>
+                        <input 
+                          type="text"
+                          value={sidebarAddress}
+                          placeholder="e.g. 123 Main St"
+                          onChange={(e) => {
+                            setSidebarAddress(e.target.value);
+                            updateIframeField('address', e.target.value);
+                          }}
+                          className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Contact Number</label>
+                        <input 
+                          type="text"
+                          value={sidebarPhone}
+                          placeholder="e.g. +1 234 567 890"
+                          onChange={(e) => {
+                            setSidebarPhone(e.target.value);
+                            updateIframeField('phone', e.target.value);
+                          }}
+                          className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Email Address</label>
+                        <input 
+                          type="email"
+                          value={sidebarEmail}
+                          placeholder="e.g. contact@mybrand.com"
+                          onChange={(e) => {
+                            setSidebarEmail(e.target.value);
+                            updateIframeField('email', e.target.value);
+                          }}
+                          className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                        />
+                      </div>
+
+                      <div className="mt-4 pt-6 border-t border-[var(--border-subtle)]">
+                        <button 
+                          onClick={handlePublish}
+                          disabled={isPublishing}
+                          className="w-full bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white px-6 py-4 rounded-xl font-bold uppercase tracking-wider text-sm transition-transform hover:scale-105 shadow-[0_0_15px_rgba(59,130,246,0.3)] disabled:opacity-50"
+                        >
+                          {isPublishing ? "Publishing..." : "Publish to Web 🚀"}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 ) : (
                   <PreviewRenderer data={previewData} logoUrl={logoUrl} onDataChange={setPreviewData} />
                 )}

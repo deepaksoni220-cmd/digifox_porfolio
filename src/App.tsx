@@ -18,6 +18,7 @@ import { PremiumLandingPage } from './pages/PremiumLandingPage';
 import { AiBuilderPage } from './pages/AiBuilderPage';
 import { GeneratedSitePage } from './pages/GeneratedSitePage';
 import { PublishedSite } from './pages/PublishedSite';
+import { ProtectedPage } from './components/ProtectedPage';
 
 function Portfolio() {
   const [isLoading, setIsLoading] = useState(true);
@@ -113,7 +114,11 @@ function App() {
           <Route path="/" element={<Portfolio />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/basic_vs_exclusive" element={<PremiumLandingPage />} />
-          <Route path="/ai-builder" element={<AiBuilderPage />} />
+          <Route path="/ai-builder" element={
+            <ProtectedPage>
+              <AiBuilderPage />
+            </ProtectedPage>
+          } />
           <Route path="/generated-site" element={<GeneratedSitePage />} />
         </Routes>
       </Router>

@@ -1,0 +1,147 @@
+
+4:45:31 pm [vite] (client) Re-optimizing dependencies because vite config has changed
+Port 5173 is in use, trying another one...
+
+  VITE v8.0.16  ready in 516 ms
+
+  ➜  Local:   http://localhost:5174/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+
+Unable to parse HTML; parse5 error code disallowed-content-in-noscript-in-head
+ at /Users/admin/Desktop/digifox visiond/porfolio 05/index.html:58:15
+56 |      fbq('track', 'PageView');
+57 |      </script>
+58 |      <noscript><img height="1" width="1" style="display:none"
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+59 |      src="https://www.facebook.com/tr?id=830536173138266&ev=PageView&noscript=1"
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+60 |      /></noscript>
+   |  ^^^^^^^
+
+Unable to parse HTML; parse5 error code disallowed-content-in-noscript-in-head
+ at /Users/admin/Desktop/digifox visiond/porfolio 05/index.html:58:15
+56 |      fbq('track', 'PageView');
+57 |      </script>
+58 |      <noscript><img height="1" width="1" style="display:none"
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+59 |      src="https://www.facebook.com/tr?id=830536173138266&ev=PageView&noscript=1"
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+60 |      /></noscript>
+   |  ^^^^^^^ (x2)
+
+Unable to parse HTML; parse5 error code disallowed-content-in-noscript-in-head
+ at /Users/admin/Desktop/digifox visiond/porfolio 05/index.html:58:15
+56 |      fbq('track', 'PageView');
+57 |      </script>
+58 |      <noscript><img height="1" width="1" style="display:none"
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+59 |      src="https://www.facebook.com/tr?id=830536173138266&ev=PageView&noscript=1"
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+60 |      /></noscript>
+   |  ^^^^^^^ (x3)
+
+Unable to parse HTML; parse5 error code disallowed-content-in-noscript-in-head
+ at /Users/admin/Desktop/digifox visiond/porfolio 05/index.html:58:15
+56 |      fbq('track', 'PageView');
+57 |      </script>
+58 |      <noscript><img height="1" width="1" style="display:none"
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+59 |      src="https://www.facebook.com/tr?id=830536173138266&ev=PageView&noscript=1"
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+60 |      /></noscript>
+   |  ^^^^^^^ (x4)
+
+Unable to parse HTML; parse5 error code disallowed-content-in-noscript-in-head
+ at /Users/admin/Desktop/digifox visiond/porfolio 05/index.html:58:15
+56 |      fbq('track', 'PageView');
+57 |      </script>
+58 |      <noscript><img height="1" width="1" style="display:none"
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+59 |      src="https://www.facebook.com/tr?id=830536173138266&ev=PageView&noscript=1"
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+60 |      /></noscript>
+   |  ^^^^^^^ (x5)
+
+Unable to parse HTML; parse5 error code disallowed-content-in-noscript-in-head
+ at /Users/admin/Desktop/digifox visiond/porfolio 05/index.html:58:15
+56 |      fbq('track', 'PageView');
+57 |      </script>
+58 |      <noscript><img height="1" width="1" style="display:none"
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+59 |      src="https://www.facebook.com/tr?id=830536173138266&ev=PageView&noscript=1"
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+60 |      /></noscript>
+   |  ^^^^^^^ (x6)
+4:58:31 pm [vite] (client) hmr update /src/pages/AiBuilderPage.tsx, /src/index.css
+4:58:32 pm [vite] (client) ✨ new dependencies optimized: firebase/app, firebase/firestore
+4:58:32 pm [vite] (client) ✨ optimized dependencies changed. reloading
+
+Unable to parse HTML; parse5 error code disallowed-content-in-noscript-in-head
+ at /Users/admin/Desktop/digifox visiond/porfolio 05/index.html:58:15
+56 |      fbq('track', 'PageView');
+57 |      </script>
+58 |      <noscript><img height="1" width="1" style="display:none"
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+59 |      src="https://www.facebook.com/tr?id=830536173138266&ev=PageView&noscript=1"
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+60 |      /></noscript>
+   |  ^^^^^^^
+4:58:58 pm [vite] (client) hmr update /src/App.tsx, /src/index.css
+4:59:16 pm [vite] (client) hmr update /src/index.css, /src/pages/AiBuilderPage.tsx, /src/pages/PublishedSite.tsx
+4:59:30 pm [vite] (client) hmr update /src/index.css, /src/pages/PublishedSite.tsx
+
+Unable to parse HTML; parse5 error code disallowed-content-in-noscript-in-head
+ at /Users/admin/Desktop/digifox visiond/porfolio 05/index.html:58:15
+56 |      fbq('track', 'PageView');
+57 |      </script>
+58 |      <noscript><img height="1" width="1" style="display:none"
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+59 |      src="https://www.facebook.com/tr?id=830536173138266&ev=PageView&noscript=1"
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+60 |      /></noscript>
+   |  ^^^^^^^
+5:03:55 pm [vite] (client) hmr update /src/index.css, /src/pages/AiBuilderPage.tsx
+5:08:33 pm [vite] (client) hmr update /src/index.css, /src/pages/PublishedSite.tsx
+
+Unable to parse HTML; parse5 error code disallowed-content-in-noscript-in-head
+ at /Users/admin/Desktop/digifox visiond/porfolio 05/index.html:58:15
+56 |      fbq('track', 'PageView');
+57 |      </script>
+58 |      <noscript><img height="1" width="1" style="display:none"
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+59 |      src="https://www.facebook.com/tr?id=830536173138266&ev=PageView&noscript=1"
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+60 |      /></noscript>
+   |  ^^^^^^^
+5:08:50 pm [vite] (client) hmr update /src/index.css, /src/components/builder/PreviewRenderer.tsx
+5:09:01 pm [vite] (client) hmr update /src/pages/GeneratedSitePage.tsx, /src/index.css
+5:10:28 pm [vite] (client) hmr update /src/pages/AiBuilderPage.tsx, /src/index.css
+5:18:10 pm [vite] (client) hmr update /src/index.css, /src/components/builder/PreviewRenderer.tsx
+5:24:32 pm [vite] (client) hmr update /src/App.tsx, /src/index.css
+5:24:50 pm [vite] (client) hmr update /src/App.tsx, /src/index.css (x2)
+5:25:01 pm [vite] (client) hmr update /src/index.css, /src/pages/AiBuilderPage.tsx
+npx vercel dev
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+clear
+exit

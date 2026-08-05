@@ -1,7 +1,5 @@
 {
   "rewrites": [
-    { "source": "/ai-builder/preset/drinking5d/:match*", "destination": "https://digifox-onlinestore.vercel.app/:match*" },
-    { "source": "/ai-builder/preset/bnrmlss2/:match*", "destination": "https://digifox-storedemo-gqiq.vercel.app/:match*" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(assets|src|node_modules|@vite/client)/(.*)", "destination": "/$1" },
     { "source": "/(.*)", "destination": "/index.html" }

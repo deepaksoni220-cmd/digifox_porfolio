@@ -20,6 +20,24 @@ export const AiBuilderPage: React.FC = () => {
   const [error, setError] = useState("");
   const [previewData, setPreviewData] = useState<GeneratedWebsiteData | null>(null);
   
+  // Sync previewData to sessionStorage so Full Screen Preview always works
+  useEffect(() => {
+    if (previewData) {
+      sessionStorage.setItem("generatedSite", JSON.stringify(previewData));
+    } else {
+      sessionStorage.removeItem("generatedSite");
+    }
+  }, [previewData]);
+
+  // Sync logoUrl to sessionStorage
+  useEffect(() => {
+    if (logoUrl) {
+      sessionStorage.setItem("generatedLogo", logoUrl);
+    } else {
+      sessionStorage.removeItem("generatedLogo");
+    }
+  }, [logoUrl]);
+  
   const [isPublishing, setIsPublishing] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState("");
 
@@ -221,12 +239,6 @@ export const AiBuilderPage: React.FC = () => {
     try {
       const result = await generateWebsite(finalHistory, websiteType);
       setPreviewData(result);
-      sessionStorage.setItem("generatedSite", JSON.stringify(result));
-      if (logoUrl) {
-        sessionStorage.setItem("generatedLogo", logoUrl);
-      } else {
-        sessionStorage.removeItem("generatedLogo");
-      }
     } catch (err: any) {
       setError(err.message || "Failed to generate website layout.");
     } finally {

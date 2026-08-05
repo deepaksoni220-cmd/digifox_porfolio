@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { generateWebsite, planWebsite, type GeneratedWebsiteData, type ChatMessage } from '../services/aiBuilderService';
 import { publishWebsite } from '../services/firebase';
 import { PreviewRenderer } from '../components/builder/PreviewRenderer';
+import { TemplateGallery } from '../components/builder/TemplateGallery';
 import { SEOMeta } from '../components/SEOMeta';
 import { predefinedTemplates } from '../data/templates';
 
@@ -13,7 +14,7 @@ export const AiBuilderPage: React.FC = () => {
   const [websiteType, setWebsiteType] = useState("Local Business");
   const [logoUrl, setLogoUrl] = useState("");
 
-  const [buildMode, setBuildMode] = useState("ai"); // 'ai', 'aero', 'voya', 'drinking 5d', 'bnrmlss 2', 'coin-site 2'
+  const [activeTab, setActiveTab] = useState<'ai' | 'templates'>('templates');
 
   const [isPlanning, setIsPlanning] = useState(false);
   const [isBuilding, setIsBuilding] = useState(false);
@@ -308,152 +309,154 @@ export const AiBuilderPage: React.FC = () => {
               </p>
             </div>
 
-            {/* Build Mode Selector */}
-            <div className="flex flex-wrap gap-3 mb-6">
-              {[
-                { id: 'ai', label: '🤖 Custom AI Builder' },
-                { id: 'aero', label: '🧊 Aero (3D)' },
-                { id: 'voya', label: '🧊 Voya (Premium)' },
-                { id: 'drinking5d', label: '🍹 Drinking 5D' },
-                { id: 'bnrmlss2', label: '🚀 Bnrmlss 2' },
-                { id: 'coinSite', label: '💰 Coin Site' },
-              ].map(mode => (
-                <button
-                  key={mode.id}
-                  onClick={() => {
-                    if (mode.id === 'ai') {
-                      setBuildMode('ai');
-                      setPreviewData(null);
-                    } else {
-                      setBuildMode('ai');
-                      setPreviewData(predefinedTemplates[mode.id]);
-                    }
-                  }}
-                  className={`px-4 py-2 rounded-xl text-sm font-bold uppercase tracking-wider transition-all border ${
-                    (buildMode === 'ai' && previewData?.templateStyle === mode.id) || (buildMode === mode.id && !previewData)
-                      ? 'bg-blue-600/20 border-blue-500 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)]' 
-                      : 'bg-[var(--bg-surface)] border-[var(--border-strong)] text-[var(--text-secondary)] hover:border-[var(--text-primary)] hover:text-[var(--text-primary)]'
-                  }`}
-                >
-                  {mode.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Configuration Row (Only for AI) */}
-            {buildMode === "ai" && (
-            <div className="flex flex-col sm:flex-row gap-4 mb-2">
-              <div className="flex-1 flex flex-col gap-2">
-                <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Website Type</label>
-                <select 
-                  value={websiteType}
-                  onChange={(e) => setWebsiteType(e.target.value)}
-                  disabled={chatHistory.length > 0}
-                  className="bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none disabled:opacity-50"
-                >
-                  <option value="Local Business">Local Business</option>
-                  <option value="Portfolio">Portfolio</option>
-                  <option value="Factory / Manufacturing">Factory / Manufacturing</option>
-                  <option value="E-Commerce Store">E-Commerce Store</option>
-                  <option value="Mobile Web App">Mobile Web App</option>
-                </select>
-              </div>
-
-              <div className="flex-1 flex flex-col gap-2">
-                <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Company Logo (Optional)</label>
-                <div className="relative flex items-center">
-                  <input 
-                    type="file" 
-                    accept="image/*"
-                    onChange={handleLogoUpload}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                  />
-                  <div className="w-full bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-secondary)] flex justify-between items-center hover:border-[#3b82f6] transition-colors">
-                    <span className="truncate">{logoUrl ? "Logo Uploaded!" : "Choose an image file..."}</span>
-                    {logoUrl && <img src={logoUrl} alt="Logo" className="h-6 w-auto object-contain rounded" />}
-                  </div>
-                </div>
-              </div>
-            </div>
-            )}
-
-            <div className="flex flex-col bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] shadow-xl w-full h-[500px] overflow-hidden">
-              
-              {/* Chat History */}
-              <div 
-                ref={chatScrollRef}
-                className="flex-1 overflow-y-auto p-6 flex flex-col gap-4"
+            {/* Tab Selector */}
+            <div className="flex gap-4 mb-6 border-b border-[var(--border-strong)] pb-4">
+              <button
+                onClick={() => setActiveTab('templates')}
+                className={`text-lg font-bold uppercase tracking-wider transition-colors ${
+                  activeTab === 'templates' ? 'text-[#3b82f6] border-b-2 border-[#3b82f6]' : 'text-[var(--text-secondary)] hover:text-white'
+                }`}
               >
-                {chatHistory.length === 0 ? (
-                  <div className="h-full flex flex-col items-center justify-center text-[var(--text-primary)]/40 text-center gap-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"></path><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"></path></svg>
-                    <p className="font-light tracking-wide max-w-sm">
-                      Tell the AI what kind of website you want to build. It will ask questions and help structure your ideas.
-                    </p>
-                  </div>
-                ) : (
-                  chatHistory.map((msg, i) => (
-                    <div 
-                      key={i} 
-                      className={`max-w-[85%] p-4 rounded-2xl ${
-                        msg.role === 'user' 
-                          ? 'bg-[#3b82f6] text-white self-end rounded-br-sm' 
-                          : 'bg-[var(--bg-base)] border border-[var(--border-strong)] text-[var(--text-primary)] self-start rounded-bl-sm'
-                      }`}
-                    >
-                      <p className="whitespace-pre-wrap text-sm sm:text-base leading-relaxed">
-                        {msg.text}
-                      </p>
-                    </div>
-                  ))
-                )}
-                
-                {isPlanning && (
-                  <div className="bg-[var(--bg-base)] border border-[var(--border-strong)] p-4 rounded-2xl self-start rounded-bl-sm flex gap-2 items-center">
-                    <div className="w-2 h-2 bg-[var(--text-primary)]/50 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-[var(--text-primary)]/50 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 bg-[var(--text-primary)]/50 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                  </div>
-                )}
-              </div>
+                Template Gallery
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('ai');
+                  setPreviewData(null);
+                }}
+                className={`text-lg font-bold uppercase tracking-wider transition-colors ${
+                  activeTab === 'ai' ? 'text-[#3b82f6] border-b-2 border-[#3b82f6]' : 'text-[var(--text-secondary)] hover:text-white'
+                }`}
+              >
+                AI Architect
+              </button>
+            </div>
 
-              {/* Input Area */}
-              <div className="p-4 border-t border-[var(--border-strong)] bg-[var(--bg-base)] flex flex-col gap-3">
-                <textarea 
-                  rows={2}
-                  placeholder="E.g. I need a luxury watch landing page..."
-                  value={currentInput}
-                  onChange={(e) => setCurrentInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      handlePlan();
-                    }
-                  }}
-                  className="w-full bg-transparent text-[var(--text-strong)] placeholder:text-[var(--text-secondary)] outline-none resize-none px-2"
+            {activeTab === 'templates' ? (
+              <div className="mb-10">
+                <TemplateGallery 
+                  onSelect={(id, data) => {
+                    setPreviewData(data);
+                    // Scroll down to preview area smoothly
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                  }} 
                 />
-                
-                <div className="flex justify-between items-center px-2">
-                  <div className="flex gap-3 w-full justify-end">
-                    <button 
-                      onClick={handlePlan}
-                      disabled={isPlanning || isBuilding || !currentInput.trim()}
-                      className="text-[var(--text-strong)] border border-[var(--border-strong)] hover:border-[#3b82f6] hover:text-[#3b82f6] px-6 py-2 rounded-full font-bold uppercase tracking-wider text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              </div>
+            ) : (
+              <>
+                <div className="flex flex-col sm:flex-row gap-4 mb-2">
+                  <div className="flex-1 flex flex-col gap-2">
+                    <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Website Type</label>
+                    <select 
+                      value={websiteType}
+                      onChange={(e) => setWebsiteType(e.target.value)}
+                      disabled={chatHistory.length > 0}
+                      className="bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none disabled:opacity-50"
                     >
-                      {isPlanning ? "Planning..." : "Plan with AI"}
-                    </button>
-                    
-                    <button 
-                      onClick={handleBuild}
-                      disabled={isBuilding || (chatHistory.length === 0 && !currentInput.trim())}
-                      className="bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white px-8 py-2 rounded-full font-bold uppercase tracking-wider text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(59,130,246,0.3)]"
-                    >
-                      {isBuilding ? "Building..." : "Build Website"}
-                    </button>
+                      <option value="Local Business">Local Business</option>
+                      <option value="Portfolio">Portfolio</option>
+                      <option value="Factory / Manufacturing">Factory / Manufacturing</option>
+                      <option value="E-Commerce Store">E-Commerce Store</option>
+                      <option value="Mobile Web App">Mobile Web App</option>
+                    </select>
+                  </div>
+
+                  <div className="flex-1 flex flex-col gap-2">
+                    <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Company Logo (Optional)</label>
+                    <div className="relative flex items-center">
+                      <input 
+                        type="file" 
+                        accept="image/*"
+                        onChange={handleLogoUpload}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      />
+                      <div className="w-full bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-secondary)] flex justify-between items-center hover:border-[#3b82f6] transition-colors">
+                        <span className="truncate">{logoUrl ? "Logo Uploaded!" : "Choose an image file..."}</span>
+                        {logoUrl && <img src={logoUrl} alt="Logo" className="h-6 w-auto object-contain rounded" />}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+
+                <div className="flex flex-col bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] shadow-xl w-full h-[500px] overflow-hidden">
+                  
+                  {/* Chat History */}
+                  <div 
+                    ref={chatScrollRef}
+                    className="flex-1 overflow-y-auto p-6 flex flex-col gap-4"
+                  >
+                    {chatHistory.length === 0 ? (
+                      <div className="h-full flex flex-col items-center justify-center text-[var(--text-primary)]/40 text-center gap-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"></path><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"></path></svg>
+                        <p className="font-light tracking-wide max-w-sm">
+                          Tell the AI what kind of website you want to build. It will ask questions and help structure your ideas.
+                        </p>
+                      </div>
+                    ) : (
+                      chatHistory.map((msg, i) => (
+                        <div 
+                          key={i} 
+                          className={`max-w-[85%] p-4 rounded-2xl ${
+                            msg.role === 'user' 
+                              ? 'bg-[#3b82f6] text-white self-end rounded-br-sm' 
+                              : 'bg-[var(--bg-base)] border border-[var(--border-strong)] text-[var(--text-primary)] self-start rounded-bl-sm'
+                          }`}
+                        >
+                          <p className="whitespace-pre-wrap text-sm sm:text-base leading-relaxed">
+                            {msg.text}
+                          </p>
+                        </div>
+                      ))
+                    )}
+                    
+                    {isPlanning && (
+                      <div className="bg-[var(--bg-base)] border border-[var(--border-strong)] p-4 rounded-2xl self-start rounded-bl-sm flex gap-2 items-center">
+                        <div className="w-2 h-2 bg-[var(--text-primary)]/50 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-[var(--text-primary)]/50 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <div className="w-2 h-2 bg-[var(--text-primary)]/50 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Input Area */}
+                  <div className="p-4 border-t border-[var(--border-strong)] bg-[var(--bg-base)] flex flex-col gap-3">
+                    <textarea 
+                      rows={2}
+                      placeholder="E.g. I need a luxury watch landing page..."
+                      value={currentInput}
+                      onChange={(e) => setCurrentInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handlePlan();
+                        }
+                      }}
+                      className="w-full bg-transparent text-[var(--text-strong)] placeholder:text-[var(--text-secondary)] outline-none resize-none px-2"
+                    />
+                    
+                    <div className="flex justify-between items-center px-2">
+                      <div className="flex gap-3 w-full justify-end">
+                        <button 
+                          onClick={handlePlan}
+                          disabled={isPlanning || isBuilding || !currentInput.trim()}
+                          className="text-[var(--text-strong)] border border-[var(--border-strong)] hover:border-[#3b82f6] hover:text-[#3b82f6] px-6 py-2 rounded-full font-bold uppercase tracking-wider text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {isPlanning ? "Planning..." : "Plan with AI"}
+                        </button>
+                        
+                        <button 
+                          onClick={handleBuild}
+                          disabled={isBuilding || (chatHistory.length === 0 && !currentInput.trim())}
+                          className="bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white px-8 py-2 rounded-full font-bold uppercase tracking-wider text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+                        >
+                          {isBuilding ? "Building..." : "Build Website"}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
 
             {error && (
               <div className="text-red-500 text-sm font-medium bg-red-500/10 p-4 rounded-xl border border-red-500/20 w-full">

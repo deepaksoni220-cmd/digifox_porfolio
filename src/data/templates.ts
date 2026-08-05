@@ -5,6 +5,8 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     websiteType: "Business Site",
     templateStyle: "aero",
     previewUrl: "http://localhost:1002",
+    shortDescription: "3D minimalist dark aesthetic with floating objects and glowing elements.",
+    thumbnailUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
     hero: {
       title: "Aero",
       subtitle: "Experience the next generation of digital aesthetics.",
@@ -46,6 +48,8 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     websiteType: "E-Commerce Store",
     templateStyle: "bnrmlss2",
     previewUrl: "https://digifox-storedemo-gqiq.vercel.app/",
+    shortDescription: "Urban streetwear fashion e-commerce with moody underground aesthetic.",
+    thumbnailUrl: "https://images.unsplash.com/photo-1523398002811-999aa8e9ddaa?q=80&w=800&auto=format&fit=crop",
     hero: {
       title: "Bnrmlss 2",
       subtitle: "Streetwear that defines the culture.",
@@ -90,6 +94,8 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     websiteType: "Business Site",
     templateStyle: "drinking5d",
     previewUrl: "https://digifox-onlinestore.vercel.app/",
+    shortDescription: "Premium beverage brand landing page with immersive 3D bottle physics.",
+    thumbnailUrl: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=800&auto=format&fit=crop",
     hero: {
       title: "Drinking 5D",
       subtitle: "Elevate your beverage experience.",
@@ -130,6 +136,8 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
   voya: {
     websiteType: "Portfolio",
     templateStyle: "voya",
+    shortDescription: "Clean, elegant portfolio for digital artists featuring soft pastels and typography.",
+    thumbnailUrl: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=800&auto=format&fit=crop",
     hero: {
       title: "Voya",
       subtitle: "Creative direction and visual storytelling.",
@@ -170,6 +178,8 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
   coinSite: {
     websiteType: "Business Site",
     templateStyle: "coinSite",
+    shortDescription: "High-performance decentralized finance landing page with neon cyberpunk elements.",
+    thumbnailUrl: "https://images.unsplash.com/photo-1621504450181-5d156f0624e5?q=80&w=800&auto=format&fit=crop",
     hero: {
       title: "Coin Site 2",
       subtitle: "The future of decentralized finance.",

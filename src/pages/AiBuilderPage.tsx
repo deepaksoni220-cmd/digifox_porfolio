@@ -61,9 +61,32 @@ export const AiBuilderPage: React.FC = () => {
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
-        const b64 = reader.result as string;
-        setSidebarLogo(b64);
-        updateIframeField('logo', b64);
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const MAX_WIDTH = 400; // Logos don't need to be huge
+          const MAX_HEIGHT = 400;
+          
+          if (width > height && width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          } else if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) ctx.drawImage(img, 0, 0, width, height);
+          
+          const compressedBase64 = canvas.toDataURL('image/webp', 0.8);
+          setSidebarLogo(compressedBase64);
+          updateIframeField('logo', compressedBase64);
+        };
+        img.src = reader.result as string;
       };
       reader.readAsDataURL(file);
     }
@@ -106,7 +129,30 @@ export const AiBuilderPage: React.FC = () => {
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
-        setLogoUrl(reader.result as string);
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const MAX_WIDTH = 400;
+          const MAX_HEIGHT = 400;
+          
+          if (width > height && width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          } else if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) ctx.drawImage(img, 0, 0, width, height);
+          
+          setLogoUrl(canvas.toDataURL('image/webp', 0.8));
+        };
+        img.src = reader.result as string;
       };
       reader.readAsDataURL(file);
     }

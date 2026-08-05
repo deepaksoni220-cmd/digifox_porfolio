@@ -24,6 +24,7 @@ export const AiBuilderPage: React.FC = () => {
   const [publishedUrl, setPublishedUrl] = useState("");
 
   // Sidebar Form State
+  const [sidebarBrandName, setSidebarBrandName] = useState("");
   const [sidebarLogo, setSidebarLogo] = useState("");
   const [sidebarAddress, setSidebarAddress] = useState("");
   const [sidebarPhone, setSidebarPhone] = useState("");
@@ -449,6 +450,20 @@ export const AiBuilderPage: React.FC = () => {
                         Site Details
                       </h3>
                       
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Brand Name</label>
+                        <input 
+                          type="text"
+                          value={sidebarBrandName}
+                          placeholder="e.g. Acme Corp"
+                          onChange={(e) => {
+                            setSidebarBrandName(e.target.value);
+                            updateIframeField('brandName', e.target.value);
+                          }}
+                          className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                        />
+                      </div>
+
                       <div className="flex flex-col gap-2">
                         <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Logo</label>
                         <div className="relative flex items-center">

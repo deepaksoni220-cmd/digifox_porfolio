@@ -4,6 +4,7 @@ export interface GeneratedWebsiteData {
   previewUrl?: string;
   customHtml?: string;
   contactDetails?: {
+    brandName?: string;
     address?: string;
     phone?: string;
     email?: string;

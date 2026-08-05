@@ -4,6 +4,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
   aero: {
     websiteType: "Business Site",
     templateStyle: "aero",
+    category: "3d",
     previewUrl: "http://localhost:1002",
     shortDescription: "3D minimalist dark aesthetic with floating objects and glowing elements.",
     thumbnailUrl: "/templates/aero.png",
@@ -47,6 +48,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
   bnrmlss2: {
     websiteType: "E-Commerce Store",
     templateStyle: "bnrmlss2",
+    category: "2d",
     previewUrl: "https://digifox-storedemo-gqiq.vercel.app/",
     shortDescription: "Urban streetwear fashion e-commerce with moody underground aesthetic.",
     thumbnailUrl: "/templates/bnrmlss2.png",
@@ -93,6 +95,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
   drinking5d: {
     websiteType: "Business Site",
     templateStyle: "drinking5d",
+    category: "3d",
     previewUrl: "https://digifox-onlinestore.vercel.app/",
     shortDescription: "Premium beverage brand landing page with immersive 3D bottle physics.",
     thumbnailUrl: "/templates/drinking5d.png",
@@ -136,6 +139,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
   voya: {
     websiteType: "Portfolio",
     templateStyle: "voya",
+    category: "2d",
     shortDescription: "Clean, elegant portfolio for digital artists featuring soft pastels and typography.",
     thumbnailUrl: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=800&auto=format&fit=crop",
     hero: {
@@ -178,6 +182,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
   coinSite: {
     websiteType: "Business Site",
     templateStyle: "coinSite",
+    category: "2d",
     shortDescription: "High-performance decentralized finance landing page with neon cyberpunk elements.",
     thumbnailUrl: "https://images.unsplash.com/photo-1621504450181-5d156f0624e5?q=80&w=800&auto=format&fit=crop",
     hero: {

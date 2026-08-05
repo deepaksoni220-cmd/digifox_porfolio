@@ -2,6 +2,7 @@ export interface GeneratedWebsiteData {
   websiteType: string;
   templateStyle?: 'aero' | 'voya' | 'drinking5d' | 'bnrmlss2' | 'coinSite' | 'default';
   previewUrl?: string;
+  category?: '3d' | '2d';
   thumbnailUrl?: string;
   shortDescription?: string;
   customHtml?: string;

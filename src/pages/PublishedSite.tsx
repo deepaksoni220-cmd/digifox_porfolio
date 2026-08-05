@@ -29,6 +29,17 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
     fetchSite();
   }, [subdomain]);
 
+  useEffect(() => {
+    if (!siteData || !siteData.data) return;
+    const handleIframeMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'REQUEST_SYNC' && event.source) {
+        (event.source as WindowProxy).postMessage({ type: 'SYNC_DATA', data: siteData.data }, '*');
+      }
+    };
+    window.addEventListener('message', handleIframeMessage);
+    return () => window.removeEventListener('message', handleIframeMessage);
+  }, [siteData]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-6">
@@ -57,23 +68,6 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
           src={siteData.templateUrl} 
           className="w-full h-full border-none"
           title={`${subdomain} Template`}
-          ref={(iframe) => {
-            if (iframe && siteData.data) {
-              const handleIframeMessage = (event: MessageEvent) => {
-                // We no longer inject raw HTML because it destroys the React DOM,
-                // GSAP animations, and Lenis scrolling on multi-page templates.
-                // We rely strictly on SYNC_DATA (structured data sync) instead!
-                
-                if (event.data?.type === 'REQUEST_SYNC' && event.source) {
-                  (event.source as WindowProxy).postMessage({ type: 'SYNC_DATA', data: siteData.data }, '*');
-                }
-              };
-              window.addEventListener('message', handleIframeMessage);
-              
-              // Cleanup (Note: in a real app you'd want to handle cleanup better, 
-              // but since this is a top-level render it's okay for now)
-            }
-          }}
         />
       </div>
     );

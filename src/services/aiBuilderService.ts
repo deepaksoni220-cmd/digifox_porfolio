@@ -1,5 +1,6 @@
 export interface GeneratedWebsiteData {
   websiteType: string;
+  templateStyle?: 'aero' | 'voya' | 'drinking5d' | 'bnrmlss2' | 'coinSite' | 'default';
   hero: {
     title: string;
     subtitle: string;

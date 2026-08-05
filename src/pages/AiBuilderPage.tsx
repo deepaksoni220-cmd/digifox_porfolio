@@ -4,6 +4,7 @@ import { generateWebsite, planWebsite, type GeneratedWebsiteData, type ChatMessa
 import { publishWebsite } from '../services/firebase';
 import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 import { SEOMeta } from '../components/SEOMeta';
+import { predefinedTemplates } from '../data/templates';
 
 export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -13,11 +14,6 @@ export const AiBuilderPage: React.FC = () => {
   const [logoUrl, setLogoUrl] = useState("");
 
   const [buildMode, setBuildMode] = useState("ai"); // 'ai', 'aero', 'voya', 'drinking 5d', 'bnrmlss 2', 'coin-site 2'
-
-  // Custom Data for Readymade Templates
-  const [customBrandName, setCustomBrandName] = useState("");
-  const [customAddress, setCustomAddress] = useState("");
-  const [customContact, setCustomContact] = useState("");
 
   const [isPlanning, setIsPlanning] = useState(false);
   const [isBuilding, setIsBuilding] = useState(false);
@@ -109,8 +105,7 @@ export const AiBuilderPage: React.FC = () => {
   };
 
   const handlePublish = async () => {
-    // If in AI mode, we need previewData. If in template mode, we don't.
-    if (buildMode === "ai" && !previewData) return;
+    if (!previewData) return;
 
     const subdomain = prompt("Enter a unique brand name for your subdomain (e.g. 'mybrand'):");
     if (!subdomain) return;
@@ -124,28 +119,7 @@ export const AiBuilderPage: React.FC = () => {
 
     setIsPublishing(true);
     try {
-      if (buildMode === "ai") {
-        await publishWebsite(cleanSubdomain, previewData!, logoUrl);
-      } else {
-        const queryParams = new URLSearchParams({
-          brand: customBrandName,
-          address: customAddress,
-          contact: customContact
-        }).toString();
-        
-        // Map templates to their live Vercel deployments
-        const liveTemplateUrls: Record<string, string> = {
-          'aero': 'https://digifox5donline.vercel.app',
-          'voya': 'https://voya-YOUR-LINK.vercel.app',
-          'drinking 5d': 'https://digifox-onlinestore.vercel.app',
-          'bnrmlss 2': 'https://digifox-storedemo-gqiq.vercel.app',
-          'coin-site 2': 'https://coin-YOUR-LINK.vercel.app'
-        };
-        
-        const baseUrl = liveTemplateUrls[buildMode] || '';
-        const templateUrl = `${baseUrl}?${queryParams}`;
-        await publishWebsite(cleanSubdomain, null, logoUrl, templateUrl);
-      }
+      await publishWebsite(cleanSubdomain, previewData, logoUrl);
       
       const url = `https://${cleanSubdomain}.digifox.world`;
       setPublishedUrl(url);
@@ -156,7 +130,6 @@ export const AiBuilderPage: React.FC = () => {
       setIsPublishing(false);
     }
   };
-
   return (
     <main className="min-h-screen bg-[var(--bg-base)] text-[var(--text-strong)] font-['Kanit'] py-20 px-6 sm:px-10">
       <SEOMeta 
@@ -185,18 +158,23 @@ export const AiBuilderPage: React.FC = () => {
                 { id: 'ai', label: '🤖 Custom AI Builder' },
                 { id: 'aero', label: '🧊 Aero (3D)' },
                 { id: 'voya', label: '🧊 Voya (Premium)' },
-                { id: 'drinking 5d', label: '🍹 Drinking 5D' },
-                { id: 'bnrmlss 2', label: '🚀 Bnrmlss 2' },
-                { id: 'coin-site 2', label: '💰 Coin Site' },
+                { id: 'drinking5d', label: '🍹 Drinking 5D' },
+                { id: 'bnrmlss2', label: '🚀 Bnrmlss 2' },
+                { id: 'coinSite', label: '💰 Coin Site' },
               ].map(mode => (
                 <button
                   key={mode.id}
                   onClick={() => {
-                    setBuildMode(mode.id);
-                    setPreviewData(null); // Clear preview when switching modes
+                    if (mode.id === 'ai') {
+                      setBuildMode('ai');
+                      setPreviewData(null);
+                    } else {
+                      setBuildMode('ai');
+                      setPreviewData(predefinedTemplates[mode.id]);
+                    }
                   }}
                   className={`px-4 py-2 rounded-xl text-sm font-bold uppercase tracking-wider transition-all border ${
-                    buildMode === mode.id 
+                    (buildMode === 'ai' && previewData?.templateStyle === mode.id) || (buildMode === mode.id && !previewData)
                       ? 'bg-blue-600/20 border-blue-500 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)]' 
                       : 'bg-[var(--bg-surface)] border-[var(--border-strong)] text-[var(--text-secondary)] hover:border-[var(--text-primary)] hover:text-[var(--text-primary)]'
                   }`}
@@ -243,8 +221,6 @@ export const AiBuilderPage: React.FC = () => {
             </div>
             )}
 
-            {/* Chat UI or Template Preview */}
-            {buildMode === "ai" ? (
             <div className="flex flex-col bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] shadow-xl w-full h-[500px] overflow-hidden">
               
               {/* Chat History */}
@@ -322,78 +298,6 @@ export const AiBuilderPage: React.FC = () => {
                 </div>
               </div>
             </div>
-            ) : (
-              <div className="flex flex-col bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] shadow-xl w-full h-[500px] overflow-hidden">
-                <div className="flex-1 overflow-y-auto p-10 flex flex-col items-center justify-start text-center gap-6">
-                  <div className="text-6xl mb-2">🧊</div>
-                  <h3 className="text-2xl font-bold uppercase tracking-widest text-[var(--text-strong)]">
-                    {buildMode.toUpperCase()} Template Selected
-                  </h3>
-                  <p className="text-[var(--text-secondary)] text-sm max-w-md">
-                    Enter your details below to customize this premium template. These details will instantly populate the template when published!
-                  </p>
-                  
-                  <div className="w-full max-w-sm flex flex-col gap-4 text-left mt-2">
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Brand Name</label>
-                      <input 
-                        type="text" 
-                        value={customBrandName}
-                        onChange={(e) => setCustomBrandName(e.target.value)}
-                        placeholder="e.g. Digifox" 
-                        className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Business Address</label>
-                      <input 
-                        type="text" 
-                        value={customAddress}
-                        onChange={(e) => setCustomAddress(e.target.value)}
-                        placeholder="e.g. 123 Main St, NY" 
-                        className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">WhatsApp / Contact Number</label>
-                      <input 
-                        type="text" 
-                        value={customContact}
-                        onChange={(e) => setCustomContact(e.target.value)}
-                        placeholder="e.g. +1 555-1234" 
-                        className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4 mt-6">
-                    <a 
-                    href={
-                      {
-                        'aero': 'https://digifox5donline.vercel.app',
-                        'voya': 'https://voya-YOUR-LINK.vercel.app',
-                        'drinking 5d': 'https://digifox-onlinestore.vercel.app',
-                        'bnrmlss 2': 'https://digifox-storedemo-gqiq.vercel.app',
-                        'coin-site 2': 'https://coin-YOUR-LINK.vercel.app'
-                      }[buildMode] || '#'
-                    }
-                    target="_blank"
-                    rel="noreferrer"
-                    className="bg-[var(--bg-base)] border border-[var(--border-strong)] hover:border-[#3b82f6] text-[var(--text-strong)] px-8 py-3 rounded-full font-bold uppercase tracking-wider text-sm transition-all shadow-lg"
-                  >
-                    Preview Template ↗
-                  </a>
-                    <button 
-                      onClick={handlePublish}
-                      disabled={isPublishing || !customBrandName}
-                      className="bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white px-8 py-3 rounded-full font-bold uppercase tracking-wider text-sm transition-all shadow-[0_0_15px_rgba(59,130,246,0.3)] disabled:opacity-50"
-                    >
-                      {isPublishing ? "Publishing..." : "Publish Custom Site 🚀"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
 
             {error && (
               <div className="text-red-500 text-sm font-medium bg-red-500/10 p-4 rounded-xl border border-red-500/20 w-full">
@@ -409,7 +313,7 @@ export const AiBuilderPage: React.FC = () => {
             <h2 className="text-2xl font-black uppercase tracking-widest">
               Live Preview
             </h2>
-            {(previewData || buildMode !== 'ai') && !isBuilding && (
+            {previewData && !isBuilding && (
               <div className="flex gap-4">
                 <button 
                   onClick={handlePublish}
@@ -418,14 +322,12 @@ export const AiBuilderPage: React.FC = () => {
                 >
                   {isPublishing ? "Publishing..." : "Publish to Web 🚀"}
                 </button>
-                {buildMode === 'ai' && (
                 <button 
                   onClick={() => window.open('/generated-site', '_blank')}
                   className="bg-[var(--text-strong)] text-[var(--bg-base)] px-6 py-2 rounded-full font-bold uppercase tracking-wider text-sm transition-transform hover:scale-105 shadow-xl"
                 >
                   Open Full Screen ↗
                 </button>
-                )}
               </div>
             )}
           </div>
@@ -461,15 +363,6 @@ export const AiBuilderPage: React.FC = () => {
                 className="w-full"
               >
                 <PreviewRenderer data={previewData} logoUrl={logoUrl} />
-              </motion.div>
-            ) : buildMode !== 'ai' ? (
-              <motion.div 
-                key="template-preview"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="w-full h-[600px] rounded-3xl overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)]"
-              >
-                <iframe src={`/templates/${buildMode}/index.html`} className="w-full h-full border-none" title="Template Preview" />
               </motion.div>
             ) : (
               <motion.div 

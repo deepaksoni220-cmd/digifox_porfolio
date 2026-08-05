@@ -137,8 +137,8 @@ export const AiBuilderPage: React.FC = () => {
         const liveTemplateUrls: Record<string, string> = {
           'aero': 'https://digifox5donline.vercel.app',
           'voya': 'https://voya-YOUR-LINK.vercel.app',
-          'drinking 5d': 'https://drinking-YOUR-LINK.vercel.app',
-          'bnrmlss 2': 'https://bnrmlss-YOUR-LINK.vercel.app',
+          'drinking 5d': 'https://digifox-onlinestore.vercel.app',
+          'bnrmlss 2': 'https://digifox-storedemo-gqiq.vercel.app',
           'coin-site 2': 'https://coin-YOUR-LINK.vercel.app'
         };
         
@@ -372,8 +372,8 @@ export const AiBuilderPage: React.FC = () => {
                       {
                         'aero': 'https://digifox5donline.vercel.app',
                         'voya': 'https://voya-YOUR-LINK.vercel.app',
-                        'drinking 5d': 'https://drinking-YOUR-LINK.vercel.app',
-                        'bnrmlss 2': 'https://bnrmlss-YOUR-LINK.vercel.app',
+                        'drinking 5d': 'https://digifox-onlinestore.vercel.app',
+                        'bnrmlss 2': 'https://digifox-storedemo-gqiq.vercel.app',
                         'coin-site 2': 'https://coin-YOUR-LINK.vercel.app'
                       }[buildMode] || '#'
                     }

@@ -4,7 +4,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
   aero: {
     websiteType: "Business Site",
     templateStyle: "aero",
-    previewUrl: "http://localhost:1002",
+    previewUrl: "/ai-builder/preset/aero/",
     hero: {
       title: "Aero",
       subtitle: "Experience the next generation of digital aesthetics.",
@@ -45,7 +45,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
   bnrmlss2: {
     websiteType: "E-Commerce Store",
     templateStyle: "bnrmlss2",
-    previewUrl: "https://digifox-storedemo-gqiq.vercel.app/",
+    previewUrl: "/ai-builder/preset/bnrmlss2/",
     hero: {
       title: "Bnrmlss 2",
       subtitle: "Streetwear that defines the culture.",
@@ -89,7 +89,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
   drinking5d: {
     websiteType: "Business Site",
     templateStyle: "drinking5d",
-    previewUrl: "https://digifox-onlinestore.vercel.app/",
+    previewUrl: "/ai-builder/preset/drinking5d/",
     hero: {
       title: "Drinking 5D",
       subtitle: "Elevate your beverage experience.",

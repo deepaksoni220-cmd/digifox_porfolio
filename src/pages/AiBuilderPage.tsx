@@ -52,26 +52,39 @@ export const AiBuilderPage: React.FC = () => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const updateIframeField = (field: string, value: string) => {
-    // 1. Update the local state so we have it saved for sync requests
     setPreviewData(prev => {
       if (!prev) return prev;
-      return {
+      
+      const newHero = { ...prev.hero };
+      if (field === 'brandName') {
+        newHero.title = value;
+      }
+      
+      const newData = {
         ...prev,
+        hero: newHero,
         contactDetails: {
           ...(prev.contactDetails || {}),
           [field]: value
         }
       };
-    });
 
-    // 2. Push it instantly to the iframe
-    if (iframeRef.current?.contentWindow) {
-      iframeRef.current.contentWindow.postMessage({
-        type: 'UPDATE_FIELD',
-        field,
-        value
-      }, '*');
-    }
+      if (iframeRef.current?.contentWindow) {
+        // Send both for backward compatibility with older templates if any
+        iframeRef.current.contentWindow.postMessage({
+          type: 'UPDATE_FIELD',
+          field,
+          value
+        }, '*');
+        
+        iframeRef.current.contentWindow.postMessage({
+          type: 'SYNC_DATA',
+          data: newData
+        }, '*');
+      }
+
+      return newData;
+    });
   };
 
   const handleSidebarLogo = (e: React.ChangeEvent<HTMLInputElement>) => {

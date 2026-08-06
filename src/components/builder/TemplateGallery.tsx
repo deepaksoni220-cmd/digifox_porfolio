@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { GeneratedWebsiteData } from '../../services/aiBuilderService';
 import { predefinedTemplates } from '../../data/templates';
@@ -7,12 +7,19 @@ interface TemplateGalleryProps {
   onSelect: (templateId: string, data: GeneratedWebsiteData) => void;
 }
 
-const TemplateCard = ({ 
+interface TemplateCardProps {
+  id: string;
+  template: GeneratedWebsiteData;
+  index: number;
+  onSelect: (id: string, data: GeneratedWebsiteData) => void;
+  onPreviewClick: (id: string, data: GeneratedWebsiteData) => void;
+}
+
+const TemplateCard: React.FC<TemplateCardProps> = ({ 
   id, 
   template, 
   index, 
   onSelect, 
-  onSelect,
   onPreviewClick
 }) => {
   const [hovered, setHovered] = useState(false);

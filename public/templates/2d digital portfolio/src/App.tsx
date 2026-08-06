@@ -304,6 +304,37 @@ function App() {
 
       {/* Section 5: Services */}
       <ServicesSection items={data.items} header={data.servicesHeader} />
+
+      {/* Footer */}
+      <footer className="w-full bg-black border-t border-white/10 py-16 px-6 flex flex-col md:flex-row justify-between items-center gap-8 max-w-5xl mx-auto mt-20">
+        <div className="flex items-center gap-2">
+          {data.logo ? (
+            <img src={data.logo} alt="Logo" className="w-6 h-6 object-contain" />
+          ) : (
+            <Globe className="w-5 h-5 text-white animate-[spin_8s_linear_infinite]" />
+          )}
+          <span className="text-white font-semibold tracking-tight">{data.brandName}</span>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-6 md:gap-12 text-sm text-white/50 text-center md:text-left">
+          <div>
+            <span className="text-white/30 text-[10px] uppercase tracking-widest block mb-1">Address</span>
+            <span className="footer-address">{data.address}</span>
+          </div>
+          <div>
+            <span className="text-white/30 text-[10px] uppercase tracking-widest block mb-1">Phone</span>
+            <span className="footer-phone">{data.phone}</span>
+          </div>
+          <div>
+            <span className="text-white/30 text-[10px] uppercase tracking-widest block mb-1">Email</span>
+            <span className="footer-email">{data.email}</span>
+          </div>
+        </div>
+
+        <div className="text-xs text-white/30">
+          © {new Date().getFullYear()} {data.brandName}. All rights reserved.
+        </div>
+      </footer>
     </div>
   );
 }

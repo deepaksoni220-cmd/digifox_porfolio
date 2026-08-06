@@ -902,10 +902,10 @@ export const AiBuilderPage: React.FC = () => {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b border-[var(--border-strong)] pb-4 gap-4">
             <div>
               <h2 className="text-2xl font-black uppercase tracking-widest">
-                Live Preview
+                Get A Live Preview
               </h2>
               <p className="text-xs sm:text-sm text-[var(--text-primary)]/60 mt-1">
-                👉 Click directly on any text in the preview below to edit it. Also you can use the "Site Details" panel on the right to update your logo and business details of website as required by you
+                👉 Click directly on any text in the preview to edit it. Also you can use the "Site Details" panel on the right to update your logo and business details of website as required by you
               </p>
             </div>
             {previewData && !isBuilding && (

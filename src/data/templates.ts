@@ -53,7 +53,6 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     previewUrl: "https://digifox-storedemo-gqiq.vercel.app/",
     shortDescription: "Urban streetwear fashion e-commerce with moody underground aesthetic.",
     thumbnailUrl: "/templates/bnrmlss2.png",
-    previewVideoUrl: "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-lit-city-street-44026-large.mp4",
     hero: {
       title: "Bnrmlss 2",
       subtitle: "Streetwear that defines the culture.",
@@ -145,7 +144,6 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     category: "2d",
     shortDescription: "Clean, elegant portfolio for digital artists featuring soft pastels and typography.",
     thumbnailUrl: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=800&auto=format&fit=crop",
-    previewVideoUrl: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260402_054547_9875cfc5-155a-4229-8ec8-b7ba7125cbf8.mp4",
     hero: {
       title: "Voya",
       subtitle: "Creative direction and visual storytelling.",
@@ -189,7 +187,6 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     category: "2d",
     shortDescription: "High-performance decentralized finance landing page with neon cyberpunk elements.",
     thumbnailUrl: "https://images.unsplash.com/photo-1621504450181-5d156f0624e5?q=80&w=800&auto=format&fit=crop",
-    previewVideoUrl: "https://assets.mixkit.co/videos/preview/mixkit-abstract-futuristic-neon-light-loop-42861-large.mp4",
     hero: {
       title: "Coin Site 2",
       subtitle: "The future of decentralized finance.",

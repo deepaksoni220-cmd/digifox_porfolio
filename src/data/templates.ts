@@ -221,5 +221,48 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
       primaryColor: "#10b981",
       secondaryColor: "#064e3b"
     }
+  },
+  digitalPortfolio2d: {
+    websiteType: "Portfolio",
+    category: "2d",
+    previewUrl: "/2d digital portfolio/dist/index.html",
+    shortDescription: "Sleek 2D digital portfolio layout for creative designers and engineers.",
+    thumbnailUrl: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=800&auto=format&fit=crop",
+    hero: {
+      title: "Digital Portfolio",
+      subtitle: "Crafting beautiful code and human-centered design.",
+      ctaText: "Explore Projects",
+      imagePrompt: "creative developer workspace minimalist aesthetic"
+    },
+    about: {
+      heading: "About My Work",
+      description: "I build responsive, high-performance web products with clean interfaces.",
+      imagePrompt: "creative minimal layout clean design"
+    },
+    items: [
+      {
+        title: "Product Design",
+        description: "Bespoke digital product prototyping.",
+        icon: "🎨"
+      },
+      {
+        title: "Front-end Dev",
+        description: "Modern React & TypeScript engineering.",
+        icon: "💻"
+      },
+      {
+        title: "Technical Writing",
+        description: "Explaining complex technical systems.",
+        icon: "📝"
+      }
+    ],
+    contact: {
+      heading: "Let's connect.",
+      buttonText: "Send Message"
+    },
+    theme: {
+      primaryColor: "#6366f1",
+      secondaryColor: "#312e81"
+    }
   }
 };

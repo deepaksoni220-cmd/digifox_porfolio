@@ -84,14 +84,14 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
         <div className="absolute top-4 left-4 z-10">
           <span className="bg-[#0b0c16]/95 border border-[#1b1d30] text-[10px] font-extrabold uppercase tracking-widest text-[#3b82f6] px-3.5 py-1.5 rounded-full backdrop-blur-md shadow-lg flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-[#3b82f6] animate-pulse" />
-            {template.category === '3d' ? 'Business Site' : 'Standard Web'}
+            {template.category === '3d' ? '3D Website' : '2D Website'}
           </span>
         </div>
 
         {/* 3D Animated Indicator */}
         <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 bg-[#0b0c16]/95 border border-[#1b1d30] px-3.5 py-1.5 rounded-full backdrop-blur-md shadow-lg">
           <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/90">
-            {template.category === '3d' ? '⚡ 3D Animated' : '✨ 2D Standard'}
+            {template.category === '3d' ? '⚡ 3D Animated' : '✨ 2D Animated'}
           </span>
         </div>
       </div>

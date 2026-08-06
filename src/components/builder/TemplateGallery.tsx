@@ -12,18 +12,13 @@ const TemplateCard = ({
   template, 
   index, 
   onSelect, 
-  onPreviewClick 
-}: { 
-  id: string, 
-  template: GeneratedWebsiteData, 
-  index: number, 
-  onSelect: (id: string, data: GeneratedWebsiteData) => void,
-  onPreviewClick: (url: string) => void
+  onSelect,
+  onPreviewClick
 }) => {
   const [hovered, setHovered] = useState(false);
-  const videoRef = React.useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (videoRef.current) {
       if (hovered) {
         videoRef.current.play().catch(() => {});
@@ -78,30 +73,26 @@ const TemplateCard = ({
           />
         )}
         
-        {/* Subtle hover overlay */}
-        <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <motion.div 
-            initial={{ scale: 0.8, opacity: 0 }}
-            whileHover={{ scale: 1 }}
-            className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full px-5 py-2.5 font-bold uppercase tracking-wider text-xs shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300"
-          >
-            View Details
-          </motion.div>
+        {/* Modern Type Tag */}
+        <div className="absolute top-4 left-4 z-10">
+          <span className="bg-[#0b0c16]/95 border border-[#1b1d30] text-[10px] font-extrabold uppercase tracking-widest text-[#3b82f6] px-3.5 py-1.5 rounded-full backdrop-blur-md shadow-lg flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#3b82f6] animate-pulse" />
+            {template.category === '3d' ? 'Business Site' : 'Standard Web'}
+          </span>
+        </div>
+
+        {/* 3D Animated Indicator */}
+        <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 bg-[#0b0c16]/95 border border-[#1b1d30] px-3.5 py-1.5 rounded-full backdrop-blur-md shadow-lg">
+          <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/90">
+            {template.category === '3d' ? '⚡ 3D Animated' : '✨ 2D Standard'}
+          </span>
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="flex flex-col p-6 flex-1 justify-between relative z-10">
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#1b1d30] text-[#3b82f6] border border-[#2f3354]">
-              {template.websiteType}
-            </span>
-            <span className="text-[10px] uppercase tracking-widest text-[#8e95a5]">
-              {template.category === '3d' ? '⚡ 3D Animated' : '✨ 2D Layout'}
-            </span>
-          </div>
-          <h3 className="text-lg font-bold text-white mb-2 tracking-wide group-hover:text-[#3b82f6] transition-colors duration-300">
+      {/* Info Content */}
+      <div className="p-6 flex flex-col flex-1 bg-gradient-to-b from-[#0b0c16] to-[#07080e]">
+        <div className="flex-1">
+          <h3 className="text-white font-extrabold text-lg tracking-tight mb-2">
             {template.hero?.title || 'Template Name'}
           </h3>
           <p className="text-[#8e95a5] text-xs leading-relaxed line-clamp-2">
@@ -113,15 +104,15 @@ const TemplateCard = ({
         <div className="flex items-center gap-3 mt-6 pt-4 border-t border-[#1b1d30]">
           <button
             onClick={() => onSelect(id, template)}
-            className="flex-1 bg-gradient-to-r from-[#3b82f6] to-[#6366f1] hover:opacity-90 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(59,130,246,0.2)] hover:shadow-[0_0_20px_rgba(59,130,246,0.4)]"
+            className="flex-1 bg-gradient-to-r from-[#3b82f6] to-[#6366f1] hover:opacity-90 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(59,130,246,0.2)] hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] cursor-pointer"
           >
             Customize
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
           </button>
           {template.previewUrl && (
             <button
-              onClick={() => onPreviewClick(template.previewUrl!)}
-              className="flex-1 bg-[#121424] border border-[#262942] hover:bg-[#1b1d30] hover:border-[#3b82f6]/40 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2"
+              onClick={() => onPreviewClick(id, template)}
+              className="flex-1 bg-[#121424] border border-[#262942] hover:bg-[#1b1d30] hover:border-[#3b82f6]/40 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
             >
               Live Preview
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
@@ -135,7 +126,7 @@ const TemplateCard = ({
 
 export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) => {
   const [activeTab, setActiveTab] = useState<'3d' | '2d'>('3d');
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [activePreview, setActivePreview] = useState<{ id: string, data: GeneratedWebsiteData } | null>(null);
 
   const templates3D = Object.entries(predefinedTemplates).filter(([_, t]) => t.category === '3d');
   const templates2D = Object.entries(predefinedTemplates).filter(([_, t]) => t.category === '2d' || !t.category);
@@ -146,7 +137,7 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
       <div className="flex gap-6 border-b border-[#1b1d30] pb-2 relative">
         <button
           onClick={() => setActiveTab('3d')}
-          className="text-sm font-bold uppercase tracking-widest pb-3 relative z-10 transition-colors duration-300"
+          className="text-sm font-bold uppercase tracking-widest pb-3 relative z-10 transition-colors duration-300 cursor-pointer"
           style={{ color: activeTab === '3d' ? '#3b82f6' : '#8e95a5' }}
         >
           3D Animated
@@ -160,7 +151,7 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
         </button>
         <button
           onClick={() => setActiveTab('2d')}
-          className="text-sm font-bold uppercase tracking-widest pb-3 relative z-10 transition-colors duration-300"
+          className="text-sm font-bold uppercase tracking-widest pb-3 relative z-10 transition-colors duration-300 cursor-pointer"
           style={{ color: activeTab === '2d' ? '#ec4899' : '#8e95a5' }}
         >
           2D Standard
@@ -188,7 +179,7 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
                   template={template} 
                   index={i} 
                   onSelect={onSelect}
-                  onPreviewClick={setPreviewUrl} 
+                  onPreviewClick={(previewId, previewData) => setActivePreview({ id: previewId, data: previewData })} 
                 />
               ))
             : templates2D.map(([id, template], i) => (
@@ -198,7 +189,7 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
                   template={template} 
                   index={i} 
                   onSelect={onSelect}
-                  onPreviewClick={setPreviewUrl} 
+                  onPreviewClick={(previewId, previewData) => setActivePreview({ id: previewId, data: previewData })} 
                 />
               ))
           }
@@ -207,14 +198,14 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
 
       {/* Modern Pop-up Live Preview Modal */}
       <AnimatePresence>
-        {previewUrl && (
+        {activePreview && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-0">
             {/* Backdrop Blur */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setPreviewUrl(null)}
+              onClick={() => setActivePreview(null)}
               className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"
             />
 
@@ -233,23 +224,24 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
                   <span className="w-3 h-3 rounded-full bg-yellow-500" />
                   <span className="w-3 h-3 rounded-full bg-green-500" />
                   <span className="text-xs text-[#8e95a5] font-medium ml-2 font-mono truncate max-w-xs sm:max-w-md">
-                    {previewUrl.startsWith('/') ? `${window.location.origin}${previewUrl}` : previewUrl}
+                    {activePreview.data.previewUrl?.startsWith('/') ? `${window.location.origin}${activePreview.data.previewUrl}` : activePreview.data.previewUrl}
                   </span>
                 </div>
                 
                 <div className="flex items-center gap-3">
-                  <a
-                    href={previewUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1b1d30] hover:bg-[#262942] border border-[#262942] text-xs font-bold text-white transition-colors"
+                  <button
+                    onClick={() => {
+                      onSelect(activePreview.id, activePreview.data);
+                      setActivePreview(null);
+                    }}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 border border-blue-500 hover:scale-[1.02] text-xs font-bold text-white transition-all shadow-[0_0_15px_rgba(59,130,246,0.3)] cursor-pointer"
                   >
-                    Open in New Tab
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
-                  </a>
+                    Design this template for business
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </button>
                   <button 
-                    onClick={() => setPreviewUrl(null)}
-                    className="p-2 hover:bg-[#1b1d30] rounded-full text-white/70 hover:text-white transition-colors"
+                    onClick={() => setActivePreview(null)}
+                    className="p-2 hover:bg-[#1b1d30] rounded-full text-white/70 hover:text-white transition-colors cursor-pointer"
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
                   </button>
@@ -259,7 +251,7 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
               {/* Modal Iframe Content */}
               <div className="flex-1 bg-black relative">
                 <iframe 
-                  src={previewUrl}
+                  src={activePreview.data.previewUrl}
                   className="w-full h-full border-0"
                   title="Interactive Template Preview"
                 />

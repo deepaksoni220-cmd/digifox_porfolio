@@ -8,7 +8,6 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     previewUrl: "http://localhost:1002",
     shortDescription: "3D minimalist dark aesthetic with floating objects and glowing elements.",
     thumbnailUrl: "/templates/aero.png",
-    previewVideoUrl: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260324_151826_c7218672-6e92-402c-9e45-f1e0f454bdc4.mp4",
     hero: {
       title: "Aero",
       subtitle: "Experience the next generation of digital aesthetics.",
@@ -100,7 +99,6 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     previewUrl: "https://digifox-onlinestore.vercel.app/",
     shortDescription: "Premium beverage brand landing page with immersive 3D bottle physics.",
     thumbnailUrl: "/templates/drinking5d.png",
-    previewVideoUrl: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4",
     hero: {
       title: "Drinking 5D",
       subtitle: "Elevate your beverage experience.",

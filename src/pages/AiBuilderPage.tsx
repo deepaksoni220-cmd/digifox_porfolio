@@ -5,6 +5,7 @@ import { publishWebsite } from '../services/firebase';
 import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 import { TemplateGallery } from '../components/builder/TemplateGallery';
 import { SEOMeta } from '../components/SEOMeta';
+import { ThemeToggle } from '../components/ThemeToggle';
 import { predefinedTemplates } from '../data/templates';
 
 export const AiBuilderPage: React.FC = () => {
@@ -299,13 +300,18 @@ export const AiBuilderPage: React.FC = () => {
         <div className="flex flex-col md:flex-row gap-10 items-start justify-between">
           
           <div className="flex-1 w-full flex flex-col gap-6">
-            <div>
-              <h1 className="text-4xl sm:text-5xl font-black uppercase tracking-tight mb-4">
-                AI <span className="text-[#3b82f6]">Consultant</span> & Builder
-              </h1>
-              <p className="text-[var(--text-primary)]/70 text-lg max-w-2xl">
-                Discuss your vision with our AI architect. Once you're happy with the plan, click Build to instantly generate a beautifully animated one-page website.
-              </p>
+            <div className="flex justify-between items-start">
+              <div>
+                <h1 className="text-4xl sm:text-5xl font-black uppercase tracking-tight mb-4">
+                  AI <span className="text-[#3b82f6]">Consultant</span> & Builder
+                </h1>
+                <p className="text-[var(--text-primary)]/70 text-lg max-w-2xl">
+                  Discuss your vision with our AI architect. Once you're happy with the plan, click Build to instantly generate a beautifully animated one-page website.
+                </p>
+              </div>
+              <div className="hidden sm:block">
+                <ThemeToggle />
+              </div>
             </div>
 
             {/* Custom AI Builder Section */}

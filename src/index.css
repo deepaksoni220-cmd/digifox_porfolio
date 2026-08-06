@@ -95,7 +95,7 @@ video::-webkit-media-controls-volume-slider {
 
 .animate-glowing-border {
   position: relative;
-  background: #3b82f6; /* default button fallback */
+  background: #0e101f !important; /* premium dark background to highlight the border glow */
   border: 1px solid transparent;
   background-clip: padding-box;
 }

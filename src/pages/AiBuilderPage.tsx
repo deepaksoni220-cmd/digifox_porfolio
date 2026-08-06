@@ -483,7 +483,7 @@ export const AiBuilderPage: React.FC = () => {
                 Live Preview
               </h2>
               <p className="text-xs sm:text-sm text-[var(--text-primary)]/60 mt-1">
-                👉 Click directly on any text in the preview below to edit it. Use the "Site Details" panel on the right to update your logo and business details.
+                👉 Click directly on any text in the preview below to edit it. Also you can use the "Site Details" panel on the right to update your logo and business details of website as required by you
               </p>
             </div>
             {previewData && !isBuilding && (

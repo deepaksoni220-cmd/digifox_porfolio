@@ -11,6 +11,7 @@ export interface GeneratedWebsiteData {
   customHtml?: string;
   contactDetails?: {
     brandName?: string;
+    logo?: string;
     address?: string;
     phone?: string;
     email?: string;

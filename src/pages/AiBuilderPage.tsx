@@ -175,6 +175,109 @@ export const AiBuilderPage: React.FC = () => {
           });
         }
       });
+
+      // Bind click-to-edit for images inside the template iframe
+      const images = doc.querySelectorAll('img');
+      images.forEach(img => {
+        img.style.cursor = 'pointer';
+        img.addEventListener('mouseenter', () => {
+          img.style.outline = '2px dashed #10b981';
+          img.style.outlineOffset = '2px';
+        });
+        img.addEventListener('mouseleave', () => {
+          img.style.outline = '';
+        });
+
+        img.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.accept = 'image/*';
+          fileInput.onchange = (uploadEvent: any) => {
+            const file = uploadEvent.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const base64 = reader.result as string;
+                img.setAttribute('src', base64);
+                
+                const originalSrc = img.getAttribute('data-original-src') || img.src;
+                if (!img.getAttribute('data-original-src')) {
+                  img.setAttribute('data-original-src', originalSrc);
+                }
+                
+                setPreviewData(prev => {
+                  if (!prev) return prev;
+                  return {
+                    ...prev,
+                    customImages: {
+                      ...(prev.customImages || {}),
+                      [originalSrc]: base64
+                    }
+                  };
+                });
+              };
+              reader.readAsDataURL(file);
+            }
+          };
+          fileInput.click();
+        });
+      });
+
+      // Bind click-to-edit for videos inside the template iframe
+      const videos = doc.querySelectorAll('video');
+      videos.forEach(video => {
+        video.style.cursor = 'pointer';
+        video.addEventListener('mouseenter', () => {
+          video.style.outline = '2px dashed #ec4899';
+          video.style.outlineOffset = '2px';
+        });
+        video.addEventListener('mouseleave', () => {
+          video.style.outline = '';
+        });
+
+        video.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.accept = 'video/*';
+          fileInput.onchange = (uploadEvent: any) => {
+            const file = uploadEvent.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                const base64 = reader.result as string;
+                video.setAttribute('src', base64);
+                video.load();
+                video.play();
+                
+                const originalSrc = video.getAttribute('data-original-src') || video.src;
+                if (!video.getAttribute('data-original-src')) {
+                  video.setAttribute('data-original-src', originalSrc);
+                }
+                
+                setPreviewData(prev => {
+                  if (!prev) return prev;
+                  return {
+                    ...prev,
+                    customImages: {
+                      ...(prev.customImages || {}),
+                      [originalSrc]: base64
+                    }
+                  };
+                });
+              };
+              reader.readAsDataURL(file);
+            }
+          };
+          fileInput.click();
+        });
+      });
+
     } catch (e) {
       console.warn("Iframe same-origin edit binding failed or restricted:", e);
     }

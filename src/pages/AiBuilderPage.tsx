@@ -602,7 +602,9 @@ export const AiBuilderPage: React.FC = () => {
             <div className="w-full h-full relative flex flex-col">
               <div className="flex justify-between items-center mb-2 px-2 text-white/40 text-[10px] uppercase tracking-wider font-bold">
                 <span>Viewport Preview</span>
-                <span>👉 Click directly on any text in the preview to edit</span>
+                <span className="text-[#3b82f6] text-[11px] normal-case tracking-normal">
+                  👉 Click directly on any text in the preview to edit it. Also you can use the "Site Details" panel on the right to update your logo and business details of website as required by you
+                </span>
               </div>
               {previewData.previewUrl ? (
                 <iframe 

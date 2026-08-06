@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import type { GeneratedWebsiteData } from '../../services/aiBuilderService';
 import { predefinedTemplates } from '../../data/templates';
@@ -68,34 +68,44 @@ const TemplateCard = ({ id, template, index, onSelect }: { id: string, template:
 );
 
 export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) => {
+  const [activeTab, setActiveTab] = useState<'3d' | '2d'>('3d');
+
   const templates3D = Object.entries(predefinedTemplates).filter(([_, t]) => t.category === '3d');
   const templates2D = Object.entries(predefinedTemplates).filter(([_, t]) => t.category === '2d' || !t.category);
 
   return (
-    <div className="w-full flex flex-col gap-12">
-      {/* 3D Templates Section */}
-      {templates3D.length > 0 && (
-        <div>
-          <h3 className="text-xl font-bold text-white mb-6 tracking-widest uppercase border-l-4 border-[#3b82f6] pl-4">3D Animated Templates</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {templates3D.map(([id, template], i) => (
-              <TemplateCard key={id} id={id} template={template} index={i} onSelect={onSelect} />
-            ))}
-          </div>
-        </div>
-      )}
+    <div className="w-full flex flex-col gap-6">
+      {/* Tab Switcher */}
+      <div className="flex gap-4 border-b border-[var(--border-strong)] pb-4">
+        <button
+          onClick={() => setActiveTab('3d')}
+          className={`text-lg font-bold uppercase tracking-wider transition-colors ${
+            activeTab === '3d' ? 'text-[#3b82f6] border-b-2 border-[#3b82f6]' : 'text-[var(--text-secondary)] hover:text-white'
+          }`}
+        >
+          3D Animated Templates
+        </button>
+        <button
+          onClick={() => setActiveTab('2d')}
+          className={`text-lg font-bold uppercase tracking-wider transition-colors ${
+            activeTab === '2d' ? 'text-[#ec4899] border-b-2 border-[#ec4899]' : 'text-[var(--text-secondary)] hover:text-white'
+          }`}
+        >
+          2D Static Templates
+        </button>
+      </div>
 
-      {/* 2D Templates Section */}
-      {templates2D.length > 0 && (
-        <div>
-          <h3 className="text-xl font-bold text-white mb-6 tracking-widest uppercase border-l-4 border-[#ec4899] pl-4">2D Static Templates</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {templates2D.map(([id, template], i) => (
+      {/* Templates Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {activeTab === '3d' 
+          ? templates3D.map(([id, template], i) => (
               <TemplateCard key={id} id={id} template={template} index={i} onSelect={onSelect} />
-            ))}
-          </div>
-        </div>
-      )}
+            ))
+          : templates2D.map(([id, template], i) => (
+              <TemplateCard key={id} id={id} template={template} index={i} onSelect={onSelect} />
+            ))
+        }
+      </div>
     </div>
   );
 };

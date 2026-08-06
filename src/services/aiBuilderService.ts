@@ -7,6 +7,7 @@ export interface GeneratedWebsiteData {
   previewUrl?: string;
   category?: '3d' | '2d';
   thumbnailUrl?: string;
+  previewVideoUrl?: string;
   shortDescription?: string;
   customHtml?: string;
   contactDetails?: {

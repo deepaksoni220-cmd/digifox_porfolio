@@ -19,89 +19,123 @@ const TemplateCard = ({
   index: number, 
   onSelect: (id: string, data: GeneratedWebsiteData) => void,
   onPreviewClick: (url: string) => void
-}) => (
-  <motion.div
-    initial={{ opacity: 0, y: 30 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -30 }}
-    transition={{ duration: 0.4, delay: index * 0.05 }}
-    whileHover={{ y: -8, scale: 1.02 }}
-    className="group relative flex flex-col bg-[#0b0c16] border border-[#1b1d30] rounded-3xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:border-[#3b82f6]/40 hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)] transition-all duration-500"
-  >
-    {/* Decorative corner glow */}
-    <div className="absolute -top-10 -left-10 w-32 h-32 bg-[#3b82f6]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-    <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[#8b5cf6]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+}) => {
+  const [hovered, setHovered] = useState(false);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
 
-    {/* Thumbnail Area */}
-    <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#121424]">
-      {template.thumbnailUrl ? (
-        <img 
-          src={template.thumbnailUrl} 
-          alt={template.hero?.title || 'Template'} 
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-        />
-      ) : (
-        <div 
-          className="w-full h-full opacity-80 group-hover:scale-105 transition-transform duration-700 ease-out"
-          style={{
-            background: `linear-gradient(135deg, ${template.theme?.primaryColor || '#3b82f6'}33 0%, ${template.theme?.secondaryColor || '#1e3a8a'}99 100%)`
-          }}
-        />
-      )}
-      
-      {/* Subtle hover overlay */}
-      <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-        <motion.div 
-          initial={{ scale: 0.8, opacity: 0 }}
-          whileHover={{ scale: 1 }}
-          className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full px-5 py-2.5 font-bold uppercase tracking-wider text-xs shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300"
-        >
-          View Details
-        </motion.div>
-      </div>
-    </div>
+  React.useEffect(() => {
+    if (videoRef.current) {
+      if (hovered) {
+        videoRef.current.play().catch(() => {});
+      } else {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
+      }
+    }
+  }, [hovered]);
 
-    {/* Content Area */}
-    <div className="flex flex-col p-6 flex-1 justify-between relative z-10">
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#1b1d30] text-[#3b82f6] border border-[#2f3354]">
-            {template.websiteType}
-          </span>
-          <span className="text-[10px] uppercase tracking-widest text-[#8e95a5]">
-            {template.category === '3d' ? '⚡ 3D Animated' : '✨ 2D Layout'}
-          </span>
-        </div>
-        <h3 className="text-lg font-bold text-white mb-2 tracking-wide group-hover:text-[#3b82f6] transition-colors duration-300">
-          {template.hero?.title || 'Template Name'}
-        </h3>
-        <p className="text-[#8e95a5] text-xs leading-relaxed line-clamp-2">
-          {template.shortDescription || template.hero?.subtitle || 'A beautiful, modern template designed for high conversions and stunning visuals.'}
-        </p>
-      </div>
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -30 }}
+      transition={{ duration: 0.4, delay: index * 0.05 }}
+      whileHover={{ y: -8, scale: 1.02 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="group relative flex flex-col bg-[#0b0c16] border border-[#1b1d30] rounded-3xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:border-[#3b82f6]/40 hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)] transition-all duration-500"
+    >
+      {/* Decorative corner glow */}
+      <div className="absolute -top-10 -left-10 w-32 h-32 bg-[#3b82f6]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+      <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[#8b5cf6]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-      {/* Action Buttons */}
-      <div className="flex items-center gap-3 mt-6 pt-4 border-t border-[#1b1d30]">
-        <button
-          onClick={() => onSelect(id, template)}
-          className="flex-1 bg-gradient-to-r from-[#3b82f6] to-[#6366f1] hover:opacity-90 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(59,130,246,0.2)] hover:shadow-[0_0_20px_rgba(59,130,246,0.4)]"
-        >
-          Customize
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
-        </button>
-        {template.previewUrl && (
-          <button
-            onClick={() => onPreviewClick(template.previewUrl!)}
-            className="flex-1 bg-[#121424] border border-[#262942] hover:bg-[#1b1d30] hover:border-[#3b82f6]/40 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2"
-          >
-            Live Preview
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
-          </button>
+      {/* Thumbnail Area */}
+      <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#121424]">
+        {template.previewVideoUrl ? (
+          <>
+            <img 
+              src={template.thumbnailUrl} 
+              alt={template.hero?.title || 'Template'} 
+              className={`w-full h-full object-cover transition-opacity duration-500 absolute inset-0 ${hovered ? 'opacity-0' : 'opacity-100'}`}
+            />
+            <video
+              ref={videoRef}
+              src={template.previewVideoUrl}
+              muted
+              loop
+              playsInline
+              className={`w-full h-full object-cover transition-opacity duration-500 absolute inset-0 ${hovered ? 'opacity-100' : 'opacity-0'}`}
+            />
+          </>
+        ) : template.thumbnailUrl ? (
+          <img 
+            src={template.thumbnailUrl} 
+            alt={template.hero?.title || 'Template'} 
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+          />
+        ) : (
+          <div 
+            className="w-full h-full opacity-80 group-hover:scale-105 transition-transform duration-700 ease-out"
+            style={{
+              background: `linear-gradient(135deg, ${template.theme?.primaryColor || '#3b82f6'}33 0%, ${template.theme?.secondaryColor || '#1e3a8a'}99 100%)`
+            }}
+          />
         )}
+        
+        {/* Subtle hover overlay */}
+        <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <motion.div 
+            initial={{ scale: 0.8, opacity: 0 }}
+            whileHover={{ scale: 1 }}
+            className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full px-5 py-2.5 font-bold uppercase tracking-wider text-xs shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300"
+          >
+            View Details
+          </motion.div>
+        </div>
       </div>
-    </div>
-  </motion.div>
-);
+
+      {/* Content Area */}
+      <div className="flex flex-col p-6 flex-1 justify-between relative z-10">
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#1b1d30] text-[#3b82f6] border border-[#2f3354]">
+              {template.websiteType}
+            </span>
+            <span className="text-[10px] uppercase tracking-widest text-[#8e95a5]">
+              {template.category === '3d' ? '⚡ 3D Animated' : '✨ 2D Layout'}
+            </span>
+          </div>
+          <h3 className="text-lg font-bold text-white mb-2 tracking-wide group-hover:text-[#3b82f6] transition-colors duration-300">
+            {template.hero?.title || 'Template Name'}
+          </h3>
+          <p className="text-[#8e95a5] text-xs leading-relaxed line-clamp-2">
+            {template.shortDescription || template.hero?.subtitle || 'A beautiful, modern template designed for high conversions and stunning visuals.'}
+          </p>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-3 mt-6 pt-4 border-t border-[#1b1d30]">
+          <button
+            onClick={() => onSelect(id, template)}
+            className="flex-1 bg-gradient-to-r from-[#3b82f6] to-[#6366f1] hover:opacity-90 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(59,130,246,0.2)] hover:shadow-[0_0_20px_rgba(59,130,246,0.4)]"
+          >
+            Customize
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+          </button>
+          {template.previewUrl && (
+            <button
+              onClick={() => onPreviewClick(template.previewUrl!)}
+              className="flex-1 bg-[#121424] border border-[#262942] hover:bg-[#1b1d30] hover:border-[#3b82f6]/40 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              Live Preview
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+            </button>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) => {
   const [activeTab, setActiveTab] = useState<'3d' | '2d'>('3d');

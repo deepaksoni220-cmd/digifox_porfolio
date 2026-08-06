@@ -15,7 +15,15 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
 // Save generated website to database
-export const publishWebsite = async (subdomain: string, data: GeneratedWebsiteData | null, logoUrl?: string, templateUrl?: string) => {
+export const publishWebsite = async (
+  subdomain: string, 
+  data: GeneratedWebsiteData | null, 
+  logoUrl?: string, 
+  templateUrl?: string,
+  templateCategory?: string,
+  websiteType?: string,
+  businessCategory?: string
+) => {
   const siteRef = doc(db, "publishedSites", subdomain.toLowerCase());
   
   // Strip undefined values which cause "invalid nested entity" in Firestore
@@ -26,6 +34,9 @@ export const publishWebsite = async (subdomain: string, data: GeneratedWebsiteDa
     data: cleanData,
     templateUrl: templateUrl || null,
     logoUrl: logoUrl || null,
+    templateCategory: templateCategory || null,
+    websiteType: websiteType || null,
+    businessCategory: businessCategory || null,
     publishedAt: new Date().toISOString(),
   });
 };

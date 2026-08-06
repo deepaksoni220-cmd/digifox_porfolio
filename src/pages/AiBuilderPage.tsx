@@ -279,8 +279,16 @@ export const AiBuilderPage: React.FC = () => {
 
     setIsPublishing(true);
     try {
-      // Pass previewData.previewUrl so PublishedSite knows it's an iframe template
-      await publishWebsite(cleanSubdomain, previewData, logoUrl, previewData?.previewUrl);
+      // Pass previewData.previewUrl so PublishedSite knows it's an iframe template, alongside category, websiteType and businessCategory
+      await publishWebsite(
+        cleanSubdomain, 
+        previewData, 
+        logoUrl, 
+        previewData?.previewUrl,
+        templateCategory,
+        websiteType,
+        previewData?.businessCategory
+      );
       
       const url = `https://${cleanSubdomain}.digifox.world`;
       setPublishedUrl(url);

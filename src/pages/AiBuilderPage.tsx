@@ -478,9 +478,14 @@ export const AiBuilderPage: React.FC = () => {
         {/* Preview Area */}
         <div ref={previewRef} className="w-full">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b border-[var(--border-strong)] pb-4 gap-4">
-            <h2 className="text-2xl font-black uppercase tracking-widest">
-              Live Preview
-            </h2>
+            <div>
+              <h2 className="text-2xl font-black uppercase tracking-widest">
+                Live Preview
+              </h2>
+              <p className="text-xs sm:text-sm text-[var(--text-primary)]/60 mt-1">
+                👉 Click directly on any text in the preview below to edit it. Use the "Site Details" panel on the right to update your logo and business details.
+              </p>
+            </div>
             {previewData && !isBuilding && (
               <div className="flex gap-4">
                 <button 

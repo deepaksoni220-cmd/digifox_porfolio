@@ -51,62 +51,17 @@ const TemplateCard = ({
 
       {/* Thumbnail Area */}
       <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#121424]">
-        {template.previewVideoUrl ? (
-          <div className="relative w-full h-full select-none pointer-events-none">
-            <video
-              src={template.previewVideoUrl}
-              muted
-              loop
-              autoPlay
-              playsInline
-              className="w-full h-full object-cover"
+        {template.previewUrl ? (
+          <div className="w-full h-full relative pointer-events-none select-none overflow-hidden">
+            <iframe
+              src={template.previewUrl}
+              title={`${id} Live Preview`}
+              className="absolute top-0 left-0 w-[250%] h-[250%] border-none origin-top-left scale-[0.4] bg-black"
+              scrolling="no"
+              loading="lazy"
             />
-            {/* Dynamic website mockup overlay */}
-            <div className="absolute inset-0 bg-black/40 flex flex-col justify-between p-3">
-              {/* Mockup Header */}
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-1">
-                  <div className="w-3.5 h-3.5 rounded-full bg-white/10 flex items-center justify-center text-[8px] text-white">🦊</div>
-                  <span className="text-[9px] font-extrabold text-white tracking-tight">
-                    {id === 'digitalPortfolio2d' ? 'Asme' : (template.contactDetails?.brandName || template.hero?.title)}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-[7px] font-semibold text-white/70">
-                  <span>Features</span>
-                  <span>About</span>
-                  <span className="bg-white/25 rounded-full px-2 py-0.5 text-[6px] text-white backdrop-blur-sm">Login</span>
-                </div>
-              </div>
-
-              {/* Mockup Hero */}
-              <div className="flex flex-col items-center text-center gap-1.5 my-auto">
-                <h4 className="text-base font-bold text-white tracking-tight leading-none font-serif">
-                  {id === 'digitalPortfolio2d' ? 'Know it then all.' : template.hero?.title}
-                </h4>
-                
-                {/* Mockup Email Pill */}
-                <div className="w-full max-w-[130px] bg-white/10 backdrop-blur-sm border border-white/20 rounded-full py-0.5 px-2 flex items-center justify-between my-0.5">
-                  <span className="text-[5px] text-white/40">Enter your email</span>
-                  <div className="w-2.5 h-2.5 rounded-full bg-white flex items-center justify-center text-[6px] text-black">→</div>
-                </div>
-
-                <p className="text-[6px] text-white/50 max-w-[150px] leading-tight line-clamp-1">
-                  {template.hero?.subtitle}
-                </p>
-                
-                {/* Mockup CTA */}
-                <div className="bg-white/15 border border-white/25 rounded-full px-2.5 py-0.5 text-[5px] font-medium text-white backdrop-blur-sm mt-0.5">
-                  {template.hero?.ctaText || 'Discover'}
-                </div>
-              </div>
-
-              {/* Mockup Footer */}
-              <div className="flex justify-center gap-1.5 text-[6px] text-white/40">
-                <span>instagram</span>
-                <span>twitter</span>
-                <span>globe</span>
-              </div>
-            </div>
+            {/* Safe visual overlay mask to intercept clicks and darken slightly */}
+            <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
         ) : template.thumbnailUrl ? (
           <img 

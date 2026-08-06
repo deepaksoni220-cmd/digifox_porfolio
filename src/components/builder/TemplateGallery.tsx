@@ -52,21 +52,14 @@ const TemplateCard = ({
       {/* Thumbnail Area */}
       <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#121424]">
         {template.previewVideoUrl ? (
-          <>
-            <img 
-              src={template.thumbnailUrl} 
-              alt={template.hero?.title || 'Template'} 
-              className={`w-full h-full object-cover transition-opacity duration-500 absolute inset-0 ${hovered ? 'opacity-0' : 'opacity-100'}`}
-            />
-            <video
-              ref={videoRef}
-              src={template.previewVideoUrl}
-              muted
-              loop
-              playsInline
-              className={`w-full h-full object-cover transition-opacity duration-500 absolute inset-0 ${hovered ? 'opacity-100' : 'opacity-0'}`}
-            />
-          </>
+          <video
+            src={template.previewVideoUrl}
+            muted
+            loop
+            autoPlay
+            playsInline
+            className="w-full h-full object-cover"
+          />
         ) : template.thumbnailUrl ? (
           <img 
             src={template.thumbnailUrl} 

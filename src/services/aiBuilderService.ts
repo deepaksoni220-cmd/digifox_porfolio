@@ -1,3 +1,5 @@
+import { predefinedTemplates } from '../data/templates';
+
 export interface GeneratedWebsiteData {
   websiteType: string;
   templateStyle?: 'aero' | 'voya' | 'drinking5d' | 'bnrmlss2' | 'coinSite' | 'default';
@@ -71,11 +73,11 @@ export const planWebsite = async (chatHistory: ChatMessage[]): Promise<string> =
   return data.reply;
 };
 
-export const generateWebsite = async (chatHistory: ChatMessage[], websiteType: string): Promise<GeneratedWebsiteData> => {
+export const generateWebsite = async (chatHistory: ChatMessage[], websiteType: string, templateCategory: string = 'auto'): Promise<GeneratedWebsiteData> => {
   const response = await fetch('/api/generate', {
     method: 'POST',
     headers: getHeaders(),
-    body: JSON.stringify({ action: 'build', chatHistory, websiteType })
+    body: JSON.stringify({ action: 'build', chatHistory, websiteType, templateCategory })
   });
 
   if (!response.ok) {
@@ -83,6 +85,14 @@ export const generateWebsite = async (chatHistory: ChatMessage[], websiteType: s
     throw new Error(errorData?.error || `Generation Error: ${response.statusText}`);
   }
 
-  const data = await response.json();
-  return data as GeneratedWebsiteData;
+  const data = await response.json() as GeneratedWebsiteData;
+  
+  if (data.templateStyle && predefinedTemplates[data.templateStyle]) {
+    const template = predefinedTemplates[data.templateStyle];
+    data.previewUrl = template.previewUrl;
+    data.category = template.category;
+    data.thumbnailUrl = template.thumbnailUrl;
+  }
+  
+  return data;
 };

@@ -15,7 +15,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { action, chatHistory, websiteType } = req.body;
+  const { action, chatHistory, websiteType, templateCategory } = req.body;
   const GEMINI_API_KEY = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
 
   if (!GEMINI_API_KEY) {
@@ -67,6 +67,10 @@ Keep your responses very brief, conversational, and encouraging. Never output JS
     
     body.system_instruction = { parts: [{ text: PLAN_SYSTEM_PROMPT }] };
   } else if (action === 'build') {
+    let availableTemplates = `'aero' (3D Business), 'drinking5d' (3D Business), 'bnrmlss2' (2D E-commerce), 'voya' (2D Portfolio), 'coinSite' (2D Business)`;
+    if (templateCategory === '3d') availableTemplates = `'aero' (3D Business), 'drinking5d' (3D Business)`;
+    if (templateCategory === '2d') availableTemplates = `'bnrmlss2' (2D E-commerce), 'voya' (2D Portfolio), 'coinSite' (2D Business)`;
+
     const BUILD_SYSTEM_PROMPT = `You are a visionary, avant-garde web designer. 
 Generate a stunning, boundary-pushing one-page website layout based on the user's planning conversation. 
 Do not make it look like a standard generic website. Make it bold, immersive, and striking.
@@ -75,6 +79,7 @@ You MUST reply strictly with valid JSON matching this schema, and nothing else. 
 Schema:
 {
   "websiteType": "The specific type of website provided in the instructions",
+  "templateStyle": "Select the best matching template from this list: ${availableTemplates}",
   "hero": { "title": "...", "subtitle": "...", "ctaText": "...", "imagePrompt": "A highly detailed, photorealistic image description for an immersive background (e.g. 'A surreal neon cybernetic landscape, 8k, volumetric lighting', or 'Ultra-minimalist brutalist architecture, stark shadows')" },
   "about": { "heading": "...", "description": "...", "imagePrompt": "A highly detailed, editorial-style image description for the about section (e.g. 'A high-fashion cinematic portrait, dramatic lighting, contemporary art style')" },
   "items": [

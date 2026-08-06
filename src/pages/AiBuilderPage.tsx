@@ -12,6 +12,7 @@ export const AiBuilderPage: React.FC = () => {
   const [currentInput, setCurrentInput] = useState("");
   
   const [websiteType, setWebsiteType] = useState("Local Business");
+  const [templateCategory, setTemplateCategory] = useState("auto");
   const [logoUrl, setLogoUrl] = useState("");
 
   const [isPlanning, setIsPlanning] = useState(false);
@@ -249,7 +250,7 @@ export const AiBuilderPage: React.FC = () => {
     }
 
     try {
-      const result = await generateWebsite(finalHistory, websiteType);
+      const result = await generateWebsite(finalHistory, websiteType, templateCategory);
       setPreviewData(result);
     } catch (err: any) {
       setError(err.message || "Failed to generate website layout.");
@@ -327,6 +328,20 @@ export const AiBuilderPage: React.FC = () => {
                     <option value="Factory / Manufacturing">Factory / Manufacturing</option>
                     <option value="E-Commerce Store">E-Commerce Store</option>
                     <option value="Mobile Web App">Mobile Web App</option>
+                  </select>
+                </div>
+
+                <div className="flex-1 flex flex-col gap-2">
+                  <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Design Category</label>
+                  <select 
+                    value={templateCategory}
+                    onChange={(e) => setTemplateCategory(e.target.value)}
+                    disabled={chatHistory.length > 0}
+                    className="bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none disabled:opacity-50"
+                  >
+                    <option value="auto">Auto Select</option>
+                    <option value="3d">3D Animated</option>
+                    <option value="2d">2D Static</option>
                   </select>
                 </div>
 

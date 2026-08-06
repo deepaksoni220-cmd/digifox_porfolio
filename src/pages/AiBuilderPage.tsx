@@ -294,13 +294,13 @@ export const AiBuilderPage: React.FC = () => {
     }
   };
   return (
-    <main className="min-h-screen bg-[var(--bg-base)] text-[var(--text-strong)] font-['Kanit'] py-20 px-6 sm:px-10">
+    <main className="w-full min-h-screen bg-[var(--bg-base)] text-[var(--text-strong)] relative overflow-hidden pb-20">
       <SEOMeta 
         title="AI Website Builder | Digifox"
-        description="Chat with our AI consultant to plan and instantly generate a stunning, fully-animated static one-page website."
+        description="Instantly generate and customize your website using our advanced AI consultant."
       />
       
-      <div className="max-w-7xl mx-auto flex flex-col gap-12">
+      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
         
         {/* Header & Chat Section */}
         <div className="flex flex-col md:flex-row gap-10 items-start justify-between">
@@ -531,105 +531,103 @@ export const AiBuilderPage: React.FC = () => {
                 className="w-full relative"
               >
                 {previewData.previewUrl ? (
-                  <div className="flex flex-col gap-8">
+                  <div className="flex flex-col xl:flex-row gap-6">
                     {/* Live Preview Iframe */}
-                    <div className="w-full">
+                    <div className="flex-1 min-w-0">
                       <iframe 
                         ref={iframeRef}
                         src={`${previewData.previewUrl}?editor=true`} 
-                        className="w-full h-[700px] border-4 border-[var(--border-strong)] rounded-3xl shadow-2xl shadow-black/50 bg-white"
+                        className="w-full h-[650px] border-4 border-[var(--border-strong)] rounded-3xl shadow-2xl shadow-black/50 bg-white"
                         title="Live Preview"
                       />
                     </div>
                     
-                    {/* Site Details Edit Form (Wide Grid below Preview) */}
-                    <div className="w-full bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-3xl p-8 shadow-xl">
-                      <h3 className="text-xl font-bold uppercase tracking-widest border-b border-[var(--border-subtle)] pb-4 mb-6">
-                        Site Details & Settings
+                    {/* Site Details Sidebar on Right */}
+                    <div className="w-full xl:w-[380px] bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-3xl p-6 flex flex-col gap-6 h-fit xl:sticky xl:top-6 shadow-xl">
+                      <h3 className="text-xl font-bold uppercase tracking-widest border-b border-[var(--border-subtle)] pb-4">
+                        Site Details
                       </h3>
                       
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div className="flex flex-col gap-2">
-                          <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Brand Name</label>
-                          <input 
-                            type="text"
-                            value={sidebarBrandName}
-                            placeholder="e.g. Acme Corp"
-                            onChange={(e) => {
-                              setSidebarBrandName(e.target.value);
-                              updateIframeField('brandName', e.target.value);
-                            }}
-                            className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
-                          />
-                        </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Brand Name</label>
+                        <input 
+                          type="text"
+                          value={sidebarBrandName}
+                          placeholder="e.g. Acme Corp"
+                          onChange={(e) => {
+                            setSidebarBrandName(e.target.value);
+                            updateIframeField('brandName', e.target.value);
+                          }}
+                          className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                        />
+                      </div>
 
-                        <div className="flex flex-col gap-2">
-                          <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Logo</label>
-                          <div className="relative flex items-center">
-                            <input 
-                              type="file" 
-                              accept="image/*"
-                              onChange={handleSidebarLogo}
-                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                            />
-                            <div className="w-full bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-secondary)] flex justify-between items-center hover:border-[#3b82f6] transition-colors">
-                              <span className="truncate">{sidebarLogo ? "Updated" : "Choose logo..."}</span>
-                              {sidebarLogo && <img src={sidebarLogo} alt="Logo" className="h-6 w-auto object-contain rounded" />}
-                            </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Logo</label>
+                        <div className="relative flex items-center">
+                          <input 
+                            type="file" 
+                            accept="image/*"
+                            onChange={handleSidebarLogo}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                          />
+                          <div className="w-full bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-secondary)] flex justify-between items-center hover:border-[#3b82f6] transition-colors">
+                            <span className="truncate">{sidebarLogo ? "Updated" : "Choose logo..."}</span>
+                            {sidebarLogo && <img src={sidebarLogo} alt="Logo" className="h-6 w-auto object-contain rounded" />}
                           </div>
                         </div>
+                      </div>
 
-                        <div className="flex flex-col gap-2">
-                          <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Business Address</label>
-                          <input 
-                            type="text"
-                            value={sidebarAddress}
-                            placeholder="e.g. 123 Main St"
-                            onChange={(e) => {
-                              setSidebarAddress(e.target.value);
-                              updateIframeField('address', e.target.value);
-                            }}
-                            className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
-                          />
-                        </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Business Address</label>
+                        <input 
+                          type="text"
+                          value={sidebarAddress}
+                          placeholder="e.g. 123 Main St"
+                          onChange={(e) => {
+                            setSidebarAddress(e.target.value);
+                            updateIframeField('address', e.target.value);
+                          }}
+                          className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                        />
+                      </div>
 
-                        <div className="flex flex-col gap-2">
-                          <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Contact Number</label>
-                          <input 
-                            type="text"
-                            value={sidebarPhone}
-                            placeholder="e.g. +1 234 567 890"
-                            onChange={(e) => {
-                              setSidebarPhone(e.target.value);
-                              updateIframeField('phone', e.target.value);
-                            }}
-                            className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
-                          />
-                        </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Contact Number</label>
+                        <input 
+                          type="text"
+                          value={sidebarPhone}
+                          placeholder="e.g. +1 234 567 890"
+                          onChange={(e) => {
+                            setSidebarPhone(e.target.value);
+                            updateIframeField('phone', e.target.value);
+                          }}
+                          className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                        />
+                      </div>
 
-                        <div className="flex flex-col gap-2">
-                          <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Email Address</label>
-                          <input 
-                            type="email"
-                            value={sidebarEmail}
-                            placeholder="e.g. contact@mybrand.com"
-                            onChange={(e) => {
-                              setSidebarEmail(e.target.value);
-                              updateIframeField('email', e.target.value);
-                            }}
-                            className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
-                          />
-                        </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Email Address</label>
+                        <input 
+                          type="email"
+                          value={sidebarEmail}
+                          placeholder="e.g. contact@mybrand.com"
+                          onChange={(e) => {
+                            setSidebarEmail(e.target.value);
+                            updateIframeField('email', e.target.value);
+                          }}
+                          className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                        />
+                      </div>
 
-                        <div className="flex items-end mt-4 md:mt-0">
-                          <button 
-                            onClick={handlePublish}
-                            disabled={isPublishing}
-                            className="w-full bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white px-6 py-4 rounded-xl font-bold uppercase tracking-wider text-sm transition-transform hover:scale-[1.02] shadow-[0_0_15px_rgba(59,130,246,0.3)] disabled:opacity-50"
-                          >
-                            {isPublishing ? "Publishing..." : "Publish to Web 🚀"}
-                          </button>
-                        </div>
+                      <div className="mt-4 pt-6 border-t border-[var(--border-subtle)]">
+                        <button 
+                          onClick={handlePublish}
+                          disabled={isPublishing}
+                          className="w-full bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white px-6 py-4 rounded-xl font-bold uppercase tracking-wider text-sm transition-transform hover:scale-105 shadow-[0_0_15px_rgba(59,130,246,0.3)] disabled:opacity-50"
+                        >
+                          {isPublishing ? "Publishing..." : "Publish to Web 🚀"}
+                        </button>
                       </div>
                     </div>
                   </div>

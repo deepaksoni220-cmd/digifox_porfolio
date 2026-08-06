@@ -80,3 +80,37 @@ video::-webkit-media-controls-volume-slider {
 .animate-lcp-fast {
   animation: lcpFadeInUp 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
+
+@keyframes border-glow-rotate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-glowing-border {
+  position: relative;
+  background: #3b82f6; /* default button fallback */
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.animate-glowing-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  z-index: -1;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6);
+  background-size: 300% 300%;
+  border-radius: 9px;
+  animation: border-glow-rotate 4s ease infinite;
+}
+

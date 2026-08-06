@@ -52,6 +52,134 @@ export const AiBuilderPage: React.FC = () => {
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
+  // Sync previewData to sidebar inputs
+  useEffect(() => {
+    if (previewData) {
+      setSidebarBrandName(previewData.contactDetails?.brandName || previewData.hero?.title || "");
+      setSidebarLogo(previewData.contactDetails?.logo || logoUrl || "");
+      setSidebarAddress(previewData.contactDetails?.address || "");
+      setSidebarPhone(previewData.contactDetails?.phone || "");
+      setSidebarEmail(previewData.contactDetails?.email || "");
+    }
+  }, [previewData, logoUrl]);
+
+  // Update specific fields nested in previewData from iframe input edits
+  const updatePreviewDataFromIframe = (pathStr: string, value: string) => {
+    setPreviewData(prev => {
+      if (!prev) return prev;
+      const next = JSON.parse(JSON.stringify(prev));
+      const path = pathStr.split('.');
+      let current = next;
+      for (let i = 0; i < path.length - 1; i++) {
+        if (!current[path[i]]) current[path[i]] = {};
+        current = current[path[i]];
+      }
+      current[path[path.length - 1]] = value;
+
+      if (pathStr === 'contactDetails.brandName' && next.hero) {
+        next.hero.title = value;
+      }
+      return next;
+    });
+  };
+
+  // Update specific service item field nested in previewData from iframe edits
+  const updatePreviewItem = (index: number, field: string, value: string) => {
+    setPreviewData(prev => {
+      if (!prev) return prev;
+      const next = JSON.parse(JSON.stringify(prev));
+      if (!next.items) next.items = [];
+      if (next.items[index]) {
+        next.items[index][field] = value;
+      }
+      return next;
+    });
+  };
+
+  // Inject contenteditable and edit-listeners inside the iframe on load (same-origin)
+  const handleIframeLoad = () => {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (!doc) return;
+
+      // Inject visual feedback styles for contenteditable elements
+      const styleId = 'editor-outline-styles';
+      if (!doc.getElementById(styleId)) {
+        const style = doc.createElement('style');
+        style.id = styleId;
+        style.innerHTML = `
+          [contenteditable="true"]:hover {
+            outline: 2px dashed #3b82f6 !important;
+            outline-offset: 4px;
+            cursor: text !important;
+          }
+          [contenteditable="true"]:focus {
+            outline: 2px solid #3b82f6 !important;
+            outline-offset: 4px;
+          }
+        `;
+        doc.head.appendChild(style);
+      }
+
+      // Map iframe selectors to state path paths
+      const selectorMapping = [
+        { selector: '.brand-logo-text', path: 'contactDetails.brandName' },
+        { selector: '.logo-text', path: 'contactDetails.brandName' },
+        { selector: 'nav span', path: 'contactDetails.brandName' },
+        { selector: '.hero-title', path: 'hero.title' },
+        { selector: '.hero h1', path: 'hero.title' },
+        { selector: 'h1', path: 'hero.title' },
+        { selector: '.hero-subtitle', path: 'hero.subtitle' },
+        { selector: '.hero p', path: 'hero.subtitle' },
+        { selector: '.hero-cta', path: 'hero.ctaText' },
+        { selector: '.hero button', path: 'hero.ctaText' },
+        { selector: '.about-heading', path: 'about.heading' },
+        { selector: '.about h2', path: 'about.heading' },
+        { selector: '.about-description', path: 'about.description' },
+        { selector: '.about p', path: 'about.description' },
+        { selector: '.footer-address', path: 'contactDetails.address' },
+        { selector: '.footer-phone', path: 'contactDetails.phone' },
+        { selector: '.footer-email', path: 'contactDetails.email' }
+      ];
+
+      selectorMapping.forEach(({ selector, path }) => {
+        const elements = doc.querySelectorAll(selector);
+        elements.forEach(el => {
+          el.setAttribute('contenteditable', 'true');
+          el.setAttribute('suppressContentEditableWarning', 'true');
+          el.addEventListener('input', () => {
+            updatePreviewDataFromIframe(path, el.textContent || '');
+          });
+        });
+      });
+
+      // Bind edit capabilities to service items
+      const serviceCards = doc.querySelectorAll('.service-card, .item-card');
+      serviceCards.forEach((card, cardIdx) => {
+        const titleEl = card.querySelector('.service-title, h3, h4');
+        if (titleEl) {
+          titleEl.setAttribute('contenteditable', 'true');
+          titleEl.setAttribute('suppressContentEditableWarning', 'true');
+          titleEl.addEventListener('input', () => {
+            updatePreviewItem(cardIdx, 'title', titleEl.textContent || '');
+          });
+        }
+        const descEl = card.querySelector('.service-desc, p');
+        if (descEl) {
+          descEl.setAttribute('contenteditable', 'true');
+          descEl.setAttribute('suppressContentEditableWarning', 'true');
+          descEl.addEventListener('input', () => {
+            updatePreviewItem(cardIdx, 'description', descEl.textContent || '');
+          });
+        }
+      });
+    } catch (e) {
+      console.warn("Iframe same-origin edit binding failed or restricted:", e);
+    }
+  };
+
   const updateIframeField = (field: string, value: string) => {
     setPreviewData(prev => {
       if (!prev) return prev;
@@ -548,6 +676,7 @@ export const AiBuilderPage: React.FC = () => {
                       <iframe 
                         ref={iframeRef}
                         src={`${previewData.previewUrl}?editor=true`} 
+                        onLoad={handleIframeLoad}
                         className="w-full h-[650px] border-4 border-[var(--border-strong)] rounded-3xl shadow-2xl shadow-black/50 bg-white"
                         title="Live Preview"
                       />

@@ -12,7 +12,7 @@ function App() {
   const fadingInRef = useRef(false);
 
   // Template Data State
-  const [data, setData] = useState({
+  const [data, setData] = useState<any>({
     logo: "",
     brandName: "Asme",
     address: "New York, USA",
@@ -44,6 +44,20 @@ function App() {
     contact: {
       heading: "Ready to take off?",
       buttonText: "Contact Us"
+    },
+    philosophy: {
+      title1: "Innovation",
+      title2: "Vision",
+      block1Label: "Choose your space",
+      block1Text: "Every meaningful breakthrough begins at the intersection of disciplined strategy and remarkable creative vision. We operate at that crossroads, turning bold thinking into tangible outcomes that move people and reshape industries.",
+      block2Label: "Shape the future",
+      block2Text: "We believe that the best work emerges when curiosity meets conviction. Our process is designed to uncover hidden opportunities and translate them into experiences that resonate long after the first impression."
+    },
+    navigation: {
+      link1: "Features",
+      link2: "About",
+      btn1: "Sign Up",
+      btn2: "Login"
     }
   });
 
@@ -137,7 +151,7 @@ function App() {
       if (event.data?.type === 'SYNC_DATA') {
         const incoming = event.data.data;
         if (incoming) {
-          setData(prev => ({
+          setData((prev: any) => ({
             ...prev,
             ...incoming,
             logo: incoming.contactDetails?.logo || prev.logo,
@@ -151,7 +165,7 @@ function App() {
 
       if (event.data?.type === 'UPDATE_FIELD') {
         const { field, value } = event.data;
-        setData(prev => {
+        setData((prev: any) => {
           const next = { ...prev };
           if (field === 'brandName') next.brandName = value;
           if (field === 'address') next.address = value;
@@ -204,18 +218,22 @@ function App() {
               
               {/* Nav links - hidden on mobile */}
               <div className="hidden md:flex items-center gap-8 ml-10">
-                <a href="#features" className="text-white/80 hover:text-white text-sm font-medium transition-colors">Features</a>
-                <a href="#about" className="text-white/80 hover:text-white text-sm font-medium transition-colors">About</a>
+                <a href="#features" className="nav-link-1 text-white/80 hover:text-white text-sm font-medium transition-colors">
+                  {data.navigation?.link1 || "Features"}
+                </a>
+                <a href="#about" className="nav-link-2 text-white/80 hover:text-white text-sm font-medium transition-colors">
+                  {data.navigation?.link2 || "About"}
+                </a>
               </div>
             </div>
 
             {/* Right Buttons */}
             <div className="flex items-center gap-4">
-              <button className="text-white text-sm font-medium hover:text-white/80 transition-colors cursor-pointer">
-                Sign Up
+              <button className="nav-btn-1 text-white text-sm font-medium hover:text-white/80 transition-colors cursor-pointer">
+                {data.navigation?.btn1 || "Sign Up"}
               </button>
-              <button className="liquid-glass rounded-full px-6 py-2 text-white text-sm font-medium hover:bg-white/5 transition-colors cursor-pointer">
-                Login
+              <button className="nav-btn-2 liquid-glass rounded-full px-6 py-2 text-white text-sm font-medium hover:bg-white/5 transition-colors cursor-pointer">
+                {data.navigation?.btn2 || "Login"}
               </button>
             </div>
           </div>
@@ -278,7 +296,7 @@ function App() {
       <FeaturedVideoSection />
 
       {/* Section 4: Philosophy */}
-      <PhilosophySection />
+      <PhilosophySection data={data.philosophy} />
 
       {/* Section 5: Services */}
       <ServicesSection items={data.items} />

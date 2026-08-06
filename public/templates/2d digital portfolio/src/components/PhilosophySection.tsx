@@ -1,7 +1,18 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-export default function PhilosophySection() {
+interface PhilosophySectionProps {
+  data?: {
+    title1?: string;
+    title2?: string;
+    block1Label?: string;
+    block1Text?: string;
+    block2Label?: string;
+    block2Text?: string;
+  };
+}
+
+export default function PhilosophySection({ data }: PhilosophySectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
@@ -18,11 +29,11 @@ export default function PhilosophySection() {
           transition={{ duration: 0.8 }}
           className="text-5xl md:text-7xl lg:text-8xl text-white tracking-tight mb-16 md:mb-24 font-normal"
         >
-          <span>Innovation </span>
+          <span className="philosophy-title-1">{data?.title1 || "Innovation"} </span>
           <span className="font-serif italic text-white/40">x</span>
-          <span> Vision</span>
+          <span className="philosophy-title-2"> {data?.title2 || "Vision"}</span>
         </motion.h2>
-
+ 
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Left Column (Video) */}
@@ -42,7 +53,7 @@ export default function PhilosophySection() {
               preload="auto"
             />
           </motion.div>
-
+ 
           {/* Right Column (Text Blocks) */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
@@ -52,24 +63,24 @@ export default function PhilosophySection() {
           >
             {/* Block 1 */}
             <div>
-              <span className="text-white/40 text-xs tracking-widest uppercase mb-4 block">
-                Choose your space
+              <span className="philosophy-block-1-label text-white/40 text-xs tracking-widest uppercase mb-4 block">
+                {data?.block1Label || "Choose your space"}
               </span>
-              <p className="text-white/70 text-base md:text-lg leading-relaxed">
-                Every meaningful breakthrough begins at the intersection of disciplined strategy and remarkable creative vision. We operate at that crossroads, turning bold thinking into tangible outcomes that move people and reshape industries.
+              <p className="philosophy-block-1-text text-white/70 text-base md:text-lg leading-relaxed">
+                {data?.block1Text || "Every meaningful breakthrough begins at the intersection of disciplined strategy and remarkable creative vision. We operate at that crossroads, turning bold thinking into tangible outcomes that move people and reshape industries."}
               </p>
             </div>
-
+ 
             {/* Divider */}
             <div className="w-full h-px bg-white/10" />
-
+ 
             {/* Block 2 */}
             <div>
-              <span className="text-white/40 text-xs tracking-widest uppercase mb-4 block">
-                Shape the future
+              <span className="philosophy-block-2-label text-white/40 text-xs tracking-widest uppercase mb-4 block">
+                {data?.block2Label || "Shape the future"}
               </span>
-              <p className="text-white/70 text-base md:text-lg leading-relaxed">
-                We believe that the best work emerges when curiosity meets conviction. Our process is designed to uncover hidden opportunities and translate them into experiences that resonate long after the first impression.
+              <p className="philosophy-block-2-text text-white/70 text-base md:text-lg leading-relaxed">
+                {data?.block2Text || "We believe that the best work emerges when curiosity meets conviction. Our process is designed to uncover hidden opportunities and translate them into experiences that resonate long after the first impression."}
               </p>
             </div>
           </motion.div>

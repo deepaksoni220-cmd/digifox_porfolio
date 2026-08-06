@@ -141,7 +141,18 @@ export const AiBuilderPage: React.FC = () => {
         { selector: '.about p', path: 'about.description' },
         { selector: '.footer-address', path: 'contactDetails.address' },
         { selector: '.footer-phone', path: 'contactDetails.phone' },
-        { selector: '.footer-email', path: 'contactDetails.email' }
+        { selector: '.footer-email', path: 'contactDetails.email' },
+        // New selectors for full navigation & philosophy block edits
+        { selector: '.nav-link-1', path: 'navigation.link1' },
+        { selector: '.nav-link-2', path: 'navigation.link2' },
+        { selector: '.nav-btn-1', path: 'navigation.btn1' },
+        { selector: '.nav-btn-2', path: 'navigation.btn2' },
+        { selector: '.philosophy-title-1', path: 'philosophy.title1' },
+        { selector: '.philosophy-title-2', path: 'philosophy.title2' },
+        { selector: '.philosophy-block-1-label', path: 'philosophy.block1Label' },
+        { selector: '.philosophy-block-1-text', path: 'philosophy.block1Text' },
+        { selector: '.philosophy-block-2-label', path: 'philosophy.block2Label' },
+        { selector: '.philosophy-block-2-text', path: 'philosophy.block2Text' }
       ];
 
       selectorMapping.forEach(({ selector, path }) => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { GeneratedWebsiteData } from '../../services/aiBuilderService';
 import { predefinedTemplates } from '../../data/templates';
 
@@ -7,15 +7,33 @@ interface TemplateGalleryProps {
   onSelect: (templateId: string, data: GeneratedWebsiteData) => void;
 }
 
-const TemplateCard = ({ id, template, index, onSelect }: { id: string, template: GeneratedWebsiteData, index: number, onSelect: (id: string, data: GeneratedWebsiteData) => void }) => (
+const TemplateCard = ({ 
+  id, 
+  template, 
+  index, 
+  onSelect, 
+  onPreviewClick 
+}: { 
+  id: string, 
+  template: GeneratedWebsiteData, 
+  index: number, 
+  onSelect: (id: string, data: GeneratedWebsiteData) => void,
+  onPreviewClick: (url: string) => void
+}) => (
   <motion.div
-    initial={{ opacity: 0, y: 20 }}
+    initial={{ opacity: 0, y: 30 }}
     animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: index * 0.1 }}
-    className="group relative flex flex-col bg-[#0f111a] border border-[#1f2233] rounded-2xl overflow-hidden shadow-2xl hover:border-[#3b82f6]/50 transition-all duration-300"
+    exit={{ opacity: 0, y: -30 }}
+    transition={{ duration: 0.4, delay: index * 0.05 }}
+    whileHover={{ y: -8, scale: 1.02 }}
+    className="group relative flex flex-col bg-[#0b0c16] border border-[#1b1d30] rounded-3xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:border-[#3b82f6]/40 hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)] transition-all duration-500"
   >
+    {/* Decorative corner glow */}
+    <div className="absolute -top-10 -left-10 w-32 h-32 bg-[#3b82f6]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+    <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[#8b5cf6]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+
     {/* Thumbnail Area */}
-    <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#151822]">
+    <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#121424]">
       {template.thumbnailUrl ? (
         <img 
           src={template.thumbnailUrl} 
@@ -31,35 +49,53 @@ const TemplateCard = ({ id, template, index, onSelect }: { id: string, template:
         />
       )}
       
-      {/* Subtle glass overlay on hover */}
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+      {/* Subtle hover overlay */}
+      <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+        <motion.div 
+          initial={{ scale: 0.8, opacity: 0 }}
+          whileHover={{ scale: 1 }}
+          className="bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full px-5 py-2.5 font-bold uppercase tracking-wider text-xs shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300"
+        >
+          View Details
+        </motion.div>
+      </div>
     </div>
 
     {/* Content Area */}
-    <div className="flex flex-col p-6 flex-1 justify-between">
+    <div className="flex flex-col p-6 flex-1 justify-between relative z-10">
       <div>
-        <h3 className="text-xl font-bold text-white mb-2 tracking-wide">
-          {template.hero?.title || 'Template Name'} <span className="text-gray-500 font-normal text-sm">— {template.websiteType}</span>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#1b1d30] text-[#3b82f6] border border-[#2f3354]">
+            {template.websiteType}
+          </span>
+          <span className="text-[10px] uppercase tracking-widest text-[#8e95a5]">
+            {template.category === '3d' ? '⚡ 3D Animated' : '✨ 2D Layout'}
+          </span>
+        </div>
+        <h3 className="text-lg font-bold text-white mb-2 tracking-wide group-hover:text-[#3b82f6] transition-colors duration-300">
+          {template.hero?.title || 'Template Name'}
         </h3>
-        <p className="text-[#8e95a5] text-sm leading-relaxed line-clamp-2">
+        <p className="text-[#8e95a5] text-xs leading-relaxed line-clamp-2">
           {template.shortDescription || template.hero?.subtitle || 'A beautiful, modern template designed for high conversions and stunning visuals.'}
         </p>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center gap-3 mt-6 pt-4 border-t border-[#1f2233]">
+      <div className="flex items-center gap-3 mt-6 pt-4 border-t border-[#1b1d30]">
         <button
           onClick={() => onSelect(id, template)}
-          className="flex-1 bg-[#4f39f6] hover:bg-[#5b47fc] text-white py-2.5 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-2"
+          className="flex-1 bg-gradient-to-r from-[#3b82f6] to-[#6366f1] hover:opacity-90 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(59,130,246,0.2)] hover:shadow-[0_0_20px_rgba(59,130,246,0.4)]"
         >
-          Customize <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+          Customize
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
         </button>
         {template.previewUrl && (
           <button
-            onClick={() => window.open(template.previewUrl, '_blank')}
-            className="flex-1 bg-transparent border border-[#2f334a] hover:bg-[#1a1d2d] text-white py-2.5 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-2"
+            onClick={() => onPreviewClick(template.previewUrl!)}
+            className="flex-1 bg-[#121424] border border-[#262942] hover:bg-[#1b1d30] hover:border-[#3b82f6]/40 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2"
           >
-            Preview <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+            Live Preview
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
           </button>
         )}
       </div>
@@ -69,6 +105,7 @@ const TemplateCard = ({ id, template, index, onSelect }: { id: string, template:
 
 export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) => {
   const [activeTab, setActiveTab] = useState<'3d' | '2d'>('3d');
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const templates3D = Object.entries(predefinedTemplates).filter(([_, t]) => t.category === '3d');
   const templates2D = Object.entries(predefinedTemplates).filter(([_, t]) => t.category === '2d' || !t.category);
@@ -76,36 +113,119 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
   return (
     <div className="w-full flex flex-col gap-6">
       {/* Tab Switcher */}
-      <div className="flex gap-4 border-b border-[var(--border-strong)] pb-4">
+      <div className="flex gap-6 border-b border-[#1b1d30] pb-2 relative">
         <button
           onClick={() => setActiveTab('3d')}
-          className={`text-lg font-bold uppercase tracking-wider transition-colors ${
-            activeTab === '3d' ? 'text-[#3b82f6] border-b-2 border-[#3b82f6]' : 'text-[var(--text-secondary)] hover:text-white'
-          }`}
+          className="text-sm font-bold uppercase tracking-widest pb-3 relative z-10 transition-colors duration-300"
+          style={{ color: activeTab === '3d' ? '#3b82f6' : '#8e95a5' }}
         >
-          3D Animated Templates
+          3D Animated
+          {activeTab === '3d' && (
+            <motion.div 
+              layoutId="activeTabUnderline" 
+              className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#3b82f6]"
+              transition={{ type: "spring", stiffness: 380, damping: 30 }}
+            />
+          )}
         </button>
         <button
           onClick={() => setActiveTab('2d')}
-          className={`text-lg font-bold uppercase tracking-wider transition-colors ${
-            activeTab === '2d' ? 'text-[#ec4899] border-b-2 border-[#ec4899]' : 'text-[var(--text-secondary)] hover:text-white'
-          }`}
+          className="text-sm font-bold uppercase tracking-widest pb-3 relative z-10 transition-colors duration-300"
+          style={{ color: activeTab === '2d' ? '#ec4899' : '#8e95a5' }}
         >
-          2D Static Templates
+          2D Standard
+          {activeTab === '2d' && (
+            <motion.div 
+              layoutId="activeTabUnderline" 
+              className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#ec4899]"
+              transition={{ type: "spring", stiffness: 380, damping: 30 }}
+            />
+          )}
         </button>
       </div>
 
-      {/* Templates Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {activeTab === '3d' 
-          ? templates3D.map(([id, template], i) => (
-              <TemplateCard key={id} id={id} template={template} index={i} onSelect={onSelect} />
-            ))
-          : templates2D.map(([id, template], i) => (
-              <TemplateCard key={id} id={id} template={template} index={i} onSelect={onSelect} />
-            ))
-        }
-      </div>
+      {/* Templates Grid with Switch Animations */}
+      <motion.div 
+        layout
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
+        <AnimatePresence mode="popLayout">
+          {activeTab === '3d' 
+            ? templates3D.map(([id, template], i) => (
+                <TemplateCard 
+                  key={id} 
+                  id={id} 
+                  template={template} 
+                  index={i} 
+                  onSelect={onSelect}
+                  onPreviewClick={setPreviewUrl} 
+                />
+              ))
+            : templates2D.map(([id, template], i) => (
+                <TemplateCard 
+                  key={id} 
+                  id={id} 
+                  template={template} 
+                  index={i} 
+                  onSelect={onSelect}
+                  onPreviewClick={setPreviewUrl} 
+                />
+              ))
+          }
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Modern Pop-up Live Preview Modal */}
+      <AnimatePresence>
+        {previewUrl && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-10">
+            {/* Backdrop Blur */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setPreviewUrl(null)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"
+            />
+
+            {/* Modal Container */}
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0, y: 30 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 30 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="w-full max-w-6xl h-[85vh] bg-[#0b0c16] border border-[#1b1d30] rounded-3xl overflow-hidden shadow-2xl flex flex-col relative z-10"
+            >
+              {/* Modal Header */}
+              <div className="flex justify-between items-center px-6 py-4 border-b border-[#1b1d30] bg-[#0e101f]">
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-red-500" />
+                  <span className="w-3 h-3 rounded-full bg-yellow-500" />
+                  <span className="w-3 h-3 rounded-full bg-green-500" />
+                  <span className="text-xs text-[#8e95a5] font-medium ml-2 font-mono truncate max-w-xs sm:max-w-md">
+                    {previewUrl}
+                  </span>
+                </div>
+                <button 
+                  onClick={() => setPreviewUrl(null)}
+                  className="p-2 hover:bg-[#1b1d30] rounded-full text-white/70 hover:text-white transition-colors"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+              </div>
+
+              {/* Modal Iframe Content */}
+              <div className="flex-1 bg-white relative">
+                <iframe 
+                  src={previewUrl}
+                  className="w-full h-full border-0"
+                  title="Interactive Template Preview"
+                />
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

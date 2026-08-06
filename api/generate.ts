@@ -79,7 +79,7 @@ You MUST reply strictly with valid JSON matching this schema, and nothing else. 
 Schema:
 {
   "websiteType": "The specific type of website provided in the instructions",
-  "templateStyle": "Select the best matching template from this list: ${availableTemplates}",
+  "templateStyle": "CRITICAL: YOU MUST SELECT EXACTLY ONE STRING FROM THIS LIST: [${availableTemplates}]. Do not leave this blank.",
   "hero": { "title": "...", "subtitle": "...", "ctaText": "...", "imagePrompt": "A highly detailed, photorealistic image description for an immersive background (e.g. 'A surreal neon cybernetic landscape, 8k, volumetric lighting', or 'Ultra-minimalist brutalist architecture, stark shadows')" },
   "about": { "heading": "...", "description": "...", "imagePrompt": "A highly detailed, editorial-style image description for the about section (e.g. 'A high-fashion cinematic portrait, dramatic lighting, contemporary art style')" },
   "items": [
@@ -115,7 +115,11 @@ Schema:
     }
 
     const data = await response.json();
-    const text = data.candidates[0].content.parts[0].text;
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (!text) {
+      throw new Error(`Empty response from AI (likely safety filter). Data: ${JSON.stringify(data)}`);
+    }
 
     if (action === 'build') {
       const cleanString = text.replace(/```json/gi, '').replace(/```/g, '').trim();
@@ -126,6 +130,6 @@ Schema:
     }
   } catch (err: any) {
     console.error("Backend Error:", err);
-    return res.status(500).json({ error: "Failed to communicate with AI API or parse JSON." });
+    return res.status(500).json({ error: `AI Generation Error: ${err.message}` });
   }
 }

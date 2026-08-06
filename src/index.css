@@ -94,23 +94,10 @@ video::-webkit-media-controls-volume-slider {
 }
 
 .animate-glowing-border {
-  position: relative;
-  background: #0e101f !important; /* premium dark background to highlight the border glow */
-  border: 1px solid transparent;
-  background-clip: padding-box;
-}
-
-.animate-glowing-border::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  z-index: -1;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6);
-  background-size: 300% 300%;
-  border-radius: 9px;
-  animation: border-glow-rotate 4s ease infinite;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6) !important;
+  background-size: 300% 300% !important;
+  animation: border-glow-rotate 4s ease infinite !important;
+  border: none !important;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4) !important;
 }
 

@@ -161,7 +161,7 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
           className="text-sm font-bold uppercase tracking-widest pb-3 relative z-10 transition-colors duration-300 cursor-pointer"
           style={{ color: activeTab === '2d' ? '#ec4899' : '#8e95a5' }}
         >
-          2D Static Websites
+          2D Animated Websites
           {activeTab === '2d' && (
             <motion.div 
               layoutId="activeTabUnderline" 

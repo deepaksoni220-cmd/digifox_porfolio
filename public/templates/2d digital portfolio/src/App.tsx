@@ -58,6 +58,10 @@ function App() {
       link2: "About",
       btn1: "Sign Up",
       btn2: "Login"
+    },
+    servicesHeader: {
+      title: "What we do",
+      subtitle: "Our services"
     }
   });
 
@@ -299,7 +303,7 @@ function App() {
       <PhilosophySection data={data.philosophy} />
 
       {/* Section 5: Services */}
-      <ServicesSection items={data.items} />
+      <ServicesSection items={data.items} header={data.servicesHeader} />
     </div>
   );
 }

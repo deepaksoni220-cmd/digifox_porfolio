@@ -152,7 +152,9 @@ export const AiBuilderPage: React.FC = () => {
         { selector: '.philosophy-block-1-label', path: 'philosophy.block1Label' },
         { selector: '.philosophy-block-1-text', path: 'philosophy.block1Text' },
         { selector: '.philosophy-block-2-label', path: 'philosophy.block2Label' },
-        { selector: '.philosophy-block-2-text', path: 'philosophy.block2Text' }
+        { selector: '.philosophy-block-2-text', path: 'philosophy.block2Text' },
+        { selector: '.services-heading-title', path: 'servicesHeader.title' },
+        { selector: '.services-heading-subtitle', path: 'servicesHeader.subtitle' }
       ];
 
       selectorMapping.forEach(({ selector, path }) => {

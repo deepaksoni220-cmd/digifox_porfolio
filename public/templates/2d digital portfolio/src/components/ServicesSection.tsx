@@ -11,6 +11,10 @@ interface ServiceItem {
 
 interface ServicesSectionProps {
   items?: ServiceItem[];
+  header?: {
+    title?: string;
+    subtitle?: string;
+  };
 }
 
 const defaultVideos = [
@@ -18,7 +22,7 @@ const defaultVideos = [
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260324_151826_c7218672-6e92-402c-9e45-f1e0f454bdc4.mp4"
 ];
 
-export default function ServicesSection({ items }: ServicesSectionProps) {
+export default function ServicesSection({ items, header }: ServicesSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
@@ -59,11 +63,11 @@ export default function ServicesSection({ items }: ServicesSectionProps) {
           transition={{ duration: 0.7 }}
           className="flex justify-between items-end mb-12 md:mb-16"
         >
-          <h2 className="text-3xl md:text-5xl text-white tracking-tight font-normal">
-            What we do
+          <h2 className="services-heading-title text-3xl md:text-5xl text-white tracking-tight font-normal">
+            {header?.title || "What we do"}
           </h2>
-          <span className="text-white/40 text-sm hidden md:inline uppercase tracking-wider">
-            Our services
+          <span className="services-heading-subtitle text-white/40 text-sm hidden md:inline uppercase tracking-wider">
+            {header?.subtitle || "Our services"}
           </span>
         </motion.div>
 
@@ -75,7 +79,7 @@ export default function ServicesSection({ items }: ServicesSectionProps) {
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: idx * 0.15 }}
-              className="liquid-glass rounded-3xl overflow-hidden group flex flex-col cursor-pointer"
+              className="service-card liquid-glass rounded-3xl overflow-hidden group flex flex-col cursor-pointer"
             >
               {/* Card Video Area */}
               <div className="aspect-video w-full overflow-hidden relative">
@@ -95,7 +99,7 @@ export default function ServicesSection({ items }: ServicesSectionProps) {
               {/* Card Body */}
               <div className="p-6 md:p-8 flex-1 flex flex-col justify-between">
                 <div className="flex justify-between items-start mb-6">
-                  <span className="uppercase tracking-widest text-white/40 text-xs font-semibold">
+                  <span className="service-tag uppercase tracking-widest text-white/40 text-xs font-semibold">
                     {card.tag}
                   </span>
                   <div className="liquid-glass rounded-full p-2 text-white group-hover:bg-white/10 transition-colors">
@@ -104,10 +108,10 @@ export default function ServicesSection({ items }: ServicesSectionProps) {
                 </div>
 
                 <div>
-                  <h3 className="text-white text-xl md:text-2xl mb-3 tracking-tight font-medium">
+                  <h3 className="service-title text-white text-xl md:text-2xl mb-3 tracking-tight font-medium">
                     {card.title}
                   </h3>
-                  <p className="text-white/50 text-sm leading-relaxed">
+                  <p className="service-desc text-white/50 text-sm leading-relaxed">
                     {card.description}
                   </p>
                 </div>

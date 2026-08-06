@@ -231,7 +231,7 @@ export const AiBuilderPage: React.FC = () => {
       videos.forEach(video => {
         video.style.cursor = 'pointer';
         video.addEventListener('mouseenter', () => {
-          video.style.outline = '2px dashed #ec4899';
+          video.style.outline = '2px dashed #a855f7';
           video.style.outlineOffset = '2px';
         });
         video.addEventListener('mouseleave', () => {

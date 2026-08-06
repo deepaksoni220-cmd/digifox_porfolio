@@ -6,7 +6,6 @@ import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 import { TemplateGallery } from '../components/builder/TemplateGallery';
 import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { predefinedTemplates } from '../data/templates';
 
 export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -20,6 +19,7 @@ export const AiBuilderPage: React.FC = () => {
   const [isBuilding, setIsBuilding] = useState(false);
   const [error, setError] = useState("");
   const [previewData, setPreviewData] = useState<GeneratedWebsiteData | null>(null);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
   
   // Sync previewData to sessionStorage so Full Screen Preview always works
@@ -459,7 +459,7 @@ export const AiBuilderPage: React.FC = () => {
                 Or Start From a Premium Design
               </h2>
               <TemplateGallery 
-                onSelect={(id, data) => {
+                onSelect={(_, data) => {
                   setPreviewData(data);
                   // Scroll down to preview area smoothly
                   window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });

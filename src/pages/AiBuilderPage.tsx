@@ -20,6 +20,7 @@ export const AiBuilderPage: React.FC = () => {
   const [isBuilding, setIsBuilding] = useState(false);
   const [error, setError] = useState("");
   const [previewData, setPreviewData] = useState<GeneratedWebsiteData | null>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   
   // Sync previewData to sessionStorage so Full Screen Preview always works
   useEffect(() => {
@@ -241,6 +242,11 @@ export const AiBuilderPage: React.FC = () => {
     setError("");
     setIsBuilding(true);
     setPreviewData(null);
+
+    // Scroll to preview area immediately so user sees the loading state
+    setTimeout(() => {
+      previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
 
     // If there's text in the input but they clicked build, include it in the history
     let finalHistory = [...chatHistory];
@@ -470,7 +476,7 @@ export const AiBuilderPage: React.FC = () => {
         </div>
 
         {/* Preview Area */}
-        <div className="w-full">
+        <div ref={previewRef} className="w-full">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b border-[var(--border-strong)] pb-4 gap-4">
             <h2 className="text-2xl font-black uppercase tracking-widest">
               Live Preview

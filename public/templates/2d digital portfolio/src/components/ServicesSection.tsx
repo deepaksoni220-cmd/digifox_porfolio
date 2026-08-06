@@ -2,19 +2,41 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 
-export default function ServicesSection() {
+interface ServiceItem {
+  title: string;
+  description: string;
+  icon?: string;
+  price?: string;
+}
+
+interface ServicesSectionProps {
+  items?: ServiceItem[];
+}
+
+const defaultVideos = [
+  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4",
+  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260324_151826_c7218672-6e92-402c-9e45-f1e0f454bdc4.mp4"
+];
+
+export default function ServicesSection({ items }: ServicesSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
-  const cards = [
+  const cards = items && items.length > 0 ? items.map((item, idx) => ({
+    video: defaultVideos[idx % defaultVideos.length],
+    tag: item.icon || "Service",
+    title: item.title,
+    description: item.description,
+    price: item.price
+  })) : [
     {
-      video: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4",
+      video: defaultVideos[0],
       tag: "Strategy",
       title: "Research & Insight",
       description: "We dig deep into data, culture, and human behavior to surface the insights that drive meaningful, lasting change."
     },
     {
-      video: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260324_151826_c7218672-6e92-402c-9e45-f1e0f454bdc4.mp4",
+      video: defaultVideos[1],
       tag: "Craft",
       title: "Design & Execution",
       description: "From concept to launch, we obsess over every detail to deliver experiences that feel effortless and look extraordinary."

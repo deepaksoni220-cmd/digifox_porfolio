@@ -1,7 +1,14 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-export default function AboutSection() {
+interface AboutSectionProps {
+  data?: {
+    heading: string;
+    description: string;
+  };
+}
+
+export default function AboutSection({ data }: AboutSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -31,10 +38,12 @@ export default function AboutSection() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="text-4xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight font-normal max-w-4xl"
         >
-          <span className="font-serif italic text-white/60">Pioneering then ideas</span>{" "}
-          <span>for</span>{" "}
-          <br className="hidden md:inline" />
-          <span className="font-serif italic text-white/60">minds that then create, build, and inspire.</span>
+          <span className="font-serif italic text-white/60">
+            {data?.heading || "Pioneering then ideas"}
+          </span>
+          <span className="text-white/70 text-lg md:text-xl font-normal block mt-6 max-w-2xl mx-auto leading-relaxed">
+            {data?.description || "for minds that then create, build, and inspire."}
+          </span>
         </motion.h2>
       </div>
     </section>

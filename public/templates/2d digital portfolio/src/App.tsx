@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Globe, ArrowRight, Instagram, Twitter } from 'lucide-react';
 import AboutSection from './components/AboutSection';
 import FeaturedVideoSection from './components/FeaturedVideoSection';
@@ -10,6 +10,42 @@ function App() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const fadingOutRef = useRef(false);
   const fadingInRef = useRef(false);
+
+  // Template Data State
+  const [data, setData] = useState({
+    logo: "",
+    brandName: "Asme",
+    address: "New York, USA",
+    phone: "+1 234 567 890",
+    email: "hello@asme.com",
+    hero: {
+      title: "Know it then all.",
+      subtitle: "Stay updated with the latest news and insights. Subscribe to our newsletter today and never miss out on exciting updates.",
+      ctaText: "Manifesto",
+      imagePrompt: ""
+    },
+    about: {
+      heading: "About Us",
+      description: "Pioneering ideas for minds that create, build, and inspire.",
+      imagePrompt: ""
+    },
+    items: [
+      {
+        title: "Research & Insight",
+        description: "We dig deep into data, culture, and human behavior to surface the insights that drive meaningful, lasting change.",
+        icon: "⚡"
+      },
+      {
+        title: "Design & Execution",
+        description: "From concept to launch, we obsess over every detail to deliver experiences that feel effortless and look extraordinary.",
+        icon: "💻"
+      }
+    ],
+    contact: {
+      heading: "Ready to take off?",
+      buttonText: "Contact Us"
+    }
+  });
 
   const animateOpacity = (
     from: number,
@@ -95,6 +131,45 @@ function App() {
     };
   }, []);
 
+  // Listen for editor actions from parent builder window
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'SYNC_DATA') {
+        const incoming = event.data.data;
+        if (incoming) {
+          setData(prev => ({
+            ...prev,
+            ...incoming,
+            logo: incoming.contactDetails?.logo || prev.logo,
+            brandName: incoming.contactDetails?.brandName || prev.brandName,
+            address: incoming.contactDetails?.address || prev.address,
+            phone: incoming.contactDetails?.phone || prev.phone,
+            email: incoming.contactDetails?.email || prev.email,
+          }));
+        }
+      }
+
+      if (event.data?.type === 'UPDATE_FIELD') {
+        const { field, value } = event.data;
+        setData(prev => {
+          const next = { ...prev };
+          if (field === 'brandName') next.brandName = value;
+          if (field === 'address') next.address = value;
+          if (field === 'phone') next.phone = value;
+          if (field === 'email') next.email = value;
+          if (field === 'logo') next.logo = value;
+          return next;
+        });
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    // Tell parent frame we are loaded and ready to sync initial data
+    window.parent.postMessage({ type: 'REQUEST_SYNC' }, '*');
+
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
   return (
     <div className="w-full min-h-screen bg-black text-white selection:bg-white selection:text-black">
       {/* Section 1: Hero */}
@@ -117,14 +192,19 @@ function App() {
             {/* Left Brand and Links */}
             <div className="flex items-center">
               <div className="flex items-center gap-2">
-                <Globe className="w-6 h-6 text-white animate-[spin_8s_linear_infinite]" />
-                <span className="text-white font-semibold text-lg tracking-tight select-none">Asme</span>
+                {data.logo ? (
+                  <img src={data.logo} alt="Logo" className="w-6 h-6 object-contain" />
+                ) : (
+                  <Globe className="w-6 h-6 text-white animate-[spin_8s_linear_infinite]" />
+                )}
+                <span className="text-white font-semibold text-lg tracking-tight select-none">
+                  {data.brandName}
+                </span>
               </div>
               
               {/* Nav links - hidden on mobile */}
               <div className="hidden md:flex items-center gap-8 ml-10">
                 <a href="#features" className="text-white/80 hover:text-white text-sm font-medium transition-colors">Features</a>
-                <a href="#pricing" className="text-white/80 hover:text-white text-sm font-medium transition-colors">Pricing</a>
                 <a href="#about" className="text-white/80 hover:text-white text-sm font-medium transition-colors">About</a>
               </div>
             </div>
@@ -145,7 +225,7 @@ function App() {
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-12 text-center -translate-y-[8%] md:-translate-y-[12%]">
           
           <h1 className="text-6xl md:text-8xl lg:text-9xl text-white tracking-tight font-normal font-serif mb-8 select-none">
-            Know it then <span className="italic font-serif">all</span>.
+            {data.hero?.title || "Know it then all."}
           </h1>
 
           {/* Email Subscription Container */}
@@ -165,12 +245,12 @@ function App() {
 
             {/* Subtitle */}
             <p className="text-white text-sm leading-relaxed px-4 max-w-md text-white/70">
-              Stay updated with the latest news and insights. Subscribe to our newsletter today and never miss out on exciting updates.
+              {data.hero?.subtitle || "Stay updated with the latest news and insights. Subscribe to our newsletter today."}
             </p>
 
             {/* Manifesto button */}
             <button className="liquid-glass rounded-full px-8 py-3 text-white text-sm font-medium hover:bg-white/5 transition-colors cursor-pointer mt-2">
-              Manifesto
+              {data.hero?.ctaText || "Manifesto"}
             </button>
           </div>
 
@@ -192,7 +272,7 @@ function App() {
       </section>
 
       {/* Section 2: About */}
-      <AboutSection />
+      <AboutSection data={data.about} />
 
       {/* Section 3: Featured Video */}
       <FeaturedVideoSection />
@@ -201,7 +281,7 @@ function App() {
       <PhilosophySection />
 
       {/* Section 5: Services */}
-      <ServicesSection />
+      <ServicesSection items={data.items} />
     </div>
   );
 }

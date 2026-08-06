@@ -8,4 +8,9 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  base: './',
+  build: {
+    outDir: '../../2d digital portfolio/dist',
+    emptyOutDir: true
+  }
 })

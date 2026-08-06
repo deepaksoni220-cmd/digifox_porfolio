@@ -208,7 +208,7 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
       {/* Modern Pop-up Live Preview Modal */}
       <AnimatePresence>
         {previewUrl && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-10">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-0">
             {/* Backdrop Blur */}
             <motion.div 
               initial={{ opacity: 0 }}
@@ -220,11 +220,11 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
 
             {/* Modal Container */}
             <motion.div 
-              initial={{ scale: 0.95, opacity: 0, y: 30 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 30 }}
-              transition={{ type: "spring", duration: 0.5 }}
-              className="w-full max-w-6xl h-[85vh] bg-[#0b0c16] border border-[#1b1d30] rounded-3xl overflow-hidden shadow-2xl flex flex-col relative z-10"
+              initial={{ scale: 0.98, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.98, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="w-full h-full bg-[#0b0c16] overflow-hidden shadow-2xl flex flex-col relative z-10"
             >
               {/* Modal Header */}
               <div className="flex justify-between items-center px-6 py-4 border-b border-[#1b1d30] bg-[#0e101f]">
@@ -233,19 +233,31 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
                   <span className="w-3 h-3 rounded-full bg-yellow-500" />
                   <span className="w-3 h-3 rounded-full bg-green-500" />
                   <span className="text-xs text-[#8e95a5] font-medium ml-2 font-mono truncate max-w-xs sm:max-w-md">
-                    {previewUrl}
+                    {previewUrl.startsWith('/') ? `${window.location.origin}${previewUrl}` : previewUrl}
                   </span>
                 </div>
-                <button 
-                  onClick={() => setPreviewUrl(null)}
-                  className="p-2 hover:bg-[#1b1d30] rounded-full text-white/70 hover:text-white transition-colors"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                </button>
+                
+                <div className="flex items-center gap-3">
+                  <a
+                    href={previewUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1b1d30] hover:bg-[#262942] border border-[#262942] text-xs font-bold text-white transition-colors"
+                  >
+                    Open in New Tab
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                  </a>
+                  <button 
+                    onClick={() => setPreviewUrl(null)}
+                    className="p-2 hover:bg-[#1b1d30] rounded-full text-white/70 hover:text-white transition-colors"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                  </button>
+                </div>
               </div>
 
               {/* Modal Iframe Content */}
-              <div className="flex-1 bg-white relative">
+              <div className="flex-1 bg-black relative">
                 <iframe 
                   src={previewUrl}
                   className="w-full h-full border-0"

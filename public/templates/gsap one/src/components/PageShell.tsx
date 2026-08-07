@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { navigateToRoute } from '../../../_shared/preset-site-routing';
+import { navigateToRoute } from '../utils/presetRouting';
 import BubbleMenu from './BubbleMenu';
 import { ArcPaceLogo } from './ArcPaceLogo';
 import { PILL_MENU_ITEMS } from '../routes';

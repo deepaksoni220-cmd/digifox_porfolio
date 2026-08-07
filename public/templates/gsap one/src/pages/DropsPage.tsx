@@ -1,4 +1,4 @@
-import { navigateToRoute } from '../../../_shared/preset-site-routing';
+import { navigateToRoute } from '../utils/presetRouting';
 import { PageShell } from '../components/PageShell';
 
 const DROPS = [

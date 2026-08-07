@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, type CSSProperties, type ReactNode } from 'react';
 import { gsap } from 'gsap';
-import { routeHref, navigateToRoute } from '../../../_shared/preset-site-routing';
+import { routeHref, navigateToRoute } from '../utils/presetRouting';
 import './BubbleMenu.css';
 
 export interface MenuItem {

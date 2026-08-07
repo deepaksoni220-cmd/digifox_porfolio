@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { navigateToRoute } from '../../../_shared/preset-site-routing';
+import { navigateToRoute } from '../utils/presetRouting';
 import BubbleMenu from '../components/BubbleMenu';
 import SpotlightReveal from '../components/SpotlightReveal';
 import { ArcPaceLogo } from '../components/ArcPaceLogo';

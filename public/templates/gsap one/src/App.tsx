@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { PresetHashRouter } from '../../_shared/components/PresetHashRouter';
-import { applyPresetHashOnLoad } from '../../_shared/preset-site-routing';
+import { PresetHashRouter } from './components/PresetHashRouter';
+import { applyPresetHashOnLoad } from './utils/presetRouting';
 import { CollectionsPage } from './pages/CollectionsPage';
 import { CommunityPage } from './pages/CommunityPage';
 import { ContactPage } from './pages/ContactPage';

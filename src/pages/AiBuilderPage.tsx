@@ -736,7 +736,7 @@ export const AiBuilderPage: React.FC = () => {
                 Build Your Dream Website <span className="text-[#3b82f6]">with AI</span> by webmake
               </h1>
               <p className="text-[var(--text-primary)]/70 text-lg max-w-2xl mx-auto">
-                Describe your business and let AI create a beautiful, high-performance website with responsive design, SEO optimization, GEO readiness, AEO best practices, and lightning-fast performance.
+                Describe your business and let AI create a beautiful Animated, Good converting and performance website with responsive design, SEO optimization, GEO readiness, AEO best practices, and lightning-fast performance.
               </p>
             </div>
 

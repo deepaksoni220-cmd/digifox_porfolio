@@ -1,13 +1,15 @@
-import { SectionShell } from '../components/SectionShell';
+import { useCustomizer } from '../context/CustomizerContext';
 
 export function ContactSection() {
+  const { brandName } = useCustomizer();
+
   return (
     <SectionShell
       id="contact"
       eyebrow="Get in touch"
       title={
         <>
-          Contact <span className="font-serif italic">ARC PACE</span>
+          Contact <span className="font-serif italic">{brandName}</span>
         </>
       }
       description="Partnerships, press, wholesale, and product questions—our team responds within two business days."

@@ -15,9 +15,13 @@ import { navigateToRoute } from './utils/presetRouting';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { CustomizerProvider, useCustomizer } from './context/CustomizerContext';
+
 gsap.registerPlugin(ScrollTrigger);
 
-export default function App() {
+function AppContent() {
+  const { brandName } = useCustomizer();
+
   useEffect(() => {
     applyPresetHashOnLoad();
 
@@ -156,7 +160,7 @@ export default function App() {
           type="button"
           onClick={() => navigateToRoute('')}
           className="fixed-logo opacity-0 pointer-events-none text-white transition-all duration-300 hover:opacity-80"
-          aria-label="ARC PACE home"
+          aria-label={`${brandName} home`}
         >
           <ArcPaceLogo width={80} />
         </button>
@@ -187,12 +191,20 @@ export default function App() {
           className="underline-offset-4 hover:text-white hover:underline"
           onClick={() => navigateToRoute('contact')}
         >
-          Contact ARC PACE
+          Contact {brandName}
         </button>
         <span className="mx-2">·</span>
-        <span>© 2026 {BRAND_NAME}</span>
+        <span>© 2026 {brandName}</span>
       </footer>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <CustomizerProvider>
+      <AppContent />
+    </CustomizerProvider>
   );
 }
 

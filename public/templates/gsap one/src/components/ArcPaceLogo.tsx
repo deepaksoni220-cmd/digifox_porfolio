@@ -1,9 +1,24 @@
+import { useCustomizer } from '../context/CustomizerContext';
+
 interface ArcPaceLogoProps {
   width?: number;
   className?: string;
 }
 
 export function ArcPaceLogo({ width = 120, className }: ArcPaceLogoProps) {
+  const { logoUrl, brandName } = useCustomizer();
+
+  if (logoUrl) {
+    return (
+      <img 
+        src={logoUrl} 
+        alt={brandName} 
+        style={{ width: `${width}px`, height: 'auto' }}
+        className={`object-contain ${className || ''}`}
+      />
+    );
+  }
+
   return (
     <svg
       width={width}

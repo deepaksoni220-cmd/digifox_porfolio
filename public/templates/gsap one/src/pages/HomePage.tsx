@@ -8,10 +8,12 @@ import {
   HERO_VIDEO_1,
   HERO_VIDEO_2,
 } from '../constants';
+import { useCustomizer } from '../context/CustomizerContext';
 
 export function HomePage() {
   const [isFirstVideoPlaying, setIsFirstVideoPlaying] = useState(false);
   const [isSecondVideoPlaying, setIsSecondVideoPlaying] = useState(false);
+  const { brandName } = useCustomizer();
 
   return (
     <div className="relative flex w-full flex-col bg-[#050505]">
@@ -38,7 +40,7 @@ export function HomePage() {
               type="button"
               onClick={() => navigateToRoute('')}
               className="text-white transition hover:opacity-80"
-              aria-label="ARC PACE home"
+              aria-label={`${brandName} home`}
             >
               <ArcPaceLogo />
             </button>

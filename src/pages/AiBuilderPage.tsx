@@ -743,7 +743,7 @@ export const AiBuilderPage: React.FC = () => {
             {/* Custom AI Builder Section */}
             <div className="mb-12">
               <h2 className="text-2xl font-black uppercase tracking-widest mb-6 border-b border-[var(--border-strong)] pb-4 text-[#3b82f6]">
-                Generate with AI Architect
+                Generate with Our AI Designing
               </h2>
               
               <div className="flex flex-col sm:flex-row gap-4 mb-2">

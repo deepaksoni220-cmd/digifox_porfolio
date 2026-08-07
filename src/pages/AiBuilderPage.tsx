@@ -194,6 +194,7 @@ export const AiBuilderPage: React.FC = () => {
         const style = doc.createElement('style');
         style.id = styleId;
         style.innerHTML = `
+          /* Visual highlights */
           [contenteditable="true"]:hover {
             outline: 2px dashed #3b82f6 !important;
             outline-offset: 4px;
@@ -206,6 +207,13 @@ export const AiBuilderPage: React.FC = () => {
           .customizer-selected-element {
             outline: 2px solid #a855f7 !important;
             outline-offset: 4px;
+          }
+          
+          /* Prevent overlays from blocking clicks on text */
+          h1, h2, h3, h4, h5, h6, p, span, a, button, [contenteditable="true"] {
+            pointer-events: auto !important;
+            position: relative;
+            z-index: 9999 !important;
           }
           
           /* Animation Preset Keyframes */
@@ -281,15 +289,26 @@ export const AiBuilderPage: React.FC = () => {
                      ("0" + parseInt(match[3], 10).toString(16)).slice(-2);
       };
 
-      const getAnimationClass = (el: HTMLElement, prefix: string) => {
-        const animClass = Array.from(el.classList).find(c => c.startsWith(prefix));
-        return animClass ? animClass.replace(prefix, '') : 'none';
+      // Helper to find the closest text element or leaf containing text
+      const findTextElement = (el: HTMLElement | null): HTMLElement | null => {
+        if (!el || el === doc.body || el === doc.documentElement) return null;
+        
+        // Known semantic text tags
+        const textTags = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'SPAN', 'A', 'BUTTON', 'LI', 'LABEL'];
+        if (textTags.includes(el.tagName)) return el;
+        
+        // Leaf divs containing text directly
+        if (el.children.length === 0 && el.textContent && el.textContent.trim().length > 0) {
+          return el;
+        }
+        
+        return findTextElement(el.parentElement);
       };
 
       // 2. Select and bind editing & selection triggers to all text elements using root document delegation
       doc.addEventListener('click', (e) => {
         const target = e.target as HTMLElement;
-        const htmlEl = target.closest('h1, h2, h3, h4, h5, h6, p, span, a, button') as HTMLElement | null;
+        const htmlEl = findTextElement(target);
         if (htmlEl && htmlEl.getAttribute('contenteditable') !== 'false') {
           e.stopPropagation();
           

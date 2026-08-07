@@ -49,12 +49,18 @@ export const AiBuilderPage: React.FC = () => {
     text: string;
     fontSize: string;
     fontWeight: string;
+    fontStyle: string;
+    textDecoration: string;
     color: string;
     fontFamily: string;
     animateIn: string;
+    animateOut: string;
     loop: string;
+    toolbarX: number;
+    toolbarY: number;
   } | null>(null);
   const [sidebarTab, setSidebarTab] = useState<'details' | 'design'>('details');
+  const [showInlineToolbar, setShowInlineToolbar] = useState(false);
 
   // Edit Existing Brand Site States
   const [builderMode, setBuilderMode] = useState<'new' | 'edit'>('new');
@@ -122,7 +128,6 @@ export const AiBuilderPage: React.FC = () => {
     }
   }, [previewData, logoUrl]);
 
-  // Listen for text elements clicked/selected inside the iframe
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       const msg = event.data;
@@ -132,15 +137,24 @@ export const AiBuilderPage: React.FC = () => {
           text: msg.text,
           fontSize: msg.fontSize,
           fontWeight: msg.fontWeight,
+          fontStyle: msg.fontStyle || 'normal',
+          textDecoration: msg.textDecoration || 'none',
           color: msg.color,
           fontFamily: msg.fontFamily,
           animateIn: msg.animateIn || 'none',
-          loop: msg.loop || 'none'
+          animateOut: msg.animateOut || 'none',
+          loop: msg.loop || 'none',
+          toolbarX: msg.toolbarX || 0,
+          toolbarY: msg.toolbarY || 0,
         });
-        setSidebarTab('design'); // Switch to design tab
+        setSidebarTab('design');
+        setShowInlineToolbar(true);
       }
       if (msg && msg.type === 'ELEMENT_TEXT_UPDATED') {
         setSelectedElement(prev => prev ? { ...prev, text: msg.text } : null);
+      }
+      if (msg && msg.type === 'ELEMENT_DESELECTED') {
+        setShowInlineToolbar(false);
       }
     };
     window.addEventListener('message', handleMessage);
@@ -216,38 +230,76 @@ export const AiBuilderPage: React.FC = () => {
             z-index: 9999 !important;
           }
           
-          /* Animation Preset Keyframes */
-          @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-          }
-          @keyframes pulseCustom {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.02); }
-          }
-          @keyframes sway {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(2deg); }
-          }
-          @keyframes glow {
-            0%, 100% { text-shadow: 0 0 5px rgba(168,85,247,0.2); }
-            50% { text-shadow: 0 0 15px rgba(168,85,247,0.6); }
-          }
-          @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-          }
-          @keyframes zoomIn {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-          }
+          /* ===== ANIMATE IN ===== */
+          @keyframes kFadeUp { from { transform: translateY(30px); opacity: 0; } to { transform: none; opacity: 1; } }
+          @keyframes kSlideInLeft { from { transform: translateX(-40px); opacity: 0; } to { transform: none; opacity: 1; } }
+          @keyframes kFadeIn { from { opacity: 0; } to { opacity: 1; } }
+          @keyframes kZoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+          @keyframes kBounceIn { 0% { transform: scale(0.6); opacity:0; } 60% { transform: scale(1.08); opacity:1; } 80% { transform: scale(0.97); } 100% { transform: scale(1); } }
+          @keyframes kFlipX { from { transform: rotateX(80deg); opacity: 0; } to { transform: rotateX(0); opacity: 1; } }
+          @keyframes kBlurIn { from { filter: blur(16px); opacity: 0; } to { filter: blur(0); opacity: 1; } }
+          @keyframes kSlideUp { from { transform: translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+          @keyframes kSlideInRight { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+          @keyframes kRotateIn { from { transform: rotate(-15deg) scale(0.8); opacity: 0; } to { transform: none; opacity: 1; } }
+          @keyframes kScaleUp { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
           
-          .animate-float { animation: float 3s ease-in-out infinite !important; }
-          .animate-pulse-custom { animation: pulseCustom 2s ease-in-out infinite !important; }
-          .animate-sway { animation: sway 4s ease-in-out infinite !important; }
-          .animate-glow { animation: glow 2.5s ease-in-out infinite !important; }
-          .animate-slide-up { animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards !important; }
-          .animate-zoom-in { animation: zoomIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards !important; }
+          .animate-fade-up { animation: kFadeUp 0.7s cubic-bezier(.16,1,.3,1) forwards !important; }
+          .animate-slide-in-left { animation: kSlideInLeft 0.7s cubic-bezier(.16,1,.3,1) forwards !important; }
+          .animate-fade-in { animation: kFadeIn 0.7s ease forwards !important; }
+          .animate-zoom-in { animation: kZoomIn 0.7s cubic-bezier(.16,1,.3,1) forwards !important; }
+          .animate-bounce-in { animation: kBounceIn 0.8s ease forwards !important; }
+          .animate-flip-x { animation: kFlipX 0.7s ease forwards !important; }
+          .animate-blur-in { animation: kBlurIn 0.7s ease forwards !important; }
+          .animate-slide-up { animation: kSlideUp 0.7s cubic-bezier(.16,1,.3,1) forwards !important; }
+          .animate-slide-in-right { animation: kSlideInRight 0.7s cubic-bezier(.16,1,.3,1) forwards !important; }
+          .animate-rotate-in { animation: kRotateIn 0.7s ease forwards !important; }
+          .animate-scale-up { animation: kScaleUp 0.7s cubic-bezier(.16,1,.3,1) forwards !important; }
+          
+          /* ===== ANIMATE OUT ===== */
+          @keyframes kFadeCover { from { opacity: 1; } to { opacity: 0; } }
+          @keyframes kSlideOutRight { from { transform: none; opacity:1; } to { transform: translateX(40px); opacity:0; } }
+          @keyframes kFadeOut { from { opacity: 1; } to { opacity: 0; } }
+          @keyframes kZoomOut { from { transform: scale(1); opacity:1; } to { transform: scale(0.5); opacity:0; } }
+          @keyframes kSlideDown { from { transform: none; opacity:1; } to { transform: translateY(30px); opacity:0; } }
+          @keyframes kBlurOut { from { filter: blur(0); opacity:1; } to { filter: blur(16px); opacity:0; } }
+          @keyframes kSliceOutLeft { from { transform: none; clip-path:inset(0 0 0 0); opacity:1; } to { clip-path:inset(0 100% 0 0); opacity:0; } }
+          @keyframes kRotateOut { from { transform: none; opacity:1; } to { transform: rotate(15deg) scale(0.8); opacity:0; } }
+          @keyframes kBounceOut { from { transform: scale(1); opacity:1; } to { transform: scale(0.6); opacity:0; } }
+          
+          .animate-fade-cover { animation: kFadeCover 0.7s ease forwards !important; }
+          .animate-slide-out-right { animation: kSlideOutRight 0.7s ease forwards !important; }
+          .animate-fade-out { animation: kFadeOut 0.7s ease forwards !important; }
+          .animate-zoom-out { animation: kZoomOut 0.7s ease forwards !important; }
+          .animate-slide-down { animation: kSlideDown 0.7s ease forwards !important; }
+          .animate-blur-out { animation: kBlurOut 0.7s ease forwards !important; }
+          .animate-slice-out-left { animation: kSliceOutLeft 0.7s ease forwards !important; }
+          .animate-rotate-out { animation: kRotateOut 0.7s ease forwards !important; }
+          .animate-bounce-out { animation: kBounceOut 0.7s ease forwards !important; }
+          
+          /* ===== LOOP ===== */
+          @keyframes kPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.8;transform:scale(1.03)} }
+          @keyframes kShimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+          @keyframes kFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+          @keyframes kSpinLoop { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+          @keyframes kWiggle { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-4deg)} 75%{transform:rotate(4deg)} }
+          @keyframes kFlashLink { 0%,100%{opacity:1} 50%{opacity:.4} }
+          @keyframes kHeartbeat { 0%,100%{transform:scale(1)} 14%{transform:scale(1.08)} 28%{transform:scale(1)} 42%{transform:scale(1.08)} 70%{transform:scale(1)} }
+          @keyframes kSway { 0%,100%{transform:rotate(0)} 50%{transform:rotate(3deg)} }
+          @keyframes kSlowPulse { 0%,100%{opacity:1} 50%{opacity:.6} }
+          @keyframes kSoftBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+          @keyframes kGlow { 0%,100%{text-shadow:0 0 5px rgba(168,85,247,.2)} 50%{text-shadow:0 0 20px rgba(168,85,247,.7)} }
+          
+          .animate-pulse-custom { animation: kPulse 2s ease-in-out infinite !important; }
+          .animate-shimmer { background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.3) 50%,transparent 100%) !important; background-size:200% auto !important; animation: kShimmer 2s linear infinite !important; }
+          .animate-float { animation: kFloat 3s ease-in-out infinite !important; }
+          .animate-spin-loop { animation: kSpinLoop 3s linear infinite !important; display:inline-block; }
+          .animate-wiggle { animation: kWiggle 1s ease-in-out infinite !important; display:inline-block; }
+          .animate-flash-link { animation: kFlashLink 1.5s ease-in-out infinite !important; }
+          .animate-heartbeat { animation: kHeartbeat 1.5s ease-in-out infinite !important; display:inline-block; }
+          .animate-sway { animation: kSway 4s ease-in-out infinite !important; display:inline-block; }
+          .animate-slow-pulse { animation: kSlowPulse 4s ease-in-out infinite !important; }
+          .animate-soft-bounce { animation: kSoftBounce 2s ease-in-out infinite !important; display:inline-block; }
+          .animate-glow { animation: kGlow 2.5s ease-in-out infinite !important; }
         `;
         doc.head.appendChild(style);
       }
@@ -326,25 +378,60 @@ export const AiBuilderPage: React.FC = () => {
           const computedStyle = window.getComputedStyle(htmlEl);
           
           let currentAnimateIn = 'none';
-          if (htmlEl.classList.contains('animate-slide-up')) currentAnimateIn = 'fade-up';
-          if (htmlEl.classList.contains('animate-zoom-in')) currentAnimateIn = 'zoom-in';
+          const animInMap: Record<string, string> = {
+            'animate-fade-up': 'fade-up', 'animate-slide-in-left': 'slide-in-left',
+            'animate-fade-in': 'fade-in', 'animate-zoom-in': 'zoom-in',
+            'animate-bounce-in': 'bounce-in', 'animate-flip-x': 'flip-x',
+            'animate-blur-in': 'blur-in', 'animate-slide-up': 'slide-up',
+            'animate-slide-in-right': 'slide-in-right', 'animate-rotate-in': 'rotate-in',
+            'animate-scale-up': 'scale-up'
+          };
+          for (const [cls, val] of Object.entries(animInMap)) {
+            if (htmlEl.classList.contains(cls)) { currentAnimateIn = val; break; }
+          }
+
+          let currentAnimateOut = 'none';
+          const animOutMap: Record<string, string> = {
+            'animate-fade-cover': 'fade-cover', 'animate-slide-out-right': 'slide-out-right',
+            'animate-fade-out': 'fade-out', 'animate-zoom-out': 'zoom-out',
+            'animate-slide-down': 'slide-down', 'animate-blur-out': 'blur-out',
+            'animate-slice-out-left': 'slice-out-left', 'animate-rotate-out': 'rotate-out',
+            'animate-bounce-out': 'bounce-out'
+          };
+          for (const [cls, val] of Object.entries(animOutMap)) {
+            if (htmlEl.classList.contains(cls)) { currentAnimateOut = val; break; }
+          }
 
           let currentLoop = 'none';
-          if (htmlEl.classList.contains('animate-float')) currentLoop = 'float';
-          if (htmlEl.classList.contains('animate-pulse-custom')) currentLoop = 'pulse';
-          if (htmlEl.classList.contains('animate-sway')) currentLoop = 'sway';
-          if (htmlEl.classList.contains('animate-glow')) currentLoop = 'glow';
+          const loopMap: Record<string, string> = {
+            'animate-pulse-custom': 'pulse', 'animate-shimmer': 'shimmer',
+            'animate-float': 'float-bounce', 'animate-spin-loop': 'spin-loop',
+            'animate-wiggle': 'wiggle', 'animate-flash-link': 'flash-link',
+            'animate-heartbeat': 'heartbeat', 'animate-sway': 'sway',
+            'animate-slow-pulse': 'slow-pulse', 'animate-soft-bounce': 'soft-bounce',
+            'animate-glow': 'glow'
+          };
+          for (const [cls, val] of Object.entries(loopMap)) {
+            if (htmlEl.classList.contains(cls)) { currentLoop = val; break; }
+          }
+
+          const rect = htmlEl.getBoundingClientRect();
 
           window.parent.postMessage({
             type: 'ELEMENT_SELECTED',
             selector: getUniqueSelector(htmlEl),
-            text: htmlEl.textContent || '',
+            text: htmlEl.innerHTML || '',
             fontSize: computedStyle.fontSize,
             fontWeight: computedStyle.fontWeight,
+            fontStyle: computedStyle.fontStyle,
+            textDecoration: computedStyle.textDecoration,
             color: rgbToHex(computedStyle.color),
             fontFamily: computedStyle.fontFamily.replace(/['"]/g, ''),
             animateIn: currentAnimateIn,
-            loop: currentLoop
+            animateOut: currentAnimateOut,
+            loop: currentLoop,
+            toolbarX: Math.round(rect.left + rect.width / 2),
+            toolbarY: Math.round(rect.top)
           }, '*');
         }
       }, true); // Use capture phase to intercept actions reliably
@@ -365,21 +452,90 @@ export const AiBuilderPage: React.FC = () => {
         if (msg && msg.type === 'UPDATE_ELEMENT_STYLE') {
           const el = doc.querySelector(msg.selector) as HTMLElement;
           if (el) {
-            if (msg.text !== undefined) el.textContent = msg.text;
+            if (msg.html !== undefined) el.innerHTML = msg.html;
             if (msg.fontSize) el.style.fontSize = msg.fontSize;
             if (msg.fontWeight) el.style.fontWeight = msg.fontWeight;
+            if (msg.fontStyle !== undefined) el.style.fontStyle = msg.fontStyle;
+            if (msg.textDecoration !== undefined) el.style.textDecoration = msg.textDecoration;
             if (msg.color) el.style.color = msg.color;
             if (msg.fontFamily) el.style.fontFamily = msg.fontFamily;
+            if (msg.letterSpacing !== undefined) el.style.letterSpacing = msg.letterSpacing;
+            if (msg.lineHeight !== undefined) el.style.lineHeight = msg.lineHeight;
+            if (msg.textAlign !== undefined) el.style.textAlign = msg.textAlign;
 
-            // Update Animations
-            el.classList.remove('animate-float', 'animate-pulse-custom', 'animate-sway', 'animate-glow', 'animate-slide-up', 'animate-zoom-in');
-            if (msg.animateIn === 'fade-up') el.classList.add('animate-slide-up');
-            if (msg.animateIn === 'zoom-in') el.classList.add('animate-zoom-in');
-            if (msg.loop === 'float') el.classList.add('animate-float');
-            if (msg.loop === 'pulse') el.classList.add('animate-pulse-custom');
-            if (msg.loop === 'sway') el.classList.add('animate-sway');
-            if (msg.loop === 'glow') el.classList.add('animate-glow');
+            // Animate In
+            const allAnimInCls = ['animate-fade-up','animate-slide-in-left','animate-fade-in','animate-zoom-in',
+              'animate-bounce-in','animate-flip-x','animate-blur-in','animate-slide-up',
+              'animate-slide-in-right','animate-rotate-in','animate-scale-up'];
+            el.classList.remove(...allAnimInCls);
+            const animInClassMap: Record<string,string> = {
+              'fade-up':'animate-fade-up','slide-in-left':'animate-slide-in-left',
+              'fade-in':'animate-fade-in','zoom-in':'animate-zoom-in',
+              'bounce-in':'animate-bounce-in','flip-x':'animate-flip-x',
+              'blur-in':'animate-blur-in','slide-up':'animate-slide-up',
+              'slide-in-right':'animate-slide-in-right','rotate-in':'animate-rotate-in',
+              'scale-up':'animate-scale-up'
+            };
+            if (msg.animateIn && msg.animateIn !== 'none') el.classList.add(animInClassMap[msg.animateIn]);
+
+            // Animate Out
+            const allAnimOutCls = ['animate-fade-cover','animate-slide-out-right','animate-fade-out',
+              'animate-zoom-out','animate-slide-down','animate-blur-out',
+              'animate-slice-out-left','animate-rotate-out','animate-bounce-out'];
+            el.classList.remove(...allAnimOutCls);
+            const animOutClassMap: Record<string,string> = {
+              'fade-cover':'animate-fade-cover','slide-out-right':'animate-slide-out-right',
+              'fade-out':'animate-fade-out','zoom-out':'animate-zoom-out',
+              'slide-down':'animate-slide-down','blur-out':'animate-blur-out',
+              'slice-out-left':'animate-slice-out-left','rotate-out':'animate-rotate-out',
+              'bounce-out':'animate-bounce-out'
+            };
+            if (msg.animateOut && msg.animateOut !== 'none') el.classList.add(animOutClassMap[msg.animateOut]);
+
+            // Loop
+            const allLoopCls = ['animate-pulse-custom','animate-shimmer','animate-float','animate-spin-loop',
+              'animate-wiggle','animate-flash-link','animate-heartbeat','animate-sway',
+              'animate-slow-pulse','animate-soft-bounce','animate-glow'];
+            el.classList.remove(...allLoopCls);
+            const loopClassMap: Record<string,string> = {
+              'pulse':'animate-pulse-custom','shimmer':'animate-shimmer',
+              'float-bounce':'animate-float','spin-loop':'animate-spin-loop',
+              'wiggle':'animate-wiggle','flash-link':'animate-flash-link',
+              'heartbeat':'animate-heartbeat','sway':'animate-sway',
+              'slow-pulse':'animate-slow-pulse','soft-bounce':'animate-soft-bounce',
+              'glow':'animate-glow'
+            };
+            if (msg.loop && msg.loop !== 'none') el.classList.add(loopClassMap[msg.loop]);
           }
+        }
+        // Inline format commands (bold, italic, underline, link, etc.)
+        if (msg && msg.type === 'INLINE_FORMAT') {
+          doc.execCommand(msg.command, false, msg.value || undefined);
+        }
+        // Remove element
+        if (msg && msg.type === 'REMOVE_ELEMENT') {
+          const el = doc.querySelector(msg.selector) as HTMLElement;
+          if (el) el.remove();
+          window.parent.postMessage({ type: 'ELEMENT_DESELECTED' }, '*');
+        }
+        // Reset font on selected element
+        if (msg && msg.type === 'RESET_ELEMENT_FONT') {
+          const el = doc.querySelector(msg.selector) as HTMLElement;
+          if (el) {
+            el.style.fontFamily = '';
+            el.style.fontSize = '';
+            el.style.fontWeight = '';
+            el.style.fontStyle = '';
+            el.style.textDecoration = '';
+            el.style.color = '';
+            el.style.letterSpacing = '';
+            el.style.lineHeight = '';
+          }
+        }
+        // Focus selected element
+        if (msg && msg.type === 'FOCUS_ELEMENT') {
+          const el = doc.querySelector(msg.selector) as HTMLElement;
+          if (el) { el.focus(); }
         }
       };
 
@@ -526,7 +682,7 @@ export const AiBuilderPage: React.FC = () => {
 
     });
   };
-  const updateSelectedElementStyle = (updatedFields: Partial<NonNullable<typeof selectedElement>>) => {
+  const updateSelectedElementStyle = (updatedFields: Record<string, any>) => {
     if (!selectedElement) return;
     const nextElement = { ...selectedElement, ...updatedFields } as NonNullable<typeof selectedElement>;
     setSelectedElement(nextElement);
@@ -537,12 +693,18 @@ export const AiBuilderPage: React.FC = () => {
       iframe.contentWindow.postMessage({
         type: 'UPDATE_ELEMENT_STYLE',
         selector: selectedElement.selector,
-        text: nextElement.text,
+        html: nextElement.text,
         fontSize: nextElement.fontSize,
         fontWeight: nextElement.fontWeight,
+        fontStyle: nextElement.fontStyle,
+        textDecoration: nextElement.textDecoration,
         color: nextElement.color,
         fontFamily: nextElement.fontFamily,
+        letterSpacing: updatedFields.letterSpacing,
+        lineHeight: updatedFields.lineHeight,
+        textAlign: updatedFields.textAlign,
         animateIn: nextElement.animateIn,
+        animateOut: nextElement.animateOut,
         loop: nextElement.loop
       }, '*');
     }
@@ -555,12 +717,15 @@ export const AiBuilderPage: React.FC = () => {
         customStyles: {
           ...(prev.customStyles || {}),
           [selectedElement.selector]: {
-            text: nextElement.text,
+            html: nextElement.text,
             fontSize: nextElement.fontSize,
             fontWeight: nextElement.fontWeight,
+            fontStyle: nextElement.fontStyle,
+            textDecoration: nextElement.textDecoration,
             color: nextElement.color,
             fontFamily: nextElement.fontFamily,
             animateIn: nextElement.animateIn,
+            animateOut: nextElement.animateOut,
             loop: nextElement.loop
           }
         }
@@ -1356,123 +1521,249 @@ export const AiBuilderPage: React.FC = () => {
                           />
                         </div>
                       </>
-                    ) : (
-                      <div className="flex flex-col gap-5">
+                      {/* Design Tab */}
+                      <div className="flex flex-col gap-4 overflow-y-auto max-h-[calc(100vh-300px)] pr-1" style={{scrollbarWidth:'thin'}}>
                         {!selectedElement ? (
-                          <div className="text-center py-8 text-[var(--text-secondary)]">
+                          <div className="text-center py-10 text-[var(--text-secondary)]">
+                            <div className="text-4xl mb-3">✦</div>
                             <p className="text-sm font-semibold mb-2">No element selected</p>
-                            <p className="text-xs max-w-[240px] mx-auto opacity-75">
-                              👉 Click directly on any text inside the live preview iframe to adjust its styles and animations!
+                            <p className="text-xs max-w-[210px] mx-auto opacity-70 leading-relaxed">
+                              Click any text on the preview to select and style it
                             </p>
                           </div>
                         ) : (
                           <>
-                            <div className="flex flex-col gap-2">
-                              <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Text Content</label>
-                              <textarea
-                                value={selectedElement.text}
-                                rows={2}
-                                onChange={(e) => updateSelectedElementStyle({ text: e.target.value })}
-                                className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none resize-none text-sm"
-                              />
+                            {/* Selector Path */}
+                            <div className="text-[10px] text-[var(--text-secondary)] font-mono truncate px-1 opacity-60" title={selectedElement.selector}>
+                              {selectedElement.selector}
                             </div>
 
-                            <div className="flex flex-col gap-2">
-                              <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Font Family</label>
+                            {/* Inline Rich-Text Toolbar */}
+                            <div className="flex items-center gap-1 bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-3 py-2 flex-wrap">
+                              {[
+                                { icon: 'B', label: 'Bold', cmd: 'bold', style: 'font-bold' },
+                                { icon: 'I', label: 'Italic', cmd: 'italic', style: 'italic' },
+                                { icon: 'U', label: 'Underline', cmd: 'underline', style: 'underline' },
+                              ].map(b => (
+                                <button key={b.cmd}
+                                  title={b.label}
+                                  onClick={() => iframeRef.current?.contentWindow?.postMessage({ type: 'INLINE_FORMAT', command: b.cmd }, '*')}
+                                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all hover:bg-[#3b82f6]/20 hover:text-[#3b82f6] ${b.style}`}
+                                >{b.icon}</button>
+                              ))}
+                              <div className="w-px h-5 bg-[var(--border-strong)] mx-1" />
+                              <button title="Link"
+                                onClick={() => { const url = prompt('Enter URL'); if(url) iframeRef.current?.contentWindow?.postMessage({ type: 'INLINE_FORMAT', command: 'createLink', value: url }, '*'); }}
+                                className="px-2.5 py-1 rounded-lg text-xs font-bold transition-all hover:bg-[#3b82f6]/20 hover:text-[#3b82f6]">🔗</button>
+                              <div className="flex-1" />
+                              <button title="Remove Element"
+                                onClick={() => { iframeRef.current?.contentWindow?.postMessage({ type: 'REMOVE_ELEMENT', selector: selectedElement.selector }, '*'); setSelectedElement(null); setShowInlineToolbar(false); }}
+                                className="px-2.5 py-1 rounded-lg text-xs font-bold text-red-400 hover:bg-red-500/20 transition-all">✕ Remove</button>
+                              <button title="Reset Font"
+                                onClick={() => iframeRef.current?.contentWindow?.postMessage({ type: 'RESET_ELEMENT_FONT', selector: selectedElement.selector }, '*')}
+                                className="px-2.5 py-1 rounded-lg text-xs font-bold text-[var(--text-secondary)] hover:bg-[var(--border-strong)] transition-all">↺ Reset</button>
+                              <button title="Done"
+                                onClick={() => { setSelectedElement(null); setShowInlineToolbar(false); }}
+                                className="px-3 py-1 rounded-lg text-xs font-bold bg-[#3b82f6] text-white hover:bg-[#2563eb] transition-all">Done →</button>
+                            </div>
+
+                            {/* Font Family */}
+                            <div className="flex flex-col gap-1.5">
+                              <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Font ({[
+                                'System UI','Inter','Outfit','Space Grotesk','Instrument Serif',
+                                'Playfair Display','Raleway','Sora','DM Sans','Lato','Poppins',
+                                'Montserrat','Nunito','Source Code Pro','Merriweather','Josefin Sans',
+                                'Work Sans','Plus Jakarta Sans','Libre Baskerville'
+                              ].length} available)</label>
                               <select
-                                value={selectedElement.fontFamily}
+                                value={selectedElement.fontFamily.split(',')[0].trim()}
                                 onChange={(e) => updateSelectedElementStyle({ fontFamily: e.target.value })}
-                                className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                                className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-3 py-2.5 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none text-sm"
                               >
-                                <option value="System UI">System UI</option>
-                                <option value="Inter">Inter</option>
-                                <option value="Outfit">Outfit</option>
-                                <option value="Instrument Serif">Instrument Serif</option>
-                                <option value="Space Grotesk">Space Grotesk</option>
-                                <option value="Playfair Display">Playfair Display</option>
+                                {['System UI','Inter','Outfit','Space Grotesk','Instrument Serif','Playfair Display','Raleway','Sora','DM Sans','Lato','Poppins','Montserrat','Nunito','Source Code Pro','Merriweather','Josefin Sans','Work Sans','Plus Jakarta Sans','Libre Baskerville'].map(f => (
+                                  <option key={f} value={f}>{f}</option>
+                                ))}
                               </select>
                             </div>
 
-                            <div className="flex gap-4">
-                              <div className="flex-1 flex flex-col gap-2">
-                                <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Size (px)</label>
-                                <input
-                                  type="text"
-                                  value={selectedElement.fontSize.replace('px', '')}
+                            {/* Size + Weight */}
+                            <div className="flex gap-3">
+                              <div className="flex-1 flex flex-col gap-1.5">
+                                <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Size (px)</label>
+                                <input type="number" min="8" max="200"
+                                  value={parseInt(selectedElement.fontSize) || 16}
                                   onChange={(e) => updateSelectedElementStyle({ fontSize: e.target.value + 'px' })}
-                                  className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none text-center"
+                                  className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-3 py-2.5 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none text-center text-sm"
                                 />
                               </div>
-                              <div className="flex-1 flex flex-col gap-2">
-                                <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Weight</label>
+                              <div className="flex-1 flex flex-col gap-1.5">
+                                <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Weight</label>
                                 <select
                                   value={selectedElement.fontWeight}
                                   onChange={(e) => updateSelectedElementStyle({ fontWeight: e.target.value })}
-                                  className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                                  className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-3 py-2.5 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none text-sm"
                                 >
                                   <option value="300">Light</option>
                                   <option value="400">Regular</option>
                                   <option value="500">Medium</option>
                                   <option value="600">Semi-Bold</option>
                                   <option value="700">Bold</option>
+                                  <option value="800">Extra Bold</option>
                                   <option value="900">Black</option>
                                 </select>
                               </div>
                             </div>
 
-                            <div className="flex flex-col gap-2">
-                              <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Text Color</label>
-                              <div className="flex gap-3 items-center">
-                                <input
-                                  type="color"
+                            {/* Color */}
+                            <div className="flex flex-col gap-1.5">
+                              <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Color</label>
+                              <div className="flex gap-2 items-center">
+                                <input type="color"
                                   value={selectedElement.color.startsWith('#') ? selectedElement.color : '#ffffff'}
                                   onChange={(e) => updateSelectedElementStyle({ color: e.target.value })}
-                                  className="bg-transparent border-0 w-10 h-10 cursor-pointer rounded"
+                                  className="w-11 h-10 bg-transparent border-0 cursor-pointer rounded-lg p-0.5 border border-[var(--border-strong)]"
                                 />
-                                <input
-                                  type="text"
+                                <input type="text"
                                   value={selectedElement.color}
                                   onChange={(e) => updateSelectedElementStyle({ color: e.target.value })}
-                                  className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-2.5 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none flex-1 text-sm text-center font-mono"
+                                  className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-3 py-2.5 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none flex-1 text-sm font-mono text-center"
                                 />
                               </div>
-                            </div>
-
-                            {/* Animate In Presets */}
-                            <div className="flex flex-col gap-2 border-t border-[var(--border-subtle)] pt-4">
-                              <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Animate In</label>
-                              <div className="flex flex-wrap gap-2">
-                                {['none', 'fade-up', 'zoom-in'].map((p) => (
-                                  <button
-                                    key={p}
-                                    onClick={() => updateSelectedElementStyle({ animateIn: p })}
-                                    className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all border ${selectedElement.animateIn === p ? 'bg-[#3b82f6] border-[#3b82f6] text-white' : 'border-[var(--border-strong)] text-[var(--text-primary)]/80 hover:border-[#3b82f6]'}`}
-                                  >
-                                    {p === 'none' ? 'None' : p === 'fade-up' ? 'Fade Up' : 'Zoom In'}
-                                  </button>
+                              {/* Quick palette */}
+                              <div className="flex gap-2 flex-wrap mt-1">
+                                {['#ffffff','#000000','#3b82f6','#8b5cf6','#ec4899','#f59e0b','#10b981','#ef4444'].map(c => (
+                                  <button key={c} onClick={() => updateSelectedElementStyle({ color: c })}
+                                    className="w-6 h-6 rounded-full border-2 border-[var(--border-strong)] hover:scale-110 transition-transform"
+                                    style={{ backgroundColor: c }} title={c}
+                                  />
                                 ))}
                               </div>
                             </div>
 
-                            {/* Loop Presets */}
+                            {/* Letter Spacing + Line Height */}
+                            <div className="flex gap-3">
+                              <div className="flex-1 flex flex-col gap-1.5">
+                                <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Letter Spacing</label>
+                                <select
+                                  onChange={(e) => updateSelectedElementStyle({ letterSpacing: e.target.value })}
+                                  className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-3 py-2.5 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none text-sm"
+                                >
+                                  <option value="normal">Normal</option>
+                                  <option value="-0.05em">Tight</option>
+                                  <option value="0.05em">Wide</option>
+                                  <option value="0.1em">Wider</option>
+                                  <option value="0.2em">Widest</option>
+                                </select>
+                              </div>
+                              <div className="flex-1 flex flex-col gap-1.5">
+                                <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Line Height</label>
+                                <select
+                                  onChange={(e) => updateSelectedElementStyle({ lineHeight: e.target.value })}
+                                  className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-3 py-2.5 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none text-sm"
+                                >
+                                  <option value="1">1</option>
+                                  <option value="1.25">1.25</option>
+                                  <option value="1.5">1.5</option>
+                                  <option value="1.75">1.75</option>
+                                  <option value="2">2</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            {/* Text Align */}
+                            <div className="flex flex-col gap-1.5">
+                              <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Align</label>
+                              <div className="flex gap-2">
+                                {[['left','←'], ['center','↔'], ['right','→'], ['justify','⇔']].map(([val, icon]) => (
+                                  <button key={val}
+                                    onClick={() => updateSelectedElementStyle({ textAlign: val })}
+                                    className="flex-1 py-2 rounded-xl border border-[var(--border-strong)] text-sm hover:border-[#3b82f6] hover:text-[#3b82f6] transition-all"
+                                  >{icon}</button>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Animate In */}
                             <div className="flex flex-col gap-2 border-t border-[var(--border-subtle)] pt-4">
-                              <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Loop Effects</label>
-                              <div className="flex flex-wrap gap-2">
-                                {['none', 'float', 'pulse', 'sway', 'glow'].map((p) => (
-                                  <button
-                                    key={p}
-                                    onClick={() => updateSelectedElementStyle({ loop: p })}
-                                    className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all border ${selectedElement.loop === p ? 'bg-[#3b82f6] border-[#3b82f6] text-white' : 'border-[var(--border-strong)] text-[var(--text-primary)]/80 hover:border-[#3b82f6]'}`}
-                                  >
-                                    {p === 'none' ? 'None' : p === 'float' ? 'Float Bounce' : p === 'pulse' ? 'Pulse' : p === 'sway' ? 'Sway' : 'Glow Pulse'}
-                                  </button>
+                              <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Animate in ({[
+                                'none','fade-up','slide-in-left','fade-in','zoom-in',
+                                'bounce-in','flip-x','blur-in','slide-up','slide-in-right','rotate-in','scale-up'
+                              ].length - 1} presets)</label>
+                              <div className="flex flex-wrap gap-1.5">
+                                {[
+                                  { val: 'none', label: 'None' },
+                                  { val: 'fade-up', label: 'Fade up' },
+                                  { val: 'slide-in-left', label: 'Slide in left' },
+                                  { val: 'fade-in', label: 'Fade in' },
+                                  { val: 'zoom-in', label: 'Zoom in' },
+                                  { val: 'bounce-in', label: 'Bounce in' },
+                                  { val: 'flip-x', label: 'Flip X' },
+                                  { val: 'blur-in', label: 'Blur in' },
+                                  { val: 'slide-up', label: 'Slide up' },
+                                  { val: 'slide-in-right', label: 'Slide in right' },
+                                  { val: 'rotate-in', label: 'Rotate in' },
+                                  { val: 'scale-up', label: 'Scale up' },
+                                ].map(p => (
+                                  <button key={p.val}
+                                    onClick={() => updateSelectedElementStyle({ animateIn: p.val })}
+                                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all border ${selectedElement.animateIn === p.val ? 'bg-[#3b82f6] border-[#3b82f6] text-white' : 'border-[var(--border-strong)] text-[var(--text-primary)]/80 hover:border-[#3b82f6] hover:text-[#3b82f6]'}`}
+                                  >{p.label}</button>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Animate Out */}
+                            <div className="flex flex-col gap-2 border-t border-[var(--border-subtle)] pt-4">
+                              <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Animate out (9 presets)</label>
+                              <div className="flex flex-wrap gap-1.5">
+                                {[
+                                  { val: 'none', label: 'None' },
+                                  { val: 'fade-cover', label: 'Fade cover' },
+                                  { val: 'slide-out-right', label: 'Slide out right' },
+                                  { val: 'fade-out', label: 'Fade out' },
+                                  { val: 'zoom-out', label: 'Zoom out' },
+                                  { val: 'slide-down', label: 'Slide down' },
+                                  { val: 'blur-out', label: 'Blur out' },
+                                  { val: 'slice-out-left', label: 'Slice cut left' },
+                                  { val: 'rotate-out', label: 'Rotate out' },
+                                  { val: 'bounce-out', label: 'Bounce out' },
+                                ].map(p => (
+                                  <button key={p.val}
+                                    onClick={() => updateSelectedElementStyle({ animateOut: p.val })}
+                                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all border ${selectedElement.animateOut === p.val ? 'bg-[#8b5cf6] border-[#8b5cf6] text-white' : 'border-[var(--border-strong)] text-[var(--text-primary)]/80 hover:border-[#8b5cf6] hover:text-[#8b5cf6]'}`}
+                                  >{p.label}</button>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Loop */}
+                            <div className="flex flex-col gap-2 border-t border-[var(--border-subtle)] pt-4">
+                              <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Loop (10 presets)</label>
+                              <div className="flex flex-wrap gap-1.5">
+                                {[
+                                  { val: 'none', label: 'None' },
+                                  { val: 'pulse', label: 'Pulse' },
+                                  { val: 'shimmer', label: 'Shimmer' },
+                                  { val: 'float-bounce', label: 'Float Bounce' },
+                                  { val: 'spin-loop', label: 'Spin Loop' },
+                                  { val: 'wiggle', label: 'Wiggle' },
+                                  { val: 'flash-link', label: 'Flash Link' },
+                                  { val: 'heartbeat', label: 'Heartbeat' },
+                                  { val: 'sway', label: 'Sway' },
+                                  { val: 'slow-pulse', label: 'Slow pulse' },
+                                  { val: 'soft-bounce', label: 'Soft bounce' },
+                                  { val: 'glow', label: 'Glow pulse' },
+                                ].map(p => (
+                                  <button key={p.val}
+                                    onClick={() => updateSelectedElementStyle({ loop: p.val })}
+                                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all border ${selectedElement.loop === p.val ? 'bg-[#ec4899] border-[#ec4899] text-white' : 'border-[var(--border-strong)] text-[var(--text-primary)]/80 hover:border-[#ec4899] hover:text-[#ec4899]'}`}
+                                  >{p.label}</button>
                                 ))}
                               </div>
                             </div>
                           </>
                         )}
                       </div>
-                    )}
 
                     <div className="mt-4 pt-6 border-t border-[var(--border-subtle)]">
                       <button 

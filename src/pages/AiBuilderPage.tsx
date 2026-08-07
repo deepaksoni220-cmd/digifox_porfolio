@@ -480,8 +480,8 @@ export const AiBuilderPage: React.FC = () => {
         }, '*');
       }
 
-      return newData;
     });
+  };
   const updateSelectedElementStyle = (updatedFields: Partial<NonNullable<typeof selectedElement>>) => {
     if (!selectedElement) return;
     const nextElement = { ...selectedElement, ...updatedFields } as NonNullable<typeof selectedElement>;

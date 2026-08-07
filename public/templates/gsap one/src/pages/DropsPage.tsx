@@ -1,5 +1,5 @@
 import { navigateToRoute } from '../utils/presetRouting';
-import { PageShell } from '../components/PageShell';
+import { SectionShell } from '../components/SectionShell';
 
 const DROPS = [
   { name: 'Velocity Pro X', date: 'May 28', status: 'Waitlist open' },
@@ -7,9 +7,10 @@ const DROPS = [
   { name: 'Trail Forge SE', date: 'July 4', status: 'Coming soon' },
 ];
 
-export function DropsPage() {
+export function DropsSection() {
   return (
-    <PageShell
+    <SectionShell
+      id="drops"
       eyebrow="Limited releases"
       title={
         <>
@@ -22,7 +23,7 @@ export function DropsPage() {
         {DROPS.map((drop) => (
           <li
             key={drop.name}
-            className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-6 py-5"
+            className="drop-item flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-6 py-5"
           >
             <div>
               <p className="text-lg font-medium">{drop.name}</p>
@@ -41,6 +42,7 @@ export function DropsPage() {
       >
         Join the waitlist
       </button>
-    </PageShell>
+    </SectionShell>
   );
 }
+

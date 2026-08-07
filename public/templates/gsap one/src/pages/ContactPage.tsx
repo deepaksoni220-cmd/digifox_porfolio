@@ -1,8 +1,9 @@
-import { PageShell } from '../components/PageShell';
+import { SectionShell } from '../components/SectionShell';
 
-export function ContactPage() {
+export function ContactSection() {
   return (
-    <PageShell
+    <SectionShell
+      id="contact"
       eyebrow="Get in touch"
       title={
         <>
@@ -12,7 +13,7 @@ export function ContactPage() {
       description="Partnerships, press, wholesale, and product questions—our team responds within two business days."
     >
       <form
-        className="mt-12 max-w-lg space-y-4"
+        className="contact-form mt-12 max-w-lg space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
         }}
@@ -48,6 +49,7 @@ export function ContactPage() {
           Send message
         </button>
       </form>
-    </PageShell>
+    </SectionShell>
   );
 }
+

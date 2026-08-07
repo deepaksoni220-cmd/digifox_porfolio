@@ -1,4 +1,4 @@
-import { PageShell } from '../components/PageShell';
+import { SectionShell } from '../components/SectionShell';
 
 const COLLECTIONS = [
   { name: 'Performance', count: '12 silhouettes', tone: 'Elite training & court' },
@@ -6,9 +6,10 @@ const COLLECTIONS = [
   { name: 'Trail', count: '6 silhouettes', tone: 'Light off-road' },
 ];
 
-export function CollectionsPage() {
+export function CollectionsSection() {
   return (
-    <PageShell
+    <SectionShell
+      id="collections"
       eyebrow="Catalog"
       title={
         <>
@@ -21,7 +22,7 @@ export function CollectionsPage() {
         {COLLECTIONS.map((c) => (
           <article
             key={c.name}
-            className="aspect-[4/5] rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-transparent p-6 flex flex-col justify-end"
+            className="collection-card aspect-[4/5] rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-transparent p-6 flex flex-col justify-end"
           >
             <p className="text-xs uppercase tracking-widest text-white/40">{c.tone}</p>
             <h3 className="mt-2 text-2xl font-medium">{c.name}</h3>
@@ -29,6 +30,7 @@ export function CollectionsPage() {
           </article>
         ))}
       </div>
-    </PageShell>
+    </SectionShell>
   );
 }
+

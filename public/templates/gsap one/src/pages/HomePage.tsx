@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { navigateToRoute } from '../utils/presetRouting';
-import BubbleMenu from '../components/BubbleMenu';
 import SpotlightReveal from '../components/SpotlightReveal';
 import { ArcPaceLogo } from '../components/ArcPaceLogo';
 import {
@@ -9,7 +8,6 @@ import {
   HERO_VIDEO_1,
   HERO_VIDEO_2,
 } from '../constants';
-import { PILL_MENU_ITEMS } from '../routes';
 
 export function HomePage() {
   const [isFirstVideoPlaying, setIsFirstVideoPlaying] = useState(false);
@@ -17,7 +15,11 @@ export function HomePage() {
 
   return (
     <div className="relative flex w-full flex-col bg-[#050505]">
-      <section className="sticky top-0 z-0 flex h-[100dvh] w-full flex-col justify-between overflow-hidden pointer-events-auto">
+      {/* Hero 1 Section */}
+      <section
+        id="home-hero1"
+        className="sticky top-0 z-0 flex h-[100dvh] w-full flex-col justify-between overflow-hidden pointer-events-auto"
+      >
         <SpotlightReveal
           imageSrc={HERO_IMAGE_1}
           videoSrc={HERO_VIDEO_1}
@@ -30,44 +32,42 @@ export function HomePage() {
           onMouseLeave={() => setIsFirstVideoPlaying(false)}
         />
 
-        <header className="relative z-50 flex w-full items-start justify-center pt-[150px]">
-          <button
-            type="button"
-            onClick={() => navigateToRoute('')}
-            className="text-white"
-            aria-label="ARC PACE home"
-          >
-            <ArcPaceLogo />
-          </button>
-          <BubbleMenu
-            items={[...PILL_MENU_ITEMS]}
-            className="absolute top-8 right-8 z-50"
-            menuBg="#ffffff"
-            menuContentColor="#111111"
-          />
-        </header>
+        <div className="hero1-content relative z-10 flex w-full flex-col items-center justify-between h-full pt-[150px] pb-24 text-center text-white">
+          <header className="flex w-full justify-center">
+            <button
+              type="button"
+              onClick={() => navigateToRoute('')}
+              className="text-white transition hover:opacity-80"
+              aria-label="ARC PACE home"
+            >
+              <ArcPaceLogo />
+            </button>
+          </header>
 
-        <main className="relative z-10 flex w-full flex-1 flex-col items-center justify-end px-4 pb-24 text-center text-white">
-          <h1
-            className="mx-auto w-full translate-y-[50px] font-sans font-medium leading-[1.05] tracking-tight"
-            style={{ fontSize: 'clamp(14px, 3vw, 51px)' }}
-          >
-            <span className="block">Pure Comfort For</span>
-            <span className="block">
-              Next-Generation Athletes.{' '}
-              <span className="font-serif font-normal italic pr-1">We Craft</span>
-            </span>
-            <span className="block font-serif font-normal italic pr-1">
-              The Ultimate Footwear For Elite Performance,
-            </span>
-            <span className="block font-serif font-normal italic pr-1">
-              Urban Exploration, Everyday Style.
-            </span>
-          </h1>
-        </main>
+          <main className="flex w-full flex-col items-center px-4">
+            <h1
+              className="mx-auto w-full translate-y-[50px] font-sans font-medium leading-[1.05] tracking-tight"
+              style={{ fontSize: 'clamp(14px, 3vw, 51px)' }}
+            >
+              <span className="block">Pure Comfort For</span>
+              <span className="block">
+                Next-Generation Athletes.{' '}
+                <span className="font-serif font-normal italic pr-1">We Craft</span>
+              </span>
+              <span className="block font-serif font-normal italic pr-1">
+                The Ultimate Footwear For Elite Performance,
+              </span>
+              <span className="block font-serif font-normal italic pr-1">
+                Urban Exploration, Everyday Style.
+              </span>
+            </h1>
+          </main>
+        </div>
       </section>
 
+      {/* Hero 2 Section */}
       <section
+        id="home-hero2"
         className="relative z-10 h-[100dvh] w-full overflow-hidden bg-black text-white"
         style={{ boxShadow: '0 -20px 50px rgba(0,0,0,0.5)' }}
       >
@@ -90,7 +90,7 @@ export function HomePage() {
         />
 
         <div
-          className="absolute left-[calc(8%+200px)] top-[20%] z-20 w-[320px] rounded-sm border border-white/10 px-8 py-6"
+          className="hero2-box absolute left-[calc(8%+200px)] top-[20%] z-20 w-[320px] rounded-sm border border-white/10 px-8 py-6"
           style={{
             background: 'rgba(0, 0, 0, 0.16)',
             backdropFilter: 'blur(80px)',
@@ -155,7 +155,7 @@ export function HomePage() {
           </p>
         </div>
 
-        <div className="absolute bottom-[12%] left-[8%] z-20 max-w-[500px] text-white">
+        <div className="hero2-text absolute bottom-[12%] left-[8%] z-20 max-w-[500px] text-white">
           <h2 className="flex flex-col text-[44px] leading-[1.05] tracking-tight">
             <span className="font-sans font-medium">Bringing Aerospace-</span>
             <span className="font-sans font-medium">Grade Infrastructure</span>
@@ -167,7 +167,7 @@ export function HomePage() {
           </h2>
         </div>
 
-        <div className="absolute right-[calc(8%+100px)] bottom-[12%] z-20 flex flex-col items-center">
+        <div className="hero2-accent absolute right-[calc(8%+100px)] bottom-[12%] z-20 flex flex-col items-center">
           <div className="flex w-[180px] items-center justify-center bg-white py-[6px]">
             <span className="text-center font-serif text-[10px] font-bold uppercase leading-[16px] tracking-[0.08em] text-black">
               THE SCIENCE OF IMPACT CONTROL
@@ -181,3 +181,4 @@ export function HomePage() {
     </div>
   );
 }
+

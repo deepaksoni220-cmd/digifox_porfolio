@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/preset-sites/gsap-pill-nav/',
+  base: '/preset-sites/gsap-one-ump/',
   build: {
     outDir: 'dist',
     emptyOutDir: true,

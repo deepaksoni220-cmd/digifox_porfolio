@@ -1,4 +1,4 @@
-import { PageShell } from '../components/PageShell';
+import { SectionShell } from '../components/SectionShell';
 
 const STORES = [
   { city: 'New York', address: 'SoHo — 142 Spring St' },
@@ -7,9 +7,10 @@ const STORES = [
   { city: 'Los Angeles', address: 'Abbot Kinney — 1214 Abbot Kinney Blvd' },
 ];
 
-export function StoresPage() {
+export function StoresSection() {
   return (
-    <PageShell
+    <SectionShell
+      id="stores"
       eyebrow="Find us"
       title={
         <>
@@ -20,12 +21,13 @@ export function StoresPage() {
     >
       <ul className="mt-12 divide-y divide-white/10 rounded-2xl border border-white/10">
         {STORES.map((store) => (
-          <li key={store.city} className="flex flex-wrap justify-between gap-2 px-6 py-5">
+          <li key={store.city} className="store-row flex flex-wrap justify-between gap-2 px-6 py-5">
             <span className="font-medium">{store.city}</span>
             <span className="text-sm text-white/50">{store.address}</span>
           </li>
         ))}
       </ul>
-    </PageShell>
+    </SectionShell>
   );
 }
+

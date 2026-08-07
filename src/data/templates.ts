@@ -311,5 +311,49 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
       primaryColor: "#8b5cf6",
       secondaryColor: "#4c1d95"
     }
+  },
+  portfolio2dDesigng: {
+    websiteType: "Portfolio",
+    templateStyle: "portfolio_2d_designg",
+    category: "2d",
+    previewUrl: "/templates/2d porfolio designg/dist/index.html",
+    shortDescription: "Premium luxury layout with rich visual cards and customizable typography.",
+    thumbnailUrl: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=800&auto=format&fit=crop",
+    hero: {
+      title: "SkyElite",
+      subtitle: "Experience luxury in flight.",
+      ctaText: "Book Charter",
+      imagePrompt: "luxury private jet flying high above clouds cinematic"
+    },
+    about: {
+      heading: "Our Vision",
+      description: "We deliver bespoke travel experiences tailored for high performance.",
+      imagePrompt: "elegant private jet cabin interior luxury modern setup"
+    },
+    items: [
+      {
+        title: "Charter Booking",
+        description: "Instant flight scheduling and access.",
+        icon: "✈️"
+      },
+      {
+        title: "Bespoke Services",
+        description: "Curated in-flight dining and accommodation.",
+        icon: "🍷"
+      },
+      {
+        title: "Elite Fleet",
+        description: "Audited platinum-standard private jets.",
+        icon: "🛩️"
+      }
+    ],
+    contact: {
+      heading: "Ready to take off?",
+      buttonText: "Inquire Now"
+    },
+    theme: {
+      primaryColor: "#da3a16",
+      secondaryColor: "#111111"
+    }
   }
 };

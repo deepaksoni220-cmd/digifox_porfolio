@@ -267,5 +267,49 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
       primaryColor: "#6366f1",
       secondaryColor: "#312e81"
     }
+  },
+  gsapOne: {
+    websiteType: "Portfolio",
+    templateStyle: "gsap_one",
+    category: "2d",
+    previewUrl: "/templates/gsap one/index.html",
+    shortDescription: "Interactive creative layout with smooth GSAP animations and liquid bubble navigation.",
+    thumbnailUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
+    hero: {
+      title: "GSAP Bubble Creative",
+      subtitle: "Fluid motions and immersive micro-interactions.",
+      ctaText: "Explore Work",
+      imagePrompt: "creative developer workspace with fluid animations and bubble layouts"
+    },
+    about: {
+      heading: "Our Motion Philosophy",
+      description: "We believe in digital interfaces that feel alive, using organic physics and physics-based animations to create deep visual immersion.",
+      imagePrompt: "creative abstract layout clean fluid design"
+    },
+    items: [
+      {
+        title: "Bubble Menu",
+        description: "Interactive gravity-based circular navigation.",
+        icon: "🫧"
+      },
+      {
+        title: "GSAP Motion",
+        description: "Delightful animations on every click and scroll.",
+        icon: "✨"
+      },
+      {
+        title: "Responsive Canvas",
+        description: "Perfect scaling across all desktop and mobile displays.",
+        icon: "📱"
+      }
+    ],
+    contact: {
+      heading: "Ready to animate?",
+      buttonText: "Get in Touch"
+    },
+    theme: {
+      primaryColor: "#8b5cf6",
+      secondaryColor: "#4c1d95"
+    }
   }
 };

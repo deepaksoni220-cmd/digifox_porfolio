@@ -43,6 +43,19 @@ export const AiBuilderPage: React.FC = () => {
   const [isPublishing, setIsPublishing] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState("");
 
+  // Text Inspector States
+  const [selectedElement, setSelectedElement] = useState<{
+    selector: string;
+    text: string;
+    fontSize: string;
+    fontWeight: string;
+    color: string;
+    fontFamily: string;
+    animateIn: string;
+    loop: string;
+  } | null>(null);
+  const [sidebarTab, setSidebarTab] = useState<'details' | 'design'>('details');
+
   // Edit Existing Brand Site States
   const [builderMode, setBuilderMode] = useState<'new' | 'edit'>('new');
   const [editSubdomain, setEditSubdomain] = useState('');
@@ -109,6 +122,28 @@ export const AiBuilderPage: React.FC = () => {
     }
   }, [previewData, logoUrl]);
 
+  // Listen for text elements clicked/selected inside the iframe
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      const msg = event.data;
+      if (msg && msg.type === 'ELEMENT_SELECTED') {
+        setSelectedElement({
+          selector: msg.selector,
+          text: msg.text,
+          fontSize: msg.fontSize,
+          fontWeight: msg.fontWeight,
+          color: msg.color,
+          fontFamily: msg.fontFamily,
+          animateIn: msg.animateIn || 'none',
+          loop: msg.loop || 'none'
+        });
+        setSidebarTab('design'); // Switch to design tab
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
   // Update specific fields nested in previewData from iframe input edits
   const updatePreviewDataFromIframe = (pathStr: string, value: string) => {
     setPreviewData(prev => {
@@ -150,7 +185,7 @@ export const AiBuilderPage: React.FC = () => {
       const doc = iframe.contentDocument || iframe.contentWindow?.document;
       if (!doc) return;
 
-      // Inject visual feedback styles for contenteditable elements
+      // 1. Inject visual feedback and animation preset keyframe styles
       const styleId = 'editor-outline-styles';
       if (!doc.getElementById(styleId)) {
         const style = doc.createElement('style');
@@ -165,75 +200,146 @@ export const AiBuilderPage: React.FC = () => {
             outline: 2px solid #3b82f6 !important;
             outline-offset: 4px;
           }
+          .customizer-selected-element {
+            outline: 2px solid #a855f7 !important;
+            outline-offset: 4px;
+          }
+          
+          /* Animation Preset Keyframes */
+          @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+          }
+          @keyframes pulseCustom {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+          }
+          @keyframes sway {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(2deg); }
+          }
+          @keyframes glow {
+            0%, 100% { text-shadow: 0 0 5px rgba(168,85,247,0.2); }
+            50% { text-shadow: 0 0 15px rgba(168,85,247,0.6); }
+          }
+          @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+          }
+          @keyframes zoomIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+          }
+          
+          .animate-float { animation: float 3s ease-in-out infinite !important; }
+          .animate-pulse-custom { animation: pulseCustom 2s ease-in-out infinite !important; }
+          .animate-sway { animation: sway 4s ease-in-out infinite !important; }
+          .animate-glow { animation: glow 2.5s ease-in-out infinite !important; }
+          .animate-slide-up { animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards !important; }
+          .animate-zoom-in { animation: zoomIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards !important; }
         `;
         doc.head.appendChild(style);
       }
 
-      // Map iframe selectors to state path paths
-      const selectorMapping = [
-        { selector: '.brand-logo-text', path: 'contactDetails.brandName' },
-        { selector: '.logo-text', path: 'contactDetails.brandName' },
-        { selector: 'nav span', path: 'contactDetails.brandName' },
-        { selector: '.hero-title', path: 'hero.title' },
-        { selector: '.hero h1', path: 'hero.title' },
-        { selector: 'h1', path: 'hero.title' },
-        { selector: '.hero-subtitle', path: 'hero.subtitle' },
-        { selector: '.hero p', path: 'hero.subtitle' },
-        { selector: '.hero-cta', path: 'hero.ctaText' },
-        { selector: '.hero button', path: 'hero.ctaText' },
-        { selector: '.about-heading', path: 'about.heading' },
-        { selector: '.about h2', path: 'about.heading' },
-        { selector: '.about-description', path: 'about.description' },
-        { selector: '.about p', path: 'about.description' },
-        { selector: '.footer-address', path: 'contactDetails.address' },
-        { selector: '.footer-phone', path: 'contactDetails.phone' },
-        { selector: '.footer-email', path: 'contactDetails.email' },
-        // New selectors for full navigation & philosophy block edits
-        { selector: '.nav-link-1', path: 'navigation.link1' },
-        { selector: '.nav-link-2', path: 'navigation.link2' },
-        { selector: '.nav-btn-1', path: 'navigation.btn1' },
-        { selector: '.nav-btn-2', path: 'navigation.btn2' },
-        { selector: '.philosophy-title-1', path: 'philosophy.title1' },
-        { selector: '.philosophy-title-2', path: 'philosophy.title2' },
-        { selector: '.philosophy-block-1-label', path: 'philosophy.block1Label' },
-        { selector: '.philosophy-block-1-text', path: 'philosophy.block1Text' },
-        { selector: '.philosophy-block-2-label', path: 'philosophy.block2Label' },
-        { selector: '.philosophy-block-2-text', path: 'philosophy.block2Text' },
-        { selector: '.services-heading-title', path: 'servicesHeader.title' },
-        { selector: '.services-heading-subtitle', path: 'servicesHeader.subtitle' }
-      ];
+      // Helper to generate a unique CSS selector for any element
+      const getUniqueSelector = (el: HTMLElement) => {
+        if (el.id) return '#' + el.id;
+        if (el.className) {
+          const classes = Array.from(el.classList).filter(c => !c.startsWith('customizer-selected-element')).join('.');
+          if (classes) return el.tagName.toLowerCase() + '.' + classes.split(' ').join('.');
+        }
+        let current: HTMLElement | null = el;
+        const path: string[] = [];
+        while (current && current.nodeType === Node.ELEMENT_NODE) {
+          let selector = current.nodeName.toLowerCase();
+          if (current.id) {
+            selector += '#' + current.id;
+            path.unshift(selector);
+            break;
+          } else {
+            let sib: Element | null = current;
+            let sibIndex = 1;
+            while (sib = sib.previousElementSibling) {
+              if (sib.nodeName.toLowerCase() === current.nodeName.toLowerCase()) sibIndex++;
+            }
+            if (sibIndex > 1) selector += `:nth-of-type(${sibIndex})`;
+          }
+          path.unshift(selector);
+          current = current.parentElement;
+        }
+        return path.join(" > ");
+      };
 
-      selectorMapping.forEach(({ selector, path }) => {
-        const elements = doc.querySelectorAll(selector);
-        elements.forEach(el => {
-          el.setAttribute('contenteditable', 'true');
-          el.setAttribute('suppressContentEditableWarning', 'true');
-          el.addEventListener('input', () => {
-            updatePreviewDataFromIframe(path, el.textContent || '');
+      const rgbToHex = (rgb: string) => {
+        const match = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+        if (!match) return rgb;
+        return "#" + ("0" + parseInt(match[1], 10).toString(16)).slice(-2) +
+                     ("0" + parseInt(match[2], 10).toString(16)).slice(-2) +
+                     ("0" + parseInt(match[3], 10).toString(16)).slice(-2);
+      };
+
+      const getAnimationClass = (el: HTMLElement, prefix: string) => {
+        const animClass = Array.from(el.classList).find(c => c.startsWith(prefix));
+        return animClass ? animClass.replace(prefix, '') : 'none';
+      };
+
+      // 2. Select and bind editing & selection triggers to all text elements
+      const textSelectors = 'h1, h2, h3, h4, h5, h6, p, span, a, button';
+      const textElements = doc.querySelectorAll(textSelectors);
+      textElements.forEach(el => {
+        const htmlEl = el as HTMLElement;
+        htmlEl.setAttribute('contenteditable', 'true');
+        htmlEl.setAttribute('suppressContentEditableWarning', 'true');
+
+        htmlEl.addEventListener('click', (e) => {
+          e.stopPropagation();
+          // Remove selected outline class from all other elements
+          doc.querySelectorAll('.customizer-selected-element').forEach(s => {
+            s.classList.remove('customizer-selected-element');
           });
+          htmlEl.classList.add('customizer-selected-element');
+
+          const computedStyle = window.getComputedStyle(htmlEl);
+          
+          window.parent.postMessage({
+            type: 'ELEMENT_SELECTED',
+            selector: getUniqueSelector(htmlEl),
+            text: htmlEl.textContent || '',
+            fontSize: computedStyle.fontSize,
+            fontWeight: computedStyle.fontWeight,
+            color: rgbToHex(computedStyle.color),
+            fontFamily: computedStyle.fontFamily.replace(/['"]/g, ''),
+            animateIn: getAnimationClass(htmlEl, 'animate-slide-') ? 'fade-up' : getAnimationClass(htmlEl, 'animate-zoom-') ? 'zoom-in' : 'none',
+            loop: getAnimationClass(htmlEl, 'animate-') || 'none'
+          }, '*');
         });
       });
 
-      // Bind edit capabilities to service items
-      const serviceCards = doc.querySelectorAll('.service-card, .item-card');
-      serviceCards.forEach((card, cardIdx) => {
-        const titleEl = card.querySelector('.service-title, h3, h4');
-        if (titleEl) {
-          titleEl.setAttribute('contenteditable', 'true');
-          titleEl.setAttribute('suppressContentEditableWarning', 'true');
-          titleEl.addEventListener('input', () => {
-            updatePreviewItem(cardIdx, 'title', titleEl.textContent || '');
-          });
+      // 3. Listen for postMessages from customizer parent window to update styles/text
+      const handleCustomizerMessage = (event: MessageEvent) => {
+        const msg = event.data;
+        if (msg && msg.type === 'UPDATE_ELEMENT_STYLE') {
+          const el = doc.querySelector(msg.selector) as HTMLElement;
+          if (el) {
+            if (msg.text !== undefined) el.textContent = msg.text;
+            if (msg.fontSize) el.style.fontSize = msg.fontSize;
+            if (msg.fontWeight) el.style.fontWeight = msg.fontWeight;
+            if (msg.color) el.style.color = msg.color;
+            if (msg.fontFamily) el.style.fontFamily = msg.fontFamily;
+
+            // Update Animations
+            el.classList.remove('animate-float', 'animate-pulse-custom', 'animate-sway', 'animate-glow', 'animate-slide-up', 'animate-zoom-in');
+            if (msg.animateIn === 'fade-up') el.classList.add('animate-slide-up');
+            if (msg.animateIn === 'zoom-in') el.classList.add('animate-zoom-in');
+            if (msg.loop === 'float') el.classList.add('animate-float');
+            if (msg.loop === 'pulse') el.classList.add('animate-pulse-custom');
+            if (msg.loop === 'sway') el.classList.add('animate-sway');
+            if (msg.loop === 'glow') el.classList.add('animate-glow');
+          }
         }
-        const descEl = card.querySelector('.service-desc, p');
-        if (descEl) {
-          descEl.setAttribute('contenteditable', 'true');
-          descEl.setAttribute('suppressContentEditableWarning', 'true');
-          descEl.addEventListener('input', () => {
-            updatePreviewItem(cardIdx, 'description', descEl.textContent || '');
-          });
-        }
-      });
+      };
+
+      iframe.contentWindow?.addEventListener('message', handleCustomizerMessage);
 
       // Bind click-to-edit for images inside the template iframe
       const images = doc.querySelectorAll('img');
@@ -375,6 +481,46 @@ export const AiBuilderPage: React.FC = () => {
       }
 
       return newData;
+    });
+  const updateSelectedElementStyle = (updatedFields: Partial<NonNullable<typeof selectedElement>>) => {
+    if (!selectedElement) return;
+    const nextElement = { ...selectedElement, ...updatedFields } as NonNullable<typeof selectedElement>;
+    setSelectedElement(nextElement);
+    
+    // Post message to iframe to apply style changes live
+    const iframe = iframeRef.current;
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({
+        type: 'UPDATE_ELEMENT_STYLE',
+        selector: selectedElement.selector,
+        text: nextElement.text,
+        fontSize: nextElement.fontSize,
+        fontWeight: nextElement.fontWeight,
+        color: nextElement.color,
+        fontFamily: nextElement.fontFamily,
+        animateIn: nextElement.animateIn,
+        loop: nextElement.loop
+      }, '*');
+    }
+
+    // Also update previewData custom styles registry so they persist
+    setPreviewData(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        customStyles: {
+          ...(prev.customStyles || {}),
+          [selectedElement.selector]: {
+            text: nextElement.text,
+            fontSize: nextElement.fontSize,
+            fontWeight: nextElement.fontWeight,
+            color: nextElement.color,
+            fontFamily: nextElement.fontFamily,
+            animateIn: nextElement.animateIn,
+            loop: nextElement.loop
+          }
+        }
+      };
     });
   };
 
@@ -1073,83 +1219,216 @@ export const AiBuilderPage: React.FC = () => {
                     )}
                   </div>
                   
-                  {/* Site Details Sidebar on Right */}
+                  {/* Customizer Sidebar on Right */}
                   <div className="w-full xl:w-[380px] bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-3xl p-6 flex flex-col gap-6 h-fit xl:sticky xl:top-6 shadow-xl">
-                    <h3 className="text-xl font-bold uppercase tracking-widest border-b border-[var(--border-subtle)] pb-4">
-                      Site Details
-                    </h3>
                     
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Brand Name</label>
-                      <input 
-                        type="text"
-                        value={sidebarBrandName}
-                        placeholder="e.g. Acme Corp"
-                        onChange={(e) => {
-                          setSidebarBrandName(e.target.value);
-                          updateIframeField('brandName', e.target.value);
-                        }}
-                        className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
-                      />
+                    {/* Tab Navigation */}
+                    <div className="flex border-b border-[var(--border-subtle)] pb-2 gap-4">
+                      <button
+                        onClick={() => setSidebarTab('details')}
+                        className={`text-sm uppercase tracking-widest font-black pb-2 transition-all ${sidebarTab === 'details' ? 'border-b-2 border-[#3b82f6] text-[#3b82f6]' : 'text-[var(--text-secondary)] hover:text-[var(--text-strong)]'}`}
+                      >
+                        Site Details
+                      </button>
+                      <button
+                        onClick={() => setSidebarTab('design')}
+                        className={`text-sm uppercase tracking-widest font-black pb-2 transition-all ${sidebarTab === 'design' ? 'border-b-2 border-[#3b82f6] text-[#3b82f6]' : 'text-[var(--text-secondary)] hover:text-[var(--text-strong)]'}`}
+                      >
+                        Text Inspector
+                      </button>
                     </div>
 
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Logo</label>
-                      <div className="relative flex items-center">
-                        <input 
-                          type="file" 
-                          accept="image/*"
-                          onChange={handleSidebarLogo}
-                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                        />
-                        <div className="w-full bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-secondary)] flex justify-between items-center hover:border-[#3b82f6] transition-colors">
-                          <span className="truncate">{sidebarLogo ? "Updated" : "Choose logo..."}</span>
-                          {sidebarLogo && <img src={sidebarLogo} alt="Logo" className="h-6 w-auto object-contain rounded" />}
+                    {sidebarTab === 'details' ? (
+                      <>
+                        <div className="flex flex-col gap-2">
+                          <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Brand Name</label>
+                          <input 
+                            type="text"
+                            value={sidebarBrandName}
+                            placeholder="e.g. Acme Corp"
+                            onChange={(e) => {
+                              setSidebarBrandName(e.target.value);
+                              updateIframeField('brandName', e.target.value);
+                            }}
+                            className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                          />
                         </div>
+
+                        <div className="flex flex-col gap-2">
+                          <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Logo</label>
+                          <div className="relative flex items-center">
+                            <input 
+                              type="file" 
+                              accept="image/*"
+                              onChange={handleSidebarLogo}
+                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                            />
+                            <div className="w-full bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-secondary)] flex justify-between items-center hover:border-[#3b82f6] transition-colors">
+                              <span className="truncate">{sidebarLogo ? "Updated" : "Choose logo..."}</span>
+                              {sidebarLogo && <img src={sidebarLogo} alt="Logo" className="h-6 w-auto object-contain rounded" />}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Business Address</label>
+                          <input 
+                            type="text"
+                            value={sidebarAddress}
+                            placeholder="e.g. 123 Main St"
+                            onChange={(e) => {
+                              setSidebarAddress(e.target.value);
+                              updateIframeField('address', e.target.value);
+                            }}
+                            className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                          />
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Contact Number</label>
+                          <input 
+                            type="text"
+                            value={sidebarPhone}
+                            placeholder="e.g. +1 234 567 890"
+                            onChange={(e) => {
+                              setSidebarPhone(e.target.value);
+                              updateIframeField('phone', e.target.value);
+                            }}
+                            className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                          />
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Email Address</label>
+                          <input 
+                            type="email"
+                            value={sidebarEmail}
+                            placeholder="e.g. contact@mybrand.com"
+                            onChange={(e) => {
+                              setSidebarEmail(e.target.value);
+                              updateIframeField('email', e.target.value);
+                            }}
+                            className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex flex-col gap-5">
+                        {!selectedElement ? (
+                          <div className="text-center py-8 text-[var(--text-secondary)]">
+                            <p className="text-sm font-semibold mb-2">No element selected</p>
+                            <p className="text-xs max-w-[240px] mx-auto opacity-75">
+                              👉 Click directly on any text inside the live preview iframe to adjust its styles and animations!
+                            </p>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="flex flex-col gap-2">
+                              <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Text Content</label>
+                              <textarea
+                                value={selectedElement.text}
+                                rows={2}
+                                onChange={(e) => updateSelectedElementStyle({ text: e.target.value })}
+                                className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none resize-none text-sm"
+                              />
+                            </div>
+
+                            <div className="flex flex-col gap-2">
+                              <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Font Family</label>
+                              <select
+                                value={selectedElement.fontFamily}
+                                onChange={(e) => updateSelectedElementStyle({ fontFamily: e.target.value })}
+                                className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                              >
+                                <option value="System UI">System UI</option>
+                                <option value="Inter">Inter</option>
+                                <option value="Outfit">Outfit</option>
+                                <option value="Instrument Serif">Instrument Serif</option>
+                                <option value="Space Grotesk">Space Grotesk</option>
+                                <option value="Playfair Display">Playfair Display</option>
+                              </select>
+                            </div>
+
+                            <div className="flex gap-4">
+                              <div className="flex-1 flex flex-col gap-2">
+                                <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Size (px)</label>
+                                <input
+                                  type="text"
+                                  value={selectedElement.fontSize.replace('px', '')}
+                                  onChange={(e) => updateSelectedElementStyle({ fontSize: e.target.value + 'px' })}
+                                  className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none text-center"
+                                />
+                              </div>
+                              <div className="flex-1 flex flex-col gap-2">
+                                <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Weight</label>
+                                <select
+                                  value={selectedElement.fontWeight}
+                                  onChange={(e) => updateSelectedElementStyle({ fontWeight: e.target.value })}
+                                  className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                                >
+                                  <option value="300">Light</option>
+                                  <option value="400">Regular</option>
+                                  <option value="500">Medium</option>
+                                  <option value="600">Semi-Bold</option>
+                                  <option value="700">Bold</option>
+                                  <option value="900">Black</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col gap-2">
+                              <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Text Color</label>
+                              <div className="flex gap-3 items-center">
+                                <input
+                                  type="color"
+                                  value={selectedElement.color.startsWith('#') ? selectedElement.color : '#ffffff'}
+                                  onChange={(e) => updateSelectedElementStyle({ color: e.target.value })}
+                                  className="bg-transparent border-0 w-10 h-10 cursor-pointer rounded"
+                                />
+                                <input
+                                  type="text"
+                                  value={selectedElement.color}
+                                  onChange={(e) => updateSelectedElementStyle({ color: e.target.value })}
+                                  className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-2.5 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none flex-1 text-sm text-center font-mono"
+                                />
+                              </div>
+                            </div>
+
+                            {/* Animate In Presets */}
+                            <div className="flex flex-col gap-2 border-t border-[var(--border-subtle)] pt-4">
+                              <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Animate In</label>
+                              <div className="flex flex-wrap gap-2">
+                                {['none', 'fade-up', 'zoom-in'].map((p) => (
+                                  <button
+                                    key={p}
+                                    onClick={() => updateSelectedElementStyle({ animateIn: p })}
+                                    className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all border ${selectedElement.animateIn === p ? 'bg-[#3b82f6] border-[#3b82f6] text-white' : 'border-[var(--border-strong)] text-[var(--text-primary)]/80 hover:border-[#3b82f6]'}`}
+                                  >
+                                    {p === 'none' ? 'None' : p === 'fade-up' ? 'Fade Up' : 'Zoom In'}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Loop Presets */}
+                            <div className="flex flex-col gap-2 border-t border-[var(--border-subtle)] pt-4">
+                              <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Loop Effects</label>
+                              <div className="flex flex-wrap gap-2">
+                                {['none', 'float', 'pulse', 'sway', 'glow'].map((p) => (
+                                  <button
+                                    key={p}
+                                    onClick={() => updateSelectedElementStyle({ loop: p })}
+                                    className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all border ${selectedElement.loop === p ? 'bg-[#3b82f6] border-[#3b82f6] text-white' : 'border-[var(--border-strong)] text-[var(--text-primary)]/80 hover:border-[#3b82f6]'}`}
+                                  >
+                                    {p === 'none' ? 'None' : p === 'float' ? 'Float Bounce' : p === 'pulse' ? 'Pulse' : p === 'sway' ? 'Sway' : 'Glow Pulse'}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          </>
+                        )}
                       </div>
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Business Address</label>
-                      <input 
-                        type="text"
-                        value={sidebarAddress}
-                        placeholder="e.g. 123 Main St"
-                        onChange={(e) => {
-                          setSidebarAddress(e.target.value);
-                          updateIframeField('address', e.target.value);
-                        }}
-                        className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
-                      />
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Contact Number</label>
-                      <input 
-                        type="text"
-                        value={sidebarPhone}
-                        placeholder="e.g. +1 234 567 890"
-                        onChange={(e) => {
-                          setSidebarPhone(e.target.value);
-                          updateIframeField('phone', e.target.value);
-                        }}
-                        className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
-                      />
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Email Address</label>
-                      <input 
-                        type="email"
-                        value={sidebarEmail}
-                        placeholder="e.g. contact@mybrand.com"
-                        onChange={(e) => {
-                          setSidebarEmail(e.target.value);
-                          updateIframeField('email', e.target.value);
-                        }}
-                        className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
-                      />
-                    </div>
+                    )}
 
                     <div className="mt-4 pt-6 border-t border-[var(--border-subtle)]">
                       <button 

@@ -728,18 +728,16 @@ export const AiBuilderPage: React.FC = () => {
         <div className="flex flex-col md:flex-row gap-10 items-start justify-between">
           
           <div className="flex-1 w-full flex flex-col gap-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <h1 className="text-4xl sm:text-5xl font-black uppercase tracking-tight mb-4">
-                  AI <span className="text-[#3b82f6]">Consultant</span> & Builder
-                </h1>
-                <p className="text-[var(--text-primary)]/70 text-lg max-w-2xl">
-                  Discuss your vision with our AI architect. Once you're happy with the plan, click Build to instantly generate a beautifully animated one-page website.
-                </p>
-              </div>
-              <div className="hidden sm:block">
+            <div className="w-full flex flex-col items-center text-center justify-center mb-6 relative">
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden sm:block">
                 <ThemeToggle />
               </div>
+              <h1 className="text-4xl sm:text-5xl font-black uppercase tracking-tight mb-4">
+                AI <span className="text-[#3b82f6]">Consultant</span> & Builder
+              </h1>
+              <p className="text-[var(--text-primary)]/70 text-lg max-w-2xl mx-auto">
+                Discuss your vision with our AI architect. Once you're happy with the plan, click Build to instantly generate a beautifully animated one-page website.
+              </p>
             </div>
 
             {/* Custom AI Builder Section */}

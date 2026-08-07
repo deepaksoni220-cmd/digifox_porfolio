@@ -139,6 +139,9 @@ export const AiBuilderPage: React.FC = () => {
         });
         setSidebarTab('design'); // Switch to design tab
       }
+      if (msg && msg.type === 'ELEMENT_TEXT_UPDATED') {
+        setSelectedElement(prev => prev ? { ...prev, text: msg.text } : null);
+      }
     };
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
@@ -283,16 +286,18 @@ export const AiBuilderPage: React.FC = () => {
         return animClass ? animClass.replace(prefix, '') : 'none';
       };
 
-      // 2. Select and bind editing & selection triggers to all text elements
-      const textSelectors = 'h1, h2, h3, h4, h5, h6, p, span, a, button';
-      const textElements = doc.querySelectorAll(textSelectors);
-      textElements.forEach(el => {
-        const htmlEl = el as HTMLElement;
-        htmlEl.setAttribute('contenteditable', 'true');
-        htmlEl.setAttribute('suppressContentEditableWarning', 'true');
-
-        htmlEl.addEventListener('click', (e) => {
+      // 2. Select and bind editing & selection triggers to all text elements using root document delegation
+      doc.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const htmlEl = target.closest('h1, h2, h3, h4, h5, h6, p, span, a, button') as HTMLElement | null;
+        if (htmlEl && htmlEl.getAttribute('contenteditable') !== 'false') {
           e.stopPropagation();
+          
+          if (!htmlEl.hasAttribute('contenteditable')) {
+            htmlEl.setAttribute('contenteditable', 'true');
+            htmlEl.setAttribute('suppressContentEditableWarning', 'true');
+          }
+
           // Remove selected outline class from all other elements
           doc.querySelectorAll('.customizer-selected-element').forEach(s => {
             s.classList.remove('customizer-selected-element');
@@ -301,6 +306,16 @@ export const AiBuilderPage: React.FC = () => {
 
           const computedStyle = window.getComputedStyle(htmlEl);
           
+          let currentAnimateIn = 'none';
+          if (htmlEl.classList.contains('animate-slide-up')) currentAnimateIn = 'fade-up';
+          if (htmlEl.classList.contains('animate-zoom-in')) currentAnimateIn = 'zoom-in';
+
+          let currentLoop = 'none';
+          if (htmlEl.classList.contains('animate-float')) currentLoop = 'float';
+          if (htmlEl.classList.contains('animate-pulse-custom')) currentLoop = 'pulse';
+          if (htmlEl.classList.contains('animate-sway')) currentLoop = 'sway';
+          if (htmlEl.classList.contains('animate-glow')) currentLoop = 'glow';
+
           window.parent.postMessage({
             type: 'ELEMENT_SELECTED',
             selector: getUniqueSelector(htmlEl),
@@ -309,10 +324,20 @@ export const AiBuilderPage: React.FC = () => {
             fontWeight: computedStyle.fontWeight,
             color: rgbToHex(computedStyle.color),
             fontFamily: computedStyle.fontFamily.replace(/['"]/g, ''),
-            animateIn: getAnimationClass(htmlEl, 'animate-slide-') ? 'fade-up' : getAnimationClass(htmlEl, 'animate-zoom-') ? 'zoom-in' : 'none',
-            loop: getAnimationClass(htmlEl, 'animate-') || 'none'
+            animateIn: currentAnimateIn,
+            loop: currentLoop
           }, '*');
-        });
+        }
+      }, true); // Use capture phase to intercept actions reliably
+
+      doc.addEventListener('input', (e) => {
+        const target = e.target as HTMLElement;
+        if (target.classList.contains('customizer-selected-element')) {
+          window.parent.postMessage({
+            type: 'ELEMENT_TEXT_UPDATED',
+            text: target.textContent || ''
+          }, '*');
+        }
       });
 
       // 3. Listen for postMessages from customizer parent window to update styles/text

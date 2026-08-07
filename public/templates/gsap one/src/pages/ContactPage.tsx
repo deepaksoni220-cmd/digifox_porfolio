@@ -1,4 +1,5 @@
 import { useCustomizer } from '../context/CustomizerContext';
+import { SectionShell } from '../components/SectionShell';
 
 export function ContactSection() {
   const { brandName } = useCustomizer();

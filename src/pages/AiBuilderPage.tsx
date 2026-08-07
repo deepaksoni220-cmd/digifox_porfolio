@@ -733,7 +733,7 @@ export const AiBuilderPage: React.FC = () => {
                 <ThemeToggle />
               </div>
               <h1 className="text-4xl sm:text-5xl font-black uppercase tracking-tight mb-4">
-                AI <span className="text-[#3b82f6]">Consultant</span> & Builder
+                Build Your Dream Website <span className="text-[#3b82f6]">with AI</span> by webmake
               </h1>
               <p className="text-[var(--text-primary)]/70 text-lg max-w-2xl mx-auto">
                 Discuss your vision with our AI architect. Once you're happy with the plan, click Build to instantly generate a beautifully animated one-page website.

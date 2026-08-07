@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/preset-sites/gsap-one-ump/',
+  base: './',
   build: {
     outDir: 'dist',
     emptyOutDir: true,

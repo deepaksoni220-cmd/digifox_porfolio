@@ -953,7 +953,7 @@ export const AiBuilderPage: React.FC = () => {
                 <ThemeToggle />
               </div>
               <h1 className="text-4xl sm:text-5xl font-black uppercase tracking-tight mb-4">
-                Build Your Dream Website <span className="text-[#3b82f6]">with AI</span> by webmake
+                Build Your <span className="text-[#3b82f6]">Dream Website</span> by webmake
               </h1>
               <p className="text-[var(--text-primary)]/70 text-lg max-w-2xl mx-auto">
                 Describe your business and let AI create a beautiful Animated, Good converting and performance website with responsive design, SEO optimization, GEO readiness, AEO best practices, and lightning-fast performance.
@@ -1177,7 +1177,7 @@ export const AiBuilderPage: React.FC = () => {
                 Get A Live Preview
               </h2>
               <p className="text-xs sm:text-sm text-[var(--text-primary)]/60 mt-1">
-                👉 Click directly on any text in the preview to edit it. Also you can use the "Site Details" panel on the right to update your logo and business details of website as required by you
+                👉 Click directly on any text or image in the preview to edit or replace it. Also you can use the "Site Details" panel on the right to update your logo and business details of website as required by you
               </p>
             </div>
             {previewData && !isBuilding && (
@@ -1306,7 +1306,7 @@ export const AiBuilderPage: React.FC = () => {
                           <div className="text-center py-10 text-[var(--text-secondary)]">
                             <div className="text-4xl mb-3">✦</div>
                             <p className="text-sm font-semibold mb-2">No element selected</p>
-                            <p className="text-xs max-w-[210px] mx-auto opacity-70 leading-relaxed">Click any text on the preview to select and style it</p>
+                            <p className="text-xs max-w-[210px] mx-auto opacity-70 leading-relaxed">Click any text or image on the preview to select and style or replace it</p>
                           </div>
                         ) : (
                           <>
@@ -1451,8 +1451,7 @@ export const AiBuilderPage: React.FC = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="w-full h-[400px] rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-secondary)] font-medium text-lg uppercase tracking-widest text-center px-4"
-              >
-                Plan your website above, then click Build to see it here.
+                
               </motion.div>
             )}
           </AnimatePresence>

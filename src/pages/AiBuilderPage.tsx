@@ -574,6 +574,7 @@ export const AiBuilderPage: React.FC = () => {
         }, '*');
       }
 
+      return newData; // ← this was missing, causing previewData to become undefined and crashing to main page
     });
   };
   const updateSelectedElementStyle = (updatedFields: Record<string, any>) => {

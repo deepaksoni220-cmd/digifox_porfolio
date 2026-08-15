@@ -200,7 +200,7 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
         applyStyles(); // Initial attempt
         
         // Aggressive observer: Re-apply if React blows away the styles/classes
-        const observer = new MutationObserver((mutations) => {
+        const observer = new MutationObserver(() => {
           // Temporarily disconnect to avoid infinite loop when we change the DOM
           observer.disconnect();
           applyStyles();

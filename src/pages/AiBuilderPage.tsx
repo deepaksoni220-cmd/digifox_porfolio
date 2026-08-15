@@ -6,7 +6,7 @@ import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 import { TemplateGallery } from '../components/builder/TemplateGallery';
 import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { Globe } from 'lucide-react';
+import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush } from 'lucide-react';
 
 export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -846,11 +846,18 @@ export const AiBuilderPage: React.FC = () => {
 
           {/* Center: Viewport switcher */}
           <div className="flex items-center gap-1 bg-white/[0.04] border border-white/[0.08] rounded-xl p-1 shrink-0">
-            {([['desktop','🖥','Desktop'],['tablet','📱','Tablet'],['mobile','📞','Mobile']] as const).map(([v,ic,label]) => (
-              <button key={v} onClick={() => setViewport(v)}
+            {([
+              { v: 'desktop', icon: <Monitor size={15} />, label: 'Desktop' },
+              { v: 'tablet',  icon: <Tablet  size={15} />, label: 'Tablet'  },
+              { v: 'mobile',  icon: <Smartphone size={14} />, label: 'Mobile'  },
+            ] as const).map(({ v, icon, label }) => (
+              <button key={v} onClick={() => setViewport(v as any)}
                 title={label}
-                className={`px-3 py-1.5 rounded-lg text-sm transition-all font-semibold ${viewport === v ? 'bg-[#3b82f6] text-white shadow-md' : 'text-white/40 hover:text-white/80'}`}>
-                {ic}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all ${
+                  viewport === v ? 'bg-[#3b82f6] text-white shadow-md' : 'text-white/35 hover:text-white/70'
+                }`}>
+                {icon}
+                <span className="hidden md:inline">{label}</span>
               </button>
             ))}
           </div>
@@ -884,9 +891,18 @@ export const AiBuilderPage: React.FC = () => {
 
             {/* Sidebar tabs */}
             <div className="flex border-b border-white/[0.06] shrink-0">
-              {([['customize','Customize'],['design','Design'],['ai','✨ AI']] as const).map(([t,label]) => (
-                <button key={t} onClick={() => setFsTab(t)}
-                  className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all border-b-2 ${fsTab === t ? 'border-[#3b82f6] text-[#3b82f6] bg-[#3b82f6]/5' : 'border-transparent text-white/30 hover:text-white/60'}`}>
+              {([
+                { t: 'customize', icon: <Settings2 size={13} />, label: 'Customize' },
+                { t: 'design',    icon: <Paintbrush size={13} />, label: 'Design'    },
+                { t: 'ai',        icon: <Sparkles   size={13} />, label: 'AI Edit'   },
+              ] as const).map(({ t, icon, label }) => (
+                <button key={t} onClick={() => setFsTab(t as any)}
+                  className={`flex-1 flex flex-col items-center gap-1 py-3 text-[9px] font-black uppercase tracking-widest transition-all border-b-2 ${
+                    fsTab === t
+                      ? 'border-[#3b82f6] text-[#3b82f6] bg-[#3b82f6]/5'
+                      : 'border-transparent text-white/30 hover:text-white/60'
+                  }`}>
+                  {icon}
                   {label}
                 </button>
               ))}

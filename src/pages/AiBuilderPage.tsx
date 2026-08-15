@@ -1240,7 +1240,7 @@ export const AiBuilderPage: React.FC = () => {
                         <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Button link :</label>
                         <input 
                           type="text" 
-                          placeholder="https://..." 
+                          placeholder="- enter url address" 
                           value={selectedElement.href || ''} 
                           onChange={(e) => updateSelectedElementStyle({ href: e.target.value })}
                           className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-white focus:border-blue-500/60 outline-none text-xs"
@@ -1879,7 +1879,7 @@ export const AiBuilderPage: React.FC = () => {
                               <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Button link :</label>
                               <input 
                                 type="text" 
-                                placeholder="https://..." 
+                                placeholder="- enter url address" 
                                 value={selectedElement.href || ''} 
                                 onChange={(e) => updateSelectedElementStyle({ href: e.target.value })}
                                 className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-3 py-2.5 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none text-sm"

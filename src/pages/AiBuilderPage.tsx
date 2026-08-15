@@ -364,6 +364,7 @@ export const AiBuilderPage: React.FC = () => {
       doc.addEventListener('click', (e) => {
         const htmlEl = findTextEl(e.target as HTMLElement);
         if (htmlEl && htmlEl.getAttribute('contenteditable') !== 'false') {
+          e.preventDefault();
           e.stopPropagation();
           if (!htmlEl.hasAttribute('contenteditable')) { htmlEl.setAttribute('contenteditable','true'); }
           doc.querySelectorAll('.customizer-selected-element').forEach(s => s.classList.remove('customizer-selected-element'));
@@ -447,7 +448,13 @@ export const AiBuilderPage: React.FC = () => {
       if (msg.letterSpacing !== undefined) el.style.setProperty('letter-spacing', msg.letterSpacing, 'important');
       if (msg.lineHeight    !== undefined) el.style.setProperty('line-height',    msg.lineHeight,    'important');
       if (msg.textAlign     !== undefined) el.style.setProperty('text-align',     msg.textAlign,     'important');
-      if (msg.href          !== undefined) el.setAttribute('href', msg.href);
+      if (msg.href          !== undefined) {
+        if (el.tagName === 'BUTTON') {
+          el.setAttribute('onclick', "window.open('" + msg.href + "', '_blank')");
+        } else {
+          el.setAttribute('href', msg.href);
+        }
+      }
       // Animate In
       el.classList.remove.apply(el.classList, allIn);
       if (msg.animateIn  && msg.animateIn  !== 'none' && inMap[msg.animateIn])   el.classList.add(inMap[msg.animateIn]);
@@ -1860,7 +1867,7 @@ export const AiBuilderPage: React.FC = () => {
                             </div>
 
                             {/* Link URL */}
-                            {selectedElement.tagName === 'A' && (
+                            {['A', 'BUTTON', 'SVG', 'IMG'].includes(selectedElement.tagName) && (
                               <div className="flex flex-col gap-1.5">
                                 <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Link URL</label>
                                 <input 

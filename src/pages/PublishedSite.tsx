@@ -185,7 +185,13 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
                 if (rules.fontWeight) el.style.setProperty('font-weight', rules.fontWeight, 'important');
                 if (rules.color) el.style.setProperty('color', rules.color, 'important');
                 if (rules.fontFamily) el.style.setProperty('font-family', `"${rules.fontFamily}", sans-serif`, 'important');
-                if (rules.href !== undefined) el.setAttribute('href', rules.href);
+                if (rules.href !== undefined) {
+                  if (el.tagName === 'BUTTON') {
+                    el.setAttribute('onclick', `window.open('${rules.href}', '_blank')`);
+                  } else {
+                    el.setAttribute('href', rules.href);
+                  }
+                }
                 
                 if (rules.animateIn && rules.animateIn !== 'none' && inMap[rules.animateIn]) el.classList.add(inMap[rules.animateIn]);
                 if (rules.animateOut && rules.animateOut !== 'none' && outMap[rules.animateOut]) el.classList.add(outMap[rules.animateOut]);

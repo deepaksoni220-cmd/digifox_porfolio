@@ -42,9 +42,27 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-6">
-        <div className="w-16 h-16 border-4 border-[#3b82f6] border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-white font-['Kanit'] uppercase tracking-widest animate-pulse">Loading {subdomain}.digifox.world...</p>
+      <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center overflow-hidden relative">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.15)_0%,transparent_50%)] animate-pulse"></div>
+        <div className="relative flex flex-col items-center gap-8 z-10">
+          <div className="relative">
+            <div className="w-24 h-24 border border-white/10 rounded-2xl flex items-center justify-center bg-white/5 backdrop-blur-xl shadow-[0_0_40px_rgba(59,130,246,0.2)]">
+              <span className="text-5xl animate-bounce" style={{ animationDuration: '2s' }}>🦊</span>
+            </div>
+            <div className="absolute -inset-4 bg-[#3b82f6] opacity-20 blur-2xl rounded-full animate-pulse z-[-1]"></div>
+          </div>
+          <div className="flex flex-col items-center gap-3">
+            <h2 className="text-white font-['Kanit'] text-2xl uppercase tracking-[0.2em] font-light">
+              Digifox
+            </h2>
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#3b82f6] animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
+              <p className="text-gray-400 font-['Kanit'] text-xs uppercase tracking-widest">
+                Building <span className="text-white font-medium">{subdomain}</span>...
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

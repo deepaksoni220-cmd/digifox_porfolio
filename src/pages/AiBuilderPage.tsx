@@ -1228,7 +1228,7 @@ export const AiBuilderPage: React.FC = () => {
                     {sidebarEnableWhatsapp && (
                       <div className="flex flex-col gap-1.5 mt-1">
                         <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">enter watsapp numb</label>
-                        <input type="text" value={sidebarWhatsappNumber} placeholder="e.g. +1234567890"
+                        <input type="text" value={sidebarWhatsappNumber} placeholder="e.g. 1234567890"
                           onChange={(e) => { setSidebarWhatsappNumber(e.target.value); updateIframeField('whatsappNumber', e.target.value); }}
                           className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-white focus:border-green-500/60 outline-none text-xs" />
                       </div>
@@ -1892,7 +1892,7 @@ export const AiBuilderPage: React.FC = () => {
                           {sidebarEnableWhatsapp && (
                             <div className="flex flex-col gap-2 mt-1">
                               <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">enter watsapp numb</label>
-                              <input type="text" value={sidebarWhatsappNumber} placeholder="e.g. +1234567890"
+                              <input type="text" value={sidebarWhatsappNumber} placeholder="e.g. 1234567890"
                                 onChange={(e) => { setSidebarWhatsappNumber(e.target.value); updateIframeField('whatsappNumber', e.target.value); }}
                                 className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-green-500/60 outline-none" />
                             </div>

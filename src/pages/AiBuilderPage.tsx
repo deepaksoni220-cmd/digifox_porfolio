@@ -146,6 +146,7 @@ export const AiBuilderPage: React.FC = () => {
           loop: msg.loop || 'none',
         });
         setSidebarTab('design');
+        setFsTab('design'); // auto-switch Draftly sidebar to Design tab
       }
       if (msg && msg.type === 'ELEMENT_TEXT_UPDATED') {
         setSelectedElement(prev => prev ? { ...prev, text: msg.text } : null);
@@ -270,25 +271,15 @@ export const AiBuilderPage: React.FC = () => {
         doc.head.appendChild(style);
       }
 
+      const escapeCSS = (str: string) =>
+        str.replace(/([:\[\]!#().,"'<>*+~=|^${}])/g, '\\$1');
+
       const getUniqueSelector = (el: HTMLElement) => {
-        if (el.id) return '#' + el.id;
-        if (el.className) {
-          const classes = Array.from(el.classList).filter(c => !c.startsWith('customizer-selected-element')).join('.');
-          if (classes) return el.tagName.toLowerCase() + '.' + classes.split(' ').join('.');
+        // Tag + data-editorid is the most reliable approach
+        if (!el.getAttribute('data-editorid')) {
+          el.setAttribute('data-editorid', Math.random().toString(36).slice(2, 9));
         }
-        let current: HTMLElement | null = el;
-        const path: string[] = [];
-        while (current && current.nodeType === Node.ELEMENT_NODE) {
-          let selector = current.nodeName.toLowerCase();
-          if (current.id) { selector += '#' + current.id; path.unshift(selector); break; }
-          else {
-            let sib: Element | null = current; let sibIndex = 1;
-            while (sib = sib.previousElementSibling) { if (sib.nodeName.toLowerCase() === current.nodeName.toLowerCase()) sibIndex++; }
-            if (sibIndex > 1) selector += `:nth-of-type(${sibIndex})`;
-          }
-          path.unshift(selector); current = current.parentElement;
-        }
-        return path.join(' > ');
+        return `[data-editorid="${el.getAttribute('data-editorid')}"]`;
       };
 
       const rgbToHex = (rgb: string) => {
@@ -339,18 +330,20 @@ export const AiBuilderPage: React.FC = () => {
       const handleCustomizerMessage = (event: MessageEvent) => {
         const msg = event.data;
         if (msg && msg.type === 'UPDATE_ELEMENT_STYLE') {
-          const el = doc.querySelector(msg.selector) as HTMLElement;
+          // Primary: find by data-editorid attribute; fallback: selected class
+          let el = msg.selector ? doc.querySelector(msg.selector) as HTMLElement : null;
+          if (!el) el = doc.querySelector('.customizer-selected-element') as HTMLElement;
           if (el) {
             if (msg.html !== undefined) el.innerHTML = msg.html;
-            if (msg.fontSize) el.style.fontSize = msg.fontSize;
-            if (msg.fontWeight) el.style.fontWeight = msg.fontWeight;
-            if (msg.fontStyle !== undefined) el.style.fontStyle = msg.fontStyle;
-            if (msg.textDecoration !== undefined) el.style.textDecoration = msg.textDecoration;
-            if (msg.color) el.style.color = msg.color;
-            if (msg.fontFamily) el.style.fontFamily = msg.fontFamily;
-            if (msg.letterSpacing !== undefined) el.style.letterSpacing = msg.letterSpacing;
-            if (msg.lineHeight !== undefined) el.style.lineHeight = msg.lineHeight;
-            if (msg.textAlign !== undefined) el.style.textAlign = msg.textAlign;
+            if (msg.fontSize) el.style.setProperty('font-size', msg.fontSize, 'important');
+            if (msg.fontWeight) el.style.setProperty('font-weight', msg.fontWeight, 'important');
+            if (msg.fontStyle !== undefined) el.style.setProperty('font-style', msg.fontStyle, 'important');
+            if (msg.textDecoration !== undefined) el.style.setProperty('text-decoration', msg.textDecoration, 'important');
+            if (msg.color) el.style.setProperty('color', msg.color, 'important');
+            if (msg.fontFamily) el.style.setProperty('font-family', msg.fontFamily, 'important');
+            if (msg.letterSpacing !== undefined) el.style.setProperty('letter-spacing', msg.letterSpacing, 'important');
+            if (msg.lineHeight !== undefined) el.style.setProperty('line-height', msg.lineHeight, 'important');
+            if (msg.textAlign !== undefined) el.style.setProperty('text-align', msg.textAlign, 'important');
             const allIn=['animate-fade-up','animate-slide-in-left','animate-fade-in','animate-zoom-in','animate-bounce-in','animate-flip-x','animate-blur-in','animate-slide-up','animate-slide-in-right','animate-rotate-in','animate-scale-up'];
             const inMap: Record<string,string>={'fade-up':'animate-fade-up','slide-in-left':'animate-slide-in-left','fade-in':'animate-fade-in','zoom-in':'animate-zoom-in','bounce-in':'animate-bounce-in','flip-x':'animate-flip-x','blur-in':'animate-blur-in','slide-up':'animate-slide-up','slide-in-right':'animate-slide-in-right','rotate-in':'animate-rotate-in','scale-up':'animate-scale-up'};
             el.classList.remove(...allIn); if (msg.animateIn && msg.animateIn!=='none') el.classList.add(inMap[msg.animateIn]);
@@ -363,8 +356,17 @@ export const AiBuilderPage: React.FC = () => {
           }
         }
         if (msg && msg.type === 'INLINE_FORMAT') doc.execCommand(msg.command, false, msg.value||undefined);
-        if (msg && msg.type === 'REMOVE_ELEMENT') { const el=doc.querySelector(msg.selector) as HTMLElement; if(el) el.remove(); window.parent.postMessage({type:'ELEMENT_DESELECTED'},'*'); }
-        if (msg && msg.type === 'RESET_ELEMENT_FONT') { const el=doc.querySelector(msg.selector) as HTMLElement; if(el){el.style.fontFamily='';el.style.fontSize='';el.style.fontWeight='';el.style.fontStyle='';el.style.textDecoration='';el.style.color='';el.style.letterSpacing='';el.style.lineHeight='';} }
+        if (msg && msg.type === 'REMOVE_ELEMENT') {
+          let el = msg.selector ? doc.querySelector(msg.selector) as HTMLElement : null;
+          if (!el) el = doc.querySelector('.customizer-selected-element') as HTMLElement;
+          if (el) el.remove();
+          window.parent.postMessage({type:'ELEMENT_DESELECTED'},'*');
+        }
+        if (msg && msg.type === 'RESET_ELEMENT_FONT') {
+          let el = msg.selector ? doc.querySelector(msg.selector) as HTMLElement : null;
+          if (!el) el = doc.querySelector('.customizer-selected-element') as HTMLElement;
+          if (el) { el.style.removeProperty('font-family'); el.style.removeProperty('font-size'); el.style.removeProperty('font-weight'); el.style.removeProperty('font-style'); el.style.removeProperty('text-decoration'); el.style.removeProperty('color'); el.style.removeProperty('letter-spacing'); el.style.removeProperty('line-height'); }
+        }
       };
 
       iframe.contentWindow?.addEventListener('message', handleCustomizerMessage);

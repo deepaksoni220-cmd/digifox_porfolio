@@ -294,11 +294,33 @@ export const AiBuilderPage: React.FC = () => {
         str.replace(/([:\[\]!#().,"'<>*+~=|^${}])/g, '\\$1');
 
       const getUniqueSelector = (el: HTMLElement) => {
-        // Tag + data-editorid is the most reliable approach
-        if (!el.getAttribute('data-editorid')) {
-          el.setAttribute('data-editorid', Math.random().toString(36).slice(2, 9));
+        if (el.getAttribute('data-editorid')) {
+          return `[data-editorid="${el.getAttribute('data-editorid')}"]`;
         }
-        return `[data-editorid="${el.getAttribute('data-editorid')}"]`;
+        // Generate a stable CSS path if no editorid exists
+        let path = [];
+        let current: HTMLElement | null = el;
+        while (current && current !== doc.documentElement) {
+          let selector = current.tagName.toLowerCase();
+          if (current.id) {
+            selector += '#' + current.id;
+            path.unshift(selector);
+            break; // IDs are unique enough
+          } else {
+            let index = 1;
+            let sibling = current.previousElementSibling;
+            while (sibling) {
+              if (sibling.tagName === current.tagName) index++;
+              sibling = sibling.previousElementSibling;
+            }
+            if (index > 1 || (current.nextElementSibling && current.nextElementSibling.tagName === current.tagName)) {
+              selector += `:nth-of-type(${index})`;
+            }
+          }
+          path.unshift(selector);
+          current = current.parentElement;
+        }
+        return path.join(' > ');
       };
 
       const rgbToHex = (rgb: string) => {

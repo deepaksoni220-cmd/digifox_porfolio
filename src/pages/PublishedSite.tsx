@@ -144,33 +144,69 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
         const loopMap: Record<string, string>= {'pulse':'animate-pulse-custom','shimmer':'animate-shimmer','float-bounce':'animate-float','spin-loop':'animate-spin-loop','wiggle':'animate-wiggle','flash-link':'animate-flash-link','heartbeat':'animate-heartbeat','sway':'animate-sway','slow-pulse':'animate-slow-pulse','soft-bounce':'animate-soft-bounce','glow':'animate-glow'};
         
         const applyStyles = () => {
+          let hasChanges = false;
+          // Create a temp div for HTML normalization to prevent infinite innerHTML loops
+          const tempDiv = doc.createElement('div');
+
           Object.keys(customStyles).forEach(selector => {
             const el = doc.querySelector(selector) as HTMLElement;
-            if (el && !el.dataset.styled) {
+            if (el) {
               const rules = customStyles[selector];
-              if (rules.html !== undefined) el.innerHTML = rules.html;
-              if (rules.fontSize) el.style.setProperty('font-size', rules.fontSize, 'important');
-              if (rules.fontWeight) el.style.setProperty('font-weight', rules.fontWeight, 'important');
-              if (rules.color) el.style.setProperty('color', rules.color, 'important');
-              if (rules.fontFamily) el.style.setProperty('font-family', `"${rules.fontFamily}", sans-serif`, 'important');
+              let needsUpdate = false;
               
-              if (rules.animateIn && rules.animateIn !== 'none' && inMap[rules.animateIn]) el.classList.add(inMap[rules.animateIn]);
-              if (rules.animateOut && rules.animateOut !== 'none' && outMap[rules.animateOut]) el.classList.add(outMap[rules.animateOut]);
-              if (rules.loop && rules.loop !== 'none' && loopMap[rules.loop]) el.classList.add(loopMap[rules.loop]);
+              // 1. Check for text/HTML drift
+              if (rules.html !== undefined) {
+                tempDiv.innerHTML = rules.html;
+                if (el.innerHTML !== tempDiv.innerHTML) {
+                  needsUpdate = true;
+                }
+              }
               
-              // Mark as styled so we don't re-apply indefinitely
-              el.dataset.styled = "true";
+              // 2. Check for animation classes drift
+              if (rules.animateIn && rules.animateIn !== 'none' && inMap[rules.animateIn] && !el.classList.contains(inMap[rules.animateIn])) {
+                needsUpdate = true;
+              }
+              if (rules.animateOut && rules.animateOut !== 'none' && outMap[rules.animateOut] && !el.classList.contains(outMap[rules.animateOut])) {
+                needsUpdate = true;
+              }
+              if (rules.loop && rules.loop !== 'none' && loopMap[rules.loop] && !el.classList.contains(loopMap[rules.loop])) {
+                needsUpdate = true;
+              }
+              
+              // 3. Check for inline style drift
+              if (rules.fontSize && el.style.fontSize !== rules.fontSize) needsUpdate = true;
+              if (rules.color && el.style.color !== rules.color) needsUpdate = true;
+              if (rules.fontFamily && el.style.fontFamily !== `"${rules.fontFamily}", sans-serif`) needsUpdate = true;
+              
+              if (needsUpdate || !el.dataset.styled) {
+                if (rules.html !== undefined) el.innerHTML = tempDiv.innerHTML;
+                if (rules.fontSize) el.style.setProperty('font-size', rules.fontSize, 'important');
+                if (rules.fontWeight) el.style.setProperty('font-weight', rules.fontWeight, 'important');
+                if (rules.color) el.style.setProperty('color', rules.color, 'important');
+                if (rules.fontFamily) el.style.setProperty('font-family', `"${rules.fontFamily}", sans-serif`, 'important');
+                
+                if (rules.animateIn && rules.animateIn !== 'none' && inMap[rules.animateIn]) el.classList.add(inMap[rules.animateIn]);
+                if (rules.animateOut && rules.animateOut !== 'none' && outMap[rules.animateOut]) el.classList.add(outMap[rules.animateOut]);
+                if (rules.loop && rules.loop !== 'none' && loopMap[rules.loop]) el.classList.add(loopMap[rules.loop]);
+                
+                el.dataset.styled = "true";
+                hasChanges = true;
+              }
             }
           });
+          return hasChanges;
         };
         
         applyStyles(); // Initial attempt
         
-        // Wait for React to mount and elements to appear
-        const observer = new MutationObserver(() => {
+        // Aggressive observer: Re-apply if React blows away the styles/classes
+        const observer = new MutationObserver((mutations) => {
+          // Temporarily disconnect to avoid infinite loop when we change the DOM
+          observer.disconnect();
           applyStyles();
+          observer.observe(doc.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class', 'style'] });
         });
-        observer.observe(doc.body, { childList: true, subtree: true });
+        observer.observe(doc.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class', 'style'] });
       }
 
     } catch (e) {

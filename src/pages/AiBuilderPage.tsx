@@ -670,7 +670,7 @@ export const AiBuilderPage: React.FC = () => {
             fontWeight: nextElement.fontWeight,
             color: nextElement.color,
             fontFamily: nextElement.fontFamily,
-            textAlign: updatedFields.textAlign !== undefined ? updatedFields.textAlign : (prev.customStyles?.[selectedElement.selector]?.textAlign || nextElement.textAlign),
+            textAlign: updatedFields.textAlign !== undefined ? updatedFields.textAlign : prev.customStyles?.[selectedElement.selector]?.textAlign,
             animateIn: nextElement.animateIn,
             animateOut: nextElement.animateOut,
             loop: nextElement.loop,

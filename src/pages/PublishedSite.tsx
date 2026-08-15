@@ -177,6 +177,7 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
               if (rules.fontSize && el.style.fontSize !== rules.fontSize) needsUpdate = true;
               if (rules.color && el.style.color !== rules.color) needsUpdate = true;
               if (rules.fontFamily && el.style.fontFamily !== `"${rules.fontFamily}", sans-serif`) needsUpdate = true;
+              if (rules.href !== undefined && el.getAttribute('href') !== rules.href) needsUpdate = true;
               
               if (needsUpdate || !el.dataset.styled) {
                 if (rules.html !== undefined) el.innerHTML = tempDiv.innerHTML;
@@ -184,6 +185,7 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
                 if (rules.fontWeight) el.style.setProperty('font-weight', rules.fontWeight, 'important');
                 if (rules.color) el.style.setProperty('color', rules.color, 'important');
                 if (rules.fontFamily) el.style.setProperty('font-family', `"${rules.fontFamily}", sans-serif`, 'important');
+                if (rules.href !== undefined) el.setAttribute('href', rules.href);
                 
                 if (rules.animateIn && rules.animateIn !== 'none' && inMap[rules.animateIn]) el.classList.add(inMap[rules.animateIn]);
                 if (rules.animateOut && rules.animateOut !== 'none' && outMap[rules.animateOut]) el.classList.add(outMap[rules.animateOut]);

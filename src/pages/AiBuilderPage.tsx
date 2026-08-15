@@ -62,6 +62,8 @@ export const AiBuilderPage: React.FC = () => {
     animateIn: string;
     animateOut: string;
     loop: string;
+    href?: string;
+    tagName: string;
   } | null>(null);
   const [sidebarTab, setSidebarTab] = useState<'details' | 'design'>('details');
 
@@ -144,9 +146,11 @@ export const AiBuilderPage: React.FC = () => {
           textDecoration: msg.textDecoration || 'none',
           color: msg.color,
           fontFamily: msg.fontFamily,
-          animateIn: msg.animateIn || 'none',
-          animateOut: msg.animateOut || 'none',
-          loop: msg.loop || 'none',
+          animateIn: msg.animateIn,
+          animateOut: msg.animateOut,
+          loop: msg.loop,
+          href: msg.href,
+          tagName: msg.tagName
         });
         setSidebarTab('design');
         setFsTab('design'); // auto-switch Draftly sidebar to Design tab
@@ -349,7 +353,9 @@ export const AiBuilderPage: React.FC = () => {
 
       const findTextEl = (el: HTMLElement | null): HTMLElement | null => {
         if (!el || el === doc.body || el === doc.documentElement) return null;
-        const tags = ['H1','H2','H3','H4','H5','H6','P','SPAN','A','BUTTON','LI','LABEL'];
+        const aTag = el.closest('a');
+        if (aTag) return aTag;
+        const tags = ['H1','H2','H3','H4','H5','H6','P','SPAN','A','BUTTON','LI','LABEL','SVG','IMG'];
         if (tags.includes(el.tagName)) return el;
         if (el.children.length === 0 && el.textContent && el.textContent.trim().length > 0) return el;
         return findTextEl(el.parentElement);
@@ -376,6 +382,8 @@ export const AiBuilderPage: React.FC = () => {
             fontSize:cs.fontSize, fontWeight:cs.fontWeight, fontStyle:cs.fontStyle, textDecoration:cs.textDecoration,
             color:rgbToHex(cs.color), fontFamily:cs.fontFamily.replace(/['"]/g,''),
             animateIn:animIn, animateOut:animOut, loop:loop,
+            href: htmlEl.getAttribute('href') || undefined,
+            tagName: htmlEl.tagName,
             toolbarX:Math.round(rect.left+rect.width/2), toolbarY:Math.round(rect.top)
           },'*');
         }
@@ -439,6 +447,7 @@ export const AiBuilderPage: React.FC = () => {
       if (msg.letterSpacing !== undefined) el.style.setProperty('letter-spacing', msg.letterSpacing, 'important');
       if (msg.lineHeight    !== undefined) el.style.setProperty('line-height',    msg.lineHeight,    'important');
       if (msg.textAlign     !== undefined) el.style.setProperty('text-align',     msg.textAlign,     'important');
+      if (msg.href          !== undefined) el.setAttribute('href', msg.href);
       // Animate In
       el.classList.remove.apply(el.classList, allIn);
       if (msg.animateIn  && msg.animateIn  !== 'none' && inMap[msg.animateIn])   el.classList.add(inMap[msg.animateIn]);
@@ -645,7 +654,8 @@ export const AiBuilderPage: React.FC = () => {
         textAlign: updatedFields.textAlign,
         animateIn: nextElement.animateIn,
         animateOut: nextElement.animateOut,
-        loop: nextElement.loop
+        loop: nextElement.loop,
+        href: nextElement.href
       }, '*');
     }
     setPreviewData(prev => {
@@ -660,9 +670,11 @@ export const AiBuilderPage: React.FC = () => {
             fontWeight: nextElement.fontWeight,
             color: nextElement.color,
             fontFamily: nextElement.fontFamily,
+            textAlign: updatedFields.textAlign !== undefined ? updatedFields.textAlign : (prev.customStyles?.[selectedElement.selector]?.textAlign || nextElement.textAlign),
             animateIn: nextElement.animateIn,
             animateOut: nextElement.animateOut,
-            loop: nextElement.loop
+            loop: nextElement.loop,
+            href: nextElement.href
           }
         }
       };
@@ -1846,6 +1858,20 @@ export const AiBuilderPage: React.FC = () => {
                               <button title="Reset styles" onClick={() => iframeRef.current?.contentWindow?.postMessage({ type:'RESET_ELEMENT_FONT', selector:selectedElement.selector },'*')} className="px-2 py-1 rounded-lg text-xs font-bold text-[var(--text-secondary)] hover:bg-[var(--border-strong)] transition-all">↺</button>
                               <button title="Done" onClick={() => setSelectedElement(null)} className="px-3 py-1 rounded-lg text-xs font-bold bg-[#3b82f6] text-white hover:bg-[#2563eb] transition-all">Done</button>
                             </div>
+
+                            {/* Link URL */}
+                            {selectedElement.tagName === 'A' && (
+                              <div className="flex flex-col gap-1.5">
+                                <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Link URL</label>
+                                <input 
+                                  type="text" 
+                                  placeholder="https://..." 
+                                  value={selectedElement.href || ''} 
+                                  onChange={(e) => updateSelectedElementStyle({ href: e.target.value })}
+                                  className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-3 py-2.5 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none text-sm"
+                                />
+                              </div>
+                            )}
 
                             {/* Font */}
                             <div className="flex flex-col gap-1.5">

@@ -425,8 +425,14 @@ export const AiBuilderPage: React.FC = () => {
     }
 
     if (msg.type === 'UPDATE_FIELD') {
-      // Update brand name / contact fields in template
-      document.querySelectorAll('[data-field="' + msg.field + '"]').forEach(function(el){ el.textContent = msg.value; });
+      // Update brand name / contact fields / logos in template
+      document.querySelectorAll('[data-field="' + msg.field + '"]').forEach(function(el){ 
+        if (el.tagName === 'IMG') {
+          el.src = msg.value;
+        } else {
+          el.textContent = msg.value;
+        }
+      });
     }
   });
 })();

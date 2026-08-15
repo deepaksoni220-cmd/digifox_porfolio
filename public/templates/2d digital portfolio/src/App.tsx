@@ -211,11 +211,11 @@ function App() {
             <div className="flex items-center">
               <div className="flex items-center gap-2">
                 {data.logo ? (
-                  <img src={data.logo} alt="Logo" className="w-6 h-6 object-contain" />
+                  <img src={data.logo} alt="Logo" data-field="logo" className="w-6 h-6 object-contain" />
                 ) : (
                   <Globe className="w-6 h-6 text-white animate-[spin_8s_linear_infinite]" />
                 )}
-                <span className="text-white font-semibold text-lg tracking-tight select-none">
+                <span data-field="brandName" className="text-white font-semibold text-lg tracking-tight select-none">
                   {data.brandName}
                 </span>
               </div>

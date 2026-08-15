@@ -772,6 +772,13 @@ export const AiBuilderPage: React.FC = () => {
     }
   };
 
+  const handleAiEditFromFs = async () => {
+    if (!aiEditPrompt.trim() || !previewData || !previewData.templateStyle) return;
+    const editText = aiEditPrompt;
+    await handleAiEdit();
+    setAiEditLog(prev => [...prev, editText].slice(-10));
+  };
+
   const handlePublish = async () => {
     if (!previewData) return;
 
@@ -808,171 +815,362 @@ export const AiBuilderPage: React.FC = () => {
     }
   };
 
+  // Viewport state for the Draftly-style editor
+  const [viewport, setViewport] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const [fsTab, setFsTab] = useState<'customize' | 'design' | 'ai'>('customize');
+  const [aiEditLog, setAiEditLog] = useState<string[]>([]);
+
+  const viewportWidth = { desktop: '100%', tablet: '768px', mobile: '390px' };
+
   if (previewData && !isBuilding) {
     return (
-      <div className="fixed inset-0 z-50 bg-[#07080e] text-white flex flex-col h-screen overflow-hidden">
-        {/* Fullscreen Editor Header */}
-        <header className="flex justify-between items-center px-6 py-4 border-b border-[#1b1d30] bg-[#0c0d1b] shrink-0">
-          <div className="flex items-center gap-3">
-            <button 
+      <div className="fixed inset-0 z-50 bg-[#07080e] text-white flex flex-col h-screen overflow-hidden font-sans">
+
+        {/* ── TOP BAR ── */}
+        <header className="flex justify-between items-center px-5 py-3 border-b border-white/[0.06] bg-[#0a0b15] shrink-0 gap-4">
+
+          {/* Left: back + site name */}
+          <div className="flex items-center gap-3 min-w-0">
+            <button
               onClick={() => setPreviewData(null)}
-              className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-white/10 hover:bg-white/5 text-xs font-semibold text-white/80 hover:text-white transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 hover:bg-white/5 text-[11px] font-semibold text-white/60 hover:text-white transition-all shrink-0"
             >
-              ← Back to Gallery
+              ← Back
             </button>
-            <div className="w-px h-5 bg-white/15" />
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/20">
-                {previewData.websiteType}
-              </span>
-              <span className="text-xs text-white/60">
-                Editing Custom Template
-              </span>
-            </div>
+            <div className="w-px h-4 bg-white/10 shrink-0" />
+            <span className="text-[11px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md bg-blue-500/15 text-blue-400 border border-blue-500/20 shrink-0">
+              {previewData.websiteType}
+            </span>
+            <span className="text-[11px] text-white/35 truncate hidden sm:block">— Webmake Editor</span>
           </div>
 
-          <div className="flex gap-4">
-            <button 
-              onClick={handlePublish}
-              disabled={isPublishing}
-              className="bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white px-6 py-2 rounded-full font-bold uppercase tracking-wider text-xs transition-transform hover:scale-105 shadow-[0_0_15px_rgba(59,130,246,0.3)] cursor-pointer"
-            >
-              {isPublishing ? "Publishing..." : "Publish to Web 🚀"}
-            </button>
+          {/* Center: Viewport switcher */}
+          <div className="flex items-center gap-1 bg-white/[0.04] border border-white/[0.08] rounded-xl p-1 shrink-0">
+            {([['desktop','🖥','Desktop'],['tablet','📱','Tablet'],['mobile','📞','Mobile']] as const).map(([v,ic,label]) => (
+              <button key={v} onClick={() => setViewport(v)}
+                title={label}
+                className={`px-3 py-1.5 rounded-lg text-sm transition-all font-semibold ${viewport === v ? 'bg-[#3b82f6] text-white shadow-md' : 'text-white/40 hover:text-white/80'}`}>
+                {ic}
+              </button>
+            ))}
+          </div>
+
+          {/* Right: actions */}
+          <div className="flex gap-2.5 shrink-0">
+            {publishedUrl && (
+              <a href={publishedUrl} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-green-500/30 bg-green-500/10 text-green-400 text-[11px] font-bold uppercase tracking-wider hover:bg-green-500/20 transition-all">
+                🌐 Live
+              </a>
+            )}
             {previewData.previewUrl && (
-              <button 
-                onClick={() => window.open(previewData.previewUrl, '_blank')}
-                className="bg-white/10 hover:bg-white/15 text-white border border-white/10 px-6 py-2 rounded-full font-bold uppercase tracking-wider text-xs transition-transform hover:scale-105 cursor-pointer"
-              >
-                Open Live Site ↗
+              <button onClick={() => window.open(previewData.previewUrl, '_blank')}
+                className="px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-[11px] font-bold uppercase tracking-wider transition-all">
+                Open ↗
               </button>
             )}
+            <button onClick={handlePublish} disabled={isPublishing}
+              className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#3b82f6] to-[#6366f1] hover:opacity-90 disabled:opacity-40 text-white text-[11px] font-bold uppercase tracking-wider shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all">
+              {isPublishing ? 'Publishing...' : '🚀 Publish'}
+            </button>
           </div>
         </header>
 
-        {/* Fullscreen Workspace */}
+        {/* ── WORKSPACE ── */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Main Iframe Editor */}
-          <div className="flex-1 p-6 bg-[#040408] relative overflow-hidden flex flex-col justify-center items-center">
-            {publishedUrl && (
-              <div className="absolute top-6 left-6 right-6 z-20 bg-blue-500/10 border border-blue-500/30 text-blue-400 p-4 rounded-2xl flex items-center justify-between shadow-2xl">
-                <span className="font-semibold text-sm">Your website is live!</span>
-                <a href={publishedUrl} target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-300 text-sm">
-                  {publishedUrl}
-                </a>
+
+          {/* ── LEFT SIDEBAR ── */}
+          <div className="w-[260px] shrink-0 bg-[#0a0b15] border-r border-white/[0.06] flex flex-col overflow-hidden">
+
+            {/* Sidebar tabs */}
+            <div className="flex border-b border-white/[0.06] shrink-0">
+              {([['customize','Customize'],['design','Design'],['ai','✨ AI']] as const).map(([t,label]) => (
+                <button key={t} onClick={() => setFsTab(t)}
+                  className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all border-b-2 ${fsTab === t ? 'border-[#3b82f6] text-[#3b82f6] bg-[#3b82f6]/5' : 'border-transparent text-white/30 hover:text-white/60'}`}>
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* Sidebar content */}
+            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4" style={{scrollbarWidth:'thin', scrollbarColor:'#1b1d30 transparent'}}>
+
+              {/* ── TAB: CUSTOMIZE ── */}
+              {fsTab === 'customize' && (
+                <>
+                  <p className="text-[9px] uppercase tracking-widest text-white/25 font-bold">Brand — Logo & Details</p>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Brand Name</label>
+                    <input type="text" value={sidebarBrandName} placeholder="e.g. Acme Corp"
+                      onChange={(e) => { setSidebarBrandName(e.target.value); updateIframeField('brandName', e.target.value); }}
+                      className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-white focus:border-blue-500/60 outline-none text-xs" />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Logo</label>
+                    <div className="relative">
+                      <input type="file" accept="image/*" onChange={handleSidebarLogo}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                      <div className="w-full bg-white/[0.04] border border-white/[0.08] border-dashed rounded-lg px-3 py-3 text-white/40 flex justify-between items-center hover:border-blue-500/40 transition-colors text-xs cursor-pointer">
+                        <span>{sidebarLogo ? '✅ Logo uploaded' : '📁 Upload logo...'}</span>
+                        {sidebarLogo && <img src={sidebarLogo} alt="Logo" className="h-5 w-auto object-contain rounded" />}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="w-full h-px bg-white/[0.05]" />
+                  <p className="text-[9px] uppercase tracking-widest text-white/25 font-bold">Contact Info</p>
+
+                  {[
+                    { label: 'Address', field: 'address', val: sidebarAddress, set: setSidebarAddress, ph: '123 Main St', type: 'text' },
+                    { label: 'Phone', field: 'phone', val: sidebarPhone, set: setSidebarPhone, ph: '+1 234 567 890', type: 'tel' },
+                    { label: 'Email', field: 'email', val: sidebarEmail, set: setSidebarEmail, ph: 'contact@brand.com', type: 'email' },
+                  ].map(({ label, field, val, set, ph, type }) => (
+                    <div key={field} className="flex flex-col gap-1.5">
+                      <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">{label}</label>
+                      <input type={type} value={val} placeholder={ph}
+                        onChange={(e) => { (set as any)(e.target.value); updateIframeField(field, e.target.value); }}
+                        className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2.5 text-white focus:border-blue-500/60 outline-none text-xs" />
+                    </div>
+                  ))}
+                </>
+              )}
+
+              {/* ── TAB: DESIGN ── */}
+              {fsTab === 'design' && (
+                <>
+                  {!selectedElement ? (
+                    <div className="flex-1 flex flex-col items-center justify-center text-center py-12 gap-3">
+                      <div className="w-14 h-14 rounded-2xl border border-white/10 bg-white/[0.03] flex items-center justify-center text-2xl">✦</div>
+                      <p className="text-xs font-semibold text-white/50">No element selected</p>
+                      <p className="text-[10px] text-white/25 max-w-[160px] leading-relaxed">Click any text or image in the preview to select and style it</p>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-3">
+                      <div className="text-[9px] text-white/20 font-mono truncate" title={selectedElement.selector}>{selectedElement.selector}</div>
+
+                      {/* Inline toolbar */}
+                      <div className="flex items-center gap-1 bg-white/[0.04] border border-white/[0.08] rounded-xl px-2.5 py-2 flex-wrap">
+                        {[['B','bold','font-bold'],['I','italic','italic'],['U','underline','underline']].map(([l,cmd,cls]) => (
+                          <button key={cmd} onClick={() => iframeRef.current?.contentWindow?.postMessage({type:'INLINE_FORMAT',command:cmd},'*')}
+                            className={`px-2 py-1 rounded-md text-xs ${cls} hover:bg-blue-500/20 hover:text-blue-300 transition-all text-white/70`}>{l}</button>
+                        ))}
+                        <div className="w-px h-4 bg-white/10 mx-0.5" />
+                        <button onClick={() => { const url=prompt('Enter URL'); if(url) iframeRef.current?.contentWindow?.postMessage({type:'INLINE_FORMAT',command:'createLink',value:url},'*'); }}
+                          className="px-2 py-1 rounded-md text-xs hover:bg-blue-500/20 hover:text-blue-300 transition-all text-white/70">🔗</button>
+                        <div className="flex-1" />
+                        <button onClick={() => { iframeRef.current?.contentWindow?.postMessage({type:'REMOVE_ELEMENT',selector:selectedElement.selector},'*'); setSelectedElement(null); }}
+                          className="px-2 py-1 rounded-md text-xs text-red-400 hover:bg-red-500/20 transition-all">✕</button>
+                        <button onClick={() => iframeRef.current?.contentWindow?.postMessage({type:'RESET_ELEMENT_FONT',selector:selectedElement.selector},'*')}
+                          className="px-2 py-1 rounded-md text-xs text-white/40 hover:bg-white/10 transition-all">↺</button>
+                        <button onClick={() => setSelectedElement(null)}
+                          className="px-2.5 py-1 rounded-md text-xs font-bold bg-blue-500 text-white hover:bg-blue-400 transition-all">Done</button>
+                      </div>
+
+                      {/* Font */}
+                      <div className="flex flex-col gap-1">
+                        <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Font</label>
+                        <select value={selectedElement.fontFamily.split(',')[0].trim().replace(/['"]/g,'')}
+                          onChange={(e) => updateSelectedElementStyle({fontFamily: e.target.value})}
+                          className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-white focus:border-blue-500/60 outline-none text-xs">
+                          {['System UI','Inter','Outfit','Space Grotesk','Instrument Serif','Playfair Display','Raleway','Sora','DM Sans','Lato','Poppins','Montserrat','Nunito','Source Code Pro','Merriweather','Josefin Sans','Work Sans','Plus Jakarta Sans','Libre Baskerville'].map(f => <option key={f} value={f}>{f}</option>)}
+                        </select>
+                      </div>
+
+                      {/* Size + Weight */}
+                      <div className="flex gap-2">
+                        <div className="flex-1 flex flex-col gap-1">
+                          <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Size px</label>
+                          <input type="number" min="8" max="200" value={parseInt(selectedElement.fontSize)||16}
+                            onChange={(e) => updateSelectedElementStyle({fontSize: e.target.value+'px'})}
+                            className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-2 py-2 text-white focus:border-blue-500/60 outline-none text-xs text-center" />
+                        </div>
+                        <div className="flex-1 flex flex-col gap-1">
+                          <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Weight</label>
+                          <select value={selectedElement.fontWeight} onChange={(e) => updateSelectedElementStyle({fontWeight: e.target.value})}
+                            className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-2 py-2 text-white focus:border-blue-500/60 outline-none text-xs">
+                            {[['300','Light'],['400','Regular'],['500','Medium'],['600','Semi-Bold'],['700','Bold'],['800','Extra Bold'],['900','Black']].map(([v,l]) => <option key={v} value={v}>{l}</option>)}
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* Color */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Color</label>
+                        <div className="flex gap-2 items-center">
+                          <input type="color" value={selectedElement.color.startsWith('#') ? selectedElement.color : '#ffffff'}
+                            onChange={(e) => updateSelectedElementStyle({color: e.target.value})}
+                            className="w-9 h-9 cursor-pointer rounded-lg border border-white/[0.08] p-0.5 bg-transparent" />
+                          <input type="text" value={selectedElement.color} onChange={(e) => updateSelectedElementStyle({color: e.target.value})}
+                            className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-2 py-2 text-white focus:border-blue-500/60 outline-none flex-1 text-xs font-mono text-center" />
+                        </div>
+                        <div className="flex gap-1.5 mt-0.5">
+                          {['#ffffff','#000000','#3b82f6','#8b5cf6','#ec4899','#f59e0b','#10b981','#ef4444'].map(c => (
+                            <button key={c} onClick={() => updateSelectedElementStyle({color: c})}
+                              className="w-5 h-5 rounded-full border border-white/20 hover:scale-125 transition-transform" style={{backgroundColor:c}} />
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Spacing + Line Height */}
+                      <div className="flex gap-2">
+                        <div className="flex-1 flex flex-col gap-1">
+                          <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Spacing</label>
+                          <select onChange={(e) => updateSelectedElementStyle({letterSpacing: e.target.value})}
+                            className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-2 py-2 text-white focus:border-blue-500/60 outline-none text-xs">
+                            <option value="normal">Normal</option><option value="-0.05em">Tight</option><option value="0.05em">Wide</option><option value="0.1em">Wider</option><option value="0.2em">Widest</option>
+                          </select>
+                        </div>
+                        <div className="flex-1 flex flex-col gap-1">
+                          <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Line H.</label>
+                          <select onChange={(e) => updateSelectedElementStyle({lineHeight: e.target.value})}
+                            className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-2 py-2 text-white focus:border-blue-500/60 outline-none text-xs">
+                            {['1','1.25','1.5','1.75','2'].map(v => <option key={v} value={v}>{v}</option>)}
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* Align */}
+                      <div className="flex flex-col gap-1">
+                        <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Align</label>
+                        <div className="flex gap-1">
+                          {[['left','←'],['center','↔'],['right','→'],['justify','⇔']].map(([v,ic]) => (
+                            <button key={v} onClick={() => updateSelectedElementStyle({textAlign: v})}
+                              className="flex-1 py-2 rounded-lg border border-white/[0.08] text-xs hover:border-blue-500/60 hover:text-blue-300 transition-all text-white/60">{ic}</button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Animate In */}
+                      <div className="flex flex-col gap-1.5 border-t border-white/[0.06] pt-3">
+                        <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Animate In</label>
+                        <div className="flex flex-wrap gap-1">
+                          {[{v:'none',l:'None'},{v:'fade-up',l:'↑Fade'},{v:'slide-in-left',l:'←Slide'},{v:'fade-in',l:'Fade'},{v:'zoom-in',l:'Zoom'},{v:'bounce-in',l:'Bounce'},{v:'flip-x',l:'Flip'},{v:'blur-in',l:'Blur'},{v:'slide-up',l:'↑Slide'},{v:'slide-in-right',l:'→Slide'},{v:'rotate-in',l:'Rotate'},{v:'scale-up',l:'Scale'}].map(p => (
+                            <button key={p.v} onClick={() => updateSelectedElementStyle({animateIn: p.v})}
+                              className={`px-2 py-1 rounded-md text-[10px] font-semibold transition-all border ${selectedElement.animateIn===p.v ? 'bg-blue-500 border-blue-500 text-white' : 'border-white/[0.08] text-white/50 hover:border-blue-500/50 hover:text-blue-300'}`}>{p.l}</button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Animate Out */}
+                      <div className="flex flex-col gap-1.5 border-t border-white/[0.06] pt-3">
+                        <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Animate Out</label>
+                        <div className="flex flex-wrap gap-1">
+                          {[{v:'none',l:'None'},{v:'fade-out',l:'Fade'},{v:'slide-out-right',l:'→Slide'},{v:'zoom-out',l:'Zoom'},{v:'slide-down',l:'↓Slide'},{v:'blur-out',l:'Blur'},{v:'slice-out-left',l:'Slice'},{v:'rotate-out',l:'Rotate'},{v:'bounce-out',l:'Bounce'}].map(p => (
+                            <button key={p.v} onClick={() => updateSelectedElementStyle({animateOut: p.v})}
+                              className={`px-2 py-1 rounded-md text-[10px] font-semibold transition-all border ${selectedElement.animateOut===p.v ? 'bg-purple-500 border-purple-500 text-white' : 'border-white/[0.08] text-white/50 hover:border-purple-500/50 hover:text-purple-300'}`}>{p.l}</button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Loop */}
+                      <div className="flex flex-col gap-1.5 border-t border-white/[0.06] pt-3">
+                        <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Loop</label>
+                        <div className="flex flex-wrap gap-1">
+                          {[{v:'none',l:'None'},{v:'pulse',l:'Pulse'},{v:'shimmer',l:'Shimmer'},{v:'float-bounce',l:'Float'},{v:'spin-loop',l:'Spin'},{v:'wiggle',l:'Wiggle'},{v:'flash-link',l:'Flash'},{v:'heartbeat',l:'Heart'},{v:'sway',l:'Sway'},{v:'slow-pulse',l:'SlowPulse'},{v:'soft-bounce',l:'Bounce'},{v:'glow',l:'Glow'}].map(p => (
+                            <button key={p.v} onClick={() => updateSelectedElementStyle({loop: p.v})}
+                              className={`px-2 py-1 rounded-md text-[10px] font-semibold transition-all border ${selectedElement.loop===p.v ? 'bg-pink-500 border-pink-500 text-white' : 'border-white/[0.08] text-white/50 hover:border-pink-500/50 hover:text-pink-300'}`}>{p.l}</button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* ── TAB: AI EDIT ── */}
+              {fsTab === 'ai' && (
+                <div className="flex flex-col gap-4">
+                  <div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-xl">
+                    <p className="text-[10px] text-blue-300/80 leading-relaxed">✨ Describe any change and AI will apply it instantly to your site content and theme.</p>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <textarea
+                      rows={3}
+                      value={aiEditPrompt}
+                      onChange={(e) => setAiEditPrompt(e.target.value)}
+                      placeholder="e.g. 'Make the hero title bolder', 'Change primary color to deep purple', 'Add urgency to the CTA button text'..."
+                      className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-3 py-3 text-white focus:border-blue-500/60 outline-none text-xs resize-none placeholder:text-white/25"
+                      onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleAiEditFromFs(); }}}
+                    />
+                    <button
+                      onClick={handleAiEditFromFs}
+                      disabled={isEditing || !aiEditPrompt.trim()}
+                      className="w-full bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 disabled:opacity-40 text-white py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
+                      {isEditing ? '⏳ Applying...' : '✨ Apply with AI'}
+                    </button>
+                  </div>
+
+                  {error && (
+                    <div className="text-red-400 text-[10px] bg-red-500/10 border border-red-500/20 p-3 rounded-xl">{error}</div>
+                  )}
+
+                  {aiEditLog.length > 0 && (
+                    <div className="flex flex-col gap-2">
+                      <label className="text-[9px] uppercase tracking-widest text-white/25 font-bold">Recent Edits</label>
+                      {aiEditLog.slice().reverse().map((log, i) => (
+                        <div key={i} className="text-[10px] text-white/40 bg-white/[0.03] border border-white/[0.05] rounded-lg px-3 py-2 truncate">
+                          ✓ {log}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Sidebar bottom: Publish CTA */}
+            <div className="p-4 border-t border-white/[0.06] shrink-0">
+              <button onClick={handlePublish} disabled={isPublishing}
+                className="w-full bg-gradient-to-r from-[#3b82f6] to-[#6366f1] hover:opacity-90 disabled:opacity-40 text-white py-3 rounded-xl text-[11px] font-bold uppercase tracking-wider shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all">
+                {isPublishing ? 'Publishing...' : '🚀 Publish to Web'}
+              </button>
+            </div>
+          </div>
+
+          {/* ── PREVIEW CANVAS ── */}
+          <div className="flex-1 bg-[#04040a] flex flex-col items-center justify-start overflow-auto p-6 gap-4">
+
+            {/* Browser chrome bar */}
+            <div className="shrink-0 flex items-center gap-2 px-4 py-2.5 bg-[#0d0e1c] border border-white/[0.07] rounded-t-2xl"
+              style={{ width: viewportWidth[viewport], maxWidth: '100%', transition: 'width 0.3s ease' }}>
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-red-500/60" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
+                <div className="w-3 h-3 rounded-full bg-green-500/60" />
               </div>
-            )}
-            
-            <div className="w-full h-full relative flex flex-col">
-              <div className="flex justify-between items-center mb-2 px-2 text-white/40 text-[10px] uppercase tracking-wider font-bold">
-                <span>Viewport Preview</span>
-                <span className="text-[#3b82f6] text-[11px] normal-case tracking-normal">
-                  👉 Click directly on any text in the preview to edit it. Also you can use the "Site Details" panel on the right to update your logo and business details of website as required by you
-                </span>
+              <div className="flex-1 bg-white/[0.05] rounded-lg px-3 py-1 text-[10px] text-white/30 truncate text-center font-mono">
+                {previewData.previewUrl || 'webmake — live preview'}
               </div>
+            </div>
+
+            {/* Iframe or renderer */}
+            <div
+              className="relative shrink-0 bg-white shadow-2xl shadow-black/60 rounded-b-2xl overflow-hidden border border-white/[0.07] border-t-0"
+              style={{ width: viewportWidth[viewport], maxWidth: '100%', height: 'calc(100vh - 180px)', transition: 'width 0.3s ease' }}>
               {previewData.previewUrl ? (
-                <iframe 
+                <iframe
                   ref={iframeRef}
-                  src={`${previewData.previewUrl}?editor=true`} 
+                  src={`${previewData.previewUrl}?editor=true`}
                   onLoad={handleIframeLoad}
-                  className="w-full h-full flex-1 border border-[#1b1d30] rounded-2xl shadow-2xl bg-white"
+                  className="w-full h-full"
                   title="Live Preview"
                 />
               ) : (
-                <div className="w-full h-full flex-1 overflow-y-auto border border-[#1b1d30] rounded-2xl shadow-2xl bg-[#0b0c16]">
+                <div className="w-full h-full overflow-y-auto">
                   <PreviewRenderer data={previewData} logoUrl={logoUrl} onDataChange={setPreviewData} />
                 </div>
               )}
             </div>
-          </div>
 
-          {/* Details Editor Sidebar */}
-          <div className="w-[380px] bg-[#0c0d1b] border-l border-[#1b1d30] p-6 flex flex-col gap-6 overflow-y-auto shrink-0">
-            <h3 className="text-sm font-bold uppercase tracking-widest border-b border-white/10 pb-4 text-white/90">
-              Site Details
-            </h3>
-            
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Brand Name</label>
-              <input 
-                type="text"
-                value={sidebarBrandName}
-                placeholder="e.g. Acme Corp"
-                onChange={(e) => {
-                  setSidebarBrandName(e.target.value);
-                  updateIframeField('brandName', e.target.value);
-                }}
-                className="bg-[#121424] border border-[#262942] rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none text-sm"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Logo</label>
-              <div className="relative flex items-center">
-                <input 
-                  type="file" 
-                  accept="image/*"
-                  onChange={handleSidebarLogo}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                />
-                <div className="w-full bg-[#121424] border border-[#262942] rounded-xl px-4 py-3 text-white/60 flex justify-between items-center hover:border-blue-500 transition-colors text-sm cursor-pointer">
-                  <span className="truncate">{sidebarLogo ? "Updated" : "Choose logo..."}</span>
-                  {sidebarLogo && <img src={sidebarLogo} alt="Logo" className="h-6 w-auto object-contain rounded" />}
-                </div>
+            {publishedUrl && (
+              <div className="mt-2 bg-green-500/10 border border-green-500/30 text-green-400 px-5 py-3 rounded-xl flex items-center gap-3 text-xs font-semibold">
+                <span>🌐 Live at:</span>
+                <a href={publishedUrl} target="_blank" rel="noopener noreferrer" className="underline hover:text-green-300">{publishedUrl}</a>
               </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Business Address</label>
-              <input 
-                type="text"
-                value={sidebarAddress}
-                placeholder="e.g. 123 Main St"
-                onChange={(e) => {
-                  setSidebarAddress(e.target.value);
-                  updateIframeField('address', e.target.value);
-                }}
-                className="bg-[#121424] border border-[#262942] rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none text-sm"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Contact Number</label>
-              <input 
-                type="text"
-                value={sidebarPhone}
-                placeholder="e.g. +1 234 567 890"
-                onChange={(e) => {
-                  setSidebarPhone(e.target.value);
-                  updateIframeField('phone', e.target.value);
-                }}
-                className="bg-[#121424] border border-[#262942] rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none text-sm"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] uppercase tracking-widest text-white/40 font-bold">Email Address</label>
-              <input 
-                type="email"
-                value={sidebarEmail}
-                placeholder="e.g. contact@mybrand.com"
-                onChange={(e) => {
-                  setSidebarEmail(e.target.value);
-                  updateIframeField('email', e.target.value);
-                }}
-                className="bg-[#121424] border border-[#262942] rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none text-sm"
-              />
-            </div>
-
-            <div className="mt-4 pt-6 border-t border-white/10">
-              <button 
-                onClick={handlePublish}
-                disabled={isPublishing}
-                className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:opacity-90 disabled:opacity-50 text-white px-6 py-4 rounded-xl font-bold uppercase tracking-wider text-sm transition-transform hover:scale-105 shadow-[0_0_15px_rgba(59,130,246,0.3)] cursor-pointer"
-              >
-                {isPublishing ? "Publishing..." : "Publish to Web 🚀"}
-              </button>
-            </div>
+            )}
           </div>
         </div>
       </div>

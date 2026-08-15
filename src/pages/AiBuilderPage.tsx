@@ -153,6 +153,21 @@ export const AiBuilderPage: React.FC = () => {
       }
       if (msg && msg.type === 'ELEMENT_TEXT_UPDATED') {
         setSelectedElement(prev => prev ? { ...prev, text: msg.text } : null);
+        setPreviewData(prev => {
+          if (!prev) return prev;
+          const selector = msg.selector;
+          if (!selector) return prev;
+          return {
+            ...prev,
+            customStyles: {
+              ...(prev.customStyles || {}),
+              [selector]: {
+                ...(prev.customStyles?.[selector] || {}),
+                html: msg.text
+              }
+            }
+          };
+        });
       }
     };
     window.addEventListener('message', handleMessage);
@@ -368,7 +383,7 @@ export const AiBuilderPage: React.FC = () => {
 
       doc.addEventListener('input', (e) => {
         const t = e.target as HTMLElement;
-        if (t.classList.contains('customizer-selected-element')) window.parent.postMessage({ type:'ELEMENT_TEXT_UPDATED', text:t.textContent||'' },'*');
+        if (t.classList.contains('customizer-selected-element')) window.parent.postMessage({ type:'ELEMENT_TEXT_UPDATED', selector: getUniqueSelector(t), text:t.innerHTML||'' },'*');
       });
 
       // ── INJECT MESSAGE HANDLER SCRIPT DIRECTLY INTO IFRAME ──

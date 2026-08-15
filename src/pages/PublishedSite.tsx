@@ -218,6 +218,29 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
         observer.observe(doc.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class', 'style'] });
       }
 
+      // Inject WhatsApp Button
+      if (siteData.data?.contactDetails?.enableWhatsapp && siteData.data?.contactDetails?.whatsappNumber) {
+        let waBtn = doc.getElementById('custom-whatsapp-btn');
+        if (!waBtn) {
+          waBtn = doc.createElement('a');
+          waBtn.id = 'custom-whatsapp-btn';
+          waBtn.style.cssText = 'position: fixed; bottom: 24px; right: 24px; z-index: 9999; background-color: #25D366; color: white; padding: 14px; border-radius: 50%; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); transition: transform 0.2s; display: flex; align-items: center; justify-content: center; cursor: pointer;';
+          waBtn.setAttribute('target', '_blank');
+          waBtn.setAttribute('rel', 'noopener noreferrer');
+          waBtn.innerHTML = `<svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`;
+          // Add hover effect
+          waBtn.onmouseenter = () => waBtn.style.transform = 'scale(1.1)';
+          waBtn.onmouseleave = () => waBtn.style.transform = 'scale(1)';
+          doc.body.appendChild(waBtn);
+        }
+        const number = siteData.data.contactDetails.whatsappNumber.replace(/[^0-9]/g, '');
+        waBtn.setAttribute('href', `https://wa.me/${number}`);
+      } else {
+        const waBtn = doc.getElementById('custom-whatsapp-btn');
+        if (waBtn) waBtn.remove();
+      }
+
+
     } catch (e) {
       console.warn("Published site same-origin style applier restricted or failed:", e);
     }

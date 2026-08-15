@@ -118,7 +118,8 @@ export const AiBuilderPage: React.FC = () => {
   const [sidebarAddress, setSidebarAddress] = useState("");
   const [sidebarPhone, setSidebarPhone] = useState("");
   const [sidebarEmail, setSidebarEmail] = useState("");
-
+  const [sidebarEnableWhatsapp, setSidebarEnableWhatsapp] = useState(false);
+  const [sidebarWhatsappNumber, setSidebarWhatsappNumber] = useState("");
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
@@ -130,6 +131,8 @@ export const AiBuilderPage: React.FC = () => {
       setSidebarAddress(previewData.contactDetails?.address || "");
       setSidebarPhone(previewData.contactDetails?.phone || "");
       setSidebarEmail(previewData.contactDetails?.email || "");
+      setSidebarEnableWhatsapp(previewData.contactDetails?.enableWhatsapp || false);
+      setSidebarWhatsappNumber(previewData.contactDetails?.whatsappNumber || "");
     }
   }, [previewData, logoUrl]);
 
@@ -493,6 +496,29 @@ export const AiBuilderPage: React.FC = () => {
           el.textContent = msg.value;
         }
       });
+    }
+
+    if (msg.type === 'SYNC_DATA') {
+      var cd = msg.data.contactDetails;
+      if (cd && cd.enableWhatsapp && cd.whatsappNumber) {
+        var waBtn = document.getElementById('custom-whatsapp-btn');
+        if (!waBtn) {
+          waBtn = document.createElement('a');
+          waBtn.id = 'custom-whatsapp-btn';
+          waBtn.style.cssText = 'position: fixed; bottom: 24px; right: 24px; z-index: 9999; background-color: #25D366; color: white; padding: 14px; border-radius: 50%; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); transition: transform 0.2s; display: flex; align-items: center; justify-content: center; cursor: pointer;';
+          waBtn.setAttribute('target', '_blank');
+          waBtn.setAttribute('rel', 'noopener noreferrer');
+          waBtn.innerHTML = '<svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>';
+          waBtn.onmouseenter = function() { waBtn.style.transform = 'scale(1.1)'; };
+          waBtn.onmouseleave = function() { waBtn.style.transform = 'scale(1)'; };
+          document.body.appendChild(waBtn);
+        }
+        var num = cd.whatsappNumber.replace(/[^0-9]/g, '');
+        waBtn.setAttribute('href', 'https://wa.me/' + num);
+      } else {
+        var waBtn = document.getElementById('custom-whatsapp-btn');
+        if (waBtn) waBtn.remove();
+      }
     }
   });
 })();
@@ -1189,6 +1215,26 @@ export const AiBuilderPage: React.FC = () => {
                     </div>
                   </div>
 
+                  {/* WhatsApp Connection */}
+                  <div className="flex flex-col gap-2 mt-2 pt-4 border-t border-white/5">
+                    <label className="flex items-center gap-2 cursor-pointer group">
+                      <div className={`w-8 h-4 rounded-full transition-colors relative ${sidebarEnableWhatsapp ? 'bg-green-500' : 'bg-white/10'}`}>
+                        <div className={`absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-white transition-transform ${sidebarEnableWhatsapp ? 'translate-x-4' : ''}`} />
+                      </div>
+                      <input type="checkbox" checked={sidebarEnableWhatsapp} className="hidden"
+                        onChange={(e) => { setSidebarEnableWhatsapp(e.target.checked); updateIframeField('enableWhatsapp', e.target.checked as any); }} />
+                      <span className="text-xs text-white/70 group-hover:text-white transition-colors">add message us button on website</span>
+                    </label>
+                    {sidebarEnableWhatsapp && (
+                      <div className="flex flex-col gap-1.5 mt-1">
+                        <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">enter watsapp numb</label>
+                        <input type="text" value={sidebarWhatsappNumber} placeholder="e.g. +1234567890"
+                          onChange={(e) => { setSidebarWhatsappNumber(e.target.value); updateIframeField('whatsappNumber', e.target.value); }}
+                          className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-white focus:border-green-500/60 outline-none text-xs" />
+                      </div>
+                    )}
+                  </div>
+
                   <div className="w-full h-px bg-white/[0.05]" />
                   <p className="text-[9px] uppercase tracking-widest text-white/25 font-bold">Contact Info</p>
 
@@ -1832,6 +1878,28 @@ export const AiBuilderPage: React.FC = () => {
                             </div>
                           </div>
                         </div>
+
+                        {/* WhatsApp Connection */}
+                        <div className="flex flex-col gap-3 mt-2 pt-4 border-t border-[var(--border-subtle)]">
+                          <label className="flex items-center gap-3 cursor-pointer group">
+                            <div className={`w-10 h-5 rounded-full transition-colors relative shadow-inner ${sidebarEnableWhatsapp ? 'bg-green-500' : 'bg-[var(--border-strong)]'}`}>
+                              <div className={`absolute top-1 left-1 w-3 h-3 rounded-full bg-white transition-transform shadow-sm ${sidebarEnableWhatsapp ? 'translate-x-5' : ''}`} />
+                            </div>
+                            <input type="checkbox" checked={sidebarEnableWhatsapp} className="hidden"
+                              onChange={(e) => { setSidebarEnableWhatsapp(e.target.checked); updateIframeField('enableWhatsapp', e.target.checked as any); }} />
+                            <span className="text-sm text-[var(--text-strong)] font-medium">add message us button on website</span>
+                          </label>
+                          {sidebarEnableWhatsapp && (
+                            <div className="flex flex-col gap-2 mt-1">
+                              <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">enter watsapp numb</label>
+                              <input type="text" value={sidebarWhatsappNumber} placeholder="e.g. +1234567890"
+                                onChange={(e) => { setSidebarWhatsappNumber(e.target.value); updateIframeField('whatsappNumber', e.target.value); }}
+                                className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-green-500/60 outline-none" />
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="h-px w-full bg-[var(--border-subtle)] my-2" />
                         <div className="flex flex-col gap-2">
                           <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Business Address</label>
                           <input type="text" value={sidebarAddress} placeholder="e.g. 123 Main St"

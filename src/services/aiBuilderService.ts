@@ -16,6 +16,8 @@ export interface GeneratedWebsiteData {
     address?: string;
     phone?: string;
     email?: string;
+    enableWhatsapp?: boolean;
+    whatsappNumber?: string;
   };
   customImages?: Record<string, string>;
   hero: {

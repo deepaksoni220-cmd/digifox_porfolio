@@ -1,15 +1,15 @@
-import { predefinedTemplates } from '../data/templates';
 
 export interface GeneratedWebsiteData {
   websiteType: string;
   businessCategory?: string;
-  templateStyle?: 'aero' | 'voya' | 'drinking5d' | 'bnrmlss2' | 'coinSite' | 'default';
+  templateStyle?: string;
   previewUrl?: string;
   category?: '3d' | '2d';
   thumbnailUrl?: string;
   previewVideoUrl?: string;
   shortDescription?: string;
   customHtml?: string;
+  customStyles?: any;
   contactDetails?: {
     brandName?: string;
     logo?: string;
@@ -76,7 +76,7 @@ export const planWebsite = async (chatHistory: ChatMessage[]): Promise<string> =
   return data.reply;
 };
 
-export const generateWebsite = async (chatHistory: ChatMessage[], websiteType: string, templateCategory: string = 'auto'): Promise<GeneratedWebsiteData> => {
+export const generateWebsite = async (chatHistory: ChatMessage[], websiteType: string, _templateCategory: string = 'auto'): Promise<GeneratedWebsiteData> => {
   // Step 1: Extract requirements and match template (Task A & B)
   const extractResponse = await fetch('/api/generate', {
     method: 'POST',

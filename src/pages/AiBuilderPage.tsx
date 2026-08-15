@@ -157,6 +157,7 @@ export const AiBuilderPage: React.FC = () => {
   }, []);
 
   // Update specific fields nested in previewData from iframe input edits
+  // @ts-ignore
   const updatePreviewDataFromIframe = (pathStr: string, value: string) => {
     setPreviewData(prev => {
       if (!prev) return prev;
@@ -177,6 +178,7 @@ export const AiBuilderPage: React.FC = () => {
   };
 
   // Update specific service item field nested in previewData from iframe edits
+  // @ts-ignore
   const updatePreviewItem = (index: number, field: string, value: string) => {
     setPreviewData(prev => {
       if (!prev) return prev;
@@ -287,6 +289,7 @@ export const AiBuilderPage: React.FC = () => {
         doc.head.appendChild(fontLink);
       }
 
+      // @ts-ignore
       const escapeCSS = (str: string) =>
         str.replace(/([:\[\]!#().,"'<>*+~=|^${}])/g, '\\$1');
 
@@ -825,12 +828,12 @@ export const AiBuilderPage: React.FC = () => {
           // Simple top-level merge for content
           Object.keys(patch.contentPatch).forEach(key => {
             if (typeof patch.contentPatch[key] === 'object' && !Array.isArray(patch.contentPatch[key])) {
-              newData[key as keyof GeneratedWebsiteData] = {
-                ...(newData[key as keyof GeneratedWebsiteData] as any || {}),
+              (newData as any)[key] = {
+                ...((newData as any)[key] || {}),
                 ...patch.contentPatch[key]
-              } as any;
+              };
             } else {
-              newData[key as keyof GeneratedWebsiteData] = patch.contentPatch[key] as any;
+              (newData as any)[key] = patch.contentPatch[key];
             }
           });
         }

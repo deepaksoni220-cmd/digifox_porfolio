@@ -10,7 +10,7 @@ export default defineConfig({
   ],
   base: './',
   build: {
-    outDir: '../../2d digital portfolio/dist',
+    outDir: './dist',
     emptyOutDir: true
   }
 })

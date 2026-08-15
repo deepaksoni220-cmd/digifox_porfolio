@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { kv } from '@vercel/kv';
+import { TEMPLATE_REGISTRY } from '../src/data/templateRegistry';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // CORS setup for local development testing
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, POST');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-token');
@@ -15,122 +15,114 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { action, chatHistory, websiteType, templateCategory } = req.body;
+  const { action, chatHistory, userPrompt, websiteType } = req.body;
   const GEMINI_API_KEY = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
 
   if (!GEMINI_API_KEY) {
-    return res.status(500).json({ error: "Missing Gemini API Key. Please add VITE_GEMINI_API_KEY to your Vercel Environment Variables or .env.local file." });
+    return res.status(500).json({ error: "Missing Gemini API Key." });
   }
-
-  // --- RATE LIMITING ---
-  const adminToken = req.headers['x-admin-token'];
-  const isAdmin = adminToken && adminToken === process.env.ADMIN_BYPASS_TOKEN;
-
-  if (!isAdmin && action === 'build') {
-    const rawIp = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || 'unknown';
-    const cleanIp = Array.isArray(rawIp) ? rawIp[0] : rawIp.split(',')[0].trim();
-    
-    if (cleanIp !== 'unknown') {
-      const today = new Date().toISOString().split('T')[0];
-      const kvKey = `buildlimit:${cleanIp}:${today}`;
-      
-      try {
-        const currentUsage = await kv.get<number>(kvKey) || 0;
-        if (currentUsage >= 5) {
-          return res.status(429).json({ 
-            error: "You have reached your daily limit of 5 website builds. Please try again tomorrow." 
-          });
-        }
-        await kv.incr(kvKey);
-        await kv.expire(kvKey, 86400); // Expire in 24 hours
-      } catch (err) {
-        console.warn("KV Rate Limiting failed (is KV provisioned?), proceeding anyway", err);
-      }
-    }
-  }
-  // --- END RATE LIMITING ---
 
   const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
-  const contents = chatHistory.map((msg: any) => ({
-    role: msg.role === 'user' ? 'user' : 'model',
-    parts: [{ text: msg.text }]
-  }));
+  try {
+    if (action === 'extract_and_match') {
+      // TASK A & B: Extract requirements from user prompt and select best template
+      const SYSTEM_PROMPT = `You are an expert AI matching system for a website builder.
+Your job is to analyze the user's business description and extract their requirements into a strict JSON format.
+Then, you must select the best matching template from the provided registry.
 
-  let body: any = { contents };
+Available Templates:
+${JSON.stringify(TEMPLATE_REGISTRY, null, 2)}
 
-  if (action === 'plan') {
-    const PLAN_SYSTEM_PROMPT = `You are an elite, award-winning avant-garde web designer (think Awwwards site of the day). 
-Your goal is to help the user plan a highly unique, breathtaking, and non-traditional one-page website layout. 
-Break away from boring corporate templates. Suggest striking color palettes, brutalist or glassmorphic elements, and a truly immersive 4-section structure.
-Keep your responses very brief, conversational, and encouraging. Never output JSON in this phase, just talk to the user.`;
-    
-    body.system_instruction = { parts: [{ text: PLAN_SYSTEM_PROMPT }] };
-  } else if (action === 'build') {
-    let availableTemplates = `'aero' (3D Business), 'drinking5d' (3D Business), 'bnrmlss2' (2D E-commerce), 'voya' (2D Portfolio), 'coinSite' (2D Business)`;
-    if (templateCategory === '3d') availableTemplates = `'aero' (3D Business), 'drinking5d' (3D Business)`;
-    if (templateCategory === '2d') availableTemplates = `'bnrmlss2' (2D E-commerce), 'voya' (2D Portfolio), 'coinSite' (2D Business)`;
-
-    const BUILD_SYSTEM_PROMPT = `You are a visionary, avant-garde web designer. 
-Generate a stunning, boundary-pushing one-page website layout based on the user's planning conversation. 
-Do not make it look like a standard generic website. Make it bold, immersive, and striking.
-You MUST reply strictly with valid JSON matching this schema, and nothing else. No markdown wrapping, no explanations.
-
-Schema:
+Output strictly valid JSON in this format:
 {
-  "websiteType": "The specific type of website provided in the instructions",
-  "businessCategory": "A brief string representing the industry/business category (e.g. 'Aero', 'Jewelry', 'Coffee', 'Fitness') based on the planning conversation",
-  "templateStyle": "CRITICAL: YOU MUST SELECT EXACTLY ONE STRING FROM THIS LIST: [${availableTemplates}]. Do not leave this blank.",
-  "hero": { "title": "...", "subtitle": "...", "ctaText": "...", "imagePrompt": "A highly detailed, photorealistic image description for an immersive background (e.g. 'A surreal neon cybernetic landscape, 8k, volumetric lighting', or 'Ultra-minimalist brutalist architecture, stark shadows')" },
-  "about": { "heading": "...", "description": "...", "imagePrompt": "A highly detailed, editorial-style image description for the about section (e.g. 'A high-fashion cinematic portrait, dramatic lighting, contemporary art style')" },
-  "items": [
-    { "title": "...", "description": "...", "icon": "emoji", "price": "Optional (e.g. '$49.99')", "imagePrompt": "Optional, high-end editorial image description" }, 
-    { "title": "...", "description": "...", "icon": "emoji", "price": "...", "imagePrompt": "..." },
-    { "title": "...", "description": "...", "icon": "emoji", "price": "..." }
-  ],
-  "contact": { "heading": "...", "buttonText": "..." },
-  "theme": { "primaryColor": "#hex (Use bold, non-traditional colors)", "secondaryColor": "#hex (Highly contrasting accent color)" }
+  "industry": "...",
+  "business_type": "...",
+  "style": "...",
+  "color_preference": "...",
+  "features": ["..."],
+  "selected_template_id": "Must be exactly one of the template_id values from the registry that best matches the requirements."
 }`;
 
-    contents.push({
-      role: 'user',
-      parts: [{ text: `Great, please generate the final JSON layout based on our discussion. The website type is: ${websiteType}. Make sure to set "websiteType" in the JSON to exactly "${websiteType}".` }]
-    });
+      const contents = [{
+        role: 'user',
+        parts: [{ text: `User request: ${userPrompt || (chatHistory ? chatHistory[chatHistory.length - 1].text : '')}` }]
+      }];
 
-    body.system_instruction = { parts: [{ text: BUILD_SYSTEM_PROMPT }] };
-    body.generationConfig = { response_mime_type: "application/json" };
-  } else {
-    return res.status(400).json({ error: "Invalid action" });
-  }
+      const response = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents,
+          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          generationConfig: { response_mime_type: "application/json" }
+        })
+      });
 
-  try {
-    const response = await fetch(ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
-
-    if (!response.ok) {
-      const errText = await response.text();
-      return res.status(response.status).json({ error: `API Error: ${errText}` });
-    }
-
-    const data = await response.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    if (!text) {
-      throw new Error(`Empty response from AI (likely safety filter). Data: ${JSON.stringify(data)}`);
-    }
-
-    if (action === 'build') {
+      if (!response.ok) throw new Error(await response.text());
+      const data = await response.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
       const cleanString = text.replace(/```json/gi, '').replace(/```/g, '').trim();
       const parsed = JSON.parse(cleanString);
+
       return res.status(200).json(parsed);
-    } else {
-      return res.status(200).json({ reply: text });
+    } 
+    
+    else if (action === 'generate_content') {
+      // TASK C: Generate structured content schema based on the selected template
+      const { templateId, businessDetails } = req.body;
+      const selectedTemplate = TEMPLATE_REGISTRY.find(t => t.template_id === templateId);
+
+      const SYSTEM_PROMPT = `You are an expert copywriter.
+Generate website content for the given business details tailored to this template: ${selectedTemplate?.name}.
+The template has these sections: ${selectedTemplate?.sections.join(', ')}.
+
+Output strictly valid JSON matching this schema:
+{
+  "websiteType": "${selectedTemplate?.name}",
+  "templateStyle": "${templateId}",
+  "hero": { "title": "...", "subtitle": "...", "ctaText": "...", "imagePrompt": "..." },
+  "about": { "heading": "...", "description": "...", "imagePrompt": "..." },
+  "items": [
+    { "title": "...", "description": "...", "icon": "emoji", "price": "Optional", "imagePrompt": "Optional" }
+  ],
+  "contact": { "heading": "...", "buttonText": "..." },
+  "theme": { "primaryColor": "#hex", "secondaryColor": "#hex" }
+}`;
+
+      const contents = [{
+        role: 'user',
+        parts: [{ text: `Business Details: ${JSON.stringify(businessDetails)}` }]
+      }];
+
+      const response = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents,
+          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          generationConfig: { response_mime_type: "application/json" }
+        })
+      });
+
+      if (!response.ok) throw new Error(await response.text());
+      const data = await response.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      const cleanString = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+      const parsed = JSON.parse(cleanString);
+      
+      // Ensure the correct template ID and URL are attached
+      parsed.templateStyle = templateId;
+      parsed.previewUrl = selectedTemplate?.previewUrl;
+      parsed.thumbnailUrl = selectedTemplate?.thumbnailUrl;
+      
+      return res.status(200).json(parsed);
     }
+
+    return res.status(400).json({ error: "Invalid action" });
+
   } catch (err: any) {
     console.error("Backend Error:", err);
-    return res.status(500).json({ error: `AI Generation Error: ${err.message}` });
+    return res.status(500).json({ error: \`AI Error: \${err.message}\` });
   }
 }

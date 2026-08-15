@@ -77,25 +77,44 @@ export const planWebsite = async (chatHistory: ChatMessage[]): Promise<string> =
 };
 
 export const generateWebsite = async (chatHistory: ChatMessage[], websiteType: string, templateCategory: string = 'auto'): Promise<GeneratedWebsiteData> => {
-  const response = await fetch('/api/generate', {
+  // Step 1: Extract requirements and match template (Task A & B)
+  const extractResponse = await fetch('/api/generate', {
     method: 'POST',
     headers: getHeaders(),
-    body: JSON.stringify({ action: 'build', chatHistory, websiteType, templateCategory })
+    body: JSON.stringify({ 
+      action: 'extract_and_match', 
+      chatHistory,
+      websiteType 
+    })
   });
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(errorData?.error || `Generation Error: ${response.statusText}`);
+  if (!extractResponse.ok) {
+    const errorData = await extractResponse.json().catch(() => null);
+    throw new Error(errorData?.error || `Matching Error: ${extractResponse.statusText}`);
   }
 
-  const data = await response.json() as GeneratedWebsiteData;
+  const matchData = await extractResponse.json();
   
-  if (data.templateStyle && predefinedTemplates[data.templateStyle]) {
-    const template = predefinedTemplates[data.templateStyle];
-    data.previewUrl = template.previewUrl;
-    data.category = template.category;
-    data.thumbnailUrl = template.thumbnailUrl;
+  if (!matchData.selected_template_id) {
+    throw new Error("AI failed to select a valid template.");
   }
-  
+
+  // Step 2: Generate Content & Theme mapped to that template (Task C)
+  const generateResponse = await fetch('/api/generate', {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify({ 
+      action: 'generate_content', 
+      templateId: matchData.selected_template_id,
+      businessDetails: matchData
+    })
+  });
+
+  if (!generateResponse.ok) {
+    const errorData = await generateResponse.json().catch(() => null);
+    throw new Error(errorData?.error || `Generation Error: ${generateResponse.statusText}`);
+  }
+
+  const data = await generateResponse.json() as GeneratedWebsiteData;
   return data;
 };

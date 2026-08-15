@@ -1344,6 +1344,7 @@ export const AiBuilderPage: React.FC = () => {
           </div>
         </div>
       </div>
+    </>
     );
   }
 

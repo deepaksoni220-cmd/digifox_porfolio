@@ -449,8 +449,9 @@ export const AiBuilderPage: React.FC = () => {
       if (msg.lineHeight    !== undefined) el.style.setProperty('line-height',    msg.lineHeight,    'important');
       if (msg.textAlign     !== undefined) el.style.setProperty('text-align',     msg.textAlign,     'important');
       if (msg.href          !== undefined) {
-        if (el.tagName === 'BUTTON') {
+        if (el.tagName !== 'A') {
           el.setAttribute('onclick', "window.open('" + msg.href + "', '_blank')");
+          el.style.setProperty('cursor', 'pointer', 'important');
         } else {
           el.setAttribute('href', msg.href);
         }
@@ -1858,8 +1859,6 @@ export const AiBuilderPage: React.FC = () => {
                               <button title="Bold" onClick={() => iframeRef.current?.contentWindow?.postMessage({ type:'INLINE_FORMAT', command:'bold' },'*')} className="px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-[#3b82f6]/20 hover:text-[#3b82f6] transition-all">B</button>
                               <button title="Italic" onClick={() => iframeRef.current?.contentWindow?.postMessage({ type:'INLINE_FORMAT', command:'italic' },'*')} className="px-2.5 py-1 rounded-lg text-xs italic font-bold hover:bg-[#3b82f6]/20 hover:text-[#3b82f6] transition-all">I</button>
                               <button title="Underline" onClick={() => iframeRef.current?.contentWindow?.postMessage({ type:'INLINE_FORMAT', command:'underline' },'*')} className="px-2.5 py-1 rounded-lg text-xs underline font-bold hover:bg-[#3b82f6]/20 hover:text-[#3b82f6] transition-all">U</button>
-                              <div className="w-px h-5 bg-[var(--border-strong)] mx-1" />
-                              <button title="Link" onClick={() => { const url=prompt('Enter URL'); if(url) iframeRef.current?.contentWindow?.postMessage({ type:'INLINE_FORMAT', command:'createLink', value:url },'*'); }} className="px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-[#3b82f6]/20 hover:text-[#3b82f6] transition-all">🔗</button>
                               <div className="flex-1" />
                               <button title="Remove" onClick={() => { iframeRef.current?.contentWindow?.postMessage({ type:'REMOVE_ELEMENT', selector:selectedElement.selector },'*'); setSelectedElement(null); }} className="px-2 py-1 rounded-lg text-xs font-bold text-red-400 hover:bg-red-500/20 transition-all">✕</button>
                               <button title="Reset styles" onClick={() => iframeRef.current?.contentWindow?.postMessage({ type:'RESET_ELEMENT_FONT', selector:selectedElement.selector },'*')} className="px-2 py-1 rounded-lg text-xs font-bold text-[var(--text-secondary)] hover:bg-[var(--border-strong)] transition-all">↺</button>
@@ -1867,18 +1866,16 @@ export const AiBuilderPage: React.FC = () => {
                             </div>
 
                             {/* Link URL */}
-                            {['A', 'BUTTON', 'SVG', 'IMG'].includes(selectedElement.tagName) && (
-                              <div className="flex flex-col gap-1.5">
-                                <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Button / Link URL</label>
-                                <input 
-                                  type="text" 
-                                  placeholder="https://..." 
-                                  value={selectedElement.href || ''} 
-                                  onChange={(e) => updateSelectedElementStyle({ href: e.target.value })}
-                                  className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-3 py-2.5 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none text-sm"
-                                />
-                              </div>
-                            )}
+                            <div className="flex flex-col gap-1.5">
+                              <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Button link :</label>
+                              <input 
+                                type="text" 
+                                placeholder="https://..." 
+                                value={selectedElement.href || ''} 
+                                onChange={(e) => updateSelectedElementStyle({ href: e.target.value })}
+                                className="bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-xl px-3 py-2.5 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none text-sm"
+                              />
+                            </div>
 
                             {/* Font */}
                             <div className="flex flex-col gap-1.5">

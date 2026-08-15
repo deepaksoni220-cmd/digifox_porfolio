@@ -186,8 +186,9 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
                 if (rules.color) el.style.setProperty('color', rules.color, 'important');
                 if (rules.fontFamily) el.style.setProperty('font-family', `"${rules.fontFamily}", sans-serif`, 'important');
                 if (rules.href !== undefined) {
-                  if (el.tagName === 'BUTTON') {
+                  if (el.tagName !== 'A') {
                     el.setAttribute('onclick', `window.open('${rules.href}', '_blank')`);
+                    el.style.setProperty('cursor', 'pointer', 'important');
                   } else {
                     el.setAttribute('href', rules.href);
                   }

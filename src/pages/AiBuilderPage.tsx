@@ -46,6 +46,8 @@ export const AiBuilderPage: React.FC = () => {
   const [isPublishing, setIsPublishing] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState("");
   const [publishSuccessUrl, setPublishSuccessUrl] = useState<string | null>(null);
+  const [showPublishModal, setShowPublishModal] = useState(false);
+  const [subdomainInput, setSubdomainInput] = useState("");
 
   // Text Inspector States
   const [selectedElement, setSelectedElement] = useState<{
@@ -876,14 +878,19 @@ export const AiBuilderPage: React.FC = () => {
     setAiEditLog(prev => [...prev, editText].slice(-10));
   };
 
-  const handlePublish = async () => {
+  const handlePublishClick = () => {
     if (!previewData) return;
+    setSubdomainInput("");
+    setShowPublishModal(true);
+  };
 
-    const subdomain = prompt("Enter a unique brand name for your subdomain (e.g. 'mybrand'):");
-    if (!subdomain) return;
+  const confirmPublish = async () => {
+    if (!previewData || !subdomainInput) return;
+    
+    setShowPublishModal(false);
     
     // clean subdomain
-    const cleanSubdomain = subdomain.trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+    const cleanSubdomain = subdomainInput.trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
     if (!cleanSubdomain) {
       alert("Invalid subdomain name. Only letters, numbers, and hyphens are allowed.");
       return;
@@ -922,6 +929,64 @@ export const AiBuilderPage: React.FC = () => {
   if (previewData && !isBuilding) {
     return (
       <>
+        {/* SUBDOMAIN PROMPT MODAL */}
+        <AnimatePresence>
+          {showPublishModal && (
+            <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                onClick={() => setShowPublishModal(false)}
+              />
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                className="relative w-full max-w-md bg-[#0f111a] border border-white/10 rounded-2xl shadow-2xl p-8 flex flex-col"
+              >
+                <h2 className="text-xl font-bold text-white mb-2">Publish Website</h2>
+                <p className="text-white/60 mb-6 text-sm">
+                  Enter a unique brand name for your subdomain.
+                </p>
+                
+                <div className="flex items-center bg-black/40 border border-white/10 rounded-xl overflow-hidden mb-8 focus-within:border-[#3b82f6] focus-within:ring-1 focus-within:ring-[#3b82f6] transition-all">
+                  <input
+                    type="text"
+                    value={subdomainInput}
+                    onChange={(e) => setSubdomainInput(e.target.value)}
+                    placeholder="mybrand"
+                    className="flex-1 bg-transparent border-none text-white px-4 py-3 outline-none"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') confirmPublish();
+                    }}
+                    autoFocus
+                  />
+                  <div className="px-4 py-3 text-white/40 bg-white/5 border-l border-white/10 select-none">
+                    .digifox.world
+                  </div>
+                </div>
+                
+                <div className="flex gap-3 w-full">
+                  <button 
+                    onClick={() => setShowPublishModal(false)}
+                    className="flex-1 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-bold transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={confirmPublish}
+                    className="flex-1 py-3 rounded-xl bg-[#3b82f6] hover:bg-blue-500 text-white font-bold transition-all"
+                  >
+                    Publish
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+
         {/* SUCCESS MODAL */}
         <AnimatePresence>
           {publishSuccessUrl && (
@@ -1030,7 +1095,7 @@ export const AiBuilderPage: React.FC = () => {
                 Open ↗
               </button>
             )}
-            <button onClick={handlePublish} disabled={isPublishing}
+            <button onClick={handlePublishClick} disabled={isPublishing}
               className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#3b82f6] to-[#6366f1] hover:opacity-90 disabled:opacity-40 text-white text-[11px] font-bold uppercase tracking-wider shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all">
               {isPublishing ? 'Publishing...' : '🚀 Publish'}
             </button>
@@ -1293,7 +1358,7 @@ export const AiBuilderPage: React.FC = () => {
 
             {/* Sidebar bottom: Publish CTA */}
             <div className="p-4 border-t border-white/[0.06] shrink-0">
-              <button onClick={handlePublish} disabled={isPublishing}
+              <button onClick={handlePublishClick} disabled={isPublishing}
                 className="w-full bg-gradient-to-r from-[#3b82f6] to-[#6366f1] hover:opacity-90 disabled:opacity-40 text-white py-3 rounded-xl text-[11px] font-bold uppercase tracking-wider shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all">
                 {isPublishing ? 'Publishing...' : '🚀 Publish to Web'}
               </button>
@@ -1596,7 +1661,7 @@ export const AiBuilderPage: React.FC = () => {
             {previewData && !isBuilding && (
               <div className="flex gap-4">
                 <button 
-                  onClick={handlePublish}
+                  onClick={handlePublishClick}
                   disabled={isPublishing}
                   className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-bold uppercase tracking-wider text-sm transition-transform hover:scale-105 shadow-[0_0_15px_rgba(59,130,246,0.3)] disabled:opacity-50"
                 >
@@ -1879,7 +1944,7 @@ export const AiBuilderPage: React.FC = () => {
                     )}
 
                     <div className="pt-4 border-t border-[var(--border-subtle)]">
-                      <button onClick={handlePublish} disabled={isPublishing}
+                      <button onClick={handlePublishClick} disabled={isPublishing}
                         className="w-full bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white px-6 py-4 rounded-xl font-bold uppercase tracking-wider text-sm transition-transform hover:scale-105 shadow-[0_0_15px_rgba(59,130,246,0.3)] disabled:opacity-50">
                         {isPublishing ? "Publishing..." : "Publish to Web 🚀"}
                       </button>

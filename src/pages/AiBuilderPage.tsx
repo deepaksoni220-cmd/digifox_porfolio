@@ -1869,7 +1869,7 @@ export const AiBuilderPage: React.FC = () => {
                             {/* Link URL */}
                             {['A', 'BUTTON', 'SVG', 'IMG'].includes(selectedElement.tagName) && (
                               <div className="flex flex-col gap-1.5">
-                                <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Link URL</label>
+                                <label className="text-[10px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Button / Link URL</label>
                                 <input 
                                   type="text" 
                                   placeholder="https://..." 

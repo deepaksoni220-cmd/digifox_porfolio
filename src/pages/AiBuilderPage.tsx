@@ -271,6 +271,22 @@ export const AiBuilderPage: React.FC = () => {
         doc.head.appendChild(style);
       }
 
+      // Pre-load all editor fonts into the iframe so they render correctly
+      const allEditorFonts = [
+        'Inter','Outfit','Space+Grotesk','Instrument+Serif','Playfair+Display',
+        'Raleway','Sora','DM+Sans','Lato','Poppins','Montserrat','Nunito',
+        'Source+Code+Pro','Merriweather','Josefin+Sans','Work+Sans',
+        'Plus+Jakarta+Sans','Libre+Baskerville'
+      ];
+      const fontPreloadId = 'editor-font-preload';
+      if (!doc.getElementById(fontPreloadId)) {
+        const fontLink = doc.createElement('link');
+        fontLink.id = fontPreloadId;
+        fontLink.rel = 'stylesheet';
+        fontLink.href = `https://fonts.googleapis.com/css2?${allEditorFonts.map(f => `family=${f}:wght@300;400;500;600;700;800;900`).join('&')}&display=swap`;
+        doc.head.appendChild(fontLink);
+      }
+
       const escapeCSS = (str: string) =>
         str.replace(/([:\[\]!#().,"'<>*+~=|^${}])/g, '\\$1');
 
@@ -340,7 +356,19 @@ export const AiBuilderPage: React.FC = () => {
             if (msg.fontStyle !== undefined) el.style.setProperty('font-style', msg.fontStyle, 'important');
             if (msg.textDecoration !== undefined) el.style.setProperty('text-decoration', msg.textDecoration, 'important');
             if (msg.color) el.style.setProperty('color', msg.color, 'important');
-            if (msg.fontFamily) el.style.setProperty('font-family', msg.fontFamily, 'important');
+            if (msg.fontFamily) {
+              // Dynamically inject the chosen font into the iframe if not already present
+              const fontKey = msg.fontFamily.replace(/ /g, '+');
+              const fontLinkId = 'gf-' + fontKey;
+              if (!doc.getElementById(fontLinkId)) {
+                const link = doc.createElement('link');
+                link.id = fontLinkId;
+                link.rel = 'stylesheet';
+                link.href = `https://fonts.googleapis.com/css2?family=${fontKey}:wght@300;400;500;600;700;800;900&display=swap`;
+                doc.head.appendChild(link);
+              }
+              el.style.setProperty('font-family', `'${msg.fontFamily}', sans-serif`, 'important');
+            }
             if (msg.letterSpacing !== undefined) el.style.setProperty('letter-spacing', msg.letterSpacing, 'important');
             if (msg.lineHeight !== undefined) el.style.setProperty('line-height', msg.lineHeight, 'important');
             if (msg.textAlign !== undefined) el.style.setProperty('text-align', msg.textAlign, 'important');

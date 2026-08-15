@@ -118,6 +118,58 @@ Output strictly valid JSON matching this schema:
       
       return res.status(200).json(parsed);
     }
+    
+    else if (action === 'patch_edit') {
+      // TASK E: Generate a minimal JSON patch based on user edit request
+      const { userEditRequest, currentData, templateId } = req.body;
+      const selectedTemplate = TEMPLATE_REGISTRY.find(t => t.template_id === templateId);
+
+      const SYSTEM_PROMPT = `You are a precision JSON patcher for a website builder.
+The user wants to edit their current website data.
+Analyze their request and output ONLY the fields that need to be changed in a strict JSON format.
+DO NOT return the entire website data. Only return the fields that are being modified.
+
+Current Data State:
+${JSON.stringify(currentData, null, 2)}
+
+User Request: "${userEditRequest}"
+
+Output strictly valid JSON matching this schema:
+{
+  "themePatch": {
+    "primaryColor": "optional new hex",
+    "secondaryColor": "optional new hex"
+  },
+  "contentPatch": {
+    "hero": { "title": "optional new title" },
+    "about": { "description": "optional new description" }
+  }
+}
+If a section or field is not being changed, omit it completely from the JSON.`;
+
+      const contents = [{
+        role: 'user',
+        parts: [{ text: `Generate the JSON patch for this edit request: ${userEditRequest}` }]
+      }];
+
+      const response = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents,
+          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          generationConfig: { response_mime_type: "application/json" }
+        })
+      });
+
+      if (!response.ok) throw new Error(await response.text());
+      const data = await response.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      const cleanString = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+      const parsed = JSON.parse(cleanString);
+      
+      return res.status(200).json(parsed);
+    }
 
     return res.status(400).json({ error: "Invalid action" });
 

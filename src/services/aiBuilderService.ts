@@ -118,3 +118,23 @@ export const generateWebsite = async (chatHistory: ChatMessage[], websiteType: s
   const data = await generateResponse.json() as GeneratedWebsiteData;
   return data;
 };
+
+export const patchWebsite = async (userEditRequest: string, currentData: GeneratedWebsiteData, templateId: string): Promise<any> => {
+  const response = await fetch('/api/generate', {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify({ 
+      action: 'patch_edit', 
+      userEditRequest,
+      currentData,
+      templateId
+    })
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.error || `Patching Error: ${response.statusText}`);
+  }
+
+  return await response.json();
+};

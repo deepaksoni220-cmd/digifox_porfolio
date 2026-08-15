@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { generateWebsite, planWebsite, type GeneratedWebsiteData, type ChatMessage } from '../services/aiBuilderService';
+import { generateWebsite, planWebsite, patchWebsite, type GeneratedWebsiteData, type ChatMessage } from '../services/aiBuilderService';
 import { publishWebsite, getPublishedWebsite } from '../services/firebase';
 import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 import { TemplateGallery } from '../components/builder/TemplateGallery';
@@ -11,6 +11,9 @@ import { Globe } from 'lucide-react';
 export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [currentInput, setCurrentInput] = useState("");
+  
+  const [aiEditPrompt, setAiEditPrompt] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
   
   const [websiteType, setWebsiteType] = useState("Local Business");
   const [templateCategory, setTemplateCategory] = useState("auto");
@@ -705,26 +708,67 @@ export const AiBuilderPage: React.FC = () => {
     setIsBuilding(true);
     setPreviewData(null);
 
-    // Scroll to preview area immediately so user sees the loading state
-    setTimeout(() => {
-      previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
-
-    // If there's text in the input but they clicked build, include it in the history
-    let finalHistory = [...chatHistory];
-    if (currentInput.trim()) {
-      finalHistory.push({ role: 'user', text: currentInput.trim() });
-      setChatHistory(finalHistory);
-      setCurrentInput("");
-    }
-
+    setError("");
     try {
+      let finalHistory = [...chatHistory];
+      // If there's text in the input but they clicked build, include it in the history
+      if (currentInput.trim()) {
+        finalHistory.push({ role: 'user', text: currentInput });
+        setChatHistory(finalHistory);
+        setCurrentInput("");
+      }
+
       const result = await generateWebsite(finalHistory, websiteType, templateCategory);
       setPreviewData(result);
+      
+      // Auto scroll to preview area smoothly
+      setTimeout(() => {
+        previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 500);
+
     } catch (err: any) {
       setError(err.message || "Failed to generate website layout.");
     } finally {
       setIsBuilding(false);
+    }
+  };
+
+  const handleAiEdit = async () => {
+    if (!aiEditPrompt.trim() || !previewData || !previewData.templateStyle) return;
+    setIsEditing(true);
+    setError("");
+    try {
+      const patch = await patchWebsite(aiEditPrompt, previewData, previewData.templateStyle);
+      
+      // Deep merge the patch into previewData
+      setPreviewData(prev => {
+        if (!prev) return prev;
+        const newData = { ...prev };
+        
+        if (patch.themePatch) {
+          newData.theme = { ...newData.theme, ...patch.themePatch };
+        }
+        if (patch.contentPatch) {
+          // Simple top-level merge for content
+          Object.keys(patch.contentPatch).forEach(key => {
+            if (typeof patch.contentPatch[key] === 'object' && !Array.isArray(patch.contentPatch[key])) {
+              newData[key as keyof GeneratedWebsiteData] = {
+                ...(newData[key as keyof GeneratedWebsiteData] as any || {}),
+                ...patch.contentPatch[key]
+              } as any;
+            } else {
+              newData[key as keyof GeneratedWebsiteData] = patch.contentPatch[key] as any;
+            }
+          });
+        }
+        return newData;
+      });
+      
+      setAiEditPrompt("");
+    } catch (err: any) {
+      setError(err.message || "Failed to apply AI edit.");
+    } finally {
+      setIsEditing(false);
     }
   };
 
@@ -1205,6 +1249,35 @@ export const AiBuilderPage: React.FC = () => {
               <a href={publishedUrl} target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-300">
                 {publishedUrl}
               </a>
+            </div>
+          )}
+          
+          {/* AI Magic Edit Box */}
+          {previewData && !isBuilding && (
+            <div className="mb-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 p-4 rounded-xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-10">✨</div>
+              <h3 className="text-sm font-bold text-[var(--text-strong)] mb-3 flex items-center gap-2">
+                <span className="text-[#3b82f6]">✨</span> AI Magic Edit
+              </h3>
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  value={aiEditPrompt}
+                  onChange={(e) => setAiEditPrompt(e.target.value)}
+                  placeholder="Tell us what you want to change (e.g. 'Make the hero title bolder and background darker')"
+                  className="flex-1 bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleAiEdit();
+                  }}
+                />
+                <button
+                  onClick={handleAiEdit}
+                  disabled={isEditing || !aiEditPrompt.trim()}
+                  className="bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white px-8 py-2 rounded-xl font-bold uppercase tracking-wider text-sm transition-transform hover:scale-105 shadow-[0_0_15px_rgba(59,130,246,0.3)] disabled:opacity-50"
+                >
+                  {isEditing ? "Applying..." : "Apply"}
+                </button>
+              </div>
             </div>
           )}
           

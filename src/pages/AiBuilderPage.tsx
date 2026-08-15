@@ -343,61 +343,97 @@ export const AiBuilderPage: React.FC = () => {
         if (t.classList.contains('customizer-selected-element')) window.parent.postMessage({ type:'ELEMENT_TEXT_UPDATED', text:t.textContent||'' },'*');
       });
 
-      const handleCustomizerMessage = (event: MessageEvent) => {
-        const msg = event.data;
-        if (msg && msg.type === 'UPDATE_ELEMENT_STYLE') {
-          // Primary: find by data-editorid attribute; fallback: selected class
-          let el = msg.selector ? doc.querySelector(msg.selector) as HTMLElement : null;
-          if (!el) el = doc.querySelector('.customizer-selected-element') as HTMLElement;
-          if (el) {
-            if (msg.html !== undefined) el.innerHTML = msg.html;
-            if (msg.fontSize) el.style.setProperty('font-size', msg.fontSize, 'important');
-            if (msg.fontWeight) el.style.setProperty('font-weight', msg.fontWeight, 'important');
-            if (msg.fontStyle !== undefined) el.style.setProperty('font-style', msg.fontStyle, 'important');
-            if (msg.textDecoration !== undefined) el.style.setProperty('text-decoration', msg.textDecoration, 'important');
-            if (msg.color) el.style.setProperty('color', msg.color, 'important');
-            if (msg.fontFamily) {
-              // Dynamically inject the chosen font into the iframe if not already present
-              const fontKey = msg.fontFamily.replace(/ /g, '+');
-              const fontLinkId = 'gf-' + fontKey;
-              if (!doc.getElementById(fontLinkId)) {
-                const link = doc.createElement('link');
-                link.id = fontLinkId;
-                link.rel = 'stylesheet';
-                link.href = `https://fonts.googleapis.com/css2?family=${fontKey}:wght@300;400;500;600;700;800;900&display=swap`;
-                doc.head.appendChild(link);
-              }
-              el.style.setProperty('font-family', `'${msg.fontFamily}', sans-serif`, 'important');
-            }
-            if (msg.letterSpacing !== undefined) el.style.setProperty('letter-spacing', msg.letterSpacing, 'important');
-            if (msg.lineHeight !== undefined) el.style.setProperty('line-height', msg.lineHeight, 'important');
-            if (msg.textAlign !== undefined) el.style.setProperty('text-align', msg.textAlign, 'important');
-            const allIn=['animate-fade-up','animate-slide-in-left','animate-fade-in','animate-zoom-in','animate-bounce-in','animate-flip-x','animate-blur-in','animate-slide-up','animate-slide-in-right','animate-rotate-in','animate-scale-up'];
-            const inMap: Record<string,string>={'fade-up':'animate-fade-up','slide-in-left':'animate-slide-in-left','fade-in':'animate-fade-in','zoom-in':'animate-zoom-in','bounce-in':'animate-bounce-in','flip-x':'animate-flip-x','blur-in':'animate-blur-in','slide-up':'animate-slide-up','slide-in-right':'animate-slide-in-right','rotate-in':'animate-rotate-in','scale-up':'animate-scale-up'};
-            el.classList.remove(...allIn); if (msg.animateIn && msg.animateIn!=='none') el.classList.add(inMap[msg.animateIn]);
-            const allOut=['animate-fade-out','animate-slide-out-right','animate-zoom-out','animate-slide-down','animate-blur-out','animate-slice-out-left','animate-rotate-out','animate-bounce-out'];
-            const outMap: Record<string,string>={'fade-out':'animate-fade-out','slide-out-right':'animate-slide-out-right','zoom-out':'animate-zoom-out','slide-down':'animate-slide-down','blur-out':'animate-blur-out','slice-out-left':'animate-slice-out-left','rotate-out':'animate-rotate-out','bounce-out':'animate-bounce-out'};
-            el.classList.remove(...allOut); if (msg.animateOut && msg.animateOut!=='none') el.classList.add(outMap[msg.animateOut]);
-            const allLoop=['animate-pulse-custom','animate-shimmer','animate-float','animate-spin-loop','animate-wiggle','animate-flash-link','animate-heartbeat','animate-sway','animate-slow-pulse','animate-soft-bounce','animate-glow'];
-            const loopMap2: Record<string,string>={'pulse':'animate-pulse-custom','shimmer':'animate-shimmer','float-bounce':'animate-float','spin-loop':'animate-spin-loop','wiggle':'animate-wiggle','flash-link':'animate-flash-link','heartbeat':'animate-heartbeat','sway':'animate-sway','slow-pulse':'animate-slow-pulse','soft-bounce':'animate-soft-bounce','glow':'animate-glow'};
-            el.classList.remove(...allLoop); if (msg.loop && msg.loop!=='none') el.classList.add(loopMap2[msg.loop]);
-          }
-        }
-        if (msg && msg.type === 'INLINE_FORMAT') doc.execCommand(msg.command, false, msg.value||undefined);
-        if (msg && msg.type === 'REMOVE_ELEMENT') {
-          let el = msg.selector ? doc.querySelector(msg.selector) as HTMLElement : null;
-          if (!el) el = doc.querySelector('.customizer-selected-element') as HTMLElement;
-          if (el) el.remove();
-          window.parent.postMessage({type:'ELEMENT_DESELECTED'},'*');
-        }
-        if (msg && msg.type === 'RESET_ELEMENT_FONT') {
-          let el = msg.selector ? doc.querySelector(msg.selector) as HTMLElement : null;
-          if (!el) el = doc.querySelector('.customizer-selected-element') as HTMLElement;
-          if (el) { el.style.removeProperty('font-family'); el.style.removeProperty('font-size'); el.style.removeProperty('font-weight'); el.style.removeProperty('font-style'); el.style.removeProperty('text-decoration'); el.style.removeProperty('color'); el.style.removeProperty('letter-spacing'); el.style.removeProperty('line-height'); }
-        }
-      };
+      // ── INJECT MESSAGE HANDLER SCRIPT DIRECTLY INTO IFRAME ──
+      // This is the ONLY reliable way: run the handler inside the iframe's own JS context
+      // so font-family changes, querySelector, and Google Fonts injection all work natively.
+      const scriptId = 'editor-message-handler';
+      if (!doc.getElementById(scriptId)) {
+        const script = doc.createElement('script');
+        script.id = scriptId;
+        script.textContent = `
+(function() {
+  var inMap  = {'fade-up':'animate-fade-up','slide-in-left':'animate-slide-in-left','fade-in':'animate-fade-in','zoom-in':'animate-zoom-in','bounce-in':'animate-bounce-in','flip-x':'animate-flip-x','blur-in':'animate-blur-in','slide-up':'animate-slide-up','slide-in-right':'animate-slide-in-right','rotate-in':'animate-rotate-in','scale-up':'animate-scale-up'};
+  var outMap = {'fade-out':'animate-fade-out','slide-out-right':'animate-slide-out-right','zoom-out':'animate-zoom-out','slide-down':'animate-slide-down','blur-out':'animate-blur-out','slice-out-left':'animate-slice-out-left','rotate-out':'animate-rotate-out','bounce-out':'animate-bounce-out'};
+  var loopMap= {'pulse':'animate-pulse-custom','shimmer':'animate-shimmer','float-bounce':'animate-float','spin-loop':'animate-spin-loop','wiggle':'animate-wiggle','flash-link':'animate-flash-link','heartbeat':'animate-heartbeat','sway':'animate-sway','slow-pulse':'animate-slow-pulse','soft-bounce':'animate-soft-bounce','glow':'animate-glow'};
+  var allIn  = Object.values(inMap);
+  var allOut = Object.values(outMap);
+  var allLoop= Object.values(loopMap);
 
-      iframe.contentWindow?.addEventListener('message', handleCustomizerMessage);
+  function loadFont(name) {
+    var key = name.replace(/ /g, '+');
+    var id  = 'gf-' + key;
+    if (!document.getElementById(id)) {
+      var lnk = document.createElement('link');
+      lnk.id  = id;
+      lnk.rel = 'stylesheet';
+      lnk.href= 'https://fonts.googleapis.com/css2?family=' + key + ':ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap';
+      document.head.appendChild(lnk);
+    }
+  }
+
+  function getEl(selector) {
+    var el = selector ? document.querySelector(selector) : null;
+    return el || document.querySelector('.customizer-selected-element');
+  }
+
+  window.addEventListener('message', function(e) {
+    var msg = e.data;
+    if (!msg) return;
+
+    if (msg.type === 'UPDATE_ELEMENT_STYLE') {
+      var el = getEl(msg.selector);
+      if (!el) return;
+      if (msg.html !== undefined) el.innerHTML = msg.html;
+      if (msg.fontSize)    el.style.setProperty('font-size',       msg.fontSize,    'important');
+      if (msg.fontWeight)  el.style.setProperty('font-weight',     msg.fontWeight,  'important');
+      if (msg.fontStyle   !== undefined) el.style.setProperty('font-style',      msg.fontStyle,   'important');
+      if (msg.textDecoration !== undefined) el.style.setProperty('text-decoration', msg.textDecoration, 'important');
+      if (msg.color)       el.style.setProperty('color',           msg.color,       'important');
+      if (msg.fontFamily) {
+        loadFont(msg.fontFamily);
+        el.style.setProperty('font-family', "'" + msg.fontFamily + "', sans-serif", 'important');
+      }
+      if (msg.letterSpacing !== undefined) el.style.setProperty('letter-spacing', msg.letterSpacing, 'important');
+      if (msg.lineHeight    !== undefined) el.style.setProperty('line-height',    msg.lineHeight,    'important');
+      if (msg.textAlign     !== undefined) el.style.setProperty('text-align',     msg.textAlign,     'important');
+      // Animate In
+      el.classList.remove.apply(el.classList, allIn);
+      if (msg.animateIn  && msg.animateIn  !== 'none' && inMap[msg.animateIn])   el.classList.add(inMap[msg.animateIn]);
+      // Animate Out
+      el.classList.remove.apply(el.classList, allOut);
+      if (msg.animateOut && msg.animateOut !== 'none' && outMap[msg.animateOut]) el.classList.add(outMap[msg.animateOut]);
+      // Loop
+      el.classList.remove.apply(el.classList, allLoop);
+      if (msg.loop && msg.loop !== 'none' && loopMap[msg.loop]) el.classList.add(loopMap[msg.loop]);
+    }
+
+    if (msg.type === 'INLINE_FORMAT') {
+      document.execCommand(msg.command, false, msg.value || undefined);
+    }
+
+    if (msg.type === 'REMOVE_ELEMENT') {
+      var el = getEl(msg.selector);
+      if (el) el.remove();
+      window.parent.postMessage({ type: 'ELEMENT_DESELECTED' }, '*');
+    }
+
+    if (msg.type === 'RESET_ELEMENT_FONT') {
+      var el = getEl(msg.selector);
+      if (el) {
+        ['font-family','font-size','font-weight','font-style','text-decoration','color','letter-spacing','line-height'].forEach(function(p){ el.style.removeProperty(p); });
+      }
+    }
+
+    if (msg.type === 'UPDATE_FIELD') {
+      // Update brand name / contact fields in template
+      document.querySelectorAll('[data-field="' + msg.field + '"]').forEach(function(el){ el.textContent = msg.value; });
+    }
+  });
+})();
+        `;
+        doc.head.appendChild(script);
+      }
+
 
       // Bind click-to-edit for images inside the template iframe
       const images = doc.querySelectorAll('img');

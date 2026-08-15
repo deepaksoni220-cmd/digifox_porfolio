@@ -1226,9 +1226,6 @@ export const AiBuilderPage: React.FC = () => {
                           <button key={cmd} onClick={() => iframeRef.current?.contentWindow?.postMessage({type:'INLINE_FORMAT',command:cmd},'*')}
                             className={`px-2 py-1 rounded-md text-xs ${cls} hover:bg-blue-500/20 hover:text-blue-300 transition-all text-white/70`}>{l}</button>
                         ))}
-                        <div className="w-px h-4 bg-white/10 mx-0.5" />
-                        <button onClick={() => { const url=prompt('Enter URL'); if(url) iframeRef.current?.contentWindow?.postMessage({type:'INLINE_FORMAT',command:'createLink',value:url},'*'); }}
-                          className="px-2 py-1 rounded-md text-xs hover:bg-blue-500/20 hover:text-blue-300 transition-all text-white/70">🔗</button>
                         <div className="flex-1" />
                         <button onClick={() => { iframeRef.current?.contentWindow?.postMessage({type:'REMOVE_ELEMENT',selector:selectedElement.selector},'*'); setSelectedElement(null); }}
                           className="px-2 py-1 rounded-md text-xs text-red-400 hover:bg-red-500/20 transition-all">✕</button>
@@ -1236,6 +1233,18 @@ export const AiBuilderPage: React.FC = () => {
                           className="px-2 py-1 rounded-md text-xs text-white/40 hover:bg-white/10 transition-all">↺</button>
                         <button onClick={() => setSelectedElement(null)}
                           className="px-2.5 py-1 rounded-md text-xs font-bold bg-blue-500 text-white hover:bg-blue-400 transition-all">Done</button>
+                      </div>
+
+                      {/* Link URL */}
+                      <div className="flex flex-col gap-1">
+                        <label className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Button link :</label>
+                        <input 
+                          type="text" 
+                          placeholder="https://..." 
+                          value={selectedElement.href || ''} 
+                          onChange={(e) => updateSelectedElementStyle({ href: e.target.value })}
+                          className="bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-2 text-white focus:border-blue-500/60 outline-none text-xs"
+                        />
                       </div>
 
                       {/* Font */}

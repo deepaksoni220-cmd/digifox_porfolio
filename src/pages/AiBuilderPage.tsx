@@ -6,7 +6,7 @@ import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 import { TemplateGallery } from '../components/builder/TemplateGallery';
 import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush } from 'lucide-react';
+import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink } from 'lucide-react';
 
 export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -45,6 +45,7 @@ export const AiBuilderPage: React.FC = () => {
   
   const [isPublishing, setIsPublishing] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState("");
+  const [publishSuccessUrl, setPublishSuccessUrl] = useState<string | null>(null);
 
   // Text Inspector States
   const [selectedElement, setSelectedElement] = useState<{
@@ -903,7 +904,7 @@ export const AiBuilderPage: React.FC = () => {
       
       const url = `https://${cleanSubdomain}.digifox.world`;
       setPublishedUrl(url);
-      alert(`Website published successfully at: ${url}`);
+      setPublishSuccessUrl(url);
     } catch (err: any) {
       alert(err.message || "Failed to publish website");
     } finally {
@@ -920,7 +921,64 @@ export const AiBuilderPage: React.FC = () => {
 
   if (previewData && !isBuilding) {
     return (
-      <div className="fixed inset-0 z-50 bg-[#07080e] text-white flex flex-col h-screen overflow-hidden font-sans">
+      <>
+        {/* SUCCESS MODAL */}
+        <AnimatePresence>
+          {publishSuccessUrl && (
+            <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                onClick={() => setPublishSuccessUrl(null)}
+              />
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                className="relative w-full max-w-md bg-[#0f111a] border border-white/10 rounded-2xl shadow-2xl p-8 flex flex-col items-center text-center"
+              >
+                <button 
+                  onClick={() => setPublishSuccessUrl(null)}
+                  className="absolute top-4 right-4 p-2 text-white/40 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-all"
+                >
+                  <X size={18} />
+                </button>
+                
+                <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mb-6">
+                  <CheckCircle className="text-green-500 w-8 h-8" />
+                </div>
+                
+                <h2 className="text-2xl font-bold text-white mb-2">Website Published!</h2>
+                <p className="text-white/60 mb-8">
+                  Your customizations have been saved and your site is now live at the URL below.
+                </p>
+                
+                <div className="w-full bg-black/40 border border-white/5 rounded-xl p-4 flex items-center justify-between mb-8 group">
+                  <span className="text-blue-400 font-mono text-sm truncate pr-4">{publishSuccessUrl}</span>
+                  <a 
+                    href={publishSuccessUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/20 text-blue-400 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-blue-500 hover:text-white transition-all shrink-0"
+                  >
+                    Visit <ExternalLink size={14} />
+                  </a>
+                </div>
+                
+                <button 
+                  onClick={() => setPublishSuccessUrl(null)}
+                  className="w-full py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-bold transition-all"
+                >
+                  Continue Editing
+                </button>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+
+        <div className="fixed inset-0 z-50 bg-[#07080e] text-white flex flex-col h-screen overflow-hidden font-sans">
 
         {/* ── TOP BAR ── */}
         <header className="flex justify-between items-center px-5 py-3 border-b border-white/[0.06] bg-[#0a0b15] shrink-0 gap-4">

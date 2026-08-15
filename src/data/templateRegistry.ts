@@ -67,7 +67,7 @@ export const TEMPLATE_REGISTRY: TemplateMetadata[] = [
     styles: ["sleek", "clean", "professional", "modern"],
     features: ["hero", "about", "skills", "contact"],
     sections: ["hero", "about", "items", "contact"],
-    previewUrl: "/2d digital portfolio/dist/index.html",
+    previewUrl: "/templates/2d digital portfolio/dist/index.html",
     thumbnailUrl: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=800&auto=format&fit=crop"
   },
   {

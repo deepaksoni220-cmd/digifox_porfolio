@@ -227,7 +227,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
   digitalPortfolio2d: {
     websiteType: "Portfolio",
     category: "2d",
-    previewUrl: "/2d digital portfolio/dist/index.html",
+    previewUrl: "/templates/2d digital portfolio/dist/index.html",
     shortDescription: "Sleek 2D digital portfolio layout for creative designers and engineers.",
     thumbnailUrl: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=800&auto=format&fit=crop",
     previewVideoUrl: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_074625_a81f018a-956b-43fb-9aee-4d1508e30e6a.mp4",

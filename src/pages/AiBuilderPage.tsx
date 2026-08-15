@@ -578,9 +578,7 @@ export const AiBuilderPage: React.FC = () => {
       if (!prev) return prev;
       
       const newHero = { ...prev.hero };
-      if (field === 'brandName') {
-        newHero.title = value;
-      }
+      // Removed the buggy brandName -> hero.title link
       
       const newData = {
         ...prev,

@@ -89,48 +89,67 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
             0%, 100% { text-shadow: 0 0 5px rgba(168,85,247,0.2); }
             50% { text-shadow: 0 0 15px rgba(168,85,247,0.6); }
           }
-          @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-          }
           @keyframes zoomIn {
             from { transform: scale(0.95); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
           }
+          /* Added standard utility animations */
+          .animate-fade-up { animation: fadeUp 0.8s ease-out forwards; }
+          @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
           
+          .animate-slide-in-left { animation: slideInLeft 0.8s ease-out forwards; }
+          @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+          
+          .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+          @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+          
+          .animate-zoom-in { animation: zoomIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+          .animate-bounce-in { animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+          @keyframes bounceIn { 
+            0% { opacity: 0; transform: scale(0.3); } 
+            50% { opacity: 1; transform: scale(1.05); } 
+            70% { transform: scale(0.9); } 
+            100% { transform: scale(1); } 
+          }
           .animate-float { animation: float 3s ease-in-out infinite !important; }
-          .animate-pulse-custom { animation: pulseCustom 2s ease-in-out infinite !important; }
+          .animate-pulse { animation: pulseCustom 2s ease-in-out infinite !important; }
           .animate-sway { animation: sway 4s ease-in-out infinite !important; }
           .animate-glow { animation: glow 2.5s ease-in-out infinite !important; }
-          .animate-slide-up { animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards !important; }
-          .animate-zoom-in { animation: zoomIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards !important; }
         `;
         doc.head.appendChild(style);
       }
 
-      // Apply saved custom styles
+      // Apply saved custom styles robustly using MutationObserver
       const customStyles = siteData.data?.customStyles;
       if (customStyles) {
-        Object.keys(customStyles).forEach(selector => {
-          const el = doc.querySelector(selector) as HTMLElement;
-          if (el) {
-            const styles = customStyles[selector];
-            if (styles.text !== undefined) el.textContent = styles.text;
-            if (styles.fontSize) el.style.fontSize = styles.fontSize;
-            if (styles.fontWeight) el.style.fontWeight = styles.fontWeight;
-            if (styles.color) el.style.color = styles.color;
-            if (styles.fontFamily) el.style.fontFamily = styles.fontFamily;
-
-            // Apply animation classes
-            el.classList.remove('animate-float', 'animate-pulse-custom', 'animate-sway', 'animate-glow', 'animate-slide-up', 'animate-zoom-in');
-            if (styles.animateIn === 'fade-up') el.classList.add('animate-slide-up');
-            if (styles.animateIn === 'zoom-in') el.classList.add('animate-zoom-in');
-            if (styles.loop === 'float') el.classList.add('animate-float');
-            if (styles.loop === 'pulse') el.classList.add('animate-pulse-custom');
-            if (styles.loop === 'sway') el.classList.add('animate-sway');
-            if (styles.loop === 'glow') el.classList.add('animate-glow');
-          }
+        const applyStyles = () => {
+          Object.keys(customStyles).forEach(selector => {
+            const el = doc.querySelector(selector) as HTMLElement;
+            if (el && !el.dataset.styled) {
+              const rules = customStyles[selector];
+              if (rules.html !== undefined) el.innerHTML = rules.html;
+              if (rules.fontSize) el.style.setProperty('font-size', rules.fontSize, 'important');
+              if (rules.fontWeight) el.style.setProperty('font-weight', rules.fontWeight, 'important');
+              if (rules.color) el.style.setProperty('color', rules.color, 'important');
+              if (rules.fontFamily) el.style.setProperty('font-family', `"${rules.fontFamily}", sans-serif`, 'important');
+              
+              if (rules.animateIn && rules.animateIn !== 'none') el.classList.add(`animate-${rules.animateIn}`);
+              if (rules.animateOut && rules.animateOut !== 'none') el.classList.add(`animate-${rules.animateOut}`);
+              if (rules.loop && rules.loop !== 'none') el.classList.add(`animate-${rules.loop}`);
+              
+              // Mark as styled so we don't re-apply indefinitely
+              el.dataset.styled = "true";
+            }
+          });
+        };
+        
+        applyStyles(); // Initial attempt
+        
+        // Wait for React to mount and elements to appear
+        const observer = new MutationObserver(() => {
+          applyStyles();
         });
+        observer.observe(doc.body, { childList: true, subtree: true });
       }
 
     } catch (e) {

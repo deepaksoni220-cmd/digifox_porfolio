@@ -246,7 +246,7 @@ function App() {
         {/* Hero Content */}
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-12 text-center -translate-y-[8%] md:-translate-y-[12%]">
           
-          <h1 className="text-6xl md:text-8xl lg:text-9xl text-white tracking-tight font-normal font-serif mb-8 select-none">
+          <h1 data-editorid="hero-title" className="text-6xl md:text-8xl lg:text-9xl text-white tracking-tight font-normal font-serif mb-8 select-none">
             {data.hero?.title || "Know it then all."}
           </h1>
 
@@ -266,12 +266,12 @@ function App() {
             </div>
 
             {/* Subtitle */}
-            <p className="text-white text-sm leading-relaxed px-4 max-w-md text-white/70">
+            <p data-editorid="hero-subtitle" className="text-white text-sm leading-relaxed px-4 max-w-md text-white/70">
               {data.hero?.subtitle || "Stay updated with the latest news and insights. Subscribe to our newsletter today."}
             </p>
 
             {/* Manifesto button */}
-            <button className="liquid-glass rounded-full px-8 py-3 text-white text-sm font-medium hover:bg-white/5 transition-colors cursor-pointer mt-2">
+            <button data-editorid="hero-cta" className="liquid-glass rounded-full px-8 py-3 text-white text-sm font-medium hover:bg-white/5 transition-colors cursor-pointer mt-2">
               {data.hero?.ctaText || "Manifesto"}
             </button>
           </div>

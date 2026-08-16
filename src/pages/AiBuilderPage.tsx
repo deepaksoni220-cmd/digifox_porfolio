@@ -2122,11 +2122,6 @@ export const AiBuilderPage: React.FC = () => {
                 <span className="text-xl font-black text-[var(--text-strong)]">1,500+</span>
                 <span className="opacity-70">Sites Launched</span>
               </div>
-              <div className="hidden sm:block text-[var(--border-strong)]">•</div>
-              <div className="flex items-center gap-2">
-                <span className="text-xl font-black text-[var(--text-strong)]">99.4%</span>
-                <span className="opacity-70">Client Satisfaction</span>
-              </div>
             </div>
           </div>
 

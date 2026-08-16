@@ -200,6 +200,7 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
               if (rules.textDecoration && el.style.textDecoration !== rules.textDecoration) needsUpdate = true;
               if (rules.letterSpacing !== undefined && el.style.letterSpacing !== rules.letterSpacing) needsUpdate = true;
               if (rules.lineHeight !== undefined && el.style.lineHeight !== rules.lineHeight) needsUpdate = true;
+              if (rules.textAlign !== undefined && el.style.textAlign !== rules.textAlign) needsUpdate = true;
               if (rules.href !== undefined && el.getAttribute('href') !== rules.href) needsUpdate = true;
               
               if (needsUpdate || !el.dataset.styled) {
@@ -210,6 +211,7 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
                 if (rules.textDecoration) el.style.setProperty('text-decoration', rules.textDecoration, 'important');
                 if (rules.letterSpacing !== undefined) el.style.setProperty('letter-spacing', rules.letterSpacing, 'important');
                 if (rules.lineHeight !== undefined) el.style.setProperty('line-height', rules.lineHeight, 'important');
+                if (rules.textAlign !== undefined) el.style.setProperty('text-align', rules.textAlign, 'important');
                 if (rules.color) el.style.setProperty('color', rules.color, 'important');
                 if (rules.fontFamily) el.style.setProperty('font-family', `"${rules.fontFamily}", sans-serif`, 'important');
                 if (rules.href !== undefined) {

@@ -198,6 +198,8 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
               if (rules.fontWeight && el.style.fontWeight !== rules.fontWeight) needsUpdate = true;
               if (rules.fontStyle && el.style.fontStyle !== rules.fontStyle) needsUpdate = true;
               if (rules.textDecoration && el.style.textDecoration !== rules.textDecoration) needsUpdate = true;
+              if (rules.letterSpacing !== undefined && el.style.letterSpacing !== rules.letterSpacing) needsUpdate = true;
+              if (rules.lineHeight !== undefined && el.style.lineHeight !== rules.lineHeight) needsUpdate = true;
               if (rules.href !== undefined && el.getAttribute('href') !== rules.href) needsUpdate = true;
               
               if (needsUpdate || !el.dataset.styled) {
@@ -206,6 +208,8 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
                 if (rules.fontWeight) el.style.setProperty('font-weight', rules.fontWeight, 'important');
                 if (rules.fontStyle) el.style.setProperty('font-style', rules.fontStyle, 'important');
                 if (rules.textDecoration) el.style.setProperty('text-decoration', rules.textDecoration, 'important');
+                if (rules.letterSpacing !== undefined) el.style.setProperty('letter-spacing', rules.letterSpacing, 'important');
+                if (rules.lineHeight !== undefined) el.style.setProperty('line-height', rules.lineHeight, 'important');
                 if (rules.color) el.style.setProperty('color', rules.color, 'important');
                 if (rules.fontFamily) el.style.setProperty('font-family', `"${rules.fontFamily}", sans-serif`, 'important');
                 if (rules.href !== undefined) {

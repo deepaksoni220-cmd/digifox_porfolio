@@ -355,5 +355,49 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
       primaryColor: "#da3a16",
       secondaryColor: "#111111"
     }
+  },
+  demoCarsVanta: {
+    websiteType: "Automotive & Luxury Transport",
+    templateStyle: "demo_cars_vanta",
+    category: "3d",
+    previewUrl: "/templates/demo cars vanta/index.html",
+    shortDescription: "Ultra-premium automotive and chauffeur template with interactive 3D video reveal, fleet selector and booking widget.",
+    thumbnailUrl: "/templates/demo-cars-vanta.png",
+    hero: {
+      title: "BookCabs.Au",
+      subtitle: "Premium chauffeur-driven journeys across Melbourne.",
+      ctaText: "Reserve Ride",
+      imagePrompt: "matte black luxury chauffeur car in dark studio cinematic lighting"
+    },
+    about: {
+      heading: "Get A Ride Beyond Ordinary",
+      description: "From airport transfers to corporate travel, every ride is designed around your time and comfort.",
+      imagePrompt: "luxury chauffeur car interior leather seats ambient lighting"
+    },
+    items: [
+      {
+        title: "Airport Transfers",
+        description: "Reliable, punctual, and stress-free airport transfers.",
+        icon: "✈️"
+      },
+      {
+        title: "Corporate Travel",
+        description: "Executive luxury chauffeur services tailored for business needs.",
+        icon: "💼"
+      },
+      {
+        title: "City Tours & Events",
+        description: "Explore the city in absolute comfort with premium rides.",
+        icon: "🏙️"
+      }
+    ],
+    contact: {
+      heading: "Book A Cab Online",
+      buttonText: "Reserve Now"
+    },
+    theme: {
+      primaryColor: "#FF4D14",
+      secondaryColor: "#050505"
+    }
   }
 };

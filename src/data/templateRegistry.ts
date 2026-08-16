@@ -89,5 +89,15 @@ export const TEMPLATE_REGISTRY: TemplateMetadata[] = [
     sections: ["hero", "about", "items", "contact"],
     previewUrl: "/templates/2d porfolio designg/dist/index.html",
     thumbnailUrl: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    template_id: "demoCarsVanta",
+    name: "Vanta Luxury Fleet & Chauffeur",
+    industries: ["automotive", "luxury", "cars", "transport", "travel", "chauffeur", "rental"],
+    styles: ["luxury", "cinematic", "dark", "sleek", "interactive", "3d"],
+    features: ["hero", "video-reveal", "interactive-fleet", "booking", "services", "contact"],
+    sections: ["hero", "about", "items", "contact"],
+    previewUrl: "/templates/demo cars vanta/index.html",
+    thumbnailUrl: "/templates/demo-cars-vanta.png"
   }
 ];

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BookCabs.Au</title>
+<meta name="description" content="Premium chauffeur-driven journeys across Melbourne.">
+<meta name="theme-color" content="#000000">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=Instrument+Serif:ital@1&display=swap">
+
+<link rel="stylesheet" href="./assets/vendor/lenis.css">
+<link rel="stylesheet" href="./style.css">
+<script>document.documentElement.className = document.documentElement.className.replace('no-js','js');</script>
+</head>
+<body class="theme-light">
+
+<!-- ══════════ PRELOADER ══════════ -->
+<div class="preloader" id="preloader" role="status" aria-live="polite" aria-label="Loading BookCabs.Au">
+  <div class="pre-inner">
+    <div class="pre-meta">
+      <span class="pre-mark">BookCabs.Au</span>
+      <span class="pre-tag">MODEL 03 — NOCTURNE</span>
+    </div>
+    <div class="pre-num"><span id="preCount">0</span><i>%</i></div>
+    <div class="pre-rail"><span class="pre-fill" id="preFill"></span><span class="pre-sweep"></span></div>
+    <p class="pre-status" id="preStatus">CALIBRATING STUDIO LIGHTS</p>
+  </div>
+  <div class="pre-shutter" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+</div>
+
+<!-- ══════════ CURSOR ══════════ -->
+<div class="cursor" aria-hidden="true">
+  <div class="cursor-ring" id="cursorRing"><span class="cursor-label" id="cursorLabel"></span></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+</div>
+
+<!-- ══════════ HUD ══════════ -->
+<div class="hud" aria-hidden="true">
+  <div class="hud-progress"><span class="hud-progress-fill" id="hudProgress"></span></div>
+  <span class="hud-edge hud-edge--l">BookCabs.Au — MELBOURNE'S PREMIER SERVICE</span>
+  <span class="hud-edge hud-edge--r">SCROLL TO UNVEIL</span>
+</div>
+
+<header class="topbar">
+  <a class="brand" href="#top" data-cursor="TOP" aria-label="BookCabs.Au — back to top">
+    <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M2 4 L12 21 L22 4" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M7.4 4 L12 12 L16.6 4" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".45"/>
+    </svg>
+    <span class="brand-word" data-field="brandName">BookCabs.Au</span>
+  </a>
+  <nav class="topnav" aria-label="Primary">
+    <a href="#specs" data-cursor="VIEW">Spec</a>
+    <a href="#drive" data-cursor="VIEW">Drive</a>
+    <a href="#gallery" data-cursor="VIEW">Our Services</a>
+    <a href="#config" data-cursor="VIEW">Our cars</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <span class="toggle-thumb"></span>
+    </button>
+    <a class="topnav-cta" href="#reserve" data-cursor="HOLD">Reserve</a>
+  </nav>
+</header>
+
+<button class="idle" id="idleToggle" type="button" aria-pressed="true" data-cursor="TOGGLE">
+  <span class="idle-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+  <span class="idle-text">DIGIFOX DEMO</span>
+</button>
+
+<main id="top">
+
+  <!-- ══════════ 01 · SHEET REVEAL ══════════ -->
+  <section class="reveal" id="reveal" aria-labelledby="revealTitle">
+    <div class="reveal-stage" id="revealStage">
+      <div class="stage-media" data-media="reveal">
+        <img data-draftly-asset-id="hero-image" data-draftly-default-src="./assets/img/vanta-hero.jpg" class="stage-plate stage-plate--under" src="./assets/img/vanta-hero.jpg" alt="Matte black BookCabs.Au fastback revealed in a blacked-out studio, red tail lights lit.">
+        <img data-draftly-asset-id="img-1" data-draftly-default-src="./assets/img/vanta-veiled.jpg" class="stage-plate stage-plate--veil" id="veilPlate" src="./assets/img/vanta-veiled.jpg" alt="The car beneath a silk dust sheet, lit by two crossing light bars.">
+        <video data-draftly-asset-id="hero-video" data-draftly-default-src="./assets/video/vanta-reveal.mp4" class="stage-video" id="revealVideo" playsinline muted preload="metadata"
+               data-src="./assets/video/vanta-reveal.mp4"
+               poster="./assets/img/vanta-veiled.jpg" tabindex="-1" aria-hidden="true"></video>
+        <div class="stage-bars" aria-hidden="true"><i></i><i></i></div>
+        <div class="stage-vig" aria-hidden="true"></div>
+      </div>
+
+      <div class="reveal-copy">
+        <p class="kicker" data-anim="kicker"><i class="dot"></i>MELBOURNE'S — Best CHAUFFEUR SERVICES</p>
+        <h1 class="display display--hero" id="revealTitle">
+          <span class="line" data-split>GET A RIDE</span>
+          <span class="line line--mix" data-split>BEYOND ORDINARY</span>
+        </h1>
+        <p class="lede" data-anim="lede">Premium chauffeur-driven journeys across Melbourne. From airport transfers to corporate travel, every ride is designed around your time and comfort.</p>
+      </div>
+
+      <ul class="edge-stats" aria-hidden="true">
+        <li class="edge-stat edge-stat--tl"><b>30<span>X</span></b><span>STIFFER MONOCOQUE</span></li>
+        <li class="edge-stat edge-stat--tr"><b>001<span>/150</span></b><span>ALLOCATION</span></li>
+        <li class="edge-stat edge-stat--bl"><b>Ø</b><span>DRIVER AIDS</span></li>
+      </ul>
+
+      <div class="reveal-trio" aria-hidden="true">
+        <span>DISTINCTIVE</span><span>UNSTOPPABLE</span><span>UNRIVALED</span>
+      </div>
+
+      <div class="scroll-cue" aria-hidden="true"><span>SCROLL</span><i></i></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 02 · SPEC STRIP ══════════ -->
+  <section class="specs" id="specs" aria-labelledby="specsTitle">
+    <div class="wrap">
+      <div class="specs-hero">
+        <div class="sec-head">
+          <p class="kicker"><i class="dot"></i>02 — HOMOLOGATION</p>
+          <h2 class="sec-title" id="specsTitle">BUILT AROUND<br><em>your</em> JOURNEY.</h2>
+          <p class="sec-note">From airport transfers to private journeys, every trip is built around comfort, reliability and exceptional service.</p>
+        </div>
+        <div class="specs-img-wrap">
+          <img src="./assets/img/vanta-fleet.jpg"
+               alt="Fleet of BookCabs.Au black cars lined up in an urban boulevard." loading="lazy">
+          <span class="specs-img-label">FLEET — ALLOCATION 001–150</span>
+        </div>
+      </div>
+      <ol class="spec-row">
+        <li class="spec">
+          <span class="spec-idx">01</span>
+          <b class="spec-fig"><span class="count" data-count="10" data-dec="0">0</span><i>+</i></b>
+          <span class="spec-unit">YEARS OF EXPERIENCE</span>
+          <span class="spec-label">Serving Melbourne since 2015</span>
+        </li>
+        <li class="spec">
+          <span class="spec-idx">02</span>
+          <b class="spec-fig">Allday<i>/7</i></b>
+          <span class="spec-unit">AIRPORT TRANSFERS</span>
+          <span class="spec-label">Available around the clock</span>
+        </li>
+        <li class="spec">
+          <span class="spec-idx">03</span>
+          <b class="spec-fig"><span class="count" data-count="14" data-dec="0">0</span><i>+</i></b>
+          <span class="spec-unit">PREMIUM VEHICLE OPTIONS</span>
+          <span class="spec-label">Luxury sedans, SUVs & people movers</span>
+        </li>
+        <li class="spec">
+          <span class="spec-idx">04</span>
+          <b class="spec-fig"><span class="count" data-count="100" data-dec="0">0</span><i>%</i></b>
+          <span class="spec-unit">PROFESSIONAL SERVICE</span>
+          <span class="spec-label">Comfort, reliability & personalised travels</span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ══════════ BOOKING WIDGET ══════════ -->
+  <section class="booking-widget" id="booking" style="background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('./assets/img/corporate.jpeg'); background-size: cover; background-position: center; padding-top: 10vw;">
+    <div class="wrap">
+      <p class="kicker" style="color: #fff; font-weight: bold;">BOOK CHAUFFEUR FOR A RIDE OR EVENT?</p>
+      <h2 class="sec-title sec-title--sm" style="margin-top: 10px; margin-bottom: 30px;">Airport Transfers, Corporate Events & Tours?<br><em>Book</em> A Cab Online</h2>
+      
+      <div class="booking-form-container">
+        <div class="booking-tabs" id="bookingTabs">
+          <button class="booking-tab is-active" type="button" data-tab="distance">DISTANCE</button>
+          <button class="booking-tab" type="button" data-tab="hourly">HOURLY</button>
+          <button class="booking-tab" type="button" data-tab="flat">FLAT RATE</button>
+        </div>
+        <form class="booking-form" action="https://formspree.io/f/your_formspree_endpoint" method="POST" id="bookingForm">
+          <input type="hidden" name="booking_type" id="bookingType" value="distance">
+          <div class="form-group">
+            <label>PICKUP DATE <span class="info-icon" title="Select your pickup date">?</span></label>
+            <input type="date" name="pickup_date" required style="cursor: pointer;">
+          </div>
+          <div class="form-group">
+            <label>PICKUP TIME <span class="info-icon" title="Select your pickup time">?</span></label>
+            <input type="time" name="pickup_time" required style="cursor: pointer;">
+          </div>
+          <div class="form-group flex-grow">
+            <label>PICKUP LOCATION <span class="info-icon">?</span></label>
+            <input type="text" name="pickup_location" placeholder="Enter a location" required>
+          </div>
+          <div class="form-group flex-grow">
+            <label>DROP-OFF LOCATION <span class="info-icon">?</span></label>
+            <input type="text" name="dropoff_location" placeholder="Enter a location" required>
+          </div>
+          <button type="submit" class="booking-submit">BOOK NOW</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Tab switching logic for the booking form
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabs = document.querySelectorAll('.booking-tab');
+      const typeInput = document.getElementById('bookingType');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Remove active class from all tabs
+          tabs.forEach(t => t.classList.remove('is-active'));
+          // Add active class to clicked tab
+          tab.classList.add('is-active');
+          // Update the hidden input value so the form knows what type of booking it is
+          if (typeInput) {
+            typeInput.value = tab.getAttribute('data-tab');
+          }
+        });
+      });
+    });
+  </script>
+
+  <!-- ══════════ 03 · DESERT DRIVE ══════════ -->
+  <section class="drive" id="drive" aria-labelledby="driveTitle">
+    <div class="drive-stage" id="driveStage">
+      <div class="stage-media" data-media="drive">
+        <img data-draftly-asset-id="img-2" data-draftly-default-src="./assets/img/vanta-desert.jpg" class="stage-plate" id="drivePlate" src="./assets/img/vanta-desert.jpg" alt="The BookCabs.Au tearing across a moonlit salt flat, throwing a wall of dust.">
+        <video data-draftly-asset-id="video-1" data-draftly-default-src="./assets/video/vanta-drive.mp4" class="stage-video" id="driveVideo" playsinline muted preload="metadata"
+               data-src="./assets/video/vanta-drive.mp4"
+               poster="./assets/img/vanta-desert.jpg" tabindex="-1" aria-hidden="true"></video>
+      </div>
+
+      <!-- giant wordmark, occluded by the car plate above it -->
+      <h2 class="drive-word" id="driveWord" aria-hidden="true"><span>BookCabs.Au</span></h2>
+      <canvas class="drive-occluder" id="driveOccluder" aria-hidden="true"></canvas>
+      <h2 class="sr-only" id="driveTitle">BookCabs.Au on the salt flats</h2>
+      <div class="stage-vig stage-vig--soft" aria-hidden="true"></div>
+
+      <div class="drive-cards" id="driveCards">
+        <article class="gcard">
+          <p class="gcard-k">ACCELERATION</p>
+          <b class="gcard-fig">0–60</b>
+          <p class="gcard-sub">2.6 seconds. Repeatably. On a surface that gives nothing back.</p>
+        </article>
+        <article class="gcard">
+          <p class="gcard-k">RANGE</p>
+          <b class="gcard-fig">500</b>
+          <p class="gcard-sub">Miles between fills. Hydrogen, compressed to 700 bar.</p>
+        </article>
+        <article class="gcard">
+          <p class="gcard-k">REDLINE</p>
+          <b class="gcard-fig">+10<i>K</i></b>
+          <p class="gcard-sub">RPM. Titanium rods. A noise you will feel in your sternum.</p>
+        </article>
+      </div>
+
+      <p class="drive-caption" aria-hidden="true">BONNEVILLE — 03:14 — AMBIENT 9&nbsp;°C</p>
+    </div>
+  </section>
+
+
+  <!-- ══════════ 04 · DETAIL GALLERY ══════════ -->
+  <section class="gallery" id="gallery" aria-labelledby="galleryTitle">
+    <div class="gallery-pin" id="galleryPin">
+      <div class="gallery-head">
+        <p class="kicker"><i class="dot"></i>04 — OUR SERVICES</p>
+        <h2 class="sec-title sec-title--sm" id="galleryTitle">See what we<br><em>can do</em> for you.</h2>
+      </div>
+      <div class="gallery-track" id="galleryTrack">
+        <figure class="slab">
+          <span class="slab-idx">01</span>
+          <div class="slab-img"><img src="./assets/img/Airport-Transfer.webp" alt="Airport Transfer service" loading="lazy"></div>
+          <figcaption><b>AIRPORT TRANSFER</b><span>Reliable, punctual, and stress-free transfers to and from Melbourne Airport.</span></figcaption>
+        </figure>
+        <figure class="slab">
+          <span class="slab-idx">02</span>
+          <div class="slab-img"><img src="./assets/img/corporate.jpeg" alt="Corporate Travel service" loading="lazy"></div>
+          <figcaption><b>CORPORATE TRAVEL</b><span>Professional chauffeur services tailored for your executive and business needs.</span></figcaption>
+        </figure>
+        <figure class="slab">
+          <span class="slab-idx">03</span>
+          <div class="slab-img"><img src="./assets/img/city-tour.webp" alt="City Tour service" loading="lazy"></div>
+          <figcaption><b>CITY TOUR</b><span>Explore the beauty of Melbourne in absolute comfort with our premium guided tours.</span></figcaption>
+        </figure>
+        <figure class="slab">
+          <span class="slab-idx">04</span>
+          <div class="slab-img"><img src="./assets/img/luxury.webp" alt="Special Events service" loading="lazy"></div>
+          <figcaption><b>SPECIAL EVENTS</b><span>Make a grand entrance at your wedding, gala, or next unforgettable celebration.</span></figcaption>
+        </figure>
+      </div>
+      <div class="gallery-rail" aria-hidden="true"><span id="galleryRailFill"></span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 05 · FLEET CONFIGURATOR ══════════ -->
+  <section class="config" id="config" aria-labelledby="configTitle">
+    <div class="wrap config-wrap">
+      <div class="config-head">
+        <p class="kicker"><i class="dot"></i>05 — OUR FLEET</p>
+        <h2 class="sec-title sec-title--sm" id="configTitle">Choose your<br><em>perfect</em> ride.</h2>
+        <p class="sec-note">From executive sedans to spacious SUVs, our premium fleet is tailored for your journey.</p>
+        <a href="#booking" class="booking-submit" style="display: inline-block; margin-top: 25px; padding: 15px 40px; text-decoration: none;">BOOK NOW</a>
+      </div>
+
+      <div class="config-stage">
+        <div class="config-view" id="configView" aria-live="polite">
+          <img class="config-img is-live" src="./assets/img/sedan.jpeg" alt="Executive Sedan." id="configBase">
+        </div>
+        <div class="config-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <p class="config-code" id="configCode">FLEET / SEDAN</p>
+      </div>
+
+      <div class="config-panel">
+        <div class="swatches" role="group" aria-label="Choose a vehicle class">
+          <button class="sw is-active" type="button" data-cursor="SELECT"
+                  data-img="./assets/img/sedan.jpeg"
+                  data-grade="brightness(1)"
+                  data-accent="#FF4D14" data-code="FLEET / SEDAN"
+                  data-name="Executive Sedan" data-desc="The standard in corporate travel and airport transfers. Seating for up to 4 passengers."
+                  data-stat-a="4 Pax" data-stat-b="2 Bags"
+                  data-alt="Executive Sedan">
+            <span class="sw-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 11L7 6H17L19 11M3 11H21V15C21 16.1 20.1 17 19 17H5C3.9 17 3 16.1 3 15V11Z"/><circle cx="7" cy="14" r="1.5"/><circle cx="17" cy="14" r="1.5"/></svg></span>
+            <span class="sw-name">Executive Sedan</span>
+          </button>
+          <button class="sw" type="button" data-cursor="SELECT"
+                  data-img="./assets/img/suv.jpeg"
+                  data-grade="brightness(1)"
+                  data-accent="#FF4D14" data-code="FLEET / SUV"
+                  data-name="Premium SUV" data-desc="Spacious, commanding, and comfortable. Ideal for larger groups and excessive luggage."
+                  data-stat-a="7 Pax" data-stat-b="5 Bags"
+                  data-alt="Premium SUV">
+            <span class="sw-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 11V7C4 5.9 4.9 5 6 5H18C19.1 5 20 5.9 20 7V11M2 11H22V16C22 17.1 21.1 18 20 18H4C2.9 18 2 17.1 2 16V11Z"/><circle cx="7" cy="15" r="1.5"/><circle cx="17" cy="15" r="1.5"/></svg></span>
+            <span class="sw-name">Premium SUV</span>
+          </button>
+          <button class="sw" type="button" data-cursor="SELECT"
+                  data-img="./assets/img/sports.jpeg"
+                  data-grade="brightness(1)"
+                  data-accent="#C98A4B" data-code="FLEET / SPORTS"
+                  data-name="Sports Prestige" data-desc="Arrive in style. Exotic and high-performance rides for special events and grand entrances."
+                  data-stat-a="2 Pax" data-stat-b="1 Bag"
+                  data-alt="Sports car">
+            <span class="sw-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12L7 8H15L20 12M2 12H22V15C22 15.6 21.6 16 21 16H3C2.4 16 2 15.6 2 15V12Z"/><circle cx="7" cy="13.5" r="1.5"/><circle cx="17" cy="13.5" r="1.5"/></svg></span>
+            <span class="sw-name">Sports Prestige</span>
+          </button>
+          <button class="sw" type="button" data-cursor="SELECT"
+                  data-img="./assets/img/luxury.webp"
+                  data-grade="brightness(1)"
+                  data-accent="#5FA8FF" data-code="FLEET / LUXURY"
+                  data-name="First Class Luxury" data-desc="The ultimate chauffeur experience. Stretch limousines and top-tier luxury vehicles for VIPs."
+                  data-stat-a="4-8 Pax" data-stat-b="4 Bags"
+                  data-alt="Luxury vehicle">
+            <span class="sw-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 11L5 8H19L20 11M2 11H22V15C22 16.1 21.1 17 20 17H4C2.9 17 2 16.1 2 15V11Z"/><circle cx="6" cy="14" r="1.5"/><circle cx="18" cy="14" r="1.5"/></svg></span>
+            <span class="sw-name">First Class Luxury</span>
+          </button>
+        </div>
+
+        <div class="config-readout">
+          <h3 class="config-name" id="configName">Executive Sedan</h3>
+          <p class="config-desc" id="configDesc">The standard in corporate travel and airport transfers. Seating for up to 4 passengers.</p>
+          <dl class="config-meta">
+            <div><dt>Capacity</dt><dd id="configStatA">4 Pax</dd></div>
+            <div><dt>Luggage</dt><dd id="configStatB">2 Bags</dd></div>
+            <div><dt>Availability</dt><dd>On Demand</dd></div>
+          </dl>
+          <a href="#booking" class="booking-submit" style="display: inline-block; margin-top: 25px; padding: 12px 30px; text-decoration: none; text-align: center;">BOOK THIS RIDE</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 06 · UNBREAKABLE OUTRO ══════════ -->
+  <section class="outro" id="outro" aria-labelledby="outroTitle">
+    <div class="outro-pin" id="outroPin">
+      <div class="outro-bg" id="outroBg">
+        <img data-draftly-asset-id="img-8" data-draftly-default-src="./assets/img/vanta-silhouette.jpg" src="./assets/img/vanta-silhouette.jpg" alt="" aria-hidden="true">
+      </div>
+      <div class="stage-vig" aria-hidden="true"></div>
+      <p class="outro-kicker" aria-hidden="true">SO FAR — NOTHING HAS</p>
+      <h2 class="outro-word" id="outroTitle"><span class="sr-only">Distinctive</span><span class="outro-letters" id="outroLetters" aria-hidden="true">DISTINCTIVE</span></h2>
+      <p class="outro-sub">Professional chauffeurs, premium vehicles and dependable service — wherever your journey takes you across Melbourne.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ 07 · RESERVE ══════════ -->
+  <section class="reserve" id="reserve" aria-labelledby="reserveTitle">
+    <div class="wrap reserve-wrap">
+      <p class="kicker"><i class="dot"></i>07 — RESERVE YOUR RIDE</p>
+      <h2 class="sec-title" id="reserveTitle">YOUR TIME.<br><em>our</em> PRIORITY.</h2>
+      <p class="sec-note">Book your premium vehicle instantly. Serving the greater Melbourne area with professional, reliable chauffeurs.</p>
+      <a class="bigcta" href="#reserve" data-cursor="HOLD">
+        <span class="bigcta-l">BOOK NOW</span>
+        <span class="bigcta-a" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
+        </span>
+      </a>
+      <ul class="reserve-meta">
+        <li><b>AVAILABILITY</b><span>All Day.</span></li>
+        <li><b>COVERAGE</b><span>Greater Melbourne</span></li>
+        <li><b>SUPPORT</b><span>Always Online</span></li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marqueeTrack">
+      <span>PREMIUM <i>◆</i> RELIABLE <i>◆</i> EXCEPTIONAL <i>◆</i> BookCabs.Au <i>◆</i> </span>
+      <span>PREMIUM <i>◆</i> RELIABLE <i>◆</i> EXCEPTIONAL <i>◆</i> BookCabs.Au <i>◆</i> </span>
+    </div>
+  </div>
+  <div class="wrap foot-grid">
+    <div class="foot-col">
+      <p class="foot-mark" data-field="brandName">BookCabs.Au</p>
+      <p class="foot-fine" data-field="address">41 Cecil Street Southbank Vic 3006<br>Mon-Sun: 06:00 - 22:30</p>
+    </div>
+    <nav class="foot-col" aria-label="Footer">
+      <p class="foot-h">Services</p>
+      <a href="#specs" data-cursor="VIEW">Airport Transfers</a>
+      <a href="#drive" data-cursor="VIEW">Corporate Travel</a>
+      <a href="#config" data-cursor="VIEW">Private Journeys</a>
+    </nav>
+    <div class="foot-col">
+      <p class="foot-h">Contact</p>
+      <a href="tel:0417833137" data-cursor="HOLD" data-field="phone">(0417) 833 137</a>
+      <a href="#reserve" data-cursor="HOLD" data-field="email">bookings@vanta.com.au</a>
+    </div>
+    <div class="foot-col foot-col--end">
+      <p class="foot-h">Legal</p>
+      <p class="foot-fine">Figures are manufacturer estimates for a car that does not have a warranty. Fictional brand, built for a scroll-craft showcase.</p>
+      <p class="foot-fine foot-fine--dim">© 2026 <span data-field="brandName">BookCabs.Au</span></p>
+    </div>
+  </div>
+</footer>
+
+<script src="./assets/vendor/gsap.min.js"></script>
+<script src="./assets/vendor/ScrollTrigger.min.js"></script>
+<script src="./assets/vendor/ScrollToPlugin.min.js"></script>
+<script src="./assets/vendor/CustomEase.min.js"></script>
+<script src="./assets/vendor/lenis.min.js"></script>
+<script src="./assets/vendor/split-type.min.js"></script>
+<script src="./script.js"></script>
+
+<script>
+  // Theme Toggle Logic
+  const themeToggleBtn = document.getElementById('themeToggle');
+  const body = document.body;
+  
+  // Check for saved user preference
+  const currentTheme = localStorage.getItem('theme');
+  if (currentTheme === 'dark') {
+    body.classList.remove('theme-light');
+  }
+
+  themeToggleBtn.addEventListener('click', () => {
+    body.classList.toggle('theme-light');
+    
+    if (body.classList.contains('theme-light')) {
+      localStorage.setItem('theme', 'light');
+    } else {
+      localStorage.setItem('theme', 'dark');
+    }
+  });
+
+  // Dynamic Builder Sync Listener
+  window.addEventListener('message', function(event) {
+    var msg = event.data;
+    if (!msg) return;
+    if (msg.type === 'SYNC_DATA' && msg.data) {
+      var d = msg.data;
+      var name = (d.contactDetails && d.contactDetails.brandName) || (d.hero && d.hero.title);
+      if (name) {
+        document.querySelectorAll('[data-field="brandName"]').forEach(function(el){ el.textContent = name; });
+        var pm = document.querySelector('.pre-mark'); if (pm) pm.textContent = name;
+        var he = document.querySelector('.hud-edge--l'); if (he) he.textContent = name + " — PREMIER SERVICE";
+      }
+      if (d.contactDetails) {
+        if (d.contactDetails.address) document.querySelectorAll('[data-field="address"]').forEach(function(el){ el.textContent = d.contactDetails.address; });
+        if (d.contactDetails.phone) document.querySelectorAll('[data-field="phone"]').forEach(function(el){ el.textContent = d.contactDetails.phone; el.href = "tel:" + d.contactDetails.phone; });
+        if (d.contactDetails.email) document.querySelectorAll('[data-field="email"]').forEach(function(el){ el.textContent = d.contactDetails.email; el.href = "mailto:" + d.contactDetails.email; });
+      }
+    } else if (msg.type === 'UPDATE_FIELD') {
+      var f = msg.field;
+      var v = msg.value;
+      if (f === 'brandName') {
+        document.querySelectorAll('[data-field="brandName"]').forEach(function(el){ el.textContent = v; });
+        var pm = document.querySelector('.pre-mark'); if (pm) pm.textContent = v;
+      }
+      if (f === 'address') document.querySelectorAll('[data-field="address"]').forEach(function(el){ el.textContent = v; });
+      if (f === 'phone') document.querySelectorAll('[data-field="phone"]').forEach(function(el){ el.textContent = v; el.href = "tel:" + v; });
+      if (f === 'email') document.querySelectorAll('[data-field="email"]').forEach(function(el){ el.textContent = v; el.href = "mailto:" + v; });
+    }
+  });
+
+  // Request sync on initial load
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ type: 'REQUEST_SYNC' }, '*');
+  }
+</script>
+</body>
+</html>

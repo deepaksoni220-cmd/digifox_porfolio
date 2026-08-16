@@ -195,12 +195,17 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
               if (rules.fontSize && el.style.fontSize !== rules.fontSize) needsUpdate = true;
               if (rules.color && el.style.color !== rules.color) needsUpdate = true;
               if (rules.fontFamily && el.style.fontFamily !== `"${rules.fontFamily}", sans-serif`) needsUpdate = true;
+              if (rules.fontWeight && el.style.fontWeight !== rules.fontWeight) needsUpdate = true;
+              if (rules.fontStyle && el.style.fontStyle !== rules.fontStyle) needsUpdate = true;
+              if (rules.textDecoration && el.style.textDecoration !== rules.textDecoration) needsUpdate = true;
               if (rules.href !== undefined && el.getAttribute('href') !== rules.href) needsUpdate = true;
               
               if (needsUpdate || !el.dataset.styled) {
                 if (rules.html !== undefined) el.innerHTML = tempDiv.innerHTML;
                 if (rules.fontSize) el.style.setProperty('font-size', rules.fontSize, 'important');
                 if (rules.fontWeight) el.style.setProperty('font-weight', rules.fontWeight, 'important');
+                if (rules.fontStyle) el.style.setProperty('font-style', rules.fontStyle, 'important');
+                if (rules.textDecoration) el.style.setProperty('text-decoration', rules.textDecoration, 'important');
                 if (rules.color) el.style.setProperty('color', rules.color, 'important');
                 if (rules.fontFamily) el.style.setProperty('font-family', `"${rules.fontFamily}", sans-serif`, 'important');
                 if (rules.href !== undefined) {

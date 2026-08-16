@@ -2119,7 +2119,7 @@ export const AiBuilderPage: React.FC = () => {
               </div>
               <div className="hidden sm:block text-[var(--border-strong)]">•</div>
               <div className="flex items-center gap-2">
-                <span className="text-xl font-black text-[var(--text-strong)]">1,500+</span>
+                <span className="text-xl font-black text-[var(--text-strong)]">700+</span>
                 <span className="opacity-70">Sites Launched</span>
               </div>
             </div>

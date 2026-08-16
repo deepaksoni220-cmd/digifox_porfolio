@@ -2104,7 +2104,7 @@ export const AiBuilderPage: React.FC = () => {
               <span>Global Client Reviews</span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-[var(--text-strong)]">
-              Trusted by Creators in <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">USA, Australia & India</span>
+              Well Trusted by Creators in <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">USA, Australia, India and All Over the World</span>
             </h2>
             <p className="text-sm sm:text-base text-[var(--text-secondary)] mt-4 leading-relaxed">
               Real feedback from entrepreneurs, agency founders, and developers across the world building high-impact digital experiences with Webmake AI.

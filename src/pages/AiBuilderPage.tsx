@@ -2092,6 +2092,175 @@ export const AiBuilderPage: React.FC = () => {
 
       </div>
       
+      {/* Global Client Reviews Section */}
+      <section className="mt-20 pt-16 pb-8 border-t border-[var(--border-strong)] relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 via-purple-500/5 to-transparent pointer-events-none -z-10" />
+        
+        <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
+              <span className="text-yellow-400">★★★★★</span>
+              <span>Global Client Reviews</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-[var(--text-strong)]">
+              Trusted by Creators in <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">USA, Australia & India</span>
+            </h2>
+            <p className="text-sm sm:text-base text-[var(--text-secondary)] mt-4 leading-relaxed">
+              Real feedback from entrepreneurs, agency founders, and developers across the world building high-impact digital experiences with Webmake AI.
+            </p>
+
+            {/* Quick Metrics Bar */}
+            <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 mt-8 pt-6 border-t border-[var(--border-subtle)] text-xs uppercase tracking-widest font-bold text-[var(--text-secondary)]">
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-black text-[var(--text-strong)]">4.9/5</span>
+                <span className="text-yellow-400 text-sm">★★★★★</span>
+                <span className="opacity-70">(380+ Reviews)</span>
+              </div>
+              <div className="hidden sm:block text-[var(--border-strong)]">•</div>
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-black text-[var(--text-strong)]">1,500+</span>
+                <span className="opacity-70">Sites Launched</span>
+              </div>
+              <div className="hidden sm:block text-[var(--border-strong)]">•</div>
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-black text-[var(--text-strong)]">99.4%</span>
+                <span className="opacity-70">Client Satisfaction</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Review Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {/* Review 1 - USA */}
+            <div className="group relative bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-blue-500/50 rounded-2xl p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_12px_30px_rgba(59,130,246,0.12)]">
+              <div>
+                {/* Top Badge & Rating */}
+                <div className="flex items-center justify-between gap-2 mb-5">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-bold text-blue-400">
+                    <span className="text-sm">🇺🇸</span>
+                    <span>United States</span>
+                  </div>
+                  <div className="flex items-center text-yellow-400 text-sm tracking-widest">
+                    ★★★★★
+                  </div>
+                </div>
+
+                {/* Tag */}
+                <span className="text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)] opacity-70 block mb-2">
+                  Portfolio & Agency Website
+                </span>
+
+                {/* Review Text */}
+                <p className="text-[var(--text-primary)] text-sm sm:text-[15px] leading-relaxed font-normal italic mb-6">
+                  "Webmake turned our agency branding into an ultra-smooth, 3D interactive web showcase in under 15 minutes. The inline text styling and live animations saved our team weeks of development work. Incredible platform."
+                </p>
+              </div>
+
+              {/* Author Info */}
+              <div className="pt-5 border-t border-[var(--border-subtle)] flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 text-white font-black text-sm flex items-center justify-center shadow-md">
+                    MV
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-[var(--text-strong)] leading-tight flex items-center gap-1.5">
+                      Marcus Vance
+                      <span className="text-blue-400 text-xs" title="Verified Client">✓</span>
+                    </h4>
+                    <p className="text-xs text-[var(--text-secondary)]">Founder, NexaStudio • Austin, USA</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Review 2 - Australia */}
+            <div className="group relative bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-purple-500/50 rounded-2xl p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_12px_30px_rgba(139,92,246,0.12)]">
+              <div>
+                {/* Top Badge & Rating */}
+                <div className="flex items-center justify-between gap-2 mb-5">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-xs font-bold text-purple-400">
+                    <span className="text-sm">🇦🇺</span>
+                    <span>Australia</span>
+                  </div>
+                  <div className="flex items-center text-yellow-400 text-sm tracking-widest">
+                    ★★★★★
+                  </div>
+                </div>
+
+                {/* Tag */}
+                <span className="text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)] opacity-70 block mb-2">
+                  E-Commerce & Digital Brand
+                </span>
+
+                {/* Review Text */}
+                <p className="text-[var(--text-primary)] text-sm sm:text-[15px] leading-relaxed font-normal italic mb-6">
+                  "The responsiveness and visual polish of the generated sites are world-class. Our Australian clients loved how easy it was to connect the live WhatsApp button and customize branding details on the fly. 10/10 recommended."
+                </p>
+              </div>
+
+              {/* Author Info */}
+              <div className="pt-5 border-t border-[var(--border-subtle)] flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 text-white font-black text-sm flex items-center justify-center shadow-md">
+                    CH
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-[var(--text-strong)] leading-tight flex items-center gap-1.5">
+                      Chloe Henderson
+                      <span className="text-purple-400 text-xs" title="Verified Client">✓</span>
+                    </h4>
+                    <p className="text-xs text-[var(--text-secondary)]">Creative Director, Veloce • Sydney, Australia</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Review 3 - India */}
+            <div className="group relative bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-emerald-500/50 rounded-2xl p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_12px_30px_rgba(16,185,129,0.12)]">
+              <div>
+                {/* Top Badge & Rating */}
+                <div className="flex items-center justify-between gap-2 mb-5">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-bold text-emerald-400">
+                    <span className="text-sm">🇮🇳</span>
+                    <span>India</span>
+                  </div>
+                  <div className="flex items-center text-yellow-400 text-sm tracking-widest">
+                    ★★★★★
+                  </div>
+                </div>
+
+                {/* Tag */}
+                <span className="text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)] opacity-70 block mb-2">
+                  Tech Startup & SaaS Showcase
+                </span>
+
+                {/* Review Text */}
+                <p className="text-[var(--text-primary)] text-sm sm:text-[15px] leading-relaxed font-normal italic mb-6">
+                  "Webmake AI is an absolute game-changer for rapid client delivery. We built and published 5 full-fledged business sites for clients in Bangalore and Mumbai in a single afternoon. Clean code, fast hosting, and zero friction."
+                </p>
+              </div>
+
+              {/* Author Info */}
+              <div className="pt-5 border-t border-[var(--border-subtle)] flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 text-white font-black text-sm flex items-center justify-center shadow-md">
+                    AS
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-[var(--text-strong)] leading-tight flex items-center gap-1.5">
+                      Aarav Sharma
+                      <span className="text-emerald-400 text-xs" title="Verified Client">✓</span>
+                    </h4>
+                    <p className="text-xs text-[var(--text-secondary)]">Tech Lead, InfiniByte • Bengaluru, India</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
       {/* Footer */}
       <footer className="border-t border-[var(--border-strong)] bg-[var(--bg-surface)] pt-12 pb-6 mt-10">
         <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left mb-8">

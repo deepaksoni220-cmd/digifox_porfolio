@@ -6,7 +6,7 @@ import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 import { TemplateGallery } from '../components/builder/TemplateGallery';
 import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink } from 'lucide-react';
+import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown } from 'lucide-react';
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
 
 export const AiBuilderPage: React.FC = () => {
@@ -48,6 +48,7 @@ export const AiBuilderPage: React.FC = () => {
   const [publishedUrl, setPublishedUrl] = useState("");
   const [publishSuccessUrl, setPublishSuccessUrl] = useState<string | null>(null);
   const [showPublishModal, setShowPublishModal] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [subdomainInput, setSubdomainInput] = useState("");
 
   // Text Inspector States
@@ -1743,7 +1744,8 @@ export const AiBuilderPage: React.FC = () => {
         </div>
 
         {/* Preview Area */}
-        <div ref={previewRef} className="w-full">
+        {(previewData || isBuilding) && (
+          <div ref={previewRef} className="w-full">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b border-[var(--border-strong)] pb-4 gap-4">
             <div>
               <h2 className="text-2xl font-black uppercase tracking-widest">
@@ -2079,17 +2081,10 @@ export const AiBuilderPage: React.FC = () => {
                   </div>
                 </div>
               </motion.div>
-            ) : (
-              <motion.div 
-                key="empty"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="w-full h-[400px] rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-secondary)] font-medium text-lg uppercase tracking-widest text-center px-4"
-              >
-              </motion.div>
-            )}
+            ) : null}
           </AnimatePresence>
-        </div>
+          </div>
+        )}
 
       </div>
       
@@ -2213,6 +2208,97 @@ export const AiBuilderPage: React.FC = () => {
               }
             ]}
           />
+        </div>
+      </section>
+      
+      {/* Animated FAQ Section */}
+      <section className="mt-10 py-16 border-t border-[var(--border-strong)] relative overflow-hidden">
+        <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
+              <span>💡</span>
+              <span>Frequently Asked Questions</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-[var(--text-strong)]">
+              Everything You <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Need to Know</span>
+            </h2>
+            <p className="text-sm sm:text-base text-[var(--text-secondary)] mt-3 max-w-xl mx-auto">
+              Got questions about Webmake AI? Here are answers to common questions about building, customizing, and publishing your dream site.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: "How fast can I generate and publish my website?",
+                a: "You can generate a fully functional, interactive 3D website in under 60 seconds. Once generated, customize any element live and publish it immediately to a custom .digifox.world subdomain with automated SSL security."
+              },
+              {
+                q: "Can I edit text, images, and brand details directly?",
+                a: "Yes! Click directly on any text heading, description, or image in the live preview to edit it inline. You can customize fonts, colors, letter spacing, alignments, and animations with instant real-time feedback."
+              },
+              {
+                q: "Can I connect my WhatsApp number for instant leads?",
+                a: "Absolutely. With our built-in WhatsApp integration, you can place a customizable floating chat button on your website. Visitors can message you with one tap, sending pre-filled lead inquiries straight to your phone."
+              },
+              {
+                q: "Are the generated websites mobile-friendly and fast?",
+                a: "Every template is 100% responsive and built for ultra-fast performance. Layouts adapt fluidly to desktops, tablets, and phones, complete with high-performance CSS and optimized animations."
+              },
+              {
+                q: "Do I need any coding or design experience?",
+                a: "None at all! Simply describe your business or select one of our curated 3D or 2D templates. The AI crafts your layouts, copy, animations, and color schemes automatically."
+              }
+            ].map((faq, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <div 
+                  key={idx}
+                  className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                    isOpen 
+                      ? 'bg-[var(--bg-surface)] border-blue-500/50 shadow-[0_8px_25px_rgba(59,130,246,0.1)]' 
+                      : 'bg-[var(--bg-surface)]/60 border-[var(--border-subtle)] hover:border-[var(--border-strong)]'
+                  }`}
+                >
+                  <button
+                    onClick={() => setOpenFaq(isOpen ? null : idx)}
+                    className="w-full px-6 py-5 flex items-center justify-between gap-4 text-left transition-colors cursor-pointer"
+                  >
+                    <span className="text-base sm:text-lg font-bold text-[var(--text-strong)] flex items-center gap-3">
+                      <span className="text-xs font-black text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-md">
+                        0{idx + 1}
+                      </span>
+                      {faq.q}
+                    </span>
+                    <motion.div
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.25 }}
+                      className={`p-1.5 rounded-full flex-shrink-0 transition-colors ${
+                        isOpen ? 'bg-blue-500/20 text-blue-400' : 'bg-white/5 text-[var(--text-secondary)]'
+                      }`}
+                    >
+                      <ChevronDown className="w-5 h-5" />
+                    </motion.div>
+                  </button>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                      >
+                        <div className="px-6 pb-6 pt-2 text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed border-t border-[var(--border-subtle)]/50">
+                          {faq.a}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
       

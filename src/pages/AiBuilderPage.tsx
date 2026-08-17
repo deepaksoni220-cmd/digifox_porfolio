@@ -1516,14 +1516,18 @@ export const AiBuilderPage: React.FC = () => {
         description="Instantly generate and customize your website using our advanced AI consultant."
       />
       
-      {/* 1st Section Atmospheric Background */}
+      {/* 1st Section Atmospheric Background Video */}
       <div className="absolute top-0 left-0 right-0 h-[850px] overflow-hidden pointer-events-none -z-10 select-none">
-        <img 
-          src="https://storage.getlayers.ai/backgrounds/sea-storm.webp" 
-          alt="Sea Storm Background" 
-          className="w-full h-full object-cover object-top opacity-25 filter contrast-125 brightness-90"
+        <video 
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260325_120549_0cd82c36-56b3-4dd9-b190-069cfc3a623f.mp4" 
+          className="w-full h-full object-cover opacity-30 filter contrast-125 brightness-95"
+          autoPlay 
+          muted 
+          loop 
+          playsInline 
+          aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/30 via-[var(--bg-base)]/75 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/25 via-[var(--bg-base)]/70 to-[var(--bg-base)]" />
         <div className="absolute inset-0 bg-radial-gradient from-transparent via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
       </div>
 

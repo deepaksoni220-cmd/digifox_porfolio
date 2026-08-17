@@ -2132,7 +2132,7 @@ export const AiBuilderPage: React.FC = () => {
                 quote: 'Webmake turned our agency branding into an ultra-smooth, 3D interactive web showcase in under 15 minutes. The inline text styling and live animations saved our team weeks of development work. Incredible platform.',
                 name: 'Marcus Vance',
                 designation: 'Founder, NexaStudio • Austin, Texas, USA',
-                src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200&auto=format&fit=crop'
+                src: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1200&auto=format&fit=crop'
               },
               {
                 country: 'United States',

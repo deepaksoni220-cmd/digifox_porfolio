@@ -2230,7 +2230,7 @@ export const AiBuilderPage: React.FC = () => {
           <div className="space-y-4">
             {[
               {
-                q: "How fast can I generate and publish my website?",
+                q: "What time it takes to design and publish the website?",
                 a: "You can generate a fully functional, interactive 3D website in under 60 seconds. Once generated, customize any element live and publish it immediately to a custom .digifox.world subdomain with automated SSL security."
               },
               {

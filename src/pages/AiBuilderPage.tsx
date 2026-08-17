@@ -7,6 +7,7 @@ import { TemplateGallery } from '../components/builder/TemplateGallery';
 import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink } from 'lucide-react';
+import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
 
 export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -2125,172 +2126,93 @@ export const AiBuilderPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Review Cards Grid (9 Reviews) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {[
+          {/* 3D Animated Testimonials Component */}
+          <AnimatedTestimonials 
+            autoplay={true}
+            testimonials={[
               {
                 country: 'United States',
                 flag: '🇺🇸',
                 tag: 'Portfolio & Agency Website',
-                review: '"Webmake turned our agency branding into an ultra-smooth, 3D interactive web showcase in under 15 minutes. The inline text styling and live animations saved our team weeks of development work. Incredible platform."',
-                initials: 'MV',
+                quote: 'Webmake turned our agency branding into an ultra-smooth, 3D interactive web showcase in under 15 minutes. The inline text styling and live animations saved our team weeks of development work. Incredible platform.',
                 name: 'Marcus Vance',
-                role: 'Founder, NexaStudio',
-                location: 'Austin, Texas, USA',
-                avatarBg: 'from-blue-600 to-indigo-500',
-                badgeBg: 'bg-blue-500/10 border-blue-500/20 text-blue-400',
-                hoverGlow: 'hover:border-blue-500/50 hover:shadow-[0_12px_30px_rgba(59,130,246,0.12)]'
+                designation: 'Founder, NexaStudio • Austin, Texas, USA',
+                src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200&auto=format&fit=crop'
               },
               {
                 country: 'United States',
                 flag: '🇺🇸',
                 tag: 'E-Commerce & Retail Store',
-                review: '"We launched our entire summer collection website with Webmake. The layout adapts smoothly to all screens, and our conversion rate jumped 35% thanks to the snappy load speeds and clean UX."',
-                initials: 'SJ',
+                quote: 'We launched our entire summer collection website with Webmake. The layout adapts smoothly to all screens, and our conversion rate jumped 35% thanks to the snappy load speeds and clean UX.',
                 name: 'Sarah Jenkins',
-                role: 'E-Commerce Director, Aura Luxe',
-                location: 'New York, USA',
-                avatarBg: 'from-indigo-600 to-cyan-500',
-                badgeBg: 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400',
-                hoverGlow: 'hover:border-indigo-500/50 hover:shadow-[0_12px_30px_rgba(99,102,241,0.12)]'
+                designation: 'E-Commerce Director, Aura Luxe • New York, USA',
+                src: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1200&auto=format&fit=crop'
               },
               {
                 country: 'United States',
                 flag: '🇺🇸',
                 tag: 'SaaS & Tech Landing Page',
-                review: '"The AI prompt generation matched our niche branding instantly. Being able to live-edit every heading, button, and image without touching code is a superpower for fast product launches."',
-                initials: 'DM',
+                quote: 'The AI prompt generation matched our niche branding instantly. Being able to live-edit every heading, button, and image without touching code is a superpower for fast product launches.',
                 name: 'David Miller',
-                role: 'Co-Founder, CloudPulse Tech',
-                location: 'San Francisco, California, USA',
-                avatarBg: 'from-sky-600 to-blue-500',
-                badgeBg: 'bg-sky-500/10 border-sky-500/20 text-sky-400',
-                hoverGlow: 'hover:border-sky-500/50 hover:shadow-[0_12px_30px_rgba(14,165,233,0.12)]'
+                designation: 'Co-Founder, CloudPulse Tech • San Francisco, USA',
+                src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200&auto=format&fit=crop'
               },
               {
                 country: 'Australia',
                 flag: '🇦🇺',
                 tag: 'Creative Studio & Portfolio',
-                review: '"The responsiveness and visual polish of the generated sites are world-class. Our Australian clients loved how easy it was to connect the live WhatsApp button and customize branding details on the fly."',
-                initials: 'CH',
+                quote: 'The responsiveness and visual polish of the generated sites are world-class. Our Australian clients loved how easy it was to connect the live WhatsApp button and customize branding details on the fly.',
                 name: 'Chloe Henderson',
-                role: 'Creative Director, Veloce Media',
-                location: 'Sydney, Australia',
-                avatarBg: 'from-purple-600 to-pink-500',
-                badgeBg: 'bg-purple-500/10 border-purple-500/20 text-purple-400',
-                hoverGlow: 'hover:border-purple-500/50 hover:shadow-[0_12px_30px_rgba(139,92,246,0.12)]'
+                designation: 'Creative Director, Veloce Media • Sydney, Australia',
+                src: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1200&auto=format&fit=crop'
               },
               {
                 country: 'Australia',
                 flag: '🇦🇺',
                 tag: 'Corporate & Business Portal',
-                review: '"We’ve built 8 client sites with Webmake in the last month. The domain publishing is instant, SSL is automatic, and the client customization portal is intuitive for non-technical stakeholders."',
-                initials: 'LO',
+                quote: 'We have built 8 client sites with Webmake in the last month. The domain publishing is instant, SSL is automatic, and the client customization portal is intuitive for non-technical stakeholders.',
                 name: 'Liam O’Connor',
-                role: 'Operations Lead, Bondi Digital',
-                location: 'Melbourne, Australia',
-                avatarBg: 'from-violet-600 to-fuchsia-500',
-                badgeBg: 'bg-violet-500/10 border-violet-500/20 text-violet-400',
-                hoverGlow: 'hover:border-violet-500/50 hover:shadow-[0_12px_30px_rgba(124,58,237,0.12)]'
+                designation: 'Operations Lead, Bondi Digital • Melbourne, Australia',
+                src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1200&auto=format&fit=crop'
               },
               {
                 country: 'Australia',
                 flag: '🇦🇺',
                 tag: 'Fashion Brand Storefront',
-                review: '"From brand logo upload to floating contact buttons, everything worked right out of the box. Super clean aesthetic that our customers in Australia and New Zealand rave about."',
-                initials: 'JT',
+                quote: 'From brand logo upload to floating contact buttons, everything worked right out of the box. Super clean aesthetic that our customers in Australia and New Zealand rave about.',
                 name: 'Jessica Taylor',
-                role: 'Founder, Outback Apparel Co.',
-                location: 'Brisbane, Australia',
-                avatarBg: 'from-fuchsia-600 to-rose-500',
-                badgeBg: 'bg-fuchsia-500/10 border-fuchsia-500/20 text-fuchsia-400',
-                hoverGlow: 'hover:border-fuchsia-500/50 hover:shadow-[0_12px_30px_rgba(217,70,239,0.12)]'
+                designation: 'Founder, Outback Apparel Co. • Brisbane, Australia',
+                src: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1200&auto=format&fit=crop'
               },
               {
                 country: 'India',
                 flag: '🇮🇳',
                 tag: 'Enterprise Tech Platform',
-                review: '"Webmake AI is an absolute game-changer for rapid client delivery. We built and published 5 full-fledged business sites for clients in Bangalore and Mumbai in a single afternoon. Clean code, fast hosting, and zero friction."',
-                initials: 'AS',
+                quote: 'Webmake AI is an absolute game-changer for rapid client delivery. We built and published 5 full-fledged business sites for clients in Bangalore and Mumbai in a single afternoon. Clean code, fast hosting, and zero friction.',
                 name: 'Aarav Sharma',
-                role: 'Tech Lead, InfiniByte',
-                location: 'Bengaluru, India',
-                avatarBg: 'from-emerald-600 to-teal-500',
-                badgeBg: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400',
-                hoverGlow: 'hover:border-emerald-500/50 hover:shadow-[0_12px_30px_rgba(16,185,129,0.12)]'
+                designation: 'Tech Lead, InfiniByte • Bengaluru, India',
+                src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1200&auto=format&fit=crop'
               },
               {
                 country: 'India',
                 flag: '🇮🇳',
                 tag: 'Design Agency Portfolio',
-                review: '"The typography controls, letter-spacing, and smooth reveal animations give every site an ultra-luxurious feel. Our clients think we spent $10k+ on custom design. Simply unmatched."',
-                initials: 'PP',
+                quote: 'The typography controls, letter-spacing, and smooth reveal animations give every site an ultra-luxurious feel. Our clients think we spent $10k+ on custom design. Simply unmatched.',
                 name: 'Pooja Patel',
-                role: 'Brand Strategist, SparkDesign',
-                location: 'Mumbai, India',
-                avatarBg: 'from-teal-600 to-emerald-500',
-                badgeBg: 'bg-teal-500/10 border-teal-500/20 text-teal-400',
-                hoverGlow: 'hover:border-teal-500/50 hover:shadow-[0_12px_30px_rgba(20,184,166,0.12)]'
+                designation: 'Brand Strategist, SparkDesign • Mumbai, India',
+                src: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=1200&auto=format&fit=crop'
               },
               {
                 country: 'India',
                 flag: '🇮🇳',
                 tag: 'Supply Chain & B2B Portal',
-                review: '"Connecting our business WhatsApp directly to the floating corner button boosted our inbound lead inquiries by 60%. Publishing took under 60 seconds with custom subdomain!"',
-                initials: 'RV',
+                quote: 'Connecting our business WhatsApp directly to the floating corner button boosted our inbound lead inquiries by 60%. Publishing took under 60 seconds with custom subdomain!',
                 name: 'Rohan Verma',
-                role: 'Founder, Zenith Logistics',
-                location: 'New Delhi, India',
-                avatarBg: 'from-amber-600 to-orange-500',
-                badgeBg: 'bg-amber-500/10 border-amber-500/20 text-amber-400',
-                hoverGlow: 'hover:border-amber-500/50 hover:shadow-[0_12px_30px_rgba(245,158,11,0.12)]'
+                designation: 'Founder, Zenith Logistics • New Delhi, India',
+                src: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1200&auto=format&fit=crop'
               }
-            ].map((item, idx) => (
-              <div 
-                key={idx}
-                className={`group relative bg-[var(--bg-surface)] border border-[var(--border-subtle)] ${item.hoverGlow} rounded-2xl p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5`}
-              >
-                <div>
-                  {/* Top Badge & Rating */}
-                  <div className="flex items-center justify-between gap-2 mb-5">
-                    <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold ${item.badgeBg}`}>
-                      <span className="text-sm">{item.flag}</span>
-                      <span>{item.country}</span>
-                    </div>
-                    <div className="flex items-center text-yellow-400 text-sm tracking-widest">
-                      ★★★★★
-                    </div>
-                  </div>
-
-                  {/* Tag */}
-                  <span className="text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)] opacity-70 block mb-2">
-                    {item.tag}
-                  </span>
-
-                  {/* Review Text */}
-                  <p className="text-[var(--text-primary)] text-sm sm:text-[15px] leading-relaxed font-normal italic mb-6">
-                    {item.review}
-                  </p>
-                </div>
-
-                {/* Author Info */}
-                <div className="pt-5 border-t border-[var(--border-subtle)] flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-11 h-11 rounded-full bg-gradient-to-tr ${item.avatarBg} text-white font-black text-sm flex items-center justify-center shadow-md`}>
-                      {item.initials}
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-[var(--text-strong)] leading-tight flex items-center gap-1.5">
-                        {item.name}
-                        <span className="text-blue-400 text-xs" title="Verified Client">✓</span>
-                      </h4>
-                      <p className="text-xs text-[var(--text-secondary)]">{item.role} • {item.location}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+            ]}
+          />
         </div>
       </section>
       

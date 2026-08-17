@@ -1516,7 +1516,18 @@ export const AiBuilderPage: React.FC = () => {
         description="Instantly generate and customize your website using our advanced AI consultant."
       />
       
-      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      {/* 1st Section Atmospheric Background */}
+      <div className="absolute top-0 left-0 right-0 h-[850px] overflow-hidden pointer-events-none -z-10 select-none">
+        <img 
+          src="https://storage.getlayers.ai/backgrounds/sea-storm.webp" 
+          alt="Sea Storm Background" 
+          className="w-full h-full object-cover object-top opacity-25 filter contrast-125 brightness-90"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/30 via-[var(--bg-base)]/75 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-radial-gradient from-transparent via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
+      </div>
+
+      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10">
         
         {/* Header & Chat Section */}
         <div className="flex flex-col md:flex-row gap-10 items-start justify-between">
@@ -1719,6 +1730,22 @@ export const AiBuilderPage: React.FC = () => {
                   </div>
                 </>
               )}
+
+              {/* Trust Badge below AI Builder Box */}
+              <div className="flex flex-wrap items-center justify-center gap-3 pt-6 pb-2 text-center">
+                <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-[var(--bg-surface)]/80 backdrop-blur-md border border-[var(--border-strong)] shadow-lg hover:border-blue-500/50 transition-all duration-300">
+                  <div className="flex -space-x-2 overflow-hidden">
+                    <img className="inline-block h-6 w-6 rounded-full ring-2 ring-[var(--bg-surface)] object-cover" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=100&auto=format&fit=crop" alt="User" />
+                    <img className="inline-block h-6 w-6 rounded-full ring-2 ring-[var(--bg-surface)] object-cover" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=100&auto=format&fit=crop" alt="User" />
+                    <img className="inline-block h-6 w-6 rounded-full ring-2 ring-[var(--bg-surface)] object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=100&auto=format&fit=crop" alt="User" />
+                    <img className="inline-block h-6 w-6 rounded-full ring-2 ring-[var(--bg-surface)] object-cover" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=100&auto=format&fit=crop" alt="User" />
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[var(--text-strong)]">
+                    <span className="text-yellow-400">★★★★★</span>
+                    <span>Got trusted by <strong className="text-[#3b82f6]">700+ users</strong> worldwide..</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Template Gallery Section */}

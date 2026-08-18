@@ -2470,7 +2470,7 @@ export const AiBuilderPage: React.FC = () => {
                   03 — FULL CUSTOMIZE - AI EDITING
                 </div>
                 <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
-                  Change Anything
+                  Update - Change Anything
                 </h3>
                 <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
                   Tell us what you want changed. Update content, colors, images and sections instantly.

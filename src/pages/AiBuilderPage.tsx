@@ -6,7 +6,7 @@ import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 import { TemplateGallery } from '../components/builder/TemplateGallery';
 import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown, Layers, Box, MessageSquare, DollarSign } from 'lucide-react';
+import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown, Layers, Wand2, Coins, Orbit } from 'lucide-react';
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
 
 export const AiBuilderPage: React.FC = () => {
@@ -2438,7 +2438,7 @@ export const AiBuilderPage: React.FC = () => {
             >
               <div className="relative z-10 [transform:translateZ(25px)]">
                 <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
-                  <Box className="w-5 h-5 text-indigo-400" />
+                  <Orbit className="w-5 h-5 text-indigo-400" />
                 </div>
                 <div className="text-[11px] font-bold uppercase tracking-widest text-indigo-400/90 mb-1">
                   02 — 3D INTERACTIVE
@@ -2464,7 +2464,7 @@ export const AiBuilderPage: React.FC = () => {
             >
               <div className="relative z-10 [transform:translateZ(25px)]">
                 <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
-                  <MessageSquare className="w-5 h-5 text-purple-400" />
+                  <Wand2 className="w-5 h-5 text-purple-400" />
                 </div>
                 <div className="text-[11px] font-bold uppercase tracking-widest text-purple-400/90 mb-1">
                   03 — FULL CUSTOMIZE - AI EDITING
@@ -2504,7 +2504,7 @@ export const AiBuilderPage: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* Card 6: 05 — SAVE THOUSANDS OF DOLLARS (Span 3 / Full Width on lg with Subtle Radial Mist) */}
+            {/* Card 5: 05 — SAVE THOUSANDS OF DOLLARS (Span 3 / Full Width on lg with Vibrant Blue Palette) */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -2512,13 +2512,13 @@ export const AiBuilderPage: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.25 }}
               whileHover={{ scale: 1.015, rotateX: 2, z: 20 }}
               style={{ transformStyle: "preserve-3d" }}
-              className="group relative lg:col-span-3 bg-[radial-gradient(ellipse_at_top_left,_rgba(16,185,129,0.08),_#0d0f12_60%)] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col sm:flex-row sm:items-center justify-between gap-6 transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(16,185,129,0.15)] cursor-default"
+              className="group relative lg:col-span-3 bg-[radial-gradient(ellipse_at_top_left,_rgba(59,130,246,0.14),_#0d0f12_60%)] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col sm:flex-row sm:items-center justify-between gap-6 transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_20px_50px_rgba(59,130,246,0.18)] cursor-default"
             >
               <div className="relative z-10 max-w-2xl [transform:translateZ(25px)]">
-                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <DollarSign className="w-5 h-5 text-emerald-400" />
+                <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Coins className="w-5 h-5 text-blue-400" />
                 </div>
-                <div className="text-[11px] font-bold uppercase tracking-widest text-emerald-400/90 mb-1">
+                <div className="text-[11px] font-bold uppercase tracking-widest text-blue-400 font-mono mb-1">
                   05 — SAVE THOUSANDS OF DOLLARS
                 </div>
                 <h3 className="text-xl sm:text-3xl font-bold text-white tracking-tight mb-2">
@@ -2530,7 +2530,7 @@ export const AiBuilderPage: React.FC = () => {
               </div>
 
               <div className="relative z-10 shrink-0 flex flex-col sm:items-end gap-2 pt-4 sm:pt-0 border-t sm:border-t-0 border-white/[0.08] [transform:translateZ(25px)]">
-                <span className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight">$0 Upfront</span>
+                <span className="text-3xl sm:text-4xl font-black text-blue-400 tracking-tight">$0 Fee</span>
                 <span className="text-xs font-semibold text-gray-400">Generate & Preview Free</span>
               </div>
             </motion.div>

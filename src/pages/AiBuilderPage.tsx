@@ -6,7 +6,7 @@ import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 import { TemplateGallery } from '../components/builder/TemplateGallery';
 import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown, Layers, Box, Clock, MessageSquare, DollarSign } from 'lucide-react';
+import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown, Layers, Box, MessageSquare, DollarSign } from 'lucide-react';
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
 
 export const AiBuilderPage: React.FC = () => {
@@ -2442,7 +2442,7 @@ export const AiBuilderPage: React.FC = () => {
                   02 — 3D INTERACTIVE
                 </div>
                 <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
-                  Immersive Websites
+                  3D Immersive Websites
                 </h3>
                 <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
                   Bring your brand to life with interactive 3D scenes, objects and visual experiences.
@@ -2475,52 +2475,27 @@ export const AiBuilderPage: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* Card 4: 04 — READY IN MINUTES */}
+            {/* Card 4: 04 — EVERYTHING INCLUDED (Span 2 on lg) */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
               whileHover={{ y: -4 }}
-              className="group relative bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/20"
-            >
-              <div className="relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16">
-                  <Clock className="w-5 h-5 text-amber-400" />
-                </div>
-                <div className="text-[11px] font-bold uppercase tracking-widest text-amber-400/90 mb-1">
-                  04 — READY IN MINUTES
-                </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
-                  Not Weeks
-                </h3>
-                <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
-                  Start with a premium template, add your business details and launch in minutes.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Card 5: 06 — EVERYTHING INCLUDED */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.25 }}
-              whileHover={{ y: -4 }}
-              className="group relative bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/20"
+              className="group relative lg:col-span-2 bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/20"
             >
               <div className="relative z-10">
                 <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16">
                   <Globe className="w-5 h-5 text-cyan-400" />
                 </div>
                 <div className="text-[11px] font-bold uppercase tracking-widest text-cyan-400/90 mb-1">
-                  06 — EVERYTHING INCLUDED
+                  04 — EVERYTHING INCLUDED
                 </div>
                 <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
-                  Hosting + SSL + Domain
+                  Free Domain , Hosting + SSL
                 </h3>
-                <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
-                  Get the infrastructure you need to launch, host and secure your website in one place.
+                <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed max-w-xl">
+                  Get the infrastructure you need to launch, host and secure your website in one place with global CDN and automated SSL certificates.
                 </p>
               </div>
             </motion.div>

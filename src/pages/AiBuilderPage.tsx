@@ -1820,34 +1820,53 @@ export const AiBuilderPage: React.FC = () => {
                     borderGlow: 'hover:border-amber-500/50 hover:shadow-[0_8px_25px_rgba(245,158,11,0.15)]'
                   }
                 ].map((item, idx) => (
-                  <div
-                    key={idx}
-                    className={`relative bg-[var(--bg-surface)] border border-[var(--border-subtle)] ${item.borderGlow} rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 group`}
-                  >
-                    <div>
-                      {/* Step Number & Badge */}
-                      <div className="flex items-center justify-between gap-2 mb-4">
-                        <span className={`text-2xl font-black bg-gradient-to-r ${item.accent} bg-clip-text text-transparent`}>
-                          {item.step}
-                        </span>
-                        <span className="text-[10px] font-black uppercase tracking-wider text-[var(--text-secondary)] bg-[var(--bg-base)] px-2.5 py-0.5 rounded-full border border-[var(--border-subtle)]">
-                          {item.badge}
-                        </span>
+                  <div key={idx} className="relative flex flex-col">
+                    <div
+                      className={`relative bg-[var(--bg-surface)] border border-[var(--border-subtle)] ${item.borderGlow} rounded-2xl p-5 flex flex-col justify-between h-full transition-all duration-300 hover:-translate-y-1 group z-10`}
+                    >
+                      <div>
+                        {/* Step Number & Badge */}
+                        <div className="flex items-center justify-between gap-2 mb-4">
+                          <span className={`text-2xl font-black bg-gradient-to-r ${item.accent} bg-clip-text text-transparent`}>
+                            {item.step}
+                          </span>
+                          <span className="text-[10px] font-black uppercase tracking-wider text-[var(--text-secondary)] bg-[var(--bg-base)] px-2.5 py-0.5 rounded-full border border-[var(--border-subtle)]">
+                            {item.badge}
+                          </span>
+                        </div>
+
+                        <h3 className="text-sm sm:text-base font-bold text-[var(--text-strong)] leading-snug mb-2 group-hover:text-blue-400 transition-colors">
+                          {item.title}
+                        </h3>
+
+                        <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
+                          {item.desc}
+                        </p>
                       </div>
 
-                      <h3 className="text-sm sm:text-base font-bold text-[var(--text-strong)] leading-snug mb-2 group-hover:text-blue-400 transition-colors">
-                        {item.title}
-                      </h3>
-
-                      <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
-                        {item.desc}
-                      </p>
+                      <div className="mt-4 pt-3 border-t border-[var(--border-subtle)]/60 flex items-center justify-between text-[11px] font-bold text-blue-400 opacity-80 group-hover:opacity-100">
+                        <span>Instant Setup</span>
+                        <span>✓</span>
+                      </div>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-[var(--border-subtle)]/60 flex items-center justify-between text-[11px] font-bold text-blue-400 opacity-80 group-hover:opacity-100">
-                      <span>Instant Setup</span>
-                      <span>✓</span>
-                    </div>
+                    {/* Desktop Right Connecting Arrow */}
+                    {idx < 4 && (
+                      <div className="hidden lg:flex absolute -right-4.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-[var(--bg-base)] border border-blue-500/40 items-center justify-center text-blue-400 shadow-md">
+                        <svg className="w-3.5 h-3.5 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                      </div>
+                    )}
+
+                    {/* Mobile Down Connecting Arrow */}
+                    {idx < 4 && (
+                      <div className="flex lg:hidden justify-center py-2 text-blue-400/70">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

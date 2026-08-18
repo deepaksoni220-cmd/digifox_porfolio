@@ -45,7 +45,7 @@ export const ContactUsPage: React.FC = () => {
     const text = encodeURIComponent(
       `Hello Digifox Team! My name is ${formData.name || 'a client'}. I am interested in ${formData.projectType}. Message: ${formData.message || 'Let us discuss a new project.'}`
     );
-    window.open(`https://wa.me/919996944645?text=${text}`, '_blank');
+    window.open(`https://wa.me/918696755996?text=${text}`, '_blank');
   };
 
   return (
@@ -137,7 +137,7 @@ export const ContactUsPage: React.FC = () => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">WhatsApp / Direct</p>
-                  <p className="text-sm font-bold text-[var(--text-strong)] font-mono mt-0.5">+91 99969 44645</p>
+                  <p className="text-sm font-bold text-[var(--text-strong)] font-mono mt-0.5">+91-8696755996</p>
                   <button 
                     onClick={handleWhatsAppDirect}
                     className="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-semibold mt-1 transition-colors cursor-pointer"

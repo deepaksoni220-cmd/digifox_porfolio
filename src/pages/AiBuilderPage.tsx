@@ -8,7 +8,6 @@ import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown, Layers, Wand2, Coins, Orbit } from 'lucide-react';
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
-import DotGrid from '../components/ui/dot-grid';
 import SoftAurora from '../components/ui/soft-aurora';
 
 export const AiBuilderPage: React.FC = () => {
@@ -2552,72 +2551,6 @@ export const AiBuilderPage: React.FC = () => {
             </motion.div>
 
           </div>
-        </div>
-      </section>
-      
-      {/* Soft Aurora Interactive WebGL Visual Showcase Section */}
-      <section className="py-24 sm:py-32 relative overflow-hidden bg-black border-t border-white/[0.08]">
-        {/* Soft Aurora WebGL Canvas Background */}
-        <div className="absolute inset-0 opacity-75 pointer-events-auto">
-          <SoftAurora 
-            speed={0.6}
-            scale={1.4}
-            brightness={1.1}
-            color1="#00f5a0"
-            color2="#00d9f5"
-            noiseFrequency={2.2}
-            noiseAmplitude={1.0}
-            bandHeight={0.45}
-            bandSpread={1.2}
-            enableMouseInteraction={true}
-            mouseInfluence={0.3}
-          />
-        </div>
-
-        {/* Ambient Top and Bottom Dark Gradient Vignette Blends */}
-        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#060709] via-[#060709]/70 to-transparent pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[var(--bg-base)] via-[var(--bg-base)]/70 to-transparent pointer-events-none" />
-
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-emerald-300 text-xs font-bold uppercase tracking-widest mb-6">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              <span>Interactive WebGL 3D Engine</span>
-            </div>
-
-            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)] mb-6">
-              Build The Next Generation of <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">Immersive Web</span>
-            </h2>
-
-            <p className="text-base sm:text-lg text-gray-200/90 font-medium max-w-2xl mx-auto mb-10 drop-shadow-md">
-              Unleash real-time shaders, 3D interactive physics, and fluid animations crafted to convert visitors into lifelong clients.
-            </p>
-
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <button
-                onClick={() => {
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className="px-8 py-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-black font-bold text-sm sm:text-base tracking-wide transition-all duration-300 shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:shadow-[0_0_40px_rgba(16,185,129,0.7)] hover:scale-105 active:scale-95 cursor-pointer"
-              >
-                Start Generating Free ✨
-              </button>
-              <button
-                onClick={() => {
-                  const el = document.getElementById('templates-section');
-                  el?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="px-8 py-4 rounded-xl bg-black/60 hover:bg-black/80 backdrop-blur-md text-white font-bold text-sm sm:text-base border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
-              >
-                Explore 3D Templates →
-              </button>
-            </div>
-          </motion.div>
         </div>
       </section>
       

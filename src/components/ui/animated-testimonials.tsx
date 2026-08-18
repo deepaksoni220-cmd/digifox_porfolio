@@ -55,7 +55,7 @@ export const AnimatedTestimonials = ({
     <div className={cn("max-w-sm md:max-w-4xl lg:max-w-5xl mx-auto px-4 md:px-8 lg:px-12 py-10", className)}>
       <div className="relative grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
         {/* 3D Stacked Image Cards */}
-        <div>
+        <div className="relative">
           <div className="relative h-80 sm:h-96 w-full">
             <AnimatePresence>
               {testimonials.map((testimonial, index) => (
@@ -104,6 +104,27 @@ export const AnimatedTestimonials = ({
                 </motion.div>
               ))}
             </AnimatePresence>
+          </div>
+
+          {/* Floating Navigation Arrows on Sides */}
+          <div className="absolute inset-y-0 -left-3 sm:-left-6 flex items-center z-[1000]">
+            <button
+              onClick={handlePrev}
+              aria-label="Previous review"
+              className="h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-black/80 hover:bg-blue-600 text-white border border-white/25 backdrop-blur-md flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.6)] transition-all active:scale-95 hover:scale-105 cursor-pointer"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+          </div>
+
+          <div className="absolute inset-y-0 -right-3 sm:-right-6 flex items-center z-[1000]">
+            <button
+              onClick={handleNext}
+              aria-label="Next review"
+              className="h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-black/80 hover:bg-blue-600 text-white border border-white/25 backdrop-blur-md flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.6)] transition-all active:scale-95 hover:scale-105 cursor-pointer"
+            >
+              <ArrowRight className="h-5 w-5" />
+            </button>
           </div>
         </div>
 

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Lock, ArrowLeft, Clock, Eye, Server, ShieldCheck } from 'lucide-react';
 import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { PageFooter } from '../components/PageFooter';
 
 export const PrivacyPolicyPage: React.FC = () => {
   useEffect(() => {
@@ -150,6 +151,8 @@ export const PrivacyPolicyPage: React.FC = () => {
         </motion.div>
 
       </div>
+
+      <PageFooter />
     </main>
   );
 };

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Shield, ArrowLeft, CheckCircle, Clock } from 'lucide-react';
 import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { PageFooter } from '../components/PageFooter';
 
 export const TermsPage: React.FC = () => {
   useEffect(() => {
@@ -158,6 +159,8 @@ export const TermsPage: React.FC = () => {
         </motion.div>
 
       </div>
+
+      <PageFooter />
     </main>
   );
 };

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle2, ArrowLeft, MessageSquare, Sparkles, Copy, Check, Globe } from 'lucide-react';
 import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { PageFooter } from '../components/PageFooter';
 
 export const ContactUsPage: React.FC = () => {
   useEffect(() => {
@@ -351,6 +352,8 @@ export const ContactUsPage: React.FC = () => {
         </div>
 
       </div>
+
+      <PageFooter />
     </main>
   );
 };

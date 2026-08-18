@@ -8,6 +8,7 @@ import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown, Layers, Wand2, Coins, Orbit } from 'lucide-react';
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
+import DotGrid from '../components/ui/dot-grid';
 
 export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -2374,10 +2375,20 @@ export const AiBuilderPage: React.FC = () => {
         </div>
       </section>
       
-      {/* Bento Grid Features Section with Dark Glassmorphism */}
-      <section className="py-24 border-t border-white/[0.08] relative overflow-hidden bg-[#060709]">
-        {/* Subtle dot matrix background */}
-        <div className="absolute inset-0 bg-[radial-gradient(#1f242e_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-60" />
+      {/* Bento Grid Features Section with Interactive DotGrid Physics Background */}
+      <section className="py-28 border-t border-white/[0.08] relative overflow-hidden bg-[#060709]">
+        {/* Interactive Physics DotGrid Canvas Background */}
+        <DotGrid 
+          dotSize={3.5}
+          gap={26}
+          baseColor="#1b202a"
+          activeColor="#10b981"
+          proximity={150}
+          speedTrigger={40}
+          shockRadius={240}
+          shockStrength={15}
+          className="opacity-75 z-0"
+        />
 
         {/* Ambient atmospheric glows */}
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-emerald-950/20 rounded-full blur-[160px] pointer-events-none" />

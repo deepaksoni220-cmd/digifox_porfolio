@@ -1820,16 +1820,27 @@ export const AiBuilderPage: React.FC = () => {
                     borderGlow: 'hover:border-amber-500/50 hover:shadow-[0_8px_25px_rgba(245,158,11,0.15)]'
                   }
                 ].map((item, idx) => (
-                  <div key={idx} className="relative flex flex-col">
+                  <motion.div 
+                    key={idx} 
+                    initial={{ opacity: 0, y: 25 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-30px" }}
+                    transition={{ duration: 0.45, delay: idx * 0.1, ease: "easeOut" }}
+                    whileHover={{ y: -6 }}
+                    className="relative flex flex-col group cursor-default"
+                  >
                     <div
-                      className={`relative bg-[var(--bg-surface)] border border-[var(--border-subtle)] ${item.borderGlow} rounded-2xl p-5 flex flex-col justify-between h-full transition-all duration-300 hover:-translate-y-1 group z-10`}
+                      className={`relative bg-[var(--bg-surface)] border border-[var(--border-subtle)] ${item.borderGlow} rounded-2xl p-5 flex flex-col justify-between h-full transition-all duration-300 shadow-md group-hover:shadow-[0_12px_30px_rgba(59,130,246,0.15)] z-10`}
                     >
                       <div>
                         {/* Step Number & Badge */}
                         <div className="flex items-center justify-between gap-2 mb-4">
-                          <span className={`text-2xl font-black bg-gradient-to-r ${item.accent} bg-clip-text text-transparent`}>
+                          <motion.span 
+                            whileHover={{ scale: 1.1 }}
+                            className={`text-2xl font-black bg-gradient-to-r ${item.accent} bg-clip-text text-transparent inline-block`}
+                          >
                             {item.step}
-                          </span>
+                          </motion.span>
                           <span className="text-[10px] font-black uppercase tracking-wider text-[var(--text-secondary)] bg-[var(--bg-base)] px-2.5 py-0.5 rounded-full border border-[var(--border-subtle)]">
                             {item.badge}
                           </span>
@@ -1847,22 +1858,42 @@ export const AiBuilderPage: React.FC = () => {
 
                     {/* Desktop Right Connecting Arrow */}
                     {idx < 4 && (
-                      <div className="hidden lg:flex absolute -right-4.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-[var(--bg-base)] border border-blue-500/40 items-center justify-center text-blue-400 shadow-md">
-                        <svg className="w-3.5 h-3.5 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <motion.div 
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.3 + idx * 0.1 }}
+                        className="hidden lg:flex absolute -right-4.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-[var(--bg-base)] border border-blue-500/40 items-center justify-center text-blue-400 shadow-md"
+                      >
+                        <motion.svg 
+                          animate={{ x: [0, 3, 0] }}
+                          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                          className="w-3.5 h-3.5" 
+                          fill="none" 
+                          viewBox="0 0 24 24" 
+                          stroke="currentColor"
+                        >
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                        </svg>
-                      </div>
+                        </motion.svg>
+                      </motion.div>
                     )}
 
                     {/* Mobile Down Connecting Arrow */}
                     {idx < 4 && (
                       <div className="flex lg:hidden justify-center py-2 text-blue-400/70">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <motion.svg 
+                          animate={{ y: [0, 3, 0] }}
+                          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                          className="w-4 h-4" 
+                          fill="none" 
+                          viewBox="0 0 24 24" 
+                          stroke="currentColor"
+                        >
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
-                        </svg>
+                        </motion.svg>
                       </div>
                     )}
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>

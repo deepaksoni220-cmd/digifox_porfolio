@@ -87,13 +87,14 @@ export const ContactUsPage: React.FC = () => {
         >
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
             <Sparkles size={14} />
-            <span>Start Your Next Level Project</span>
+            <span>Turn Ideas Into Iconic Experiences</span>
           </div>
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-[var(--text-strong)] mb-4">
-            Let's Build Something <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Extraordinary</span>
+            Stop Blending In. <br className="hidden sm:inline" />
+            Let&apos;s Build Your <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Digital Powerhouse</span>
           </h1>
-          <p className="text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl mx-auto">
-            Have a project in mind, need a 3D animated web experience, or want to discuss custom agency services? We typically reply within 2 hours.
+          <p className="text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
+            Whether you need a bespoke 3D interactive website, high-conversion Shopify store, or next-generation web application — we engineer digital assets that outperform your competition. Response guaranteed within 2 hours.
           </p>
         </motion.div>
 

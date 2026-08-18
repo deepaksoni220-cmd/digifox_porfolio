@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { GeneratedWebsiteData } from '../../services/aiBuilderService';
 import { predefinedTemplates } from '../../data/templates';
-import NeonBorder from '../ui/neon-border';
 
 interface TemplateGalleryProps {
   onSelect: (templateId: string, data: GeneratedWebsiteData) => void;
@@ -37,8 +36,6 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
     }
   }, [hovered]);
 
-  const neonColor = template.theme?.primaryColor || (template.category === '3d' ? '#3b82f6' : '#8b5cf6');
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -48,20 +45,8 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
       whileHover={{ y: -8, scale: 1.02 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="group relative flex flex-col bg-[#0b0c16] border border-[#1b1d30] rounded-3xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:border-transparent hover:shadow-[0_20px_50px_rgba(59,130,246,0.2)] transition-all duration-500"
+      className="group relative flex flex-col bg-[#0b0c16] border border-[#1b1d30] rounded-3xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:border-[#3b82f6]/40 hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)] transition-all duration-500"
     >
-      {/* Animated Neon Border */}
-      <div className="absolute inset-0 pointer-events-none z-30 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
-        <NeonBorder 
-          color={neonColor} 
-          rounded={24} 
-          thickness={3} 
-          borderSize={45} 
-          glow={85} 
-          speed={15} 
-        />
-      </div>
-
       {/* Decorative corner glow */}
       <div className="absolute -top-10 -left-10 w-32 h-32 bg-[#3b82f6]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
       <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[#8b5cf6]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />

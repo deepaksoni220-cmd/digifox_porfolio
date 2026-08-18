@@ -367,7 +367,15 @@ export const AiBuilderPage: React.FC = () => {
         return findTextEl(el.parentElement);
       };
 
+      // Initialize edit mode state on body
+      doc.body.setAttribute('data-edit-mode', isModifyMode ? 'true' : 'false');
+
       doc.addEventListener('click', (e) => {
+        // When not in modify mode, allow free navigation / link clicks / button browsing
+        if (doc.body.getAttribute('data-edit-mode') !== 'true') {
+          return;
+        }
+
         const htmlEl = findTextEl(e.target as HTMLElement);
         if (htmlEl && htmlEl.getAttribute('contenteditable') !== 'false') {
           e.preventDefault();
@@ -437,6 +445,13 @@ export const AiBuilderPage: React.FC = () => {
   window.addEventListener('message', function(e) {
     var msg = e.data;
     if (!msg) return;
+
+    if (msg.type === 'SET_EDIT_MODE') {
+      document.body.setAttribute('data-edit-mode', msg.enabled ? 'true' : 'false');
+      if (!msg.enabled) {
+        document.querySelectorAll('.customizer-selected-element').forEach(function(s){ s.classList.remove('customizer-selected-element'); });
+      }
+    }
 
     if (msg.type === 'UPDATE_ELEMENT_STYLE') {
       var el = getEl(msg.selector);
@@ -987,10 +1002,30 @@ export const AiBuilderPage: React.FC = () => {
     }
   };
 
-  // Viewport state for the Draftly-style editor
+  // Viewport & Mode state for the Draftly-style editor
   const [viewport, setViewport] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [fsTab, setFsTab] = useState<'customize' | 'design' | 'ai'>('customize');
   const [aiEditLog, setAiEditLog] = useState<string[]>([]);
+  const [isModifyMode, setIsModifyMode] = useState<boolean>(false);
+
+  const setModifyModeState = (enabled: boolean) => {
+    setIsModifyMode(enabled);
+    try {
+      const iframe = iframeRef.current;
+      if (iframe) {
+        iframe.contentWindow?.postMessage({ type: 'SET_EDIT_MODE', enabled }, '*');
+        const doc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (doc) {
+          doc.body.setAttribute('data-edit-mode', enabled ? 'true' : 'false');
+          if (!enabled) {
+            doc.querySelectorAll('.customizer-selected-element').forEach(s => s.classList.remove('customizer-selected-element'));
+          }
+        }
+      }
+    } catch {
+      // Cross origin
+    }
+  };
 
   const viewportWidth = { desktop: '100%', tablet: '768px', mobile: '390px' };
 
@@ -1150,7 +1185,26 @@ export const AiBuilderPage: React.FC = () => {
           </div>
 
           {/* Right: actions */}
-          <div className="flex gap-2.5 shrink-0">
+          <div className="flex items-center gap-2.5 shrink-0">
+            <button
+              onClick={() => setModifyModeState(!isModifyMode)}
+              className={`px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer shadow-md ${
+                isModifyMode
+                  ? 'bg-blue-600 hover:bg-blue-500 text-white border border-blue-400/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]'
+                  : 'bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)]'
+              }`}
+            >
+              {isModifyMode ? (
+                <>
+                  <span>👁️ Browse Template</span>
+                </>
+              ) : (
+                <>
+                  <span>✏️ Modify Template</span>
+                </>
+              )}
+            </button>
+
             {publishedUrl && (
               <a href={publishedUrl} target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-green-500/30 bg-green-500/10 text-green-400 text-[11px] font-bold uppercase tracking-wider hover:bg-green-500/20 transition-all">
@@ -1466,15 +1520,37 @@ export const AiBuilderPage: React.FC = () => {
           <div className="flex-1 bg-[#04040a] flex flex-col items-center justify-start overflow-auto p-6 gap-4">
 
             {/* Browser chrome bar */}
-            <div className="shrink-0 flex items-center gap-2 px-4 py-2.5 bg-[#0d0e1c] border border-white/[0.07] rounded-t-2xl"
+            <div className="shrink-0 flex items-center justify-between gap-3 px-4 py-2.5 bg-[#0d0e1c] border border-white/[0.07] rounded-t-2xl"
               style={{ width: viewportWidth[viewport], maxWidth: '100%', transition: 'width 0.3s ease' }}>
-              <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-red-500/60" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-                <div className="w-3 h-3 rounded-full bg-green-500/60" />
+              <div className="flex items-center gap-2.5">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-red-500/60" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
+                  <div className="w-3 h-3 rounded-full bg-green-500/60" />
+                </div>
+                <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
+                  isModifyMode
+                    ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+                    : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                }`}>
+                  {isModifyMode ? '✏️ Customizer Mode (Click element to edit)' : '🟢 Interactive Navigation Active (Click nav to browse)'}
+                </span>
               </div>
-              <div className="flex-1 bg-white/[0.05] rounded-lg px-3 py-1 text-[10px] text-white/30 truncate text-center font-mono">
-                {previewData.previewUrl || 'webmake — live preview'}
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setModifyModeState(!isModifyMode)}
+                  className={`px-3.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
+                    isModifyMode
+                      ? 'bg-blue-500/20 border border-blue-500/40 text-blue-300 hover:bg-blue-500/30'
+                      : 'bg-white text-black hover:bg-white/90 shadow-sm'
+                  }`}
+                >
+                  {isModifyMode ? '👁️ Browse Mode' : '✏️ Modify'}
+                </button>
+                <div className="bg-white/[0.05] rounded-lg px-2.5 py-1 text-[10px] text-white/40 font-mono truncate max-w-[200px] hidden sm:block">
+                  {previewData.previewUrl || 'webmake — live preview'}
+                </div>
               </div>
             </div>
 

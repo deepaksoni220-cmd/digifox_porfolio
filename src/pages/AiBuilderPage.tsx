@@ -1843,11 +1843,6 @@ export const AiBuilderPage: React.FC = () => {
                           {item.desc}
                         </p>
                       </div>
-
-                      <div className="mt-4 pt-3 border-t border-[var(--border-subtle)]/60 flex items-center justify-between text-[11px] font-bold text-blue-400 opacity-80 group-hover:opacity-100">
-                        <span>Instant Setup</span>
-                        <span>✓</span>
-                      </div>
                     </div>
 
                     {/* Desktop Right Connecting Arrow */}

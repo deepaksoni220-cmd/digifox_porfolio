@@ -2376,24 +2376,28 @@ export const AiBuilderPage: React.FC = () => {
         </div>
       </section>
       
-      {/* Bento Grid Features Section with Interactive DotGrid Physics Background */}
+      {/* Bento Grid Features Section with Soft Aurora WebGL Background */}
       <section className="py-28 border-t border-white/[0.08] relative overflow-hidden bg-[#060709]">
-        {/* Interactive Physics DotGrid Canvas Background */}
-        <DotGrid 
-          dotSize={3.5}
-          gap={26}
-          baseColor="#1b202a"
-          activeColor="#10b981"
-          proximity={150}
-          speedTrigger={40}
-          shockRadius={240}
-          shockStrength={15}
-          className="opacity-75 z-0"
-        />
+        {/* Soft Aurora WebGL Canvas Background */}
+        <div className="absolute inset-0 opacity-60 pointer-events-auto">
+          <SoftAurora 
+            speed={0.5}
+            scale={1.3}
+            brightness={1.05}
+            color1="#00f5a0"
+            color2="#00d9f5"
+            noiseFrequency={2.0}
+            noiseAmplitude={1.0}
+            bandHeight={0.5}
+            bandSpread={1.1}
+            enableMouseInteraction={true}
+            mouseInfluence={0.25}
+          />
+        </div>
 
-        {/* Ambient atmospheric glows */}
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-emerald-950/20 rounded-full blur-[160px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-950/20 rounded-full blur-[160px] pointer-events-none" />
+        {/* Ambient Overlay Vignettes */}
+        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#060709] via-[#060709]/70 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#060709] via-[#060709]/70 to-transparent pointer-events-none" />
 
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">

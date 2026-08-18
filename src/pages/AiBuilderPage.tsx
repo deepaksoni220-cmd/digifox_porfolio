@@ -1549,21 +1549,21 @@ export const AiBuilderPage: React.FC = () => {
             </div>
 
             {/* Custom AI Builder Section */}
-            <div className="mb-12">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-[var(--border-strong)] pb-4 mb-6 gap-4">
-                <h2 className="text-2xl font-black uppercase tracking-widest text-[#3b82f6]">
+            <div className="mb-12 max-w-4xl mx-auto w-full">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-[var(--border-strong)] pb-3 mb-4 gap-3">
+                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-widest text-[#3b82f6]">
                   {builderMode === 'new' ? "Generate with Our AI Designing" : "Edit Existing Brand Site"}
                 </h2>
                 <div className="flex bg-[var(--bg-surface)] p-1 rounded-full border border-[var(--border-strong)]">
                   <button 
                     onClick={() => setBuilderMode('new')}
-                    className={`px-5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${builderMode === 'new' ? 'bg-[#3b82f6] text-white shadow-md' : 'text-[var(--text-secondary)] hover:text-[var(--text-strong)]'}`}
+                    className={`px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${builderMode === 'new' ? 'bg-[#3b82f6] text-white shadow-md' : 'text-[var(--text-secondary)] hover:text-[var(--text-strong)]'}`}
                   >
                     Create New
                   </button>
                   <button 
                     onClick={() => setBuilderMode('edit')}
-                    className={`px-5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${builderMode === 'edit' ? 'bg-[#3b82f6] text-white shadow-md' : 'text-[var(--text-secondary)] hover:text-[var(--text-strong)]'}`}
+                    className={`px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${builderMode === 'edit' ? 'bg-[#3b82f6] text-white shadow-md' : 'text-[var(--text-secondary)] hover:text-[var(--text-strong)]'}`}
                   >
                     Edit Brand Site
                   </button>
@@ -1571,50 +1571,50 @@ export const AiBuilderPage: React.FC = () => {
               </div>
 
               {builderMode === 'edit' ? (
-                <div className="bg-[var(--bg-surface)] p-8 rounded-3xl border border-[var(--border-subtle)] shadow-xl flex flex-col gap-6 max-w-2xl mx-auto text-center items-center">
-                  <div className="w-16 h-16 rounded-2xl bg-[#3b82f6]/10 flex items-center justify-center text-[#3b82f6]">
-                    <Globe size={32} />
+                <div className="bg-[var(--bg-surface)]/90 backdrop-blur-md p-6 rounded-2xl border border-[var(--border-subtle)] shadow-xl flex flex-col gap-4 max-w-xl mx-auto text-center items-center">
+                  <div className="w-12 h-12 rounded-xl bg-[#3b82f6]/10 flex items-center justify-center text-[#3b82f6]">
+                    <Globe size={24} />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold uppercase tracking-wider mb-2">Load Your Brand Website</h3>
-                    <p className="text-sm text-[var(--text-secondary)] max-w-md mx-auto">
-                      Enter the subdomain of the brand website you previously published to load and edit its content, images, and details.
+                    <h3 className="text-lg font-bold uppercase tracking-wider mb-1">Load Your Brand Website</h3>
+                    <p className="text-xs text-[var(--text-secondary)] max-w-md mx-auto">
+                      Enter the subdomain of the brand website you previously published to load and edit its content.
                     </p>
                   </div>
-                  <div className="flex w-full gap-3 max-w-md mt-2">
+                  <div className="flex w-full gap-3 max-w-md mt-1">
                     <div className="flex-1 relative flex items-center">
                       <input 
-                        type="text"
+                        type="text" 
                         value={editSubdomain}
                         onChange={(e) => setEditSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
                         placeholder="e.g. mybrand"
-                        className="w-full bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-full px-6 py-3.5 pr-28 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none font-semibold text-lg"
+                        className="w-full bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-full px-5 py-2.5 pr-28 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none font-semibold text-sm"
                         onKeyDown={(e) => { if (e.key === 'Enter') handleLoadBrandSite(); }}
                       />
-                      <span className="absolute right-6 text-sm text-[var(--text-secondary)] font-bold">.digifox.world</span>
+                      <span className="absolute right-5 text-xs text-[var(--text-secondary)] font-bold">.digifox.world</span>
                     </div>
                   </div>
                   {loadError && (
-                    <p className="text-red-500 text-sm font-medium">{loadError}</p>
+                    <p className="text-red-500 text-xs font-medium">{loadError}</p>
                   )}
                   <button
                     onClick={handleLoadBrandSite}
                     disabled={isLoadingBrandSite || !editSubdomain.trim()}
-                    className="bg-[#3b82f6] hover:bg-[#2563eb] text-white px-8 py-3.5 rounded-full font-bold uppercase tracking-wider text-sm transition-transform hover:scale-105 shadow-[0_0_15px_rgba(59,130,246,0.3)] disabled:opacity-50"
+                    className="bg-[#3b82f6] hover:bg-[#2563eb] text-white px-6 py-2.5 rounded-full font-bold uppercase tracking-wider text-xs transition-transform hover:scale-105 shadow-[0_0_15px_rgba(59,130,246,0.3)] disabled:opacity-50"
                   >
                     {isLoadingBrandSite ? "Loading Site..." : "Load & Edit Website"}
                   </button>
                 </div>
               ) : (
                 <>
-                  <div className="flex flex-col sm:flex-row gap-4 mb-2">
-                    <div className="flex-1 flex flex-col gap-2">
-                      <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Website Type</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[11px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Website Type</label>
                       <select 
                         value={websiteType}
                         onChange={(e) => setWebsiteType(e.target.value)}
                         disabled={chatHistory.length > 0}
-                        className="bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none disabled:opacity-50"
+                        className="bg-[var(--bg-surface)]/90 backdrop-blur-sm border border-[var(--border-strong)] rounded-xl px-3 py-2 text-xs text-[var(--text-strong)] focus:border-[#3b82f6] outline-none disabled:opacity-50 font-medium"
                       >
                         <option value="Local Business">Local Business</option>
                         <option value="Portfolio">Portfolio</option>
@@ -1624,13 +1624,13 @@ export const AiBuilderPage: React.FC = () => {
                       </select>
                     </div>
 
-                    <div className="flex-1 flex flex-col gap-2">
-                      <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Design Category</label>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[11px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Design Category</label>
                       <select 
                         value={templateCategory}
                         onChange={(e) => setTemplateCategory(e.target.value)}
                         disabled={chatHistory.length > 0}
-                        className="bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none disabled:opacity-50"
+                        className="bg-[var(--bg-surface)]/90 backdrop-blur-sm border border-[var(--border-strong)] rounded-xl px-3 py-2 text-xs text-[var(--text-strong)] focus:border-[#3b82f6] outline-none disabled:opacity-50 font-medium"
                       >
                         <option value="auto">Auto Select</option>
                         <option value="3d">3D Animated</option>
@@ -1638,8 +1638,8 @@ export const AiBuilderPage: React.FC = () => {
                       </select>
                     </div>
 
-                    <div className="flex-1 flex flex-col gap-2">
-                      <label className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-bold">Company Logo (Optional)</label>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[11px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Company Logo (Optional)</label>
                       <div className="relative flex items-center">
                         <input 
                           type="file" 
@@ -1647,58 +1647,51 @@ export const AiBuilderPage: React.FC = () => {
                           onChange={handleLogoUpload}
                           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                         />
-                        <div className="w-full bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-4 py-3 text-[var(--text-secondary)] flex justify-between items-center hover:border-[#3b82f6] transition-colors">
-                          <span className="truncate">{logoUrl ? "Logo Uploaded!" : "Choose an image file..."}</span>
-                          {logoUrl && <img src={logoUrl} alt="Logo" className="h-6 w-auto object-contain rounded" />}
+                        <div className="w-full bg-[var(--bg-surface)]/90 backdrop-blur-sm border border-[var(--border-strong)] rounded-xl px-3 py-2 text-xs text-[var(--text-secondary)] flex justify-between items-center hover:border-[#3b82f6] transition-colors font-medium">
+                          <span className="truncate">{logoUrl ? "Logo Uploaded!" : "Upload image..."}</span>
+                          {logoUrl && <img src={logoUrl} alt="Logo" className="h-5 w-auto object-contain rounded" />}
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex flex-col bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] shadow-xl w-full h-[400px] overflow-hidden">
-                    {/* Chat History */}
-                    <div 
-                      ref={chatScrollRef}
-                      className="flex-1 overflow-y-auto p-6 flex flex-col gap-4"
-                    >
-                      {chatHistory.length === 0 ? (
-                        <div className="h-full flex flex-col items-center justify-center text-[var(--text-primary)]/40 text-center gap-4">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"></path><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"></path></svg>
-                          <p className="font-light tracking-wide max-w-sm">
-                            Tell the AI what kind of website you want to build. It will ask questions and help structure your ideas.
-                          </p>
-                        </div>
-                      ) : (
-                        chatHistory.map((msg, i) => (
+                  <div className="flex flex-col bg-[var(--bg-surface)]/90 backdrop-blur-md rounded-2xl border border-[var(--border-subtle)] shadow-xl w-full overflow-hidden transition-all duration-300">
+                    {/* Chat History if present */}
+                    {chatHistory.length > 0 && (
+                      <div 
+                        ref={chatScrollRef}
+                        className="max-h-[220px] overflow-y-auto p-4 flex flex-col gap-3 border-b border-[var(--border-subtle)]"
+                      >
+                        {chatHistory.map((msg, i) => (
                           <div 
                             key={i} 
-                            className={`max-w-[85%] p-4 rounded-2xl ${
+                            className={`max-w-[85%] p-3 rounded-xl ${
                               msg.role === 'user' 
                                 ? 'bg-[#3b82f6] text-white self-end rounded-br-sm' 
                                 : 'bg-[var(--bg-base)] border border-[var(--border-strong)] text-[var(--text-primary)] self-start rounded-bl-sm'
                             }`}
                           >
-                            <p className="whitespace-pre-wrap text-sm sm:text-base leading-relaxed">
+                            <p className="whitespace-pre-wrap text-xs sm:text-sm leading-relaxed">
                               {msg.text}
                             </p>
                           </div>
-                        ))
-                      )}
-                      
-                      {isPlanning && (
-                        <div className="bg-[var(--bg-base)] border border-[var(--border-strong)] p-4 rounded-2xl self-start rounded-bl-sm flex gap-2 items-center">
-                          <div className="w-2 h-2 bg-[var(--text-primary)]/50 rounded-full animate-bounce"></div>
-                          <div className="w-2 h-2 bg-[var(--text-primary)]/50 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                          <div className="w-2 h-2 bg-[var(--text-primary)]/50 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                        </div>
-                      )}
-                    </div>
+                        ))}
+                        
+                        {isPlanning && (
+                          <div className="bg-[var(--bg-base)] border border-[var(--border-strong)] p-3 rounded-xl self-start rounded-bl-sm flex gap-1.5 items-center">
+                            <div className="w-1.5 h-1.5 bg-[var(--text-primary)]/50 rounded-full animate-bounce"></div>
+                            <div className="w-1.5 h-1.5 bg-[var(--text-primary)]/50 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                            <div className="w-1.5 h-1.5 bg-[var(--text-primary)]/50 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     {/* Input Area */}
-                    <div className="p-4 border-t border-[var(--border-strong)] bg-[var(--bg-base)] flex flex-col gap-3">
+                    <div className="p-3 sm:p-4 bg-[var(--bg-base)]/50 flex flex-col gap-3">
                       <textarea 
-                        rows={2}
-                        placeholder="E.g. I need a luxury watch landing page..."
+                        rows={chatHistory.length === 0 ? 2 : 2}
+                        placeholder="Describe your business or website idea (e.g. 'A sleek modern cafe in Sydney with menu, reviews, and table booking')..."
                         value={currentInput}
                         onChange={(e) => setCurrentInput(e.target.value)}
                         onKeyDown={(e) => {
@@ -1707,15 +1700,19 @@ export const AiBuilderPage: React.FC = () => {
                             handlePlan();
                           }
                         }}
-                        className="w-full bg-transparent text-[var(--text-strong)] placeholder:text-[var(--text-secondary)] outline-none resize-none px-2"
+                        className="w-full bg-transparent text-[var(--text-strong)] placeholder:text-[var(--text-secondary)] text-sm outline-none resize-none px-1"
                       />
                       
-                      <div className="flex justify-between items-center px-2">
-                        <div className="flex gap-3 w-full justify-end">
+                      <div className="flex flex-wrap justify-between items-center gap-2 pt-2 border-t border-[var(--border-subtle)]/50">
+                        <span className="text-[11px] text-[var(--text-secondary)] hidden sm:inline-block">
+                          Press <kbd className="px-1.5 py-0.5 rounded bg-black/20 border border-white/10 font-mono text-[10px]">Enter ↵</kbd> to plan
+                        </span>
+
+                        <div className="flex gap-2.5 ml-auto">
                           <button 
                             onClick={handlePlan}
                             disabled={isPlanning || isBuilding || !currentInput.trim()}
-                            className="text-[var(--text-strong)] border border-[var(--border-strong)] hover:border-[#3b82f6] hover:text-[#3b82f6] px-6 py-2 rounded-full font-bold uppercase tracking-wider text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="text-[var(--text-strong)] border border-[var(--border-strong)] hover:border-[#3b82f6] hover:text-[#3b82f6] px-5 py-1.5 rounded-full font-bold uppercase tracking-wider text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                           >
                             {isPlanning ? "Planning..." : "Plan with AI"}
                           </button>
@@ -1723,7 +1720,7 @@ export const AiBuilderPage: React.FC = () => {
                           <button 
                             onClick={handleBuild}
                             disabled={isBuilding || (chatHistory.length === 0 && !currentInput.trim())}
-                            className="bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white px-8 py-2 rounded-full font-bold uppercase tracking-wider text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+                            className="bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white px-6 py-1.5 rounded-full font-bold uppercase tracking-wider text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_12px_rgba(59,130,246,0.25)] cursor-pointer"
                           >
                             {isBuilding ? "Building..." : "Build Website"}
                           </button>

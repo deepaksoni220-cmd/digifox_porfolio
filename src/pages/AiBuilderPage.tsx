@@ -1607,9 +1607,9 @@ export const AiBuilderPage: React.FC = () => {
         </a>
         <div className="flex items-center gap-3 sm:gap-5">
           <div className="flex items-center gap-3 sm:gap-4 text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)]">
-            <a href="/contact" className="hover:text-[var(--text-strong)] transition-colors">Contact</a>
-            <a href="/terms" className="hover:text-[var(--text-strong)] transition-colors hidden sm:inline-block">Terms</a>
-            <a href="/privacy" className="hover:text-[var(--text-strong)] transition-colors hidden sm:inline-block">Privacy</a>
+            <a href="/ai-builder/contact" className="hover:text-[var(--text-strong)] transition-colors">Contact Us</a>
+            <a href="/ai-builder/terms" className="hover:text-[var(--text-strong)] transition-colors hidden sm:inline-block">Terms</a>
+            <a href="/ai-builder/privacy" className="hover:text-[var(--text-strong)] transition-colors hidden sm:inline-block">Privacy</a>
           </div>
           <div className="w-px h-4 bg-white/10" />
           <ThemeToggle />
@@ -2754,9 +2754,9 @@ export const AiBuilderPage: React.FC = () => {
             </p>
           </div>
           <div className="flex gap-6 justify-center">
-            <a href="#" className="text-[var(--text-secondary)] hover:text-[#3b82f6] transition-colors text-xs font-black uppercase tracking-widest">Terms</a>
-            <a href="#" className="text-[var(--text-secondary)] hover:text-[#3b82f6] transition-colors text-xs font-black uppercase tracking-widest">Privacy</a>
-            <a href="#" className="text-[var(--text-secondary)] hover:text-[#3b82f6] transition-colors text-xs font-black uppercase tracking-widest">Contact</a>
+            <a href="/ai-builder/terms" className="text-[var(--text-secondary)] hover:text-[#3b82f6] transition-colors text-xs font-black uppercase tracking-widest">Terms</a>
+            <a href="/ai-builder/privacy" className="text-[var(--text-secondary)] hover:text-[#3b82f6] transition-colors text-xs font-black uppercase tracking-widest">Privacy</a>
+            <a href="/ai-builder/contact" className="text-[var(--text-secondary)] hover:text-[#3b82f6] transition-colors text-xs font-black uppercase tracking-widest">Contact Us</a>
           </div>
         </div>
         <div className="border-t border-[var(--border-subtle)] pt-6 text-center">

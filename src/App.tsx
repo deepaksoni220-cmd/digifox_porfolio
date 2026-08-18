@@ -128,6 +128,19 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/contact" element={<ContactUsPage />} />
           <Route path="/contact-us" element={<ContactUsPage />} />
+
+          {/* AI Builder sub-routes */}
+          <Route path="/ai-builder/terms" element={<TermsPage />} />
+          <Route path="/ai-builder/terms-and-conditions" element={<TermsPage />} />
+          <Route path="/ai-builder/privacy" element={<PrivacyPolicyPage />} />
+          <Route path="/ai-builder/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/ai-builder/contact" element={<ContactUsPage />} />
+          <Route path="/ai-builder/contact-us" element={<ContactUsPage />} />
+          <Route path="/aibuilder/terms" element={<TermsPage />} />
+          <Route path="/aibuilder/privacy" element={<PrivacyPolicyPage />} />
+          <Route path="/aibuilder/contact" element={<ContactUsPage />} />
+          <Route path="/aibuilder/contact-us" element={<ContactUsPage />} />
+
           <Route path="/generated-site" element={<GeneratedSitePage />} />
         </Routes>
       </Router>

@@ -2397,8 +2397,8 @@ export const AiBuilderPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Bento Grid Container */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          {/* Bento Grid Container with 3D Perspective */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 [perspective:1200px]">
             
             {/* Card 1: 01 — 2D MOTION (Span 2 on lg with Green Mist) */}
             <motion.div 
@@ -2406,11 +2406,12 @@ export const AiBuilderPage: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.05 }}
-              whileHover={{ y: -4 }}
-              className="group relative lg:col-span-2 bg-[radial-gradient(ellipse_at_top_left,_rgba(16,185,129,0.12),_#0d0f12_70%)] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/20"
+              whileHover={{ scale: 1.02, rotateX: 3, rotateY: -3, z: 25 }}
+              style={{ transformStyle: "preserve-3d" }}
+              className="group relative lg:col-span-2 bg-[radial-gradient(ellipse_at_top_left,_rgba(16,185,129,0.12),_#0d0f12_70%)] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(16,185,129,0.15)] cursor-default"
             >
-              <div className="relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16">
+              <div className="relative z-10 [transform:translateZ(25px)]">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
                   <Layers className="w-5 h-5 text-emerald-400" />
                 </div>
                 <div className="text-[11px] font-bold uppercase tracking-widest text-emerald-400/90 mb-1">
@@ -2431,11 +2432,12 @@ export const AiBuilderPage: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              whileHover={{ y: -4 }}
-              className="group relative bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/20"
+              whileHover={{ scale: 1.02, rotateX: 3, rotateY: 3, z: 25 }}
+              style={{ transformStyle: "preserve-3d" }}
+              className="group relative bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(99,102,241,0.15)] cursor-default"
             >
-              <div className="relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16">
+              <div className="relative z-10 [transform:translateZ(25px)]">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
                   <Box className="w-5 h-5 text-indigo-400" />
                 </div>
                 <div className="text-[11px] font-bold uppercase tracking-widest text-indigo-400/90 mb-1">
@@ -2456,11 +2458,12 @@ export const AiBuilderPage: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.15 }}
-              whileHover={{ y: -4 }}
-              className="group relative bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/20"
+              whileHover={{ scale: 1.02, rotateX: -3, rotateY: -3, z: 25 }}
+              style={{ transformStyle: "preserve-3d" }}
+              className="group relative bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)] cursor-default"
             >
-              <div className="relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16">
+              <div className="relative z-10 [transform:translateZ(25px)]">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
                   <MessageSquare className="w-5 h-5 text-purple-400" />
                 </div>
                 <div className="text-[11px] font-bold uppercase tracking-widest text-purple-400/90 mb-1">
@@ -2481,11 +2484,12 @@ export const AiBuilderPage: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              whileHover={{ y: -4 }}
-              className="group relative lg:col-span-2 bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/20"
+              whileHover={{ scale: 1.02, rotateX: -3, rotateY: 3, z: 25 }}
+              style={{ transformStyle: "preserve-3d" }}
+              className="group relative lg:col-span-2 bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(6,182,212,0.15)] cursor-default"
             >
-              <div className="relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16">
+              <div className="relative z-10 [transform:translateZ(25px)]">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
                   <Globe className="w-5 h-5 text-cyan-400" />
                 </div>
                 <div className="text-[11px] font-bold uppercase tracking-widest text-cyan-400/90 mb-1">
@@ -2505,12 +2509,13 @@ export const AiBuilderPage: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              whileHover={{ y: -4 }}
-              className="group relative lg:col-span-3 bg-[radial-gradient(ellipse_at_top_left,_rgba(16,185,129,0.08),_#0d0f12_60%)] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col sm:flex-row sm:items-center justify-between gap-6 transition-all duration-300 hover:border-white/20"
+              transition={{ duration: 0.5, delay: 0.25 }}
+              whileHover={{ scale: 1.015, rotateX: 2, z: 20 }}
+              style={{ transformStyle: "preserve-3d" }}
+              className="group relative lg:col-span-3 bg-[radial-gradient(ellipse_at_top_left,_rgba(16,185,129,0.08),_#0d0f12_60%)] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col sm:flex-row sm:items-center justify-between gap-6 transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(16,185,129,0.15)] cursor-default"
             >
-              <div className="relative z-10 max-w-2xl">
-                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-6">
+              <div className="relative z-10 max-w-2xl [transform:translateZ(25px)]">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                   <DollarSign className="w-5 h-5 text-emerald-400" />
                 </div>
                 <div className="text-[11px] font-bold uppercase tracking-widest text-emerald-400/90 mb-1">
@@ -2524,7 +2529,7 @@ export const AiBuilderPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="relative z-10 shrink-0 flex flex-col sm:items-end gap-2 pt-4 sm:pt-0 border-t sm:border-t-0 border-white/[0.08]">
+              <div className="relative z-10 shrink-0 flex flex-col sm:items-end gap-2 pt-4 sm:pt-0 border-t sm:border-t-0 border-white/[0.08] [transform:translateZ(25px)]">
                 <span className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight">$0 Upfront</span>
                 <span className="text-xs font-semibold text-gray-400">Generate & Preview Free</span>
               </div>

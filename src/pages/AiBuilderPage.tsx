@@ -8,7 +8,6 @@ import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown, Layers, Wand2, Coins, Orbit } from 'lucide-react';
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
-import ShineCard from '../components/ui/shine-card';
 
 export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -2398,153 +2397,143 @@ export const AiBuilderPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Bento Grid Container */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          {/* Bento Grid Container with 3D Perspective */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 [perspective:1200px]">
             
-            {/* Card 1: 01 — 2D MOTION (Span 2 on lg) */}
-            <div className="lg:col-span-2">
-              <ShineCard
-                highlight="#10b981"
-                tiltOptions={{ glow: "#10b981", amount: 12, hoverScale: 102 }}
-                sparkle={75}
-                waveSpeed={35}
-                density={40}
-              >
-                <div className="p-7 sm:p-9 flex flex-col justify-between h-full">
-                  <div>
-                    <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-8 sm:mb-12">
-                      <Layers className="w-5 h-5 text-emerald-400" />
-                    </div>
-                    <div className="text-[11px] font-bold uppercase tracking-widest text-emerald-400/90 mb-1.5">
-                      01 — 2D MOTION
-                    </div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
-                      Animated Websites
-                    </h3>
-                    <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed max-w-xl">
-                      Smooth scroll effects, transitions and interactions built into every experience. First frame of each picks up perfectly from the last.
-                    </p>
-                  </div>
+            {/* Card 1: 01 — 2D MOTION (Span 2 on lg with Green Mist) */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.05 }}
+              whileHover={{ scale: 1.02, rotateX: 3, rotateY: -3, z: 25 }}
+              style={{ transformStyle: "preserve-3d" }}
+              className="group relative lg:col-span-2 bg-[radial-gradient(ellipse_at_top_left,_rgba(16,185,129,0.12),_#0d0f12_70%)] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(16,185,129,0.15)] cursor-default"
+            >
+              <div className="relative z-10 [transform:translateZ(25px)]">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
+                  <Layers className="w-5 h-5 text-emerald-400" />
                 </div>
-              </ShineCard>
-            </div>
+                <div className="text-[11px] font-bold uppercase tracking-widest text-emerald-400/90 mb-1">
+                  01 — 2D MOTION
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
+                  Animated Websites
+                </h3>
+                <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed max-w-xl">
+                  Smooth scroll effects, transitions and interactions built into every experience. First frame of each picks up perfectly from the last.
+                </p>
+              </div>
+            </motion.div>
 
             {/* Card 2: 02 — 3D INTERACTIVE */}
-            <div>
-              <ShineCard
-                highlight="#818cf8"
-                tiltOptions={{ glow: "#818cf8", amount: 12, hoverScale: 102 }}
-                sparkle={75}
-                waveSpeed={35}
-                density={40}
-              >
-                <div className="p-7 sm:p-9 flex flex-col justify-between h-full">
-                  <div>
-                    <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-8 sm:mb-12">
-                      <Orbit className="w-5 h-5 text-indigo-400" />
-                    </div>
-                    <div className="text-[11px] font-bold uppercase tracking-widest text-indigo-400/90 mb-1.5">
-                      02 — 3D INTERACTIVE
-                    </div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
-                      3D Immersive Websites
-                    </h3>
-                    <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
-                      Bring your brand to life with interactive 3D scenes, objects and visual experiences.
-                    </p>
-                  </div>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              whileHover={{ scale: 1.02, rotateX: 3, rotateY: 3, z: 25 }}
+              style={{ transformStyle: "preserve-3d" }}
+              className="group relative bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(99,102,241,0.15)] cursor-default"
+            >
+              <div className="relative z-10 [transform:translateZ(25px)]">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
+                  <Orbit className="w-5 h-5 text-indigo-400" />
                 </div>
-              </ShineCard>
-            </div>
+                <div className="text-[11px] font-bold uppercase tracking-widest text-indigo-400/90 mb-1">
+                  02 — 3D INTERACTIVE
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
+                  3D Immersive Websites
+                </h3>
+                <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
+                  Bring your brand to life with interactive 3D scenes, objects and visual experiences.
+                </p>
+              </div>
+            </motion.div>
 
             {/* Card 3: 03 — FULL CUSTOMIZE - AI EDITING */}
-            <div>
-              <ShineCard
-                highlight="#c084fc"
-                tiltOptions={{ glow: "#c084fc", amount: 12, hoverScale: 102 }}
-                sparkle={75}
-                waveSpeed={35}
-                density={40}
-              >
-                <div className="p-7 sm:p-9 flex flex-col justify-between h-full">
-                  <div>
-                    <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-8 sm:mb-12">
-                      <Wand2 className="w-5 h-5 text-purple-400" />
-                    </div>
-                    <div className="text-[11px] font-bold uppercase tracking-widest text-purple-400/90 mb-1.5">
-                      03 — FULL CUSTOMIZE - AI EDITING
-                    </div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
-                      Change Anything
-                    </h3>
-                    <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
-                      Tell us what you want changed. Update content, colors, images and sections instantly.
-                    </p>
-                  </div>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              whileHover={{ scale: 1.02, rotateX: -3, rotateY: -3, z: 25 }}
+              style={{ transformStyle: "preserve-3d" }}
+              className="group relative bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)] cursor-default"
+            >
+              <div className="relative z-10 [transform:translateZ(25px)]">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
+                  <Wand2 className="w-5 h-5 text-purple-400" />
                 </div>
-              </ShineCard>
-            </div>
+                <div className="text-[11px] font-bold uppercase tracking-widest text-purple-400/90 mb-1">
+                  03 — FULL CUSTOMIZE - AI EDITING
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
+                  Change Anything
+                </h3>
+                <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
+                  Tell us what you want changed. Update content, colors, images and sections instantly.
+                </p>
+              </div>
+            </motion.div>
 
             {/* Card 4: 04 — EVERYTHING INCLUDED (Span 2 on lg) */}
-            <div className="lg:col-span-2">
-              <ShineCard
-                highlight="#06b6d4"
-                tiltOptions={{ glow: "#06b6d4", amount: 12, hoverScale: 102 }}
-                sparkle={75}
-                waveSpeed={35}
-                density={40}
-              >
-                <div className="p-7 sm:p-9 flex flex-col justify-between h-full">
-                  <div>
-                    <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-8 sm:mb-12">
-                      <Globe className="w-5 h-5 text-cyan-400" />
-                    </div>
-                    <div className="text-[11px] font-bold uppercase tracking-widest text-cyan-400/90 mb-1.5">
-                      04 — EVERYTHING INCLUDED
-                    </div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
-                      Free Domain , Hosting + SSL
-                    </h3>
-                    <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed max-w-xl">
-                      Get the infrastructure you need to launch, host and secure your website in one place with global CDN and automated SSL certificates.
-                    </p>
-                  </div>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              whileHover={{ scale: 1.02, rotateX: -3, rotateY: 3, z: 25 }}
+              style={{ transformStyle: "preserve-3d" }}
+              className="group relative lg:col-span-2 bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(6,182,212,0.15)] cursor-default"
+            >
+              <div className="relative z-10 [transform:translateZ(25px)]">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
+                  <Globe className="w-5 h-5 text-cyan-400" />
                 </div>
-              </ShineCard>
-            </div>
-
-            {/* Card 5: 05 — SAVE THOUSANDS OF DOLLARS (Span 3 / Full Width on lg with Blue Palette) */}
-            <div className="lg:col-span-3">
-              <ShineCard
-                highlight="#3b82f6"
-                tiltOptions={{ glow: "#3b82f6", amount: 10, hoverScale: 101.5 }}
-                sparkle={80}
-                waveSpeed={35}
-                density={45}
-              >
-                <div className="p-7 sm:p-9 flex flex-col sm:flex-row sm:items-center justify-between gap-6 h-full">
-                  <div className="max-w-2xl">
-                    <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-6">
-                      <Coins className="w-5 h-5 text-blue-400" />
-                    </div>
-                    <div className="text-[11px] font-bold uppercase tracking-widest text-blue-400 font-mono mb-1.5">
-                      05 — SAVE THOUSANDS OF DOLLARS
-                    </div>
-                    <h3 className="text-xl sm:text-3xl font-bold text-white tracking-tight mb-2">
-                      Save $5,000–$10,000+ On Agency Builds
-                    </h3>
-                    <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
-                      Create a high-converting, animated professional website without the traditional agency design and development cost. Full ownership with zero lock-in.
-                    </p>
-                  </div>
-
-                  <div className="shrink-0 flex flex-col sm:items-end gap-1 pt-4 sm:pt-0 border-t sm:border-t-0 border-white/[0.08]">
-                    <span className="text-3xl sm:text-4xl font-black text-blue-400 tracking-tight">$0 Fee</span>
-                    <span className="text-xs font-semibold text-gray-400">Generate & Preview Free</span>
-                  </div>
+                <div className="text-[11px] font-bold uppercase tracking-widest text-cyan-400/90 mb-1">
+                  04 — EVERYTHING INCLUDED
                 </div>
-              </ShineCard>
-            </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
+                  Free Domain , Hosting + SSL
+                </h3>
+                <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed max-w-xl">
+                  Get the infrastructure you need to launch, host and secure your website in one place with global CDN and automated SSL certificates.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Card 5: 05 — SAVE THOUSANDS OF DOLLARS (Span 3 / Full Width on lg with Vibrant Blue Palette) */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              whileHover={{ scale: 1.015, rotateX: 2, z: 20 }}
+              style={{ transformStyle: "preserve-3d" }}
+              className="group relative lg:col-span-3 bg-[radial-gradient(ellipse_at_top_left,_rgba(59,130,246,0.14),_#0d0f12_60%)] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col sm:flex-row sm:items-center justify-between gap-6 transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_20px_50px_rgba(59,130,246,0.18)] cursor-default"
+            >
+              <div className="relative z-10 max-w-2xl [transform:translateZ(25px)]">
+                <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Coins className="w-5 h-5 text-blue-400" />
+                </div>
+                <div className="text-[11px] font-bold uppercase tracking-widest text-blue-400 font-mono mb-1">
+                  05 — SAVE THOUSANDS OF DOLLARS
+                </div>
+                <h3 className="text-xl sm:text-3xl font-bold text-white tracking-tight mb-2">
+                  Save $5,000–$10,000+ On Agency Builds
+                </h3>
+                <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
+                  Create a high-converting, animated professional website without the traditional agency design and development cost. Full ownership with zero lock-in.
+                </p>
+              </div>
+
+              <div className="relative z-10 shrink-0 flex flex-col sm:items-end gap-2 pt-4 sm:pt-0 border-t sm:border-t-0 border-white/[0.08] [transform:translateZ(25px)]">
+                <span className="text-3xl sm:text-4xl font-black text-blue-400 tracking-tight">$0 Fee</span>
+                <span className="text-xs font-semibold text-gray-400">Generate & Preview Free</span>
+              </div>
+            </motion.div>
 
           </div>
         </div>

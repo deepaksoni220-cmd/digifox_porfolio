@@ -1599,16 +1599,19 @@ export const AiBuilderPage: React.FC = () => {
         description="Instantly generate and customize your website using our advanced AI consultant."
       />
 
-      {/* Floating Top Header with Logo & ThemeToggle for all screen sizes */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 py-3 bg-[var(--bg-base)]/80 backdrop-blur-md border-b border-[var(--border-strong)] shadow-lg shadow-black/10">
+      {/* Floating Top Header with Logo, Nav Links & ThemeToggle for all screen sizes */}
+      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 py-3 bg-[var(--bg-base)]/85 backdrop-blur-md border-b border-[var(--border-strong)] shadow-lg shadow-black/10">
         <a href="/" className="flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[var(--text-strong)] hover:text-[#3b82f6] transition-colors">
           <span>←</span>
           <span>DIGIFOX</span>
         </a>
-        <div className="flex items-center gap-3">
-          <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 hidden min-[450px]:inline-block">
-            AI Builder
-          </span>
+        <div className="flex items-center gap-3 sm:gap-5">
+          <div className="flex items-center gap-3 sm:gap-4 text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+            <a href="/contact" className="hover:text-[var(--text-strong)] transition-colors">Contact</a>
+            <a href="/terms" className="hover:text-[var(--text-strong)] transition-colors hidden sm:inline-block">Terms</a>
+            <a href="/privacy" className="hover:text-[var(--text-strong)] transition-colors hidden sm:inline-block">Privacy</a>
+          </div>
+          <div className="w-px h-4 bg-white/10" />
           <ThemeToggle />
         </div>
       </header>

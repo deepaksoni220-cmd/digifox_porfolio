@@ -1593,11 +1593,25 @@ export const AiBuilderPage: React.FC = () => {
   }
 
   return (
-    <main className="w-full min-h-screen bg-[var(--bg-base)] text-[var(--text-strong)] relative overflow-hidden pb-20">
+    <main className="w-full min-h-screen bg-[var(--bg-base)] text-[var(--text-strong)] relative overflow-hidden pb-20 pt-16 sm:pt-20">
       <SEOMeta 
         title="AI Website Builder | Digifox"
         description="Instantly generate and customize your website using our advanced AI consultant."
       />
+
+      {/* Floating Top Header with Logo & ThemeToggle for all screen sizes */}
+      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 py-3 bg-[var(--bg-base)]/80 backdrop-blur-md border-b border-[var(--border-strong)] shadow-lg shadow-black/10">
+        <a href="/" className="flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[var(--text-strong)] hover:text-[#3b82f6] transition-colors">
+          <span>←</span>
+          <span>DIGIFOX</span>
+        </a>
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 hidden min-[450px]:inline-block">
+            AI Builder
+          </span>
+          <ThemeToggle />
+        </div>
+      </header>
       
       {/* 1st Section Atmospheric Background Video */}
       <div className="absolute top-0 left-0 right-0 h-[850px] overflow-hidden pointer-events-none z-0 select-none">
@@ -1613,17 +1627,13 @@ export const AiBuilderPage: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--bg-base)] dark:from-transparent dark:via-[var(--bg-base)]/40 dark:to-[var(--bg-base)]" />
       </div>
 
-      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10">
+      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 relative z-10">
         
         {/* Header & Chat Section */}
         <div className="flex flex-col md:flex-row gap-10 items-start justify-between">
-          
           <div className="flex-1 w-full flex flex-col gap-6">
             <div className="w-full flex flex-col items-center text-center justify-center mb-6 relative">
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden sm:block">
-                <ThemeToggle />
-              </div>
-              <h1 className="text-4xl sm:text-5xl font-black uppercase tracking-tight mb-4 text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+              <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight mb-4 text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
                 Build Your <span className="text-[#60a5fa] drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">Dream Website</span> by webmake
               </h1>
               <p className="text-white/90 text-lg max-w-2xl mx-auto font-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">

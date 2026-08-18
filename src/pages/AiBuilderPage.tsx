@@ -1540,30 +1540,30 @@ export const AiBuilderPage: React.FC = () => {
               <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden sm:block">
                 <ThemeToggle />
               </div>
-              <h1 className="text-4xl sm:text-5xl font-black uppercase tracking-tight mb-4">
-                Build Your <span className="text-[#3b82f6]">Dream Website</span> by webmake
+              <h1 className="text-4xl sm:text-5xl font-black uppercase tracking-tight mb-4 text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                Build Your <span className="text-[#60a5fa] drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">Dream Website</span> by webmake
               </h1>
-              <p className="text-[var(--text-primary)]/70 text-lg max-w-2xl mx-auto">
+              <p className="text-white/90 text-lg max-w-2xl mx-auto font-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                 Describe your business and let AI create a beautiful Animated, Good converting and performance website with responsive design, SEO optimization, GEO readiness, AEO best practices, and lightning-fast performance.
               </p>
             </div>
 
             {/* Custom AI Builder Section */}
             <div className="mb-12 max-w-4xl mx-auto w-full">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-[var(--border-strong)] pb-3 mb-4 gap-3">
-                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-widest text-[#3b82f6]">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-white/20 pb-3 mb-4 gap-3">
+                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-widest text-[#60a5fa] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                   {builderMode === 'new' ? "Generate with Our AI Designing" : "Edit Existing Brand Site"}
                 </h2>
-                <div className="flex bg-[var(--bg-surface)] p-1 rounded-full border border-[var(--border-strong)]">
+                <div className="flex bg-black/60 backdrop-blur-md p-1 rounded-full border border-white/20 shadow-lg">
                   <button 
                     onClick={() => setBuilderMode('new')}
-                    className={`px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${builderMode === 'new' ? 'bg-[#3b82f6] text-white shadow-md' : 'text-[var(--text-secondary)] hover:text-[var(--text-strong)]'}`}
+                    className={`px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${builderMode === 'new' ? 'bg-[#3b82f6] text-white shadow-md' : 'text-white/70 hover:text-white'}`}
                   >
                     Create New
                   </button>
                   <button 
                     onClick={() => setBuilderMode('edit')}
-                    className={`px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${builderMode === 'edit' ? 'bg-[#3b82f6] text-white shadow-md' : 'text-[var(--text-secondary)] hover:text-[var(--text-strong)]'}`}
+                    className={`px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${builderMode === 'edit' ? 'bg-[#3b82f6] text-white shadow-md' : 'text-white/70 hover:text-white'}`}
                   >
                     Edit Brand Site
                   </button>
@@ -1571,13 +1571,13 @@ export const AiBuilderPage: React.FC = () => {
               </div>
 
               {builderMode === 'edit' ? (
-                <div className="bg-[var(--bg-surface)]/90 backdrop-blur-md p-6 rounded-2xl border border-[var(--border-subtle)] shadow-xl flex flex-col gap-4 max-w-xl mx-auto text-center items-center">
-                  <div className="w-12 h-12 rounded-xl bg-[#3b82f6]/10 flex items-center justify-center text-[#3b82f6]">
+                <div className="bg-black/60 backdrop-blur-xl p-6 rounded-2xl border border-white/20 shadow-2xl flex flex-col gap-4 max-w-xl mx-auto text-center items-center">
+                  <div className="w-12 h-12 rounded-xl bg-[#3b82f6]/20 flex items-center justify-center text-[#60a5fa]">
                     <Globe size={24} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold uppercase tracking-wider mb-1">Load Your Brand Website</h3>
-                    <p className="text-xs text-[var(--text-secondary)] max-w-md mx-auto">
+                    <h3 className="text-lg font-bold uppercase tracking-wider mb-1 text-white">Load Your Brand Website</h3>
+                    <p className="text-xs text-white/70 max-w-md mx-auto">
                       Enter the subdomain of the brand website you previously published to load and edit its content.
                     </p>
                   </div>
@@ -1588,14 +1588,14 @@ export const AiBuilderPage: React.FC = () => {
                         value={editSubdomain}
                         onChange={(e) => setEditSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
                         placeholder="e.g. mybrand"
-                        className="w-full bg-[var(--bg-base)] border border-[var(--border-strong)] rounded-full px-5 py-2.5 pr-28 text-[var(--text-strong)] focus:border-[#3b82f6] outline-none font-semibold text-sm"
+                        className="w-full bg-black/50 border border-white/20 rounded-full px-5 py-2.5 pr-28 text-white focus:border-[#3b82f6] outline-none font-semibold text-sm"
                         onKeyDown={(e) => { if (e.key === 'Enter') handleLoadBrandSite(); }}
                       />
-                      <span className="absolute right-5 text-xs text-[var(--text-secondary)] font-bold">.digifox.world</span>
+                      <span className="absolute right-5 text-xs text-white/70 font-bold">.digifox.world</span>
                     </div>
                   </div>
                   {loadError && (
-                    <p className="text-red-500 text-xs font-medium">{loadError}</p>
+                    <p className="text-red-400 text-xs font-medium">{loadError}</p>
                   )}
                   <button
                     onClick={handleLoadBrandSite}
@@ -1609,12 +1609,12 @@ export const AiBuilderPage: React.FC = () => {
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Website Type</label>
+                      <label className="text-[11px] uppercase tracking-widest text-white font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">Website Type</label>
                       <select 
                         value={websiteType}
                         onChange={(e) => setWebsiteType(e.target.value)}
                         disabled={chatHistory.length > 0}
-                        className="bg-[var(--bg-surface)]/90 backdrop-blur-sm border border-[var(--border-strong)] rounded-xl px-3 py-2 text-xs text-[var(--text-strong)] focus:border-[#3b82f6] outline-none disabled:opacity-50 font-medium"
+                        className="bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-3 py-2 text-xs text-[var(--text-strong)] focus:border-[#3b82f6] outline-none disabled:opacity-50 font-medium shadow-md"
                       >
                         <option value="Local Business">Local Business</option>
                         <option value="Portfolio">Portfolio</option>
@@ -1625,12 +1625,12 @@ export const AiBuilderPage: React.FC = () => {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Design Category</label>
+                      <label className="text-[11px] uppercase tracking-widest text-white font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">Design Category</label>
                       <select 
                         value={templateCategory}
                         onChange={(e) => setTemplateCategory(e.target.value)}
                         disabled={chatHistory.length > 0}
-                        className="bg-[var(--bg-surface)]/90 backdrop-blur-sm border border-[var(--border-strong)] rounded-xl px-3 py-2 text-xs text-[var(--text-strong)] focus:border-[#3b82f6] outline-none disabled:opacity-50 font-medium"
+                        className="bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-3 py-2 text-xs text-[var(--text-strong)] focus:border-[#3b82f6] outline-none disabled:opacity-50 font-medium shadow-md"
                       >
                         <option value="auto">Auto Select</option>
                         <option value="3d">3D Animated</option>
@@ -1639,7 +1639,7 @@ export const AiBuilderPage: React.FC = () => {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] uppercase tracking-widest text-[var(--text-secondary)] font-bold">Company Logo (Optional)</label>
+                      <label className="text-[11px] uppercase tracking-widest text-white font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">Company Logo (Optional)</label>
                       <div className="relative flex items-center">
                         <input 
                           type="file" 
@@ -1647,7 +1647,7 @@ export const AiBuilderPage: React.FC = () => {
                           onChange={handleLogoUpload}
                           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                         />
-                        <div className="w-full bg-[var(--bg-surface)]/90 backdrop-blur-sm border border-[var(--border-strong)] rounded-xl px-3 py-2 text-xs text-[var(--text-secondary)] flex justify-between items-center hover:border-[#3b82f6] transition-colors font-medium">
+                        <div className="w-full bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-3 py-2 text-xs text-[var(--text-secondary)] flex justify-between items-center hover:border-[#3b82f6] transition-colors font-medium shadow-md">
                           <span className="truncate">{logoUrl ? "Logo Uploaded!" : "Upload image..."}</span>
                           {logoUrl && <img src={logoUrl} alt="Logo" className="h-5 w-auto object-contain rounded" />}
                         </div>

@@ -1170,25 +1170,34 @@ export const AiBuilderPage: React.FC = () => {
           </div>
 
           {/* Right: actions */}
-          <div className="flex items-center gap-2.5 shrink-0">
-            <button
-              onClick={() => setModifyModeState(!isModifyMode)}
-              className={`px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer shadow-md ${
-                isModifyMode
-                  ? 'bg-blue-600 hover:bg-blue-500 text-white border border-blue-400/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]'
-                  : 'bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)]'
-              }`}
-            >
-              {isModifyMode ? (
-                <>
-                  <span>👁️ Browse Template</span>
-                </>
-              ) : (
-                <>
-                  <span>✏️ Modify Template</span>
-                </>
-              )}
-            </button>
+          <div className="flex items-center gap-3 shrink-0">
+            {/* Browse vs Modify Active/Inactive Switcher */}
+            <div className="flex items-center bg-white/[0.06] border border-white/[0.1] rounded-xl p-1 shrink-0">
+              <button
+                onClick={() => setModifyModeState(false)}
+                title="Browse & interact with template navigation"
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                  !isModifyMode
+                    ? 'bg-[#3b82f6] text-white shadow-md'
+                    : 'text-white/40 hover:text-white/80'
+                }`}
+              >
+                <span>👁️ Browse</span>
+                {!isModifyMode && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
+              </button>
+              <button
+                onClick={() => setModifyModeState(true)}
+                title="Modify & customize template text, colors, images"
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                  isModifyMode
+                    ? 'bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] text-white shadow-md shadow-blue-500/20'
+                    : 'text-white/40 hover:text-white/80'
+                }`}
+              >
+                <span>✏️ Modify</span>
+                {isModifyMode && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
+              </button>
+            </div>
 
             {publishedUrl && (
               <a href={publishedUrl} target="_blank" rel="noopener noreferrer"
@@ -1523,16 +1532,28 @@ export const AiBuilderPage: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setModifyModeState(!isModifyMode)}
-                  className={`px-3.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
-                    isModifyMode
-                      ? 'bg-blue-500/20 border border-blue-500/40 text-blue-300 hover:bg-blue-500/30'
-                      : 'bg-white text-black hover:bg-white/90 shadow-sm'
-                  }`}
-                >
-                  {isModifyMode ? '👁️ Browse Mode' : '✏️ Modify'}
-                </button>
+                <div className="flex items-center bg-white/[0.06] border border-white/[0.1] rounded-lg p-0.5 shrink-0">
+                  <button
+                    onClick={() => setModifyModeState(false)}
+                    className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                      !isModifyMode
+                        ? 'bg-[#3b82f6] text-white shadow-sm'
+                        : 'text-white/40 hover:text-white/80'
+                    }`}
+                  >
+                    👁️ Browse
+                  </button>
+                  <button
+                    onClick={() => setModifyModeState(true)}
+                    className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                      isModifyMode
+                        ? 'bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] text-white shadow-sm'
+                        : 'text-white/40 hover:text-white/80'
+                    }`}
+                  >
+                    ✏️ Modify
+                  </button>
+                </div>
                 <div className="bg-white/[0.05] rounded-lg px-2.5 py-1 text-[10px] text-white/40 font-mono truncate max-w-[200px] hidden sm:block">
                   {previewData.previewUrl || 'webmake — live preview'}
                 </div>

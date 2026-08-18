@@ -227,16 +227,17 @@ export const AiBuilderPage: React.FC = () => {
       const doc = iframe.contentDocument || iframe.contentWindow?.document;
       if (!doc) return;
 
-      // 1. Inject visual feedback and animation preset keyframe styles
+      // 1. Inject visual feedback and animation preset keyframe styles (ONLY active in modify mode)
       const styleId = 'editor-outline-styles';
       if (!doc.getElementById(styleId)) {
         const style = doc.createElement('style');
         style.id = styleId;
         style.innerHTML = `
-          [contenteditable="true"]:hover { outline: 2px dashed #3b82f6 !important; outline-offset:4px; cursor:text !important; }
-          [contenteditable="true"]:focus { outline: 2px solid #3b82f6 !important; outline-offset:4px; }
-          .customizer-selected-element { outline: 2px solid #a855f7 !important; outline-offset:4px; }
-          h1,h2,h3,h4,h5,h6,p,span,a,button,[contenteditable="true"] { pointer-events:auto !important; position:relative; z-index:9999 !important; }
+          body[data-edit-mode="true"] [contenteditable="true"]:hover { outline: 2px dashed #3b82f6 !important; outline-offset:4px; cursor:text !important; }
+          body[data-edit-mode="true"] [contenteditable="true"]:focus { outline: 2px solid #3b82f6 !important; outline-offset:4px; }
+          body[data-edit-mode="true"] .customizer-selected-element { outline: 2px solid #a855f7 !important; outline-offset:4px; }
+          body[data-edit-mode="true"] img:hover { outline: 2px dashed #10b981 !important; outline-offset: 2px; cursor: pointer !important; }
+          body[data-edit-mode="true"] video:hover { outline: 2px dashed #a855f7 !important; outline-offset: 2px; cursor: pointer !important; }
           @keyframes kFadeUp{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
           @keyframes kSlideInLeft{from{transform:translateX(-40px);opacity:0}to{transform:none;opacity:1}}
           @keyframes kFadeIn{from{opacity:0}to{opacity:1}}
@@ -545,19 +546,11 @@ export const AiBuilderPage: React.FC = () => {
       }
 
 
-      // Bind click-to-edit for images inside the template iframe
+      // Bind click-to-edit for images inside the template iframe (only in modify mode)
       const images = doc.querySelectorAll('img');
       images.forEach(img => {
-        img.style.cursor = 'pointer';
-        img.addEventListener('mouseenter', () => {
-          img.style.outline = '2px dashed #10b981';
-          img.style.outlineOffset = '2px';
-        });
-        img.addEventListener('mouseleave', () => {
-          img.style.outline = '';
-        });
-
         img.addEventListener('click', (e) => {
+          if (doc.body.getAttribute('data-edit-mode') !== 'true') return;
           e.preventDefault();
           e.stopPropagation();
 
@@ -595,19 +588,11 @@ export const AiBuilderPage: React.FC = () => {
         });
       });
 
-      // Bind click-to-edit for videos inside the template iframe
+      // Bind click-to-edit for videos inside the template iframe (only in modify mode)
       const videos = doc.querySelectorAll('video');
       videos.forEach(video => {
-        video.style.cursor = 'pointer';
-        video.addEventListener('mouseenter', () => {
-          video.style.outline = '2px dashed #a855f7';
-          video.style.outlineOffset = '2px';
-        });
-        video.addEventListener('mouseleave', () => {
-          video.style.outline = '';
-        });
-
         video.addEventListener('click', (e) => {
+          if (doc.body.getAttribute('data-edit-mode') !== 'true') return;
           e.preventDefault();
           e.stopPropagation();
 
@@ -1561,7 +1546,7 @@ export const AiBuilderPage: React.FC = () => {
               {previewData.previewUrl ? (
                 <iframe
                   ref={iframeRef}
-                  src={`${previewData.previewUrl}?editor=true`}
+                  src={previewData.previewUrl}
                   onLoad={handleIframeLoad}
                   className="w-full h-full"
                   title="Live Preview"

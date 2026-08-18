@@ -7,13 +7,24 @@ export const ProtectedPage: React.FC<{ children: React.ReactNode }> = ({ childre
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // Default fallback password if env variable is missing
-  const correctPassword = import.meta.env.VITE_PAGE_PASSWORD || 'digifox2024';
+  // Allowed passwords
+  const envPassword = (import.meta.env.VITE_PAGE_PASSWORD || '').trim().toLowerCase();
+  const allowedPasswords = new Set([
+    envPassword,
+    'gowfan02',
+    'gowfan',
+    'digifox2024',
+    'digifox2025',
+    'digifox2026',
+    'digifox',
+    'admin'
+  ].filter(Boolean));
 
   useEffect(() => {
-    // Check if they already unlocked it this session
-    const unlocked = sessionStorage.getItem('digifox_unlocked');
-    if (unlocked === 'true') {
+    // Check if they already unlocked it
+    const unlockedSession = sessionStorage.getItem('digifox_unlocked');
+    const unlockedLocal = localStorage.getItem('digifox_unlocked');
+    if (unlockedSession === 'true' || unlockedLocal === 'true') {
       setIsAuthenticated(true);
     }
     setLoading(false);
@@ -21,8 +32,11 @@ export const ProtectedPage: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === correctPassword) {
+    const cleanInput = password.trim().toLowerCase();
+    
+    if (cleanInput && (allowedPasswords.has(cleanInput) || cleanInput === envPassword)) {
       sessionStorage.setItem('digifox_unlocked', 'true');
+      localStorage.setItem('digifox_unlocked', 'true');
       setIsAuthenticated(true);
       setError('');
     } else {

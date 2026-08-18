@@ -8,7 +8,7 @@ import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown, Layers, Wand2, Coins, Orbit } from 'lucide-react';
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
-import SoftAurora from '../components/ui/soft-aurora';
+import CursorGrid from '../components/ui/CursorGrid';
 
 export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -2375,22 +2375,24 @@ export const AiBuilderPage: React.FC = () => {
         </div>
       </section>
       
-      {/* Bento Grid Features Section with Soft Aurora WebGL Background */}
+      {/* Bento Grid Features Section with Interactive CursorGrid Background */}
       <section className="py-28 border-t border-white/[0.08] relative overflow-hidden bg-[#060709]">
-        {/* Soft Aurora WebGL Canvas Background */}
-        <div className="absolute inset-0 opacity-60 pointer-events-auto">
-          <SoftAurora 
-            speed={0.5}
-            scale={1.3}
-            brightness={1.05}
-            color1="#00f5a0"
-            color2="#00d9f5"
-            noiseFrequency={2.0}
-            noiseAmplitude={1.0}
-            bandHeight={0.5}
-            bandSpread={1.1}
-            enableMouseInteraction={true}
-            mouseInfluence={0.25}
+        {/* Interactive CursorGrid Background */}
+        <div className="absolute inset-0 pointer-events-auto">
+          <CursorGrid 
+            cellSize={65}
+            color="#3B82F6"
+            radius={160}
+            falloff="smooth"
+            holdTime={400}
+            fadeDuration={800}
+            lineWidth={1.2}
+            maxOpacity={0.9}
+            fillOpacity={0.06}
+            gridOpacity={0.04}
+            cellRadius={4}
+            clickPulse={true}
+            pulseSpeed={600}
           />
         </div>
 
@@ -2401,11 +2403,11 @@ export const AiBuilderPage: React.FC = () => {
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-gray-300 text-xs font-semibold uppercase tracking-widest mb-4 backdrop-blur-md">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
               <span>Features & Architecture</span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white drop-shadow-md">
-              Everything You Need To <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">Dominate Online</span>
+              Everything You Need To <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">Dominate Online</span>
             </h2>
             <p className="text-sm sm:text-base text-gray-400 mt-3 max-w-2xl mx-auto font-normal">
               Built for speed, conversion, and stunning visual impact. Explore the core pillars behind the Webmake AI architecture.
@@ -2415,7 +2417,7 @@ export const AiBuilderPage: React.FC = () => {
           {/* Bento Grid Container with 3D Perspective */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 [perspective:1200px]">
             
-            {/* Card 1: 01 — 2D MOTION (Span 2 on lg with Green Mist) */}
+            {/* Card 1: 01 — 2D MOTION (Span 2 on lg with Blue Mist) */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -2423,13 +2425,13 @@ export const AiBuilderPage: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.05 }}
               whileHover={{ scale: 1.02, rotateX: 3, rotateY: -3, z: 25 }}
               style={{ transformStyle: "preserve-3d" }}
-              className="group relative lg:col-span-2 bg-[radial-gradient(ellipse_at_top_left,_rgba(16,185,129,0.12),_#0d0f12_70%)] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(16,185,129,0.15)] cursor-default"
+              className="group relative lg:col-span-2 bg-[radial-gradient(ellipse_at_top_left,_rgba(59,130,246,0.14),_#0d0f12_70%)] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)] cursor-default"
             >
               <div className="relative z-10 [transform:translateZ(25px)]">
                 <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
-                  <Layers className="w-5 h-5 text-emerald-400" />
+                  <Layers className="w-5 h-5 text-blue-400" />
                 </div>
-                <div className="text-[11px] font-bold uppercase tracking-widest text-emerald-400/90 mb-1">
+                <div className="text-[11px] font-bold uppercase tracking-widest text-blue-400/90 mb-1">
                   01 — 2D MOTION
                 </div>
                 <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">

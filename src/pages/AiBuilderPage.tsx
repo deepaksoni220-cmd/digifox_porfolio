@@ -8,7 +8,6 @@ import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown, Layers, Box, Clock, MessageSquare, DollarSign } from 'lucide-react';
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
-import NeonBorder from '../components/ui/neon-border';
 
 export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);

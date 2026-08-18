@@ -6,7 +6,7 @@ import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 import { TemplateGallery } from '../components/builder/TemplateGallery';
 import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown } from 'lucide-react';
+import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown, Layers, Box, Clock, MessageSquare, DollarSign } from 'lucide-react';
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
 import NeonBorder from '../components/ui/neon-border';
 
@@ -2375,20 +2375,23 @@ export const AiBuilderPage: React.FC = () => {
         </div>
       </section>
       
-      {/* Bento Grid Features Section with Dark Glassmorphism and Animated Borders */}
-      <section className="py-20 border-t border-[var(--border-strong)] relative overflow-hidden bg-black/40">
-        {/* Atmospheric background glows */}
-        <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[140px] pointer-events-none" />
+      {/* Bento Grid Features Section with Dark Glassmorphism */}
+      <section className="py-24 border-t border-white/[0.08] relative overflow-hidden bg-[#060709]">
+        {/* Subtle dot matrix background */}
+        <div className="absolute inset-0 bg-[radial-gradient(#1f242e_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-60" />
+
+        {/* Ambient atmospheric glows */}
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-emerald-950/20 rounded-full blur-[160px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-950/20 rounded-full blur-[160px] pointer-events-none" />
 
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-14">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4 shadow-sm">
-              <span>✨</span>
-              <span>Next-Gen Capabilities</span>
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-gray-300 text-xs font-semibold uppercase tracking-widest mb-4 backdrop-blur-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Features & Architecture</span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white drop-shadow-md">
-              Everything You Need To <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Dominate Online</span>
+              Everything You Need To <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">Dominate Online</span>
             </h2>
             <p className="text-sm sm:text-base text-gray-400 mt-3 max-w-2xl mx-auto font-normal">
               Built for speed, conversion, and stunning visual impact. Explore the core pillars behind the Webmake AI architecture.
@@ -2396,40 +2399,30 @@ export const AiBuilderPage: React.FC = () => {
           </div>
 
           {/* Bento Grid Container */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             
-            {/* Card 1: 01 — 2D MOTION (Span 2 on lg) */}
+            {/* Card 1: 01 — 2D MOTION (Span 2 on lg with Green Mist) */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.05 }}
-              whileHover={{ y: -5 }}
-              className="group relative lg:col-span-2 bg-[#0c0e18]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 overflow-hidden shadow-2xl flex flex-col justify-between"
+              whileHover={{ y: -4 }}
+              className="group relative lg:col-span-2 bg-[radial-gradient(ellipse_at_top_left,_rgba(16,185,129,0.12),_#0d0f12_70%)] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/20"
             >
-              <div className="absolute inset-0 pointer-events-none z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <NeonBorder color="#38bdf8" rounded={24} thickness={3} borderSize={45} glow={80} speed={15} />
-              </div>
               <div className="relative z-10">
-                <div className="flex items-center justify-between gap-3 mb-6">
-                  <span className="text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
-                    01 — 2D MOTION
-                  </span>
-                  <span className="text-xl">🌊</span>
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16">
+                  <Layers className="w-5 h-5 text-emerald-400" />
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-3">
+                <div className="text-[11px] font-bold uppercase tracking-widest text-emerald-400/90 mb-1">
+                  01 — 2D MOTION
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
                   Animated Websites
                 </h3>
-                <p className="text-sm sm:text-base text-gray-300 font-normal leading-relaxed max-w-xl">
-                  Smooth scroll effects, transitions and interactions built into every experience. Delight visitors with fluid micro-animations that make your brand memorable.
+                <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed max-w-xl">
+                  Smooth scroll effects, transitions and interactions built into every experience. First frame of each picks up perfectly from the last.
                 </p>
-              </div>
-              <div className="mt-8 pt-6 border-t border-white/10 flex items-center gap-3 text-xs font-bold text-cyan-400">
-                <span>Micro-Interactions</span>
-                <span>•</span>
-                <span>Scroll Parallax</span>
-                <span>•</span>
-                <span>Fluid Typography</span>
               </div>
             </motion.div>
 
@@ -2439,30 +2432,22 @@ export const AiBuilderPage: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              whileHover={{ y: -5 }}
-              className="group relative bg-[#0c0e18]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 overflow-hidden shadow-2xl flex flex-col justify-between"
+              whileHover={{ y: -4 }}
+              className="group relative bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/20"
             >
-              <div className="absolute inset-0 pointer-events-none z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <NeonBorder color="#818cf8" rounded={24} thickness={3} borderSize={45} glow={80} speed={15} />
-              </div>
               <div className="relative z-10">
-                <div className="flex items-center justify-between gap-3 mb-6">
-                  <span className="text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400">
-                    02 — 3D INTERACTIVE
-                  </span>
-                  <span className="text-xl">🪐</span>
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16">
+                  <Box className="w-5 h-5 text-indigo-400" />
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-3">
+                <div className="text-[11px] font-bold uppercase tracking-widest text-indigo-400/90 mb-1">
+                  02 — 3D INTERACTIVE
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
                   Immersive Websites
                 </h3>
-                <p className="text-sm sm:text-base text-gray-300 font-normal leading-relaxed">
-                  Bring your brand to life with interactive 3D scenes, objects and visual experiences that captivate attention.
+                <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
+                  Bring your brand to life with interactive 3D scenes, objects and visual experiences.
                 </p>
-              </div>
-              <div className="mt-8 pt-6 border-t border-white/10 flex items-center gap-3 text-xs font-bold text-indigo-400">
-                <span>3D Canvas</span>
-                <span>•</span>
-                <span>Interactive Depth</span>
               </div>
             </motion.div>
 
@@ -2472,133 +2457,102 @@ export const AiBuilderPage: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.15 }}
-              whileHover={{ y: -5 }}
-              className="group relative bg-[#0c0e18]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 overflow-hidden shadow-2xl flex flex-col justify-between"
+              whileHover={{ y: -4 }}
+              className="group relative bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/20"
             >
-              <div className="absolute inset-0 pointer-events-none z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <NeonBorder color="#c084fc" rounded={24} thickness={3} borderSize={45} glow={80} speed={15} />
-              </div>
               <div className="relative z-10">
-                <div className="flex items-center justify-between gap-3 mb-6">
-                  <span className="text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400">
-                    03 — FULL CUSTOMIZE - AI EDITING
-                  </span>
-                  <span className="text-xl">🪄</span>
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16">
+                  <MessageSquare className="w-5 h-5 text-purple-400" />
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-3">
+                <div className="text-[11px] font-bold uppercase tracking-widest text-purple-400/90 mb-1">
+                  03 — FULL CUSTOMIZE - AI EDITING
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
                   Change Anything
                 </h3>
-                <p className="text-sm sm:text-base text-gray-300 font-normal leading-relaxed">
-                  Tell us what you want changed. Update content, colors, images and sections instantly with live inline editing.
+                <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
+                  Tell us what you want changed. Update content, colors, images and sections instantly.
                 </p>
-              </div>
-              <div className="mt-8 pt-6 border-t border-white/10 flex items-center gap-3 text-xs font-bold text-purple-400">
-                <span>Direct Visual Edit</span>
-                <span>•</span>
-                <span>AI Rewrites</span>
               </div>
             </motion.div>
 
-            {/* Card 4: 04 — READY IN MINUTES (Span 2 on lg) */}
+            {/* Card 4: 04 — READY IN MINUTES */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              whileHover={{ y: -5 }}
-              className="group relative lg:col-span-2 bg-[#0c0e18]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 overflow-hidden shadow-2xl flex flex-col justify-between"
+              whileHover={{ y: -4 }}
+              className="group relative bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/20"
             >
-              <div className="absolute inset-0 pointer-events-none z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <NeonBorder color="#f59e0b" rounded={24} thickness={3} borderSize={45} glow={80} speed={15} />
-              </div>
               <div className="relative z-10">
-                <div className="flex items-center justify-between gap-3 mb-6">
-                  <span className="text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400">
-                    04 — READY IN MINUTES
-                  </span>
-                  <span className="text-xl">⚡</span>
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16">
+                  <Clock className="w-5 h-5 text-amber-400" />
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-3">
+                <div className="text-[11px] font-bold uppercase tracking-widest text-amber-400/90 mb-1">
+                  04 — READY IN MINUTES
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
                   Not Weeks
                 </h3>
-                <p className="text-sm sm:text-base text-gray-300 font-normal leading-relaxed max-w-xl">
-                  Start with a premium template, add your business details and launch in minutes. No lengthy agency discovery meetings or drawn-out timelines.
+                <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
+                  Start with a premium template, add your business details and launch in minutes.
                 </p>
-              </div>
-              <div className="mt-8 pt-6 border-t border-white/10 flex items-center gap-3 text-xs font-bold text-amber-400">
-                <span>Instant Turnaround</span>
-                <span>•</span>
-                <span>Zero Coding Required</span>
-                <span>•</span>
-                <span>Live in &lt; 5 Mins</span>
               </div>
             </motion.div>
 
-            {/* Card 5: 05 — SAVE THOUSANDS OF DOLLARS (Span 2 on lg) */}
+            {/* Card 5: 06 — EVERYTHING INCLUDED */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.25 }}
-              whileHover={{ y: -5 }}
-              className="group relative lg:col-span-2 bg-[#0c0e18]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 overflow-hidden shadow-2xl flex flex-col justify-between"
+              whileHover={{ y: -4 }}
+              className="group relative bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/20"
             >
-              <div className="absolute inset-0 pointer-events-none z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <NeonBorder color="#10b981" rounded={24} thickness={3} borderSize={45} glow={80} speed={15} />
-              </div>
               <div className="relative z-10">
-                <div className="flex items-center justify-between gap-3 mb-6">
-                  <span className="text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-                    05 — SAVE THOUSANDS OF DOLLARS
-                  </span>
-                  <span className="text-xl">💰</span>
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16">
+                  <Globe className="w-5 h-5 text-cyan-400" />
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-3">
-                  $5,000–$10,000+
+                <div className="text-[11px] font-bold uppercase tracking-widest text-cyan-400/90 mb-1">
+                  06 — EVERYTHING INCLUDED
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2">
+                  Hosting + SSL + Domain
                 </h3>
-                <p className="text-sm sm:text-base text-gray-300 font-normal leading-relaxed max-w-xl">
-                  Create a professional website without the traditional agency design and development cost. Get enterprise-grade visual aesthetics at a fraction of the price.
+                <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
+                  Get the infrastructure you need to launch, host and secure your website in one place.
                 </p>
-              </div>
-              <div className="mt-8 pt-6 border-t border-white/10 flex items-center gap-3 text-xs font-bold text-emerald-400">
-                <span>Save 90%+ On Dev Costs</span>
-                <span>•</span>
-                <span>No Monthly Retainers</span>
-                <span>•</span>
-                <span>Full Ownership</span>
               </div>
             </motion.div>
 
-            {/* Card 6: 06 — EVERYTHING INCLUDED */}
+            {/* Card 6: 05 — SAVE THOUSANDS OF DOLLARS (Span 3 / Full Width on lg with Subtle Radial Mist) */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              whileHover={{ y: -5 }}
-              className="group relative bg-[#0c0e18]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 overflow-hidden shadow-2xl flex flex-col justify-between"
+              whileHover={{ y: -4 }}
+              className="group relative lg:col-span-3 bg-[radial-gradient(ellipse_at_top_left,_rgba(16,185,129,0.08),_#0d0f12_60%)] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col sm:flex-row sm:items-center justify-between gap-6 transition-all duration-300 hover:border-white/20"
             >
-              <div className="absolute inset-0 pointer-events-none z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <NeonBorder color="#3b82f6" rounded={24} thickness={3} borderSize={45} glow={80} speed={15} />
-              </div>
-              <div className="relative z-10">
-                <div className="flex items-center justify-between gap-3 mb-6">
-                  <span className="text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400">
-                    06 — EVERYTHING INCLUDED
-                  </span>
-                  <span className="text-xl">🚀</span>
+              <div className="relative z-10 max-w-2xl">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-6">
+                  <DollarSign className="w-5 h-5 text-emerald-400" />
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-3">
-                  Hosting + SSL + Domain
+                <div className="text-[11px] font-bold uppercase tracking-widest text-emerald-400/90 mb-1">
+                  05 — SAVE THOUSANDS OF DOLLARS
+                </div>
+                <h3 className="text-xl sm:text-3xl font-bold text-white tracking-tight mb-2">
+                  Save $5,000–$10,000+ On Agency Builds
                 </h3>
-                <p className="text-sm sm:text-base text-gray-300 font-normal leading-relaxed">
-                  Get the infrastructure you need to launch, host and secure your website in one place with global CDN and automated SSL certificates.
+                <p className="text-sm sm:text-base text-gray-400 font-normal leading-relaxed">
+                  Create a high-converting, animated professional website without the traditional agency design and development cost. Full ownership with zero lock-in.
                 </p>
               </div>
-              <div className="mt-8 pt-6 border-t border-white/10 flex items-center gap-3 text-xs font-bold text-blue-400">
-                <span>Free Subdomain</span>
-                <span>•</span>
-                <span>Auto SSL Security</span>
+
+              <div className="relative z-10 shrink-0 flex flex-col sm:items-end gap-2 pt-4 sm:pt-0 border-t sm:border-t-0 border-white/[0.08]">
+                <span className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight">$0 Upfront</span>
+                <span className="text-xs font-semibold text-gray-400">Generate & Preview Free</span>
               </div>
             </motion.div>
 

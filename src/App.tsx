@@ -19,6 +19,9 @@ import { AiBuilderPage } from './pages/AiBuilderPage';
 import { GeneratedSitePage } from './pages/GeneratedSitePage';
 import { PublishedSite } from './pages/PublishedSite';
 import { ProtectedPage } from './components/ProtectedPage';
+import { TermsPage } from './pages/TermsPage';
+import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { ContactUsPage } from './pages/ContactUsPage';
 
 function Portfolio() {
   const [isLoading, setIsLoading] = useState(true);
@@ -119,6 +122,12 @@ function App() {
               <AiBuilderPage />
             </ProtectedPage>
           } />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/terms-and-conditions" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPolicyPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/contact" element={<ContactUsPage />} />
+          <Route path="/contact-us" element={<ContactUsPage />} />
           <Route path="/generated-site" element={<GeneratedSitePage />} />
         </Routes>
       </Router>

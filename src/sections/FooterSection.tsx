@@ -62,9 +62,11 @@ export const FooterSection: React.FC = () => {
     { name: "About", href: "/#about" },
     { name: "Our Studio", href: "/#services" },
     { name: "Projects", href: "/#projects" },
-    { name: "Contact", href: "/#contact" },
     { name: "Basic vs Exclusive", href: "/basic_vs_exclusive" },
-    { name: "AI Website Builder", href: "/ai-builder" }
+    { name: "AI Website Builder", href: "/ai-builder" },
+    { name: "Contact Us", href: "/contact" },
+    { name: "Terms & Conditions", href: "/terms" },
+    { name: "Privacy Policy", href: "/privacy" }
   ];
 
   return (
@@ -223,10 +225,17 @@ export const FooterSection: React.FC = () => {
         {/* Bottom Bar: Copyright & Scroll to Top */}
         <div className="flex flex-col sm:flex-row justify-between items-center pt-8 gap-6 relative z-10">
           
-          {/* Copyright text */}
-          <div className="text-xs sm:text-sm font-light text-[var(--text-primary)]/40 text-center sm:text-left order-2 sm:order-1">
-            <p>© {currentYear} Digifox 5D. All rights reserved.</p>
-            <p className="mt-1 flex items-center justify-center sm:justify-start gap-1 text-[10px] text-[var(--text-primary)]/30">
+          {/* Copyright text & Legal Links */}
+          <div className="text-xs sm:text-sm font-light text-[var(--text-primary)]/40 text-center sm:text-left order-2 sm:order-1 flex flex-col gap-1.5">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 sm:gap-4 text-xs font-semibold text-[var(--text-secondary)]">
+              <a href="/terms" className="hover:text-[var(--text-strong)] transition-colors">Terms & Conditions</a>
+              <span>•</span>
+              <a href="/privacy" className="hover:text-[var(--text-strong)] transition-colors">Privacy Policy</a>
+              <span>•</span>
+              <a href="/contact" className="hover:text-[var(--text-strong)] transition-colors">Contact Us</a>
+            </div>
+            <p className="mt-1">© {currentYear} Digifox 5D. All rights reserved.</p>
+            <p className="flex items-center justify-center sm:justify-start gap-1 text-[10px] text-[var(--text-primary)]/30">
               <Globe size={10} /> Crafted with React, Tailwind & Framer Motion
             </p>
           </div>

@@ -5,10 +5,10 @@ import { Sparkles, Wand2, Palette, MessageSquare, Rocket, ArrowRight } from 'luc
 export const StepsProgressBarSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Bind scroll progress across the entire 5 steps container
+  // Bind scroll progress across the entire 5 steps container from start to finish
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start 85%', 'end 60%']
+    offset: ['start 85%', 'end 85%']
   });
 
   // Master animated progressive beam width (horizontal) & height (vertical)
@@ -139,7 +139,7 @@ export const StepsProgressBarSection: React.FC = () => {
   ];
 
   return (
-    <div ref={containerRef} className="mb-24 pt-10 pb-8 border-t border-[var(--border-strong)] relative">
+    <div ref={containerRef} className="mb-24 pt-10 pb-16 border-t border-[var(--border-strong)] relative">
       
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto mb-10">
@@ -300,23 +300,25 @@ export const StepsProgressBarSection: React.FC = () => {
           })}
         </div>
 
-        {/* Right-Side Vertical Progress Rail on Mobile (< sm/md) - Sticky throughout all 5 cards */}
-        <div className="flex sm:hidden flex-col items-center justify-between sticky top-24 self-start h-[calc(100vh-140px)] max-h-[500px] min-h-[380px] w-9 py-4 px-1 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl shrink-0 z-30">
-          {/* Step 1 Node */}
-          <span className="text-[10px] font-extrabold font-mono text-blue-500">01</span>
-          <span className="text-[8px] font-mono text-indigo-400">02</span>
-          
-          {/* Vertical Track */}
-          <div className="relative w-2 flex-1 my-2 bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden border border-black/10 dark:border-white/10">
-            <motion.div 
-              style={{ height: masterProgressHeight }}
-              className="w-full bg-gradient-to-b from-blue-500 via-indigo-500 via-purple-500 via-emerald-500 to-amber-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.8)]"
-            />
+        {/* Right-Side Vertical Progress Rail on Mobile (< sm) - Sticky throughout all 5 cards until completion */}
+        <div className="flex sm:hidden w-10 shrink-0 relative">
+          <div className="sticky top-28 h-[calc(100vh-180px)] max-h-[520px] min-h-[380px] w-10 py-4 px-1.5 rounded-2xl bg-[var(--bg-surface)]/95 backdrop-blur-md border border-[var(--border-strong)] shadow-2xl flex flex-col items-center justify-between z-30">
+            {/* Step 1 Node */}
+            <span className="text-[10px] font-black font-mono text-blue-500">01</span>
+            <span className="text-[9px] font-bold font-mono text-indigo-400">02</span>
+            <span className="text-[9px] font-bold font-mono text-purple-400">03</span>
+            <span className="text-[9px] font-bold font-mono text-emerald-400">04</span>
+            {/* Step 5 Node */}
+            <span className="text-[10px] font-black font-mono text-amber-500">05</span>
+            
+            {/* Centered Vertical Track overlay */}
+            <div className="absolute inset-y-12 w-2 left-1/2 -translate-x-1/2 bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden border border-black/10 dark:border-white/10 -z-10">
+              <motion.div 
+                style={{ height: masterProgressHeight }}
+                className="w-full bg-gradient-to-b from-blue-500 via-indigo-500 via-purple-500 via-emerald-500 to-amber-500 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.9)]"
+              />
+            </div>
           </div>
-
-          <span className="text-[8px] font-mono text-emerald-400">04</span>
-          {/* Step 5 Node */}
-          <span className="text-[10px] font-extrabold font-mono text-amber-500">05</span>
         </div>
 
       </div>

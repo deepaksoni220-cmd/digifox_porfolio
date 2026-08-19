@@ -9,6 +9,7 @@ import { ThemeToggle } from '../components/ThemeToggle';
 import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown, Layers, Wand2, Coins, Orbit } from 'lucide-react';
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
 import CursorGrid from '../components/ui/CursorGrid';
+import { StepsProgressBarSection } from '../components/builder/StepsProgressBarSection';
 
 export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -1858,141 +1859,8 @@ export const AiBuilderPage: React.FC = () => {
               />
             </div>
 
-            {/* 5 Easy Steps Process Section */}
-            <div className="mb-16 pt-8 border-t border-[var(--border-strong)]">
-              <div className="text-center max-w-3xl mx-auto mb-10">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-3">
-                  <span>⚡</span>
-                  <span>How It Works</span>
-                </div>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-[var(--text-strong)]">
-                  Build & Launch in <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">5 Easy Steps</span>
-                </h2>
-                <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-2">
-                  From initial concept to a published, high-converting live website in under 5 minutes.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
-                {[
-                  {
-                    step: '01',
-                    title: 'Prompt or Pick Design',
-                    desc: 'Describe your business idea to the AI or select a pre-made 3D/2D interactive template.',
-                    badge: 'Step 1',
-                    accent: 'from-blue-500 to-cyan-400',
-                    borderGlow: 'hover:border-blue-500/50 hover:shadow-[0_8px_25px_rgba(59,130,246,0.15)]'
-                  },
-                  {
-                    step: '02',
-                    title: 'Instant AI Generation',
-                    desc: 'In under 60 seconds, AI generates your full website with custom copy, colors, and layout.',
-                    badge: 'Step 2',
-                    accent: 'from-indigo-500 to-blue-500',
-                    borderGlow: 'hover:border-indigo-500/50 hover:shadow-[0_8px_25px_rgba(99,102,241,0.15)]'
-                  },
-                  {
-                    step: '03',
-                    title: 'Live Inline Customization',
-                    desc: 'Click on any heading, text, or image in the live preview to customize fonts, styling, and content.',
-                    badge: 'Step 3',
-                    accent: 'from-purple-500 to-indigo-500',
-                    borderGlow: 'hover:border-purple-500/50 hover:shadow-[0_8px_25px_rgba(168,85,247,0.15)]'
-                  },
-                  {
-                    step: '04',
-                    title: 'Add WhatsApp & Logo',
-                    desc: 'Connect your direct WhatsApp lead button and company logo so inquiries come straight to you.',
-                    badge: 'Step 4',
-                    accent: 'from-emerald-500 to-teal-400',
-                    borderGlow: 'hover:border-emerald-500/50 hover:shadow-[0_8px_25px_rgba(16,185,129,0.15)]'
-                  },
-                  {
-                    step: '05',
-                    title: '1-Click Live Publish',
-                    desc: 'Publish instantly with automated SSL security to a free custom subdomain or custom domain.',
-                    badge: 'Step 5',
-                    accent: 'from-amber-500 to-orange-500',
-                    borderGlow: 'hover:border-amber-500/50 hover:shadow-[0_8px_25px_rgba(245,158,11,0.15)]'
-                  }
-                ].map((item, idx) => (
-                  <motion.div 
-                    key={idx} 
-                    initial={{ opacity: 0, y: 25 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-30px" }}
-                    transition={{ duration: 0.45, delay: idx * 0.1, ease: "easeOut" }}
-                    whileHover={{ y: -6 }}
-                    className="relative flex flex-col group cursor-default"
-                  >
-                    <div
-                      className={`relative bg-[var(--bg-surface)] border border-[var(--border-subtle)] ${item.borderGlow} rounded-2xl p-5 flex flex-col justify-between h-full transition-all duration-300 shadow-md group-hover:shadow-[0_12px_30px_rgba(59,130,246,0.15)] z-10`}
-                    >
-                      <div>
-                        {/* Step Number & Badge */}
-                        <div className="flex items-center justify-between gap-2 mb-4">
-                          <motion.span 
-                            whileHover={{ scale: 1.1 }}
-                            className={`text-2xl font-black bg-gradient-to-r ${item.accent} bg-clip-text text-transparent inline-block`}
-                          >
-                            {item.step}
-                          </motion.span>
-                          <span className="text-[10px] font-black uppercase tracking-wider text-[var(--text-secondary)] bg-[var(--bg-base)] px-2.5 py-0.5 rounded-full border border-[var(--border-subtle)]">
-                            {item.badge}
-                          </span>
-                        </div>
-
-                        <h3 className="text-sm sm:text-base font-bold text-[var(--text-strong)] leading-snug mb-2 group-hover:text-blue-400 transition-colors">
-                          {item.title}
-                        </h3>
-
-                        <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
-                          {item.desc}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Desktop Right Connecting Arrow */}
-                    {idx < 4 && (
-                      <motion.div 
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.3 + idx * 0.1 }}
-                        className="hidden lg:flex absolute -right-4.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-[var(--bg-base)] border border-blue-500/40 items-center justify-center text-blue-400 shadow-md"
-                      >
-                        <motion.svg 
-                          animate={{ x: [0, 3, 0] }}
-                          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                          className="w-3.5 h-3.5" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke="currentColor"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                        </motion.svg>
-                      </motion.div>
-                    )}
-
-                    {/* Mobile Down Connecting Arrow */}
-                    {idx < 4 && (
-                      <div className="flex lg:hidden justify-center py-2 text-blue-400/70">
-                        <motion.svg 
-                          animate={{ y: [0, 3, 0] }}
-                          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                          className="w-4 h-4" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke="currentColor"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
-                        </motion.svg>
-                      </div>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+            {/* 5 Easy Steps Process Section with Progressive Bar Animations */}
+            <StepsProgressBarSection />
 
             {error && (
               <div className="text-red-500 text-sm font-medium bg-red-500/10 p-4 rounded-xl border border-red-500/20 w-full">

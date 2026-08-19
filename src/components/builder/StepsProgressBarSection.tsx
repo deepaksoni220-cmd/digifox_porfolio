@@ -275,7 +275,7 @@ export const StepsProgressBarSection: React.FC = () => {
                 {/* Card Bottom: Animated Scroll-Driven Progress Bar */}
                 <div className="relative z-10 pt-4 mt-4 border-t border-[var(--border-subtle)]">
                   <div className="flex items-center justify-between text-[11px] font-bold text-[var(--text-secondary)] mb-2 font-mono">
-                    <span className="uppercase tracking-wider text-[10px] text-slate-500 dark:text-slate-400">Scroll Phase</span>
+                    <span className="uppercase tracking-wider text-[10px] text-slate-500 dark:text-slate-400">Step {item.step}</span>
                     <span className="font-extrabold text-[12px]" style={{ color: item.color }}>{item.progressLabel}</span>
                   </div>
                   

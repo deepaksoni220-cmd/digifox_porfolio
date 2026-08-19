@@ -1714,6 +1714,7 @@ export const AiBuilderPage: React.FC = () => {
                         className="bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-xl px-3 py-2 text-xs text-[var(--text-strong)] focus:border-[#3b82f6] outline-none disabled:opacity-50 font-medium shadow-md"
                       >
                         <option value="Local Business">Local Business</option>
+                        <option value="Restaurant & Food">Restaurant & Food</option>
                         <option value="Portfolio">Portfolio</option>
                         <option value="Factory / Manufacturing">Factory / Manufacturing</option>
                         <option value="E-Commerce Store">E-Commerce Store</option>

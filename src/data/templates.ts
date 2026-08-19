@@ -399,5 +399,52 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
       primaryColor: "#FF4D14",
       secondaryColor: "#050505"
     }
+  },
+  intikBurgers: {
+    websiteType: "Restaurant & Food",
+    templateStyle: "intik_burgers",
+    category: "3d",
+    previewUrl: "/templates/intik-burgers/index.html",
+    shortDescription: "Interactive 3D burger assembly experience with loaded fries, signature menu reveal, and direct ordering.",
+    thumbnailUrl: "/templates/intik-burgers/assets/hero-burger.webp",
+    hero: {
+      title: "INTIK Burgers",
+      subtitle: "Born to Burger — Premium gourmet burgers, loaded fries, and signature sauces.",
+      ctaText: "Explore Menu",
+      imagePrompt: "gourmet double smash cheeseburger floating cinematic studio lighting"
+    },
+    about: {
+      heading: "Made, Not Assembled",
+      description: "Fresh crunch, flame-grilled beef, molten cheese and house sauces crafted with zero shortcuts.",
+      imagePrompt: "chef preparing artisan smash burger with molten cheese"
+    },
+    items: [
+      {
+        title: "Cruncher Burger",
+        description: "Crispy golden chicken, melted cheese, and classic house sauce.",
+        icon: "🍔",
+        price: "400 DZD"
+      },
+      {
+        title: "Cheesy AF",
+        description: "Maximum melt with crispy mozzarella patty and rich cheese sauce.",
+        icon: "🧀",
+        price: "800 DZD"
+      },
+      {
+        title: "Loaded Fries",
+        description: "Golden fries topped with smoky pastrami, chorizo sauce, and gratinated cheese.",
+        icon: "🍟",
+        price: "700 DZD"
+      }
+    ],
+    contact: {
+      heading: "Craving a Real Burger?",
+      buttonText: "Order Now"
+    },
+    theme: {
+      primaryColor: "#FF7B16",
+      secondaryColor: "#0F1115"
+    }
   }
 };

@@ -1600,18 +1600,18 @@ export const AiBuilderPage: React.FC = () => {
       />
 
       {/* Floating Top Header with Logo, Nav Links & ThemeToggle for all screen sizes */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 py-3 bg-[var(--bg-base)]/85 backdrop-blur-md border-b border-[var(--border-strong)] shadow-lg shadow-black/10">
-        <a href="/" className="flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[var(--text-strong)] hover:text-[#3b82f6] transition-colors">
+      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 py-3 bg-black/60 backdrop-blur-md border-b border-white/10 shadow-lg shadow-black/20 text-white">
+        <a href="/" className="flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-widest text-white hover:text-[#3b82f6] transition-colors">
           <span>←</span>
           <span>DIGIFOX</span>
         </a>
         <div className="flex items-center gap-3 sm:gap-5">
-          <div className="flex items-center gap-3 sm:gap-4 text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)]">
-            <a href="/ai-builder/contact" className="hover:text-[var(--text-strong)] transition-colors">Contact Us</a>
-            <a href="/ai-builder/terms" className="hover:text-[var(--text-strong)] transition-colors hidden sm:inline-block">Terms</a>
-            <a href="/ai-builder/privacy" className="hover:text-[var(--text-strong)] transition-colors hidden sm:inline-block">Privacy</a>
+          <div className="flex items-center gap-3 sm:gap-4 text-xs font-bold uppercase tracking-wider text-white/70">
+            <a href="/ai-builder/contact" className="hover:text-white transition-colors">Contact Us</a>
+            <a href="/ai-builder/terms" className="hover:text-white transition-colors hidden sm:inline-block">Terms</a>
+            <a href="/ai-builder/privacy" className="hover:text-white transition-colors hidden sm:inline-block">Privacy</a>
           </div>
-          <div className="w-px h-4 bg-white/10" />
+          <div className="w-px h-4 bg-white/20" />
           <ThemeToggle />
         </div>
       </header>
@@ -1620,14 +1620,14 @@ export const AiBuilderPage: React.FC = () => {
       <div className="absolute top-0 left-0 right-0 h-[850px] overflow-hidden pointer-events-none z-0 select-none">
         <video 
           src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260325_120549_0cd82c36-56b3-4dd9-b190-069cfc3a623f.mp4" 
-          className="w-full h-full object-cover opacity-100 dark:opacity-50"
+          className="w-full h-full object-cover opacity-90 dark:opacity-50" 
           autoPlay 
           muted 
           loop 
           playsInline 
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--bg-base)] dark:from-transparent dark:via-[var(--bg-base)]/40 dark:to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60 dark:from-transparent dark:via-[var(--bg-base)]/40 dark:to-[var(--bg-base)]" />
       </div>
 
       <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 relative z-10">

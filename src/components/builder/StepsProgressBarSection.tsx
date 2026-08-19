@@ -8,12 +8,16 @@ export const StepsProgressBarSection: React.FC = () => {
   // Bind scroll progress across the entire 5 steps container from start to finish
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start 85%', 'end 85%']
+    offset: ['start 80%', 'end 20%']
   });
 
   // Master animated progressive beam width (horizontal) & height (vertical)
   const masterProgressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
   const masterProgressHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+
+  // Floating mobile pill visibility (fades in when entering section, stays sticky throughout all 5 cards, fades out when leaving)
+  const mobilePillOpacity = useTransform(scrollYProgress, [0, 0.05, 0.95, 1], [0, 1, 1, 0]);
+  const mobilePillScale = useTransform(scrollYProgress, [0, 0.05, 0.95, 1], [0.8, 1, 1, 0.8]);
 
   // Step 1 Scroll Transforms (0% -> 20%)
   const step1Y = useTransform(scrollYProgress, [0, 0.2], [20, 0]);
@@ -171,8 +175,7 @@ export const StepsProgressBarSection: React.FC = () => {
             
             {/* Right Side Status on Mobile & Desktop */}
             <div className="flex items-center justify-between sm:justify-end gap-2 font-mono text-xs font-bold text-blue-500 dark:text-blue-400">
-              <span className="text-[11px] sm:text-xs">Scroll Responsive</span>
-              <span className="text-emerald-500 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+              <span className="text-emerald-500 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 text-[11px] sm:text-xs">
                 Live Active ✓
               </span>
             </div>
@@ -207,121 +210,118 @@ export const StepsProgressBarSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Grid Wrapper with Right-Side Sticky Progress Rail on Mobile */}
-      <div className="relative flex flex-row items-stretch gap-2.5 sm:gap-5">
-        
-        {/* 5 Step Cards Grid */}
-        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5 pb-6 [perspective:1200px]">
-          {stepsData.map((item, idx) => {
-            const Icon = item.icon;
+      {/* 5 Step Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5 pb-6 [perspective:1200px] pr-11 sm:pr-0">
+        {stepsData.map((item, idx) => {
+          const Icon = item.icon;
 
-            return (
-              <motion.div 
-                key={idx} 
-                style={{
-                  y: item.y,
-                  scale: item.scale,
-                  opacity: item.opacity,
-                  transformStyle: "preserve-3d"
-                }}
-                whileHover={{ y: -6, scale: 1.02 }}
-                className="relative flex flex-col group cursor-default will-change-transform"
+          return (
+            <motion.div 
+              key={idx} 
+              style={{
+                y: item.y,
+                scale: item.scale,
+                opacity: item.opacity,
+                transformStyle: "preserve-3d"
+              }}
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="relative flex flex-col group cursor-default will-change-transform"
+            >
+              <div
+                className={`relative bg-[var(--bg-surface)] border ${item.borderActive} rounded-3xl p-5 sm:p-6 flex flex-col justify-between min-h-[290px] sm:min-h-[320px] transition-all duration-300 shadow-md hover:shadow-xl z-10`}
               >
-                <div
-                  className={`relative bg-[var(--bg-surface)] border ${item.borderActive} rounded-3xl p-5 sm:p-6 flex flex-col justify-between min-h-[290px] sm:min-h-[320px] transition-all duration-300 shadow-md hover:shadow-xl z-10`}
+                {/* Scroll-Driven Glow Aura */}
+                <motion.div 
+                  style={{ opacity: item.glowOpacity }}
+                  className="absolute inset-0 pointer-events-none rounded-3xl overflow-hidden"
                 >
-                  {/* Scroll-Driven Glow Aura */}
-                  <motion.div 
-                    style={{ opacity: item.glowOpacity }}
-                    className="absolute inset-0 pointer-events-none rounded-3xl overflow-hidden"
-                  >
-                    <div 
-                      className="w-full h-full"
-                      style={{
-                        background: `radial-gradient(ellipse at top left, ${item.bgGlow}, transparent 70%)`
-                      }}
-                    />
-                  </motion.div>
+                  <div 
+                    className="w-full h-full"
+                    style={{
+                      background: `radial-gradient(ellipse at top left, ${item.bgGlow}, transparent 70%)`
+                    }}
+                  />
+                </motion.div>
 
-                  {/* Card Top & Body */}
-                  <div className="relative z-10">
-                    {/* Step Number & Icon Header */}
-                    <div className="flex items-center justify-between gap-2 mb-4">
-                      <div className="flex items-center gap-2.5">
-                        <div 
-                          className="w-9 h-9 rounded-xl flex items-center justify-center bg-black/5 dark:bg-white/[0.08] border border-black/10 dark:border-white/[0.15] text-[var(--text-strong)] shadow-sm group-hover:scale-110 transition-transform"
-                        >
-                          <Icon size={17} style={{ color: item.color }} />
-                        </div>
-                        <span className={`text-xl font-black bg-gradient-to-r ${item.accent} bg-clip-text text-transparent font-mono`}>
-                          {item.step}
-                        </span>
+                {/* Card Top & Body */}
+                <div className="relative z-10">
+                  {/* Step Number & Icon Header */}
+                  <div className="flex items-center justify-between gap-2 mb-4">
+                    <div className="flex items-center gap-2.5">
+                      <div 
+                        className="w-9 h-9 rounded-xl flex items-center justify-center bg-black/5 dark:bg-white/[0.08] border border-black/10 dark:border-white/[0.15] text-[var(--text-strong)] shadow-sm group-hover:scale-110 transition-transform"
+                      >
+                        <Icon size={17} style={{ color: item.color }} />
                       </div>
-
-                      <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-black/[0.04] dark:bg-[var(--bg-base)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
-                        {item.badge}
+                      <span className={`text-xl font-black bg-gradient-to-r ${item.accent} bg-clip-text text-transparent font-mono`}>
+                        {item.step}
                       </span>
                     </div>
 
-                    <h3 className="text-sm sm:text-base font-bold text-[var(--text-strong)] leading-snug mb-2 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
-                      {item.title}
-                    </h3>
-
-                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
-                      {item.desc}
-                    </p>
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-black/[0.04] dark:bg-[var(--bg-base)] text-[var(--text-secondary)] border border-[var(--border-subtle)]">
+                      {item.badge}
+                    </span>
                   </div>
 
-                  {/* Card Bottom: Animated Scroll-Driven Progress Bar */}
-                  <div className="relative z-10 pt-4 mt-4 border-t border-[var(--border-subtle)]">
-                    <div className="flex items-center justify-between text-[11px] font-bold text-[var(--text-secondary)] mb-2 font-mono">
-                      <span className="uppercase tracking-wider text-[10px] text-slate-500 dark:text-slate-400">Scroll Phase</span>
-                      <span className="font-extrabold text-[12px]" style={{ color: item.color }}>{item.progressLabel}</span>
-                    </div>
-                    
-                    {/* High contrast track */}
-                    <div className="h-2 w-full bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden border border-black/10 dark:border-white/10 p-[1px]">
-                      <motion.div 
-                        style={{ width: item.barWidth }}
-                        className={`h-full bg-gradient-to-r ${item.accent} rounded-full shadow-[0_0_8px_rgba(59,130,246,0.6)]`}
-                      />
-                    </div>
-                  </div>
+                  <h3 className="text-sm sm:text-base font-bold text-[var(--text-strong)] leading-snug mb-2 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
+                    {item.desc}
+                  </p>
                 </div>
 
-                {/* Connecting Desktop Arrow */}
-                {idx < 4 && (
-                  <div className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 z-20 w-6 h-6 rounded-full bg-[var(--bg-surface)] border border-[var(--border-strong)] items-center justify-center text-[var(--text-secondary)] group-hover:text-blue-400 group-hover:border-blue-500/40 shadow-sm transition-all">
-                    <ArrowRight size={12} />
+                {/* Card Bottom: Animated Scroll-Driven Progress Bar */}
+                <div className="relative z-10 pt-4 mt-4 border-t border-[var(--border-subtle)]">
+                  <div className="flex items-center justify-between text-[11px] font-bold text-[var(--text-secondary)] mb-2 font-mono">
+                    <span className="uppercase tracking-wider text-[10px] text-slate-500 dark:text-slate-400">Scroll Phase</span>
+                    <span className="font-extrabold text-[12px]" style={{ color: item.color }}>{item.progressLabel}</span>
                   </div>
-                )}
-              </motion.div>
-            );
-          })}
-        </div>
+                  
+                  {/* High contrast track */}
+                  <div className="h-2 w-full bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden border border-black/10 dark:border-white/10 p-[1px]">
+                    <motion.div 
+                      style={{ width: item.barWidth }}
+                      className={`h-full bg-gradient-to-r ${item.accent} rounded-full shadow-[0_0_8px_rgba(59,130,246,0.6)]`}
+                    />
+                  </div>
+                </div>
+              </div>
 
-        {/* Right-Side Vertical Progress Rail on Mobile (< sm) - Sticky throughout all 5 cards until completion */}
-        <div className="flex sm:hidden w-10 shrink-0 relative">
-          <div className="sticky top-28 h-[calc(100vh-180px)] max-h-[520px] min-h-[380px] w-10 py-4 px-1.5 rounded-2xl bg-[var(--bg-surface)]/95 backdrop-blur-md border border-[var(--border-strong)] shadow-2xl flex flex-col items-center justify-between z-30">
-            {/* Step 1 Node */}
-            <span className="text-[10px] font-black font-mono text-blue-500">01</span>
-            <span className="text-[9px] font-bold font-mono text-indigo-400">02</span>
-            <span className="text-[9px] font-bold font-mono text-purple-400">03</span>
-            <span className="text-[9px] font-bold font-mono text-emerald-400">04</span>
-            {/* Step 5 Node */}
-            <span className="text-[10px] font-black font-mono text-amber-500">05</span>
-            
-            {/* Centered Vertical Track overlay */}
-            <div className="absolute inset-y-12 w-2 left-1/2 -translate-x-1/2 bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden border border-black/10 dark:border-white/10 -z-10">
-              <motion.div 
-                style={{ height: masterProgressHeight }}
-                className="w-full bg-gradient-to-b from-blue-500 via-indigo-500 via-purple-500 via-emerald-500 to-amber-500 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.9)]"
-              />
-            </div>
-          </div>
-        </div>
-
+              {/* Connecting Desktop Arrow */}
+              {idx < 4 && (
+                <div className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 z-20 w-6 h-6 rounded-full bg-[var(--bg-surface)] border border-[var(--border-strong)] items-center justify-center text-[var(--text-secondary)] group-hover:text-blue-400 group-hover:border-blue-500/40 shadow-sm transition-all">
+                  <ArrowRight size={12} />
+                </div>
+              )}
+            </motion.div>
+          );
+        })}
       </div>
+
+      {/* Floating Right-Side Vertical Progress Rail on Mobile (< sm) - Truly Sticky throughout all 5 cards */}
+      <motion.div 
+        style={{ 
+          opacity: mobilePillOpacity, 
+          scale: mobilePillScale 
+        }}
+        className="fixed right-2 top-1/2 -translate-y-1/2 z-40 sm:hidden flex flex-col items-center justify-between h-[280px] w-9 py-3 px-1 rounded-full bg-[var(--bg-surface)]/95 backdrop-blur-lg border border-[var(--border-strong)] shadow-[0_10px_35px_rgba(0,0,0,0.3)] pointer-events-none"
+      >
+        {/* Step 1 Node */}
+        <span className="text-[10px] font-black font-mono text-blue-500">01</span>
+        
+        {/* Vertical Track */}
+        <div className="relative w-1.5 flex-1 my-2 bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden border border-black/10 dark:border-white/10">
+          <motion.div 
+            style={{ height: masterProgressHeight }}
+            className="w-full bg-gradient-to-b from-blue-500 via-indigo-500 via-purple-500 via-emerald-500 to-amber-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.9)]"
+          />
+        </div>
+
+        {/* Step 5 Node */}
+        <span className="text-[10px] font-black font-mono text-amber-500">05</span>
+      </motion.div>
 
     </div>
   );

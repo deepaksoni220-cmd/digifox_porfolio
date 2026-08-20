@@ -446,5 +446,50 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
       primaryColor: "#FF7B16",
       secondaryColor: "#0F1115"
     }
+  },
+  giftsApp: {
+    websiteType: "Mobile & Web App",
+    templateStyle: "gifts_app",
+    category: "3d",
+    previewUrl: "/templates/lesaa/www.lesa.app/www.lesa.app/index.html",
+    shortDescription: "Playful reading and gaming adventure application with animated characters and rich rewards.",
+    thumbnailUrl: "https://framerusercontent.com/images/j7UksNIBHOx3WkHFQfRE3XtU68.png",
+    hero: {
+      title: "DIGIFOX – The Reading Game",
+      subtitle: "The most fun reading and adventure game for kids. Boost skills through interactive play.",
+      ctaText: "Play Now",
+      imagePrompt: "colorful 3D animated character reading book kids game fantasy magical"
+    },
+    about: {
+      heading: "Why Kids Love DIGIFOX",
+      description: "Interactive missions, personalized stories, and exciting rewards that keep learning fun.",
+      imagePrompt: "cheerful vibrant fantasy game world for kids"
+    },
+    items: [
+      {
+        title: "Interactive Story Missions",
+        description: "Engaging reading adventures designed by educators.",
+        icon: "📖"
+      },
+      {
+        title: "Collectible Rewards",
+        description: "Earn gifts, badges, and unlock custom characters as you read.",
+        icon: "🎁"
+      },
+      {
+        title: "Parent Dashboard",
+        description: "Track progress and celebrate milestones together.",
+        icon: "⭐"
+      }
+    ],
+    contact: {
+      heading: "Ready for the Adventure?",
+      buttonText: "Get Started"
+    },
+    theme: {
+      primaryColor: "#ED2C95",
+      secondaryColor: "#5EEF90"
+    }
   }
 };
+

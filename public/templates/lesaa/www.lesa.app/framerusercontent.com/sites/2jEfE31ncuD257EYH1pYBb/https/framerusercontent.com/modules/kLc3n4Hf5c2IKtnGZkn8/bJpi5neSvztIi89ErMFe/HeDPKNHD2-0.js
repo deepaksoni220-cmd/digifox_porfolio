@@ -1,0 +1,2 @@
+export const v0="ბირგირი";export const v1="ბიარკი";export const v2="თორდისი";
+export const __FramerMetadata__ = {"exports":{"v0":{"type":"variable","annotations":{"framerContractVersion":"1"}},"v2":{"type":"variable","annotations":{"framerContractVersion":"1"}},"v1":{"type":"variable","annotations":{"framerContractVersion":"1"}},"__FramerMetadata__":{"type":"variable"}}}

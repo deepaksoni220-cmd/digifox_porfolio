@@ -1,0 +1,3 @@
+import{jsx as _jsx}from"react/jsx-runtime";import{forwardRef}from"react";import{useEffect}from"react";export function withLogText(Component){return /*#__PURE__*/forwardRef((props,ref)=>{console.log("here");useEffect(()=>{console.log("here1");console.log(props);console.log(ref);const el=ref?.current;if(el){console.log("here2");console.log(el.innerText);}},[]);return /*#__PURE__*/_jsx(Component,{ref:ref,...props});});}
+export const __FramerMetadata__ = {"exports":{"withLogText":{"type":"reactHoc","name":"withLogText","annotations":{"framerContractVersion":"1"}},"__FramerMetadata__":{"type":"variable"}}}
+//# sourceMappingURL=./DynamicWaitlist.map

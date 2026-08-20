@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 13.05 12.05"><path d="M 10.277 0.303 C 10.481 0.507 10.073 0.099 10.277 0.303 Z" transform="translate(0.831 2.838) rotate(-90 5.25 3.25)" fill="rgb(0,0,0)" stroke-width="0.34" stroke="rgb(0,0,0)" stroke-miterlimit="10" stroke-dasharray=""></path></svg>

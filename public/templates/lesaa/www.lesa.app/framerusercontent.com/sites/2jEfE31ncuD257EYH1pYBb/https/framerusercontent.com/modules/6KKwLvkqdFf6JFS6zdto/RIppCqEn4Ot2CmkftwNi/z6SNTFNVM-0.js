@@ -1,0 +1,2 @@
+export const v0="LESA-ს ლოგო";export const v1="კონტაქტი";export const v2="ჩაეწერეთ მოლოდინის სივრცეში";
+export const __FramerMetadata__ = {"exports":{"v2":{"type":"variable","annotations":{"framerContractVersion":"1"}},"v1":{"type":"variable","annotations":{"framerContractVersion":"1"}},"v0":{"type":"variable","annotations":{"framerContractVersion":"1"}},"__FramerMetadata__":{"type":"variable"}}}

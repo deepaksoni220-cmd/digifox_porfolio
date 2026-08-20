@@ -1,0 +1,2 @@
+export const v0="Pers\xf3nuverndaskilm\xe1lar";export const v1="K\xf6kuvirkni";export const v2="Skilm\xe1lar";
+export const __FramerMetadata__ = {"exports":{"v2":{"type":"variable","annotations":{"framerContractVersion":"1"}},"v1":{"type":"variable","annotations":{"framerContractVersion":"1"}},"v0":{"type":"variable","annotations":{"framerContractVersion":"1"}},"__FramerMetadata__":{"type":"variable"}}}

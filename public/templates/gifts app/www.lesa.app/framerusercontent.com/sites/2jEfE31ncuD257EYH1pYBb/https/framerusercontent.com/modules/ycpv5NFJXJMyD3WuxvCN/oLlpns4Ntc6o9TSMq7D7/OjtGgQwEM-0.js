@@ -1,0 +1,2 @@
+import{jsx as _jsx}from"react/jsx-runtime";import{motion}from"framer-motion";import*as React from"react";export const v0=/*#__PURE__*/_jsx(React.Fragment,{children:/*#__PURE__*/_jsx(motion.p,{className:"framer-styles-preset-1g5vnwd","data-styles-preset":"MOD8MRi7s",style:{"--framer-text-color":"var(--extracted-r6o4lv, var(--token-176ce4c1-9054-4a2a-9a0e-720a20ea9355, rgb(253, 251, 253)))"},children:"LESA n\xe1nar"})});
+export const __FramerMetadata__ = {"exports":{"v0":{"type":"variable","annotations":{"framerContractVersion":"1"}},"__FramerMetadata__":{"type":"variable"}}}

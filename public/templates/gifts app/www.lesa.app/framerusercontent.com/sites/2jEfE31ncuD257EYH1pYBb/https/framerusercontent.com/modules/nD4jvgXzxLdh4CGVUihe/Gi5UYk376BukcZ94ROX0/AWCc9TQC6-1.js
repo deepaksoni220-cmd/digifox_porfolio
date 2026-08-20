@@ -1,0 +1,2 @@
+export const v0="კონფიდენციალურობის პოლიტიკა";export const v1="ქუქი-ფაილები";export const v2="წესები და პირობები";
+export const __FramerMetadata__ = {"exports":{"v0":{"type":"variable","annotations":{"framerContractVersion":"1"}},"v1":{"type":"variable","annotations":{"framerContractVersion":"1"}},"v2":{"type":"variable","annotations":{"framerContractVersion":"1"}},"__FramerMetadata__":{"type":"variable"}}}

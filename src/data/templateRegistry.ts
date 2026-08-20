@@ -99,5 +99,26 @@ export const TEMPLATE_REGISTRY: TemplateMetadata[] = [
     sections: ["hero", "about", "items", "contact"],
     previewUrl: "/templates/demo cars vanta/index.html",
     thumbnailUrl: "/templates/demo-cars-vanta.png"
+  },
+  {
+    template_id: "intikBurgers",
+    name: "INTIK Burgers 3D Experience",
+    industries: ["food", "restaurant", "burgers", "hospitality", "takeaway"],
+    styles: ["3d", "interactive", "bold", "dark", "cinematic"],
+    features: ["hero", "burger-assembly", "signature-menu", "loaded-fries", "reviews", "contact"],
+    sections: ["hero", "about", "items", "contact"],
+    previewUrl: "/templates/intik-burgers/index.html",
+    thumbnailUrl: "/templates/intik-burgers/assets/hero-burger.webp"
+  },
+  {
+    template_id: "giftsApp",
+    name: "Lesa Gifts & Adventure App",
+    industries: ["education", "gaming", "kids", "apps", "entertainment", "gifts"],
+    styles: ["playful", "colorful", "interactive", "modern", "3d"],
+    features: ["hero", "interactive-characters", "gameplay-preview", "rewards", "contact"],
+    sections: ["hero", "about", "items", "contact"],
+    previewUrl: "/templates/lesaa/www.lesa.app/www.lesa.app/index.html",
+    thumbnailUrl: "https://framerusercontent.com/images/j7UksNIBHOx3WkHFQfRE3XtU68.png"
   }
 ];
+

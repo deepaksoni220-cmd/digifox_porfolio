@@ -1,0 +1,325 @@
+
+		import * as Framer from "framer";
+import * as React from "react";
+import { createPortal } from "react-dom";
+import * as ReactDOM from "react-dom/client";
+import Template1 from "https://framerusercontent.com/modules/vUpYJpKt4T3AtColOZUO/GaVoXzT3CxWfn2euWYNs/iWQXPJlj1.js";
+
+		const routes = {YnUlfM17T: {elements: {b6BVyxAKT: "blog-section", b6tpJ9DEQ: "timeline3", BQoBITAp3: "frettir-title", EEmEbVemh: "timeline9", EFYjP_WgY: "timeline5", GOwM_S1BC: "timeline6", IwJ3b0RIW: "white-section", jTmqAq_mN: "timeline7", KPaV0evd4: "timeline2", OneqCa2zv: "timeline8", qAdgiAlZ8: "timeline4", WoH2MLOv_: "section-2", XJe1aMVR_: "timeline1"}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/V9v6PyGS1moJIk2evDmO/W8TUbgvdg3cNeh3wLXpj/YnUlfM17T.js")), path: "/"}, YuNS79c0K: {elements: {cdEbsF3bH: "form"}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/ef3oyXWME4SrxVUnMvKJ/qwsOsrUAyNAxYNr0kUBg/YuNS79c0K.js")), path: "/contact-us/general-inquiry", pathLocalized: {sap5GhcSY: "/hafdu-samband/almennt"}}, PVO43ZLPx: {elements: {aHs0iQuf1: "form"}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/b1WUaJ5rBAY996Av3YtK/5QGDZzocc2zww5Mss04i/PVO43ZLPx.js")), path: "/contact-us/support", pathLocalized: {sap5GhcSY: "/hafdu-samband/stydja-lesa"}}, ILNhMlxK6: {elements: {QO2OdWAZk: "form"}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/QamVkE68QQpO7zLcnrpv/e0Sq9Y4cXxGxelCTBHQ3/ILNhMlxK6.js")), path: "/contact-us/feedback-suggestions", pathLocalized: {sap5GhcSY: "/hafdu-samband/lesa-abendingar"}}, IT2X21oZx: {elements: {A8__LuJ30: "privacy-section-10", ccsov3Zdo: "privacy-at-a-glance", DgBTtpbe_: "privacy-section-16-2", EFQTi4UUV: "privacy-section-4", Git3VRx9f: "privacy-section-8", GVgh3giMi: "privacy-section-18-2", gwPywZM9b: "privacy-section-15", gYutayXKE: "privacy-section-20", I0T7Mk2yf: "privacy-section-9", iiu3w1aZB: "privacy-section-2", ijkEU5cez: "privacy-section-16-3", JjWX380AW: "privacy-section-1", kaIV7RPu4: "privacy-section-12", kHcuOQLru: "privacy-section-8-4", kiHERdMs9: "privacy-section-8-2", kjxH6JFAZ: "privacy-section-5", kkd7_JZ5h: "privacy-section-13-1", km08HEpO8: "privacy-section-18-1", KSNtXQa04: "privacy-section-8-3", MPivPozpK: "privacy-section-6", OED6OxOJe: "privacy-section-14", oM2KegFup: "privacy-section-13", P3PD_fFmI: "privacy-section-17", QcaUrLztu: "privacy-section-18", rbRClzxhP: "privacy-section-11", TmDpxrIRg: "privacy-section-7", vEhgcX5TW: "privacy-section-13-2", vyOrxq4yJ: "privacy-section-8-1", W5kwEQFfb: "privacy-section-16-1", WNRW1OOdY: "privacy-section-16", xDpJvce8V: "privacy-plain-language-guides", Y5hHs1uYb: "privacy-section-8-5", yQufRD0R6: "privacy-section-3", ZnewhYS_0: "privacy-section-19"}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/mQze899b4hOHx8BNn9w0/wpvVLmQIUyRw9xmtzql8/IT2X21oZx.js")), path: "/privacy-policy"}, xZuLgothx: {elements: {a7Ws7HP1L: "terms-12-3", AJpU7fKzq: "terms-rewards", BJ9h0mMho: "terms-5-4", BuX6sknJh: "terms-10-4", C741uV_T0: "terms-9-4", cEQ5QYy2i: "terms-child-inputs", cKomCWaTa: "terms-3-6", DUKMaSrVM: "terms-2-5", dwVW6Y5j9: "terms-12-5", eGjnc5YML: "terms-2-3", ehK0yL7Zw: "terms-4-4", EhSBmZKwZ: "terms-2-2", EiPJrkemL: "terms-3-2", EpIteepfN: "terms-3-5", f9Tcqp4Op: "terms-12-2", fCYljfQwZ: "terms-1-3", fsplw7vOK: "terms-account", g3xaaF4jv: "terms-disclaimers", gun_Psl4j: "terms-9-3", H84y0jxl0: "terms-10-3", I6S9e1esS: "terms-termination", i85079KLg: "terms-12-6", ih1dPoFBD: "terms-10-1", Iqa3pUi8H: "terms-7-2", iU2YEq_Cv: "terms-general", jdqqfsTYL: "terms-7-1", jk5uQ9ktN: "terms-4-2", jvCX7n9oz: "terms-12-4", KdMiRxy7r: "terms-3-7", kmza6Q82J: "terms-8-4", kW54brUUn: "terms-4-1", ky37PeiSp: "terms-3-3", LFzvtEGFW: "terms-disputes", lIZRi_QRY: "welcome-to-lesa", mdoEiC6JW: "terms-5-1", mLXwNVfSq: "terms-1-1", nxFqDdfBb: "terms-acceptable-use", O3VAVq7Lf: "terms-contact", O6nAIj1IB: "terms-9-1", OoZyoH3yN: "terms-2-4", pt4IToBov: "terms-introduction", PUuXFE3NB: "terms-7-3", q2VmThWRs: "terms-8-6", qICuaHAoy: "terms-5-2", QuV80MNrF: "terms-1-4", qxSs_uRZv: "terms-5-3", rfUehpo2Y: "terms-10-2", ROgREzIAS: "terms-3-4", rx7sZGrCw: "terms-2-1", rZa5r7QmZ: "terms-7-5", SaYc1bWaZ: "terms-intellectual-property", SdxDamLLx: "terms-3-1", T0QtG87li: "terms-12-1", UJ0MkGkxi: "terms-8-3", Uo7VxxiK0: "terms-8-5", vCAE_jyHg: "terms-8-2", vio7o9QyE: "terms-acknowledgement", Vm89cFhbw: "terms-changes", VYmfN7QPz: "terms-7-4", YHD4Z_BGS: "terms-children-privacy", yZkZKPWKt: "terms-4-3", z3PQ8geLv: "terms-1-2", Z8qA9PXfC: "terms-8-1", zBAyln79V: "terms-9-2"}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/66VGPflulrKT7ZFWDxlu/hB6UbjsMcQkuYS0Yt2CH/xZuLgothx.js")), path: "/terms-and-conditions"}, F892qYpPc: {elements: {}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/AMHQj1f3yTi4GSiUMjmi/A9A54EeDO0EJ7cmGsCj7/F892qYpPc.js")), path: "/cookies", pathLocalized: {sap5GhcSY: "/kokuvirkni"}}, r_BDoxxsA: {elements: {}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/5E0MyymFIY9es81wcTjH/emrdkbcEEGJR5DlHXnwI/r_BDoxxsA.js")), path: "/404"}, k5vyHpttJ: {elements: {}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/ly1Nmwo05QHXqlAnW5d3/VqaL4VHYMlb3IZXE2W7u/k5vyHpttJ.js")), path: "/fun-facts", pathLocalized: {sap5GhcSY: "/frodleikur"}}, gXgACgxKO: {elements: {}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/S1sNUYEn41m17zcl1AQF/y2CrnHf3V0qHijzUk8Dy/gXgACgxKO.js")), path: "/waitlist", pathLocalized: {sap5GhcSY: "/bidlisti"}}, CGG8fOQKr: {elements: {NueruLPu9: "lesa-litabok", U3YCsw8Kk: "litablod"}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/ocy7shPYlXjUGhqlQInt/he8RHmyfBo2iLNs1UOQ0/CGG8fOQKr.js")), path: "/coloring-book", pathLocalized: {sap5GhcSY: "/litabok"}}, V4Y8maGCn: {elements: {bBaCfB4MU: "skref-5", LYUlOGptx: "skref-3", NkDSJmc9z: "skref-2", pZDtHmD07: "skref-1", QKxVDU73s: "skref-6", tTFRLwJRU: "skref-fyrir-skref", va14RErS4: "raddir-foreldra", z6QyJIEyB: "skref-4"}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/Zcz7glgredSCwz6Yrzo2/RFsgZDKfa4uFgFA94N7s/V4Y8maGCn.js")), path: "/parents", pathLocalized: {sap5GhcSY: "/foreldrar"}}, dMeLQXJ0V: {elements: {}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/pp4oau0YWgPUisn8tB3M/9z2PZ7HkH98y7wIKm6H2/dMeLQXJ0V.js")), path: "/download", pathLocalized: {sap5GhcSY: "/saekja"}}, LL7dHDA8K: {elements: {}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/f2YqEICVIHxleuT6ij6K/G7E4Wbuf8HeYXLrGYLga/LL7dHDA8K.js")), path: "/faq", pathLocalized: {sap5GhcSY: "/spurtogsvarad"}}, ENF4fOJ0K: {elements: {}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/NUjdRfsHutXTms3wdSTG/K1F3agW6xOlmYOfuf4di/ENF4fOJ0K.js")), path: "/features", pathLocalized: {sap5GhcSY: "/virkni"}}, cNOkfIR3G: {elements: {gRiCnmZ6W: "step-3", hT0FJUQal: "step-2", hxQpOWorX: "step-1", oSfLoEep9: "step-4"}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/zsGJnEAr5LiMkLMlxC1u/2IflW4eWkgvsHQR5HzrY/cNOkfIR3G.js")), path: "/about-us", pathLocalized: {sap5GhcSY: "/um-okkur"}}, Vpfb7rl9D: {elements: {aBDNB6Vzo: "speaker-1", GLKJbDRFI: "speaker-5", irfnuINbn: "speaker-4", mQWWMNjIj: "speaker-2", SfNLwkW1U: "speaker-6-birgir", wIKzazM7Z: "speaker-6", wq8fAqD2r: "speaker-3"}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/QFxnmyCcaijl2kfUV83T/uU3Gs7bjCg4aYJGrT3M4/Vpfb7rl9D.js")), path: "/payment/all-set-website-link"}, T2dnCK0k5: {elements: {bQt6TLfXE: "speaker-1", GRbSuWyC3: "speaker-4", Hjuu_O6cS: "speaker-6-birgir", POjzQGFHL: "speaker-6", RmgSd_11q: "speaker-5", S7haxae97: "speaker-3", T7cCM6A2X: "speaker-2"}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/uchFSmxi8OZgxC8NyGzh/F9q4SXC2GaMgc1NCWIGO/T2dnCK0k5.js")), path: "/payment/create-account-website-link"}, JOrkLCEMd: {elements: {}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/2ktMjPm9JwkUoCvRxD13/Dv9RF3h0FQY85F7stdGE/JOrkLCEMd.js")), path: "/team", pathLocalized: {sap5GhcSY: "/teymi"}}, cI2wbP7JT: {collectionId: "DZ_E1tt8V", elements: {GgUX8gCaJ: "start1", NvjBSeT16: "start", p0KIoMDw7: "end2", SXkdSiBqh: "end"}, page: Framer.lazy(() => import("https://framerusercontent.com/modules/jrkoPjmjVZcD93OeaEVZ/mZaBNTmabS3nJFp5PcMW/cI2wbP7JT.js")), path: "/fun-facts/:dzKRk4fpt", pathLocalized: {sap5GhcSY: "/frodleikur/:dzKRk4fpt"}}, GF8i0abso: {page: Framer.lazy(() => import("https://framerusercontent.com/modules/wliD0Nr2peAW5VXCmLfX/4YRZkEkUFQsweqoeM4Wn/GF8i0abso.js"))}, uKleg__ZX: {page: Framer.lazy(() => import("https://framerusercontent.com/modules/yJNZiljsCxRn8Git4iFr/tIGYmqlHmSQmu4CPoO9m/uKleg__ZX.js"))}}
+
+		const locales = [{code: "en", id: "default", name: "English", slug: "", textDirection: "ltr"}, {code: "is-IS", id: "sap5GhcSY", name: "Icelandic", slug: "is", textDirection: "ltr"}, {code: "ka-GE", id: "rdWA5Wjm1", name: "Georgian (Georgia)", slug: "ka", textDirection: "ltr"}]
+		const collectionUtils = {DZ_E1tt8V: async () => (await import("https://framerusercontent.com/modules/Lwb4omIsn6z7j9IWU6Ey/TEUtT4oYgBUkYsXLQ3aP/DZ_E1tt8V.js"))?.["utils"], uK62s41IU: async () => (await import("https://framerusercontent.com/modules/nYu87HbOr042B1rTroLG/inXFXqJphPmmS0NH38Ax/uK62s41IU.js"))?.["utils"]}
+		const framerSiteId = "3a880f8802c57162962951d05e1283ff2c2afb04080cee5d412b7947f91985a3"
+		function Template({webPageId, children, style, ...rest}) {const props1 = {ayQDBW0jP: "gzfyqrM5o", bg99TIEGI: "muakYN21b", BtA7IZvp0: "var(--token-8023ef46-ebe8-4b2b-a924-70ed25356ae6, rgb(71, 80, 196))", firuENq51: "yCq93MLr4", mnUo9vWeo: "eC9uE7Bsw", rD3pc_Rv7: true}
+const props2 = {...props1, BtA7IZvp0: "var(--token-0a14b2c0-3e35-41ce-aa8a-cfd71393034c, rgb(1, 14, 38))"}
+const props3 = {...props1, rD3pc_Rv7: false}
+const templateProps = {CGG8fOQKr: props1, cI2wbP7JT: props2, cNOkfIR3G: props1, dMeLQXJ0V: props1, ENF4fOJ0K: props1, F892qYpPc: props2, gXgACgxKO: props2, ILNhMlxK6: props2, IT2X21oZx: props2, JOrkLCEMd: props1, k5vyHpttJ: props2, LL7dHDA8K: props3, PVO43ZLPx: props2, T2dnCK0k5: props3, V4Y8maGCn: props1, Vpfb7rl9D: props3, w0HfMTpAn: props1, X6IZwNl6t: props1, xZuLgothx: props2, YnUlfM17T: props1, YuNS79c0K: props2}
+const props = templateProps[webPageId] ?? {}
+switch (webPageId) {case "YnUlfM17T":
+case "YuNS79c0K":
+case "PVO43ZLPx":
+case "ILNhMlxK6":
+case "IT2X21oZx":
+case "xZuLgothx":
+case "F892qYpPc":
+case "k5vyHpttJ":
+case "gXgACgxKO":
+case "CGG8fOQKr":
+case "V4Y8maGCn":
+case "dMeLQXJ0V":
+case "LL7dHDA8K":
+case "w0HfMTpAn":
+case "ENF4fOJ0K":
+case "cNOkfIR3G":
+case "X6IZwNl6t":
+case "Vpfb7rl9D":
+case "T2dnCK0k5":
+case "JOrkLCEMd":
+case "cI2wbP7JT":
+return React.createElement(Template1, {...props, key: "Template1", style}, children(true));
+default: { return children(false) }}}
+export function getLayoutTemplateBreakpoints(routeId) {switch (routeId) {case "YnUlfM17T":
+case "YuNS79c0K":
+case "PVO43ZLPx":
+case "ILNhMlxK6":
+case "IT2X21oZx":
+case "xZuLgothx":
+case "F892qYpPc":
+case "k5vyHpttJ":
+case "gXgACgxKO":
+case "CGG8fOQKr":
+case "V4Y8maGCn":
+case "dMeLQXJ0V":
+case "LL7dHDA8K":
+case "w0HfMTpAn":
+case "ENF4fOJ0K":
+case "cNOkfIR3G":
+case "X6IZwNl6t":
+case "Vpfb7rl9D":
+case "T2dnCK0k5":
+case "JOrkLCEMd":
+case "cI2wbP7JT":
+return [{hash: "1e460w5", mediaQuery: "(min-width: 2560px)"}, {hash: "1u8khbh", mediaQuery: "(min-width: 1440px) and (max-width: 2559.98px)"}, {hash: "724ncz", mediaQuery: "(min-width: 1200px) and (max-width: 1439.98px)"}, {hash: "1ltvyr1", mediaQuery: "(min-width: 768px) and (max-width: 1199.98px)"}, {hash: "l6aoom", mediaQuery: "(max-width: 767.98px)"}]
+default: { return undefined }}}
+
+		const isBrowser = typeof document !== "undefined"
+		const isBot = isBrowser && /bot|-google|google-|yandex|ia_archiver|crawl|spider/iu.test(navigator.userAgent)
+
+		export async function getPageRoot({ routeId, pathVariables, localeId, collectionItemId }) {
+			const rootPreload = routes[routeId].page.preload()
+
+			Framer.setLibraryFeatures({disableCustomCode: false, editorBarDisableFrameAncestorsSecurity: false, motionDivToDiv: false, onPageLocalizationSupport: true, onPageMoveTool: true, onPageRichTextBlockSelection: true, privateRouterReplaceState: false, scrollRestoration: true, synchronousNavigationOnDesktop: false, yieldOnTap: false})
+
+			const content = React.createElement(
+				Framer.PageRoot,
+				{
+					isWebsite: true,
+					environment: "site",
+					routeId,
+					pathVariables,
+					routes,
+					collectionUtils,
+					framerSiteId,
+					notFoundPage: Framer.lazy(() => import("https://framerusercontent.com/modules/5E0MyymFIY9es81wcTjH/emrdkbcEEGJR5DlHXnwI/r_BDoxxsA.js")),
+					isReducedMotion: undefined,
+					localeId,
+					locales,
+					preserveQueryParams: false,
+					siteCanonicalURL: "https://www.lesa.app",
+					EditorBar: 
+			typeof window !== "undefined" ? (() => {
+				if (isBot) {
+					console.log("[Framer On-Page Editing] Unavailable because navigator is bot")
+					return
+				}
+
+				return Framer.lazy(async () => {
+					const dependencies = {
+						__version: 3,
+						framer: {
+							useCurrentRoute: Framer.useCurrentRoute,
+							useLocaleInfo: Framer.useLocaleInfo,
+							useRouter: Framer.useRouter,
+						},
+						react: {
+							createElement: React.createElement,
+							Fragment: React.Fragment,
+							memo: React.memo,
+							useCallback: React.useCallback,
+							useEffect: React.useEffect,
+							useRef: React.useRef,
+							useState: React.useState,
+							useLayoutEffect: React.useLayoutEffect,
+						},
+						"react-dom": { createPortal },
+					}
+
+					window.__framer_editorBarDependencies = dependencies
+
+					const { createEditorBar } = await import("https://framer.com/edit/init.mjs")
+					return {
+						default: createEditorBar(),
+					}
+				})
+			})() : undefined
+		,
+					adaptLayoutToTextDirection: false,
+					LayoutTemplate: Template,
+					loadSnippetsModule: new Framer.LazyValue(() => import("https://framerusercontent.com/modules/yttqWGGSpiiZ61W04y3t/I5pgM04jnpyfA4MyTnun/snippets.js")),
+					initialCollectionItemId: collectionItemId,
+				}
+			)
+
+			const contentWithGracefullyDegradingErrorBoundary = React.createElement(Framer.GracefullyDegradingErrorBoundary, {
+				children: content
+			})
+
+			
+			const page = React.createElement(Framer.PageEffectsProvider, {
+				children: contentWithGracefullyDegradingErrorBoundary,
+				value: {routes: {}}
+			})
+
+			// We don't want the initial render to immediately have to suspend.
+			await rootPreload
+			return page
+		}
+
+		if (isBrowser) {
+			window.__framer_importFromPackage = (packageAndFilename, exportIdentifier) => () => {
+				return React.createElement(Framer.ErrorPlaceholder, { error: 'Package component not supported: "' + exportIdentifier + '" in "' + packageAndFilename + '"' })
+			}
+
+			
+			
+			window.__framer_events = window.__framer_events || []
+
+			// Initialize lazy modules cache for hydration
+			Framer.initLazyModulesCache()
+
+			const container = document.getElementById("main")
+			// We know that #main is parsed before this script, so we don't need to wait for DOMContentLoaded or similar events.
+			if ("framerHydrateV2" in container.dataset) main(true, container)
+			else main(false, container)
+		}
+
+		function track() {
+			if (!isBrowser) return
+			window.__framer_events.push(arguments)
+		}
+
+		async function main(shouldHydrate, container) {
+			function handleError(error, errorInfo, recoverable = true) {
+				if (error.caught || window.__framer_hadFatalError) return // we already logged it
+
+				const componentStack = errorInfo?.componentStack
+				if (recoverable) {
+					console.warn("Caught a recoverable error. The site is still functional, but might have some UI flickering or degraded page load performance. If you are the author of this website, update external components and check recently added custom code or code overrides to fix the following server/client mismatches:\n", error, componentStack)
+					// we only want to collect 1%, because this can be quite noisy (floods the data pipeline)
+					if (Math.random() > 0.01) return
+				} else {
+					console.error("Caught a fatal error. Please report the following to the Framer team via https://www.framer.com/contact/:\n", error, componentStack)
+				}
+				track(recoverable ? "published_site_load_recoverable_error" : "published_site_load_error", {
+					message: String(error),
+					componentStack, // componentStack is more useful
+					stack: componentStack ? undefined : error instanceof Error && typeof error.stack === "string" ? error.stack : null,
+				})
+			}
+
+			try {
+				let routeId, localeId, pathVariables, breakpoints, routeData
+				if (shouldHydrate) {
+					routeData = JSON.parse(container.dataset["framerHydrateV2"])
+					routeId = routeData.routeId
+					localeId = routeData.localeId
+					pathVariables = routeData.pathVariables
+					breakpoints = routeData.breakpoints
+
+					routeId = Framer.patchRoutesForABTesting(routes, routeId) // Prioritize optimized route id to avoid flickering in browsers not supporting the server-timing header (Safari older than 16.4)
+				} else {
+					Framer.patchRoutesForABTesting(routes, undefined) // This must happen before inferInitialRouteFromPath
+
+					
+					const serverRouteExperimentEnabled = true
+					const serverRoute = serverRouteExperimentEnabled && performance.getEntriesByType("navigation")[0]?.serverTiming?.find(e => e.name === "route")?.description
+					if (serverRoute) {
+						const routeData = new URLSearchParams(serverRoute)
+						routeId = routeData.get("id")
+						localeId = routeData.get("locale")
+						for (const [key, value] of routeData.entries()) {
+							if (!key.startsWith("var.")) continue
+							pathVariables ??= {}
+							pathVariables[key.slice(4)] = value
+						}
+					}
+					if (!routeId || !localeId) {
+						const routeData = Framer.inferInitialRouteFromPath(routes, decodeURIComponent(location.pathname), true, locales)
+						routeId = routeData.routeId
+						localeId = routeData.localeId
+						pathVariables = routeData.pathVariables
+					}
+					
+				}
+
+				const pagePromise = getPageRoot({
+					routeId,
+					localeId,
+					pathVariables,
+					collectionItemId: routeData?.collectionItemId,
+				})
+
+				
+if (typeof window !== "undefined") {
+	void (async () => {
+		const route = routes[routeId]
+
+		const defaultLocaleId = "default"
+		const framerLocale = locales.find(({ id }) => !localeId ? id === defaultLocaleId : id === localeId).code
+
+		let collectionItemId = routeData?.collectionItemId ?? null
+		if (collectionItemId === null && route?.collectionId && collectionUtils) {
+			  const utils = await collectionUtils[route.collectionId]?.()
+			  const [slug] = Object.values(pathVariables)
+			  if (utils && typeof slug === "string") {
+				  collectionItemId = (await utils.getRecordIdBySlug(slug, framerLocale || undefined)) ?? null
+			  }
+		}
+
+		const resolvedDateTimeOptions = Intl.DateTimeFormat().resolvedOptions()
+		const timezone = resolvedDateTimeOptions.timeZone
+		const locale = resolvedDateTimeOptions.locale
+
+		// wait for the page to be activated before sending the pageview event
+		// https://developer.chrome.com/docs/web-platform/prerender-pages#impact-on-analytics
+		await new Promise((resolve) => {
+			if (document.prerendering) {
+				document.addEventListener("prerenderingchange", resolve, { once: true })
+			} else {
+				resolve()
+			}
+		})
+
+		window.__framer_events.push([
+			"published_site_pageview",
+			{
+				framerSiteId,
+				version: 2,
+				routePath: route?.path || "/",
+				collectionItemId,
+				framerLocale: framerLocale || null,
+				webPageId: route?.abTestingVariantId ?? routeId,
+				abTestId: route?.abTestId,
+				referrer: document.referrer || null,
+				url: window.location.href,
+				hostname: window.location.hostname || null,
+				pathname: window.location.pathname || null,
+				hash: window.location.hash || null,
+				search: window.location.search || null,
+				timezone,
+				locale,
+			},
+			"eager"
+		])
+
+		// Yield to avoid blocking the main thread with the user code
+		await Framer.yieldToMain({ priority: "background", ensureContinueBeforeUnload: true, continueAfter: "paint" })
+
+		document.dispatchEvent(new CustomEvent("framer:pageview", {
+			detail: { framerLocale: framerLocale || null }
+		}))
+	})()
+}
+
+
+				const page = await pagePromise
+				if (shouldHydrate) {
+					
+
+					Framer.withPerformanceMarks("framer-rewrite-breakpoints", () => {
+						Framer.removeHiddenBreakpointLayersV2(breakpoints)
+						window.__framer_onRewriteBreakpoints?.(breakpoints)
+					})
+
+					
+
+					const startTransition = isBot ? cb => cb() : React.startTransition
+					startTransition(() => {
+						Framer.markHydrationStart()
+						Framer.turnOffReactEventHandling()
+						ReactDOM.hydrateRoot(container, page, { onRecoverableError: handleError })
+					})
+				} else {
+					
+					ReactDOM.createRoot(container, { onRecoverableError: handleError }).render(page)
+				}
+			} catch (error) {
+				handleError(error, undefined, false)
+				throw error
+			}
+		}
+
+		
+
+		
+	

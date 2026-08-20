@@ -1,0 +1,36 @@
+/**
+ * @framerDisableUnlink
+ * @framerSupportedLayoutWidth any
+ * @framerSupportedLayoutHeight any
+ */import{jsx as _jsx,jsxs as _jsxs}from"react/jsx-runtime";import{useRef,useState,useEffect}from"react";import{addPropertyControls,ControlType,RenderTarget}from"framer";import{motion,useAnimation}from"framer-motion";export default function MouseTrail(props){const{images,triggerDistance,randomnessX,randomnessY,randomRotation,animationDuration,elasticity,style}=props;const containerRef=useRef(null);const[mousePosition,setMousePosition]=useState({x:0,y:0});const[oldPosition,setOldPosition]=useState({x:0,y:0});const[distance,setDistance]=useState(0);const[firstMove,setFirstMove]=useState(true);const[imageIndex,setImageIndex]=useState(0);const[trailElements,setTrailElements]=useState([]);const[nextId,setNextId]=useState(0);// Calculate responsive trigger distance based on screen width
+const getResponsiveTriggerDistance=()=>{const width=window.innerWidth;// Scale trigger distance proportionally with screen size
+if(width>1920){return triggerDistance*1.8// More space on very large screens
+;}else if(width>1440){return triggerDistance*1.5// More space on large screens
+;}else if(width>1024){return triggerDistance*1.2// Slight increase on medium-large screens
+;}return triggerDistance// Keep original on smaller screens
+;};// Handle mouse movement
+const handleMouseMove=e=>{if(!containerRef.current)return;const rect=containerRef.current.getBoundingClientRect();const x=e.clientX;const y=e.clientY-rect.top;setMousePosition({x,y});// Prevent first jump reveal image behavior
+if(firstMove){setFirstMove(false);setOldPosition({x,y});return;}// Calculate distance moved
+const newDistance=distance+Math.abs(x-oldPosition.x);setDistance(newDistance);setOldPosition({x,y});// Create new element when distance threshold is reached
+const responsiveDistance=getResponsiveTriggerDistance();if(newDistance>responsiveDistance){setDistance(0);createTrailElement(x,y);}};// Create a new trail element
+const createTrailElement=(x,y)=>{// Get current image
+const currentImage=images[imageIndex];// Create random offsets
+const xOffset=(Math.random()-.5)*randomnessX;const yOffset=(Math.random()-.5)*randomnessY;const rotation=(Math.random()-.5)*randomRotation;// Create new element
+const newElement={id:nextId,x,y,xOffset,yOffset,rotation,image:currentImage,createdAt:Date.now()};// Add to trail elements
+setTrailElements(prev=>[...prev,newElement]);setNextId(nextId+1);// Increment image index
+setImageIndex((imageIndex+1)%images.length);// Remove element after animation completes
+setTimeout(()=>{setTrailElements(prev=>prev.filter(item=>item.id!==newElement.id));},animationDuration*1e3+300)// Add a small buffer
+;};// Clear all elements when component unmounts
+useEffect(()=>{return()=>{setTrailElements([]);};},[]);// Render trail elements
+const renderTrailElements=()=>{return trailElements.map(element=>/*#__PURE__*/_jsx(TrailElement,{x:element.x,y:element.y,xOffset:element.xOffset,yOffset:element.yOffset,rotation:element.rotation,image:element.image,animationDuration:animationDuration,elasticity:elasticity},element.id));};return /*#__PURE__*/_jsxs("div",{ref:containerRef,style:{...style,position:"relative",overflow:"hidden"},onMouseMove:handleMouseMove,children:[props.children,renderTrailElements()]});}// Trail Element Component
+function TrailElement({x,y,xOffset,yOffset,rotation,image,animationDuration,elasticity}){const controls=useAnimation();// Calculate responsive image size - allow scaling but cap it reasonably
+const getResponsiveSize=()=>{const width=window.innerWidth;// Use a consistent formula: clamp between min and max pixel values
+// This allows natural scaling while preventing extremes
+const baseSize=Math.min(Math.max(width*.08,100),180);return{maxWidth:`${baseSize}px`,maxHeight:`${baseSize}px`};};const imageSize=getResponsiveSize();useEffect(()=>{// Initial animation (appear with single overshoot using easeOut)
+controls.start({x,y,scale:1,transition:{duration:animationDuration*.6,ease:[.34,1.56,.64,1]}});// Disappear animation with single overshoot before disappearing
+setTimeout(()=>{controls.start({scale:.5,opacity:0,transition:{duration:animationDuration*.3,ease:[.6,-.28,.735,.045]}});},animationDuration*600);},[]);return /*#__PURE__*/_jsx(motion.div,{initial:{x,y,scale:1.3,opacity:1,rotate:rotation},animate:controls,style:{position:"absolute",left:0,top:0,transform:`translate(-50%, -50%) translate(${xOffset}px, ${yOffset}px)`,zIndex:100,pointerEvents:"none"},children:/*#__PURE__*/_jsx("img",{src:image,alt:"",style:{maxWidth:imageSize.maxWidth,maxHeight:imageSize.maxHeight,objectFit:"contain",borderRadius:"4%"}})});}// Canvas Preview Component
+function CanvasPreview(){if(RenderTarget.current()===RenderTarget.canvas){return /*#__PURE__*/_jsxs("div",{style:{display:"flex",justifyContent:"center",alignItems:"center",width:"100%",height:"100%",background:"rgba(0,0,0,0.05)",border:"1px dashed rgba(0,0,0,0.2)",borderRadius:"8px",color:"#888",fontSize:"14px",textAlign:"center",padding:"20px"},children:["Mouse Trail Component",/*#__PURE__*/_jsx("br",{}),"(Move cursor to see effect in Preview)"]});}return null;}// Default props
+MouseTrail.defaultProps={images:["https://framerusercontent.com/images/nXLIQjb4kAKVjbFvkwZF2KzFJw.jpg","https://framerusercontent.com/images/QVKFKT4bqMhVj9RDbhZxjsHvd8.jpg","https://framerusercontent.com/images/O3Foxt0XkzFlqpHgppKGQyGBzI.jpg","https://framerusercontent.com/images/CgTH1rQIGBgNLV9R0qYQNMu4.jpg"],triggerDistance:60,randomnessX:80,randomnessY:10,randomRotation:20,animationDuration:.9,elasticity:1.2};// Property Controls
+addPropertyControls(MouseTrail,{images:{type:ControlType.Array,title:"Images",control:{type:ControlType.Image},defaultValue:MouseTrail.defaultProps.images},triggerDistance:{type:ControlType.Number,title:"Trigger Distance",description:"Base distance (auto-scales on larger screens)",defaultValue:MouseTrail.defaultProps.triggerDistance,min:10,max:200,step:1,displayStepper:true},randomnessX:{type:ControlType.Number,title:"Randomness X",description:"Horizontal random offset",defaultValue:MouseTrail.defaultProps.randomnessX,min:0,max:200,step:1},randomnessY:{type:ControlType.Number,title:"Randomness Y",description:"Vertical random offset",defaultValue:MouseTrail.defaultProps.randomnessY,min:0,max:200,step:1},randomRotation:{type:ControlType.Number,title:"Random Rotation",description:"Random rotation in degrees",defaultValue:MouseTrail.defaultProps.randomRotation,min:0,max:180,step:1},animationDuration:{type:ControlType.Number,title:"Animation Duration",defaultValue:MouseTrail.defaultProps.animationDuration,min:.1,max:3,step:.1,unit:"s"},elasticity:{type:ControlType.Number,title:"Elasticity",description:"Bounce effect strength (not used with custom easing)",defaultValue:MouseTrail.defaultProps.elasticity,min:.1,max:3,step:.1},children:{type:ControlType.ComponentInstance,title:"Content"}});
+export const __FramerMetadata__ = {"exports":{"default":{"type":"reactComponent","name":"MouseTrail","slots":[],"annotations":{"framerContractVersion":"1"}},"__FramerMetadata__":{"type":"variable"}}}
+//# sourceMappingURL=./GSAP_Mouse_Move.map

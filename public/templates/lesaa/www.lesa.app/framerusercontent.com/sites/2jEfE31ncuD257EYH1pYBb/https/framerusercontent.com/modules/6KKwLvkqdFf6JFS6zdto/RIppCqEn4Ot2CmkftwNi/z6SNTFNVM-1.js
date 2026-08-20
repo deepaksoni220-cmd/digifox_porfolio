@@ -1,0 +1,2 @@
+export const v1="Get in touch";export const v2="Join the waitlist";
+export const __FramerMetadata__ = {"exports":{"v2":{"type":"variable","annotations":{"framerContractVersion":"1"}},"v1":{"type":"variable","annotations":{"framerContractVersion":"1"}},"__FramerMetadata__":{"type":"variable"}}}

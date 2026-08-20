@@ -1,0 +1,4 @@
+import{jsx as _jsx,Fragment as _Fragment}from"react/jsx-runtime";import{createStore}from"https://framer.com/m/framer/store.js@^1.0.0";// Learn more: https://www.framer.com/docs/guides/overrides/
+const useStore=createStore({background:"#0099FF"});const LINES=2;export default function withLineTruncate(Component){return props=>{const styles={...props?.style,WebkitLineClamp:`${LINES}`,WebkitBoxOrient:"vertical",textOverflow:"ellipsis",display:"-webkit-box",overflow:"hidden"};return /*#__PURE__*/_jsx(_Fragment,{children:/*#__PURE__*/_jsx(Component,{...props,style:styles})});};}
+export const __FramerMetadata__ = {"exports":{"default":{"type":"reactHoc","name":"withLineTruncate","annotations":{"framerContractVersion":"1"}},"__FramerMetadata__":{"type":"variable"}}}
+//# sourceMappingURL=./Truncate_Text.map

@@ -1625,5 +1625,210 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- SnippetEnd: om19hqinF -->
 
     <!-- End of bodyEnd -->
+
+<!-- DIGIFOX Full Customizer & Editor Bridge -->
+<style id="digifox-editor-styles">
+  /* Ensure clean display in editor iframe */
+  .ch2-container, #hotjar-container, .clarity-container, [id*="cookie"], [class*="cookie-banner"] {
+    display: none !important;
+  }
+  [contenteditable="true"] {
+    outline: 2px dashed rgba(59, 130, 246, 0.4) !important;
+    outline-offset: 4px !important;
+    border-radius: 4px !important;
+    cursor: text !important;
+    transition: outline-color 0.2s ease !important;
+  }
+  [contenteditable="true"]:hover {
+    outline: 2px solid #3b82f6 !important;
+    background-color: rgba(59, 130, 246, 0.05) !important;
+  }
+  [contenteditable="true"]:focus {
+    outline: 2px solid #2563eb !important;
+    background-color: rgba(59, 130, 246, 0.1) !important;
+  }
+  img[data-editable-img="true"] {
+    cursor: pointer !important;
+    transition: transform 0.2s, outline 0.2s !important;
+  }
+  img[data-editable-img="true"]:hover {
+    outline: 3px solid #3b82f6 !important;
+    outline-offset: 2px !important;
+    transform: scale(1.02) !important;
+  }
+</style>
+<script>
+(function() {
+  var isEditor = window.location.search.indexOf("editor=true") !== -1 || window.self !== window.top;
+  
+  function initCustomizerBridge() {
+    if (!isEditor) return;
+    document.body.setAttribute("data-edit-mode", "true");
+
+    // 1. Enable inline editing for all text elements
+    var textSelectors = "h1, h2, h3, h4, h5, h6, p, span, a, button, [data-framer-component-type=\"RichText\"]";
+    var allTextEls = document.querySelectorAll(textSelectors);
+    
+    allTextEls.forEach(function(el, idx) {
+      if (el.children.length === 0 || (el.children.length === 1 && el.children[0].tagName === "SPAN")) {
+        el.setAttribute("contenteditable", "true");
+        el.setAttribute("spellcheck", "false");
+        
+        var selector = el.tagName.toLowerCase() + "_" + idx;
+        el.setAttribute("data-editor-id", selector);
+
+        el.addEventListener("click", function(e) {
+          e.stopPropagation();
+          var computed = window.getComputedStyle(el);
+          window.parent.postMessage({
+            type: "ELEMENT_CLICKED",
+            elementData: {
+              selector: selector,
+              tag: el.tagName.toLowerCase(),
+              text: el.innerText || el.textContent,
+              fontSize: computed.fontSize,
+              fontWeight: computed.fontWeight,
+              fontStyle: computed.fontStyle,
+              textDecoration: computed.textDecoration,
+              color: computed.color,
+              fontFamily: computed.fontFamily,
+              textAlign: computed.textAlign,
+              letterSpacing: computed.letterSpacing,
+              lineHeight: computed.lineHeight
+            }
+          }, "*");
+        });
+
+        el.addEventListener("input", function() {
+          window.parent.postMessage({
+            type: "TEXT_EDITED",
+            selector: selector,
+            html: el.innerHTML,
+            text: el.innerText
+          }, "*");
+        });
+      }
+    });
+
+    // 2. Enable image clicking to replace
+    var allImgs = document.querySelectorAll("img");
+    allImgs.forEach(function(img) {
+      img.setAttribute("data-editable-img", "true");
+      img.addEventListener("click", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "image/*";
+        fileInput.onchange = function(uploadEvent) {
+          var file = uploadEvent.target.files && uploadEvent.target.files[0];
+          if (file) {
+            var reader = new FileReader();
+            reader.onload = function() {
+              var base64 = reader.result;
+              img.src = base64;
+              img.srcset = "";
+              window.parent.postMessage({
+                type: "IMAGE_UPDATED",
+                originalSrc: img.getAttribute("data-original-src") || img.src,
+                newSrc: base64
+              }, "*");
+            };
+            reader.readAsDataURL(file);
+          }
+        };
+        fileInput.click();
+      });
+    });
+  }
+
+  // 3. Listen for postMessages from AI Builder sidebar
+  window.addEventListener("message", function(e) {
+    if (!e.data || typeof e.data !== "object") return;
+    var msg = e.data;
+
+    if (msg.type === "UPDATE_FIELD") {
+      var field = msg.field;
+      var value = msg.value;
+      
+      if (field === "brandName") {
+        // Update all brand name instances
+        document.querySelectorAll("title, h1, [data-brand-name], nav a:first-child").forEach(function(el) {
+          if (el.tagName === "TITLE") {
+            document.title = value + " – The Reading & Gaming Adventure";
+          } else if (el.innerText && el.innerText.indexOf("DIGIFOX") !== -1) {
+            el.innerText = el.innerText.replace(/DIGIFOX/g, value);
+          }
+        });
+      }
+
+      if (field === "phone") {
+        document.querySelectorAll("a[href^=\"tel:\"]").forEach(function(el) {
+          el.href = "tel:" + value;
+          if (el.innerText.match(/\\d/)) el.innerText = value;
+        });
+      }
+
+      if (field === "email") {
+        document.querySelectorAll("a[href^=\"mailto:\"]").forEach(function(el) {
+          el.href = "mailto:" + value;
+          el.innerText = value;
+        });
+      }
+    }
+
+    if (msg.type === "UPDATE_ELEMENT_STYLE") {
+      var targetEl = document.querySelector("[data-editor-id=\"" + msg.selector + "\"]");
+      if (targetEl) {
+        if (msg.html !== undefined) targetEl.innerHTML = msg.html;
+        if (msg.fontSize) targetEl.style.fontSize = msg.fontSize;
+        if (msg.fontWeight) targetEl.style.fontWeight = msg.fontWeight;
+        if (msg.fontStyle) targetEl.style.fontStyle = msg.fontStyle;
+        if (msg.textDecoration) targetEl.style.textDecoration = msg.textDecoration;
+        if (msg.color) targetEl.style.color = msg.color;
+        if (msg.fontFamily) targetEl.style.fontFamily = msg.fontFamily;
+        if (msg.letterSpacing) targetEl.style.letterSpacing = msg.letterSpacing;
+        if (msg.lineHeight) targetEl.style.lineHeight = msg.lineHeight;
+        if (msg.textAlign) targetEl.style.textAlign = msg.textAlign;
+      }
+    }
+
+    if (msg.type === "SYNC_DATA") {
+      var cd = msg.data.contactDetails;
+      if (cd && cd.brandName) {
+        document.querySelectorAll("title, h1").forEach(function(el) {
+          if (el.innerText && el.innerText.indexOf("DIGIFOX") !== -1) {
+            el.innerText = el.innerText.replace(/DIGIFOX/g, cd.brandName);
+          }
+        });
+      }
+      if (cd && cd.enableWhatsapp && cd.whatsappNumber) {
+        var waBtn = document.getElementById("custom-whatsapp-btn");
+        if (!waBtn) {
+          waBtn = document.createElement("a");
+          waBtn.id = "custom-whatsapp-btn";
+          waBtn.style.cssText = "position: fixed; bottom: 24px; right: 24px; z-index: 99999; background-color: #25D366; color: white; padding: 14px; border-radius: 50%; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: transform 0.2s; display: flex; align-items: center; justify-content: center; cursor: pointer;";
+          waBtn.setAttribute("target", "_blank");
+          waBtn.setAttribute("rel", "noopener noreferrer");
+          waBtn.innerHTML = "<svg viewBox=\"0 0 24 24\" width=\"28\" height=\"28\" stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z\"></path></svg>";
+          document.body.appendChild(waBtn);
+        }
+        var num = cd.whatsappNumber.replace(/[^0-9]/g, "");
+        waBtn.href = "https://wa.me/" + num;
+      }
+    }
+  });
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCustomizerBridge);
+  } else {
+    setTimeout(initCustomizerBridge, 500);
+  }
+  window.addEventListener("load", function() {
+    setTimeout(initCustomizerBridge, 800);
+  });
+})();
+</script>
+
 </body>
 </html>

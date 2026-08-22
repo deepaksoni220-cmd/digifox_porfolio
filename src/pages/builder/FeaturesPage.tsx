@@ -26,7 +26,7 @@ export const FeaturesPage: React.FC = () => {
     {
       icon: "✏️",
       tag: "Visual Customizer",
-      title: "Direct Click-to-Edit Studio",
+      title: "Unlimited Customize, Click-to-Edit Studio",
       desc: "Click directly on any text, heading, or image in your live preview. Fine-tune font sizes, letter-spacing, line-heights, animations, and color tones in seconds.",
       gradient: "from-emerald-500/20 to-teal-500/10",
       border: "border-emerald-500/30"

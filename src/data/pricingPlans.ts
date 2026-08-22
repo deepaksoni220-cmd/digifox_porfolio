@@ -181,7 +181,7 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
         monthly: 40,
         annualMonthly: 30.99,
         annualTotal: 371.88,
-        discountLabel: "23% OFF",
+        discountLabel: "30.9% OFF",
         savingsText: "Save $108.12 / year (Only $10.33/site/mo)",
         description: "Launch 3 separate 3D WebGL websites for multiple brands, clients, or product launches.",
         features: [

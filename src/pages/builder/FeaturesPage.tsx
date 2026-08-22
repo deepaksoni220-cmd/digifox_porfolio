@@ -33,8 +33,8 @@ export const FeaturesPage: React.FC = () => {
     },
     {
       icon: "🌐",
-      tag: "Custom Domains",
-      title: "Free Subdomains & Custom Domain Linking",
+      tag: "Hosting & SSL",
+      title: "Free Subdomains & Hosting and SSL's",
       desc: "Publish instantly to your free *.digifox.world subdomain or connect your company domain (yourbrand.com) with automatic global SSL certificates.",
       gradient: "from-amber-500/20 to-orange-500/10",
       border: "border-amber-500/30"

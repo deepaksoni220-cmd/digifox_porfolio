@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { WebMakeNav } from "../../components/builder/WebMakeNav";
 import { WebMakeFooter } from "../../components/builder/WebMakeFooter";
 import { SEOMeta } from "../../components/SEOMeta";
-import { CursorGrid } from "../../components/ui/cursor-grid";
+import CursorGrid from "../../components/ui/CursorGrid";
 
 export const BlogsPage: React.FC = () => {
   const blogs = [

@@ -3,11 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "../ThemeToggle";
 
-interface WebamekNavProps {
+interface WebMakeNavProps {
   activePage?: "studio" | "features" | "design-kits" | "pricing" | "blogs" | "contact";
 }
 
-export const WebamekNav: React.FC<WebamekNavProps> = ({ activePage }) => {
+export const WebMakeNav: React.FC<WebMakeNavProps> = ({ activePage }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname;
@@ -49,7 +49,7 @@ export const WebamekNav: React.FC<WebamekNavProps> = ({ activePage }) => {
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
                 <span className="font-[Kanit] font-black text-xl tracking-tight text-white group-hover:text-[#60a5fa] transition-colors">
-                  Webamek
+                  WebMake
                 </span>
                 <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-widest bg-blue-500/20 text-blue-400 border border-blue-500/30">
                   AI

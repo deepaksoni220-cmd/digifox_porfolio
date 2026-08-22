@@ -9,8 +9,8 @@ import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X,
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
 import CursorGrid from '../components/ui/CursorGrid';
 import { StepsProgressBarSection } from '../components/builder/StepsProgressBarSection';
-import { WebamekNav } from '../components/builder/WebamekNav';
-import { WebamekFooter } from '../components/builder/WebamekFooter';
+import { WebMakeNav } from '../components/builder/WebMakeNav';
+import { WebMakeFooter } from '../components/builder/WebMakeFooter';
 
 export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -1150,7 +1150,7 @@ export const AiBuilderPage: React.FC = () => {
             <span className="text-[11px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md bg-blue-500/15 text-blue-400 border border-blue-500/20 shrink-0">
               {previewData.websiteType}
             </span>
-            <span className="text-[11px] text-white/35 truncate hidden sm:block">— Webmake Editor</span>
+            <span className="text-[11px] text-white/35 truncate hidden sm:block">— WebMake Editor</span>
           </div>
 
           {/* Center: Viewport switcher */}
@@ -1601,8 +1601,8 @@ export const AiBuilderPage: React.FC = () => {
         description="Instantly generate and customize your website using our advanced AI consultant."
       />
 
-      {/* Floating Webamek Top Navigation Bar */}
-      <WebamekNav activePage="studio" />
+      {/* Floating WebMake Top Navigation Bar */}
+      <WebMakeNav activePage="studio" />
       
       {/* 1st Section Atmospheric Background Video */}
       <div className="absolute top-0 left-0 right-0 h-[850px] overflow-hidden pointer-events-none z-0 select-none bg-[#060709]">
@@ -1625,7 +1625,7 @@ export const AiBuilderPage: React.FC = () => {
           <div className="flex-1 w-full flex flex-col gap-6">
             <div className="w-full flex flex-col items-center text-center justify-center mb-6 relative">
               <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight mb-4 text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-                Build Your <span className="text-[#60a5fa] drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">Dream Website</span> by webmake
+                Build Your <span className="text-[#60a5fa] drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">Dream Website</span> by WebMake
               </h1>
               <p className="text-white/90 text-lg max-w-2xl mx-auto font-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                 Describe your business and let AI create a beautiful Animated, Good converting and performance website with responsive design, SEO optimization, GEO readiness, AEO best practices, and lightning-fast performance.
@@ -2218,7 +2218,7 @@ export const AiBuilderPage: React.FC = () => {
               Well Trusted by Creators in <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">USA, Australia, India and All Over the World</span>
             </h2>
             <p className="text-sm sm:text-base text-[var(--text-secondary)] mt-4 leading-relaxed">
-              Real feedback from entrepreneurs, agency founders, and developers across the world building high-impact digital experiences with Webmake AI.
+              Real feedback from entrepreneurs, agency founders, and developers across the world building high-impact digital experiences with WebMake AI.
             </p>
 
             {/* Quick Metrics Bar */}
@@ -2244,7 +2244,7 @@ export const AiBuilderPage: React.FC = () => {
                 country: 'United States',
                 flag: '🇺🇸',
                 tag: 'Portfolio & Agency Website',
-                quote: 'Webmake turned our agency branding into an ultra-smooth, 3D interactive web showcase in under 15 minutes. The inline text styling and live animations saved our team weeks of development work. Incredible platform.',
+                quote: 'WebMake turned our agency branding into an ultra-smooth, 3D interactive web showcase in under 15 minutes. The inline text styling and live animations saved our team weeks of development work. Incredible platform.',
                 name: 'Marcus Vance',
                 designation: 'Founder, NexaStudio • Austin, Texas, USA',
                 src: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1200&auto=format&fit=crop'
@@ -2253,7 +2253,7 @@ export const AiBuilderPage: React.FC = () => {
                 country: 'United States',
                 flag: '🇺🇸',
                 tag: 'E-Commerce & Retail Store',
-                quote: 'We launched our entire summer collection website with Webmake. The layout adapts smoothly to all screens, and our conversion rate jumped 35% thanks to the snappy load speeds and clean UX.',
+                quote: 'We launched our entire summer collection website with WebMake. The layout adapts smoothly to all screens, and our conversion rate jumped 35% thanks to the snappy load speeds and clean UX.',
                 name: 'Sarah Jenkins',
                 designation: 'E-Commerce Director, Aura Luxe • New York, USA',
                 src: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1200&auto=format&fit=crop'
@@ -2280,7 +2280,7 @@ export const AiBuilderPage: React.FC = () => {
                 country: 'Australia',
                 flag: '🇦🇺',
                 tag: 'Corporate & Business Portal',
-                quote: 'We have built 8 client sites with Webmake in the last month. The domain publishing is instant, SSL is automatic, and the client customization portal is intuitive for non-technical stakeholders.',
+                quote: 'We have built 8 client sites with WebMake in the last month. The domain publishing is instant, SSL is automatic, and the client customization portal is intuitive for non-technical stakeholders.',
                 name: 'Liam O’Connor',
                 designation: 'Operations Lead, Bondi Digital • Melbourne, Australia',
                 src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1200&auto=format&fit=crop'
@@ -2298,7 +2298,7 @@ export const AiBuilderPage: React.FC = () => {
                 country: 'India',
                 flag: '🇮🇳',
                 tag: 'Enterprise Tech Platform',
-                quote: 'Webmake AI is an absolute game-changer for rapid client delivery. We built and published 5 full-fledged business sites for clients in Bangalore and Mumbai in a single afternoon. Clean code, fast hosting, and zero friction.',
+                quote: 'WebMake AI is an absolute game-changer for rapid client delivery. We built and published 5 full-fledged business sites for clients in Bangalore and Mumbai in a single afternoon. Clean code, fast hosting, and zero friction.',
                 name: 'Aarav Sharma',
                 designation: 'Tech Lead, InfiniByte • Bengaluru, India',
                 src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1200&auto=format&fit=crop'
@@ -2361,7 +2361,7 @@ export const AiBuilderPage: React.FC = () => {
               Everything You Need To <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">Dominate Online</span>
             </h2>
             <p className="text-sm sm:text-base text-gray-400 mt-3 max-w-2xl mx-auto font-normal">
-              Built for speed, conversion, and stunning visual impact. Explore the core pillars behind the Webmake AI architecture.
+              Built for speed, conversion, and stunning visual impact. Explore the core pillars behind the WebMake AI architecture.
             </p>
           </div>
 
@@ -2519,7 +2519,7 @@ export const AiBuilderPage: React.FC = () => {
               Everything You <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Need to Know</span>
             </h2>
             <p className="text-sm sm:text-base text-[var(--text-secondary)] mt-3 max-w-xl mx-auto">
-              Got questions about Webmake AI? Here are answers to common questions about building, customizing, and publishing your dream site.
+              Got questions about WebMake AI? Here are answers to common questions about building, customizing, and publishing your dream site.
             </p>
           </div>
 
@@ -2599,7 +2599,7 @@ export const AiBuilderPage: React.FC = () => {
       </section>
       
       {/* Footer */}
-      <WebamekFooter />
+      <WebMakeFooter />
     </main>
   );
 };

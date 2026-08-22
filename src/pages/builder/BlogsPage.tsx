@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { WebamekNav } from "../../components/builder/WebamekNav";
-import { WebamekFooter } from "../../components/builder/WebamekFooter";
+import { WebMakeNav } from "../../components/builder/WebMakeNav";
+import { WebMakeFooter } from "../../components/builder/WebMakeFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 
 export const BlogsPage: React.FC = () => {
@@ -27,7 +27,7 @@ export const BlogsPage: React.FC = () => {
     },
     {
       id: "core-web-vitals-for-3d-sites",
-      title: "How Webamek Delivers 60 FPS WebGL With 100/100 Core Web Vitals",
+      title: "How WebMake Delivers 60 FPS WebGL With 100/100 Core Web Vitals",
       excerpt: "The engineering behind lightweight 3D chunking, asset streaming, and edge caching for sub-second page loads on mobile.",
       category: "Engineering",
       readTime: "6 min read",
@@ -48,11 +48,11 @@ export const BlogsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#07080e] text-white font-sans selection:bg-[#3b82f6] selection:text-white">
       <SEOMeta
-        title="Webamek Blog — Insights on AI Websites, 3D WebGL, & Growth"
+        title="WebMake Blog — Insights on AI Websites, 3D WebGL, & Growth"
         description="Learn the latest techniques in AI-powered website design, 3D animations, Core Web Vitals optimization, and conversion rate tactics."
       />
       
-      <WebamekNav activePage="blogs" />
+      <WebMakeNav activePage="blogs" />
 
       {/* Hero Header */}
       <div className="pt-32 pb-14 px-4 sm:px-6 lg:px-8 max-w-[1200px] mx-auto text-center relative">
@@ -63,7 +63,7 @@ export const BlogsPage: React.FC = () => {
         </div>
 
         <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tight max-w-4xl mx-auto">
-          The Webamek <br />
+          The WebMake <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f472b6] via-[#a855f7] to-[#60a5fa]">
             Design & AI Journal
           </span>
@@ -129,7 +129,7 @@ export const BlogsPage: React.FC = () => {
           ))}
         </div>
       </div>
-      <WebamekFooter />
+      <WebMakeFooter />
 </div>
   );
 };

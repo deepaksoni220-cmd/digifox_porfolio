@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { WebamekNav } from "../../components/builder/WebamekNav";
-import { WebamekFooter } from "../../components/builder/WebamekFooter";
+import { WebMakeNav } from "../../components/builder/WebMakeNav";
+import { WebMakeFooter } from "../../components/builder/WebMakeFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 import { predefinedTemplates } from "../../data/templates";
 
@@ -26,11 +26,11 @@ export const DesignKitsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#07080e] text-white font-sans selection:bg-[#3b82f6] selection:text-white">
       <SEOMeta
-        title="Webamek Design Kits & 3D Templates — Web Studio"
+        title="WebMake Design Kits & 3D Templates — Web Studio"
         description="Browse pre-built 3D WebGL and 2D animated design kits for restaurants, e-commerce, portfolios, and tech businesses."
       />
       
-      <WebamekNav activePage="design-kits" />
+      <WebMakeNav activePage="design-kits" />
 
       {/* Hero Header */}
       <div className="pt-32 pb-14 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto text-center relative">
@@ -192,7 +192,7 @@ export const DesignKitsPage: React.FC = () => {
           </div>
         )}
       </AnimatePresence>
-      <WebamekFooter />
+      <WebMakeFooter />
 </div>
   );
 };

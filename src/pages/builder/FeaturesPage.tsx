@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { WebamekNav } from "../../components/builder/WebamekNav";
-import { WebamekFooter } from "../../components/builder/WebamekFooter";
+import { WebMakeNav } from "../../components/builder/WebMakeNav";
+import { WebMakeFooter } from "../../components/builder/WebMakeFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 
 export const FeaturesPage: React.FC = () => {
@@ -11,7 +11,7 @@ export const FeaturesPage: React.FC = () => {
       icon: "⚡",
       tag: "AI Intelligence",
       title: "Prompt to Your Sales Machine Website",
-      desc: "Simply describe your business, niche, or product in plain words. Webamek generates structured sections, headlines, benefit blocks, and call-to-actions instantly.",
+      desc: "Simply describe your business, niche, or product in plain words. WebMake generates structured sections, headlines, benefit blocks, and call-to-actions instantly.",
       gradient: "from-blue-500/20 to-indigo-500/10",
       border: "border-blue-500/30"
     },
@@ -60,11 +60,11 @@ export const FeaturesPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#07080e] text-white font-sans selection:bg-[#3b82f6] selection:text-white">
       <SEOMeta
-        title="Webamek Features — AI & 3D Website Builder"
+        title="WebMake Features — AI & 3D Website Builder"
         description="Explore next-generation AI web creation, 3D WebGL animations, visual click-to-edit studio, and custom domain publishing."
       />
       
-      <WebamekNav activePage="features" />
+      <WebMakeNav activePage="features" />
 
       {/* Atmospheric Hero */}
       <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto text-center relative">
@@ -97,7 +97,7 @@ export const FeaturesPage: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-6 text-lg sm:text-xl text-white/70 max-w-3xl mx-auto font-light leading-relaxed"
         >
-          Webamek merges autonomous AI generation with high-performance WebGL physics and intuitive visual editing so you can launch high-converting websites in minutes.
+          WebMake merges autonomous AI generation with high-performance WebGL physics and intuitive visual editing so you can launch high-converting websites in minutes.
         </motion.p>
 
         <motion.div
@@ -177,7 +177,7 @@ export const FeaturesPage: React.FC = () => {
           </Link>
         </div>
       </div>
-      <WebamekFooter />
+      <WebMakeFooter />
 </div>
   );
 };

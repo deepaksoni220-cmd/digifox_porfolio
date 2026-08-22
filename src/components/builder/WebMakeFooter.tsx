@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export const WebamekFooter: React.FC = () => {
+export const WebMakeFooter: React.FC = () => {
   return (
     <footer className="border-t border-white/[0.08] bg-[#05060b] text-white pt-16 pb-12 mt-20 relative z-20">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,7 +19,7 @@ export const WebamekFooter: React.FC = () => {
               </div>
               <div className="flex flex-col">
                 <span className="font-[Kanit] font-black text-xl tracking-tight text-white group-hover:text-[#60a5fa] transition-colors">
-                  Webamek <span className="text-xs font-extrabold uppercase px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">AI</span>
+                  WebMake <span className="text-xs font-extrabold uppercase px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">AI</span>
                 </span>
                 <span className="text-[10px] text-white/40 tracking-wider -mt-1 font-medium">
                   by digifox.world
@@ -77,7 +77,7 @@ export const WebamekFooter: React.FC = () => {
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-xs text-white/40">
           <p>
-            &copy; {new Date().getFullYear()} Webamek by digifox.world. All rights reserved.
+            &copy; {new Date().getFullYear()} WebMake by digifox.world. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link to="/ai-builder/terms" className="hover:text-white transition-colors">Terms</Link>

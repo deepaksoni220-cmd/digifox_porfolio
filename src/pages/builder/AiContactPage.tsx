@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { WebamekNav } from "../../components/builder/WebamekNav";
-import { WebamekFooter } from "../../components/builder/WebamekFooter";
+import { WebMakeNav } from "../../components/builder/WebMakeNav";
+import { WebMakeFooter } from "../../components/builder/WebMakeFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 
 export const AiContactPage: React.FC = () => {
@@ -17,11 +17,11 @@ export const AiContactPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#07080e] text-white font-sans selection:bg-[#3b82f6] selection:text-white">
       <SEOMeta
-        title="Contact Webamek — Support, Custom Design, & Enterprise"
+        title="Contact WebMake — Support, Custom Design, & Enterprise"
         description="Have questions about the AI Website Builder, custom 3D design, or enterprise plans? Get in touch with our team."
       />
       
-      <WebamekNav activePage="contact" />
+      <WebMakeNav activePage="contact" />
 
       {/* Hero Header */}
       <div className="pt-32 pb-14 px-4 sm:px-6 lg:px-8 max-w-[1200px] mx-auto text-center relative">
@@ -34,7 +34,7 @@ export const AiContactPage: React.FC = () => {
         <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tight max-w-4xl mx-auto">
           Get In Touch With <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#a855f7] to-[#ec4899]">
-            The Webamek Team
+            The WebMake Team
           </span>
         </h1>
 
@@ -192,7 +192,7 @@ export const AiContactPage: React.FC = () => {
 
         </div>
       </div>
-      <WebamekFooter />
+      <WebMakeFooter />
 </div>
   );
 };

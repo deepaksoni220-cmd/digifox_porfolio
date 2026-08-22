@@ -98,7 +98,7 @@ export const PrivacyPolicyPage: React.FC = () => {
             </h2>
             <p>We utilize the collected information strictly for legitimate operational purposes:</p>
             <ul className="space-y-2 pl-4 list-disc marker:text-emerald-400">
-              <li>To build, host, and deliver bespoke digital websites and Webmake templates.</li>
+              <li>To build, host, and deliver bespoke digital websites and WebMake templates.</li>
               <li>To provide customer support, project consultations, and updates.</li>
               <li>To protect against fraudulent, unauthorized, or illegal activities.</li>
               <li>To continuously benchmark and improve server performance, CDN delivery, and AI generation quality.</li>

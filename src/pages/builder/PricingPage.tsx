@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { WebamekNav } from "../../components/builder/WebamekNav";
-import { WebamekFooter } from "../../components/builder/WebamekFooter";
+import { WebMakeNav } from "../../components/builder/WebMakeNav";
+import { WebMakeFooter } from "../../components/builder/WebMakeFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 import { PRICING_DATA } from "../../data/pricingPlans";
 
@@ -61,11 +61,11 @@ export const PricingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#07080e] text-white font-sans selection:bg-[#3b82f6] selection:text-white">
       <SEOMeta
-        title="Webamek Pricing — Simple, Transparent Plans for 2D & 3D Websites"
+        title="WebMake Pricing — Simple, Transparent Plans for 2D & 3D Websites"
         description="Choose between high-speed 2D websites and immersive 3D WebGL animated websites. Save up to 25% on annual plans."
       />
       
-      <WebamekNav activePage="pricing" />
+      <WebMakeNav activePage="pricing" />
 
       {/* Hero Header */}
       <div className="pt-32 pb-14 px-4 sm:px-6 lg:px-8 max-w-[1200px] mx-auto text-center relative">
@@ -306,7 +306,7 @@ export const PricingPage: React.FC = () => {
           ))}
         </div>
       </div>
-      <WebamekFooter />
+      <WebMakeFooter />
 </div>
   );
 };

@@ -72,20 +72,20 @@ export const TermsPage: React.FC = () => {
               <span className="text-[#3b82f6]">1.</span> Acceptance of Terms
             </h2>
             <p>
-              Welcome to Digifox 5D (&quot;Digifox&quot;, &quot;we&quot;, &quot;our&quot;, or &quot;us&quot;). By accessing our website, utilizing our AI Website Builder (&quot;Webmake&quot;), or hiring us for bespoke web design, 3D development, and digital marketing services, you agree to be bound by these Terms and Conditions and our Privacy Policy. If you disagree with any part of these terms, you must refrain from using our platforms and services.
+              Welcome to Digifox 5D (&quot;Digifox&quot;, &quot;we&quot;, &quot;our&quot;, or &quot;us&quot;). By accessing our website, utilizing our AI Website Builder (&quot;WebMake&quot;), or hiring us for bespoke web design, 3D development, and digital marketing services, you agree to be bound by these Terms and Conditions and our Privacy Policy. If you disagree with any part of these terms, you must refrain from using our platforms and services.
             </p>
           </section>
 
           {/* Section 2 */}
           <section className="space-y-3 border-t border-[var(--border-strong)] pt-8">
             <h2 className="text-base sm:text-lg font-bold text-[var(--text-strong)] uppercase tracking-wider flex items-center gap-2">
-              <span className="text-[#3b82f6]">2.</span> Services & Webmake AI Builder
+              <span className="text-[#3b82f6]">2.</span> Services & WebMake AI Builder
             </h2>
             <p>
               Digifox provides cutting-edge digital agency services, including 3D web experiences, bespoke website architecture, UI/UX design, performance marketing, and automated website generation through our AI Builder.
             </p>
             <ul className="space-y-2 pl-4 list-disc marker:text-[#3b82f6]">
-              <li><strong>Site Generation:</strong> Sites generated with Webmake are designed to provide rapid prototyping and customizable digital blueprints.</li>
+              <li><strong>Site Generation:</strong> Sites generated with WebMake are designed to provide rapid prototyping and customizable digital blueprints.</li>
               <li><strong>Subdomain Publishing:</strong> Sites published on <code className="text-[#3b82f6] bg-blue-500/10 px-1.5 py-0.5 rounded font-mono">*.digifox.world</code> remain hosted on our secure cloud infrastructure subject to standard network uptime policies.</li>
               <li><strong>Customization:</strong> Users maintain full rights to edit and tailor generated content for their lawful commercial and personal enterprises.</li>
             </ul>

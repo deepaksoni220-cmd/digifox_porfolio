@@ -10,6 +10,7 @@ import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
 import CursorGrid from '../components/ui/CursorGrid';
 import { StepsProgressBarSection } from '../components/builder/StepsProgressBarSection';
 import { WebamekNav } from '../components/builder/WebamekNav';
+import { WebamekFooter } from '../components/builder/WebamekFooter';
 
 export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -2598,28 +2599,7 @@ export const AiBuilderPage: React.FC = () => {
       </section>
       
       {/* Footer */}
-      <footer className="border-t border-[var(--border-strong)] bg-[var(--bg-surface)] pt-12 pb-6 mt-10">
-        <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left mb-8">
-          <div>
-            <span className="text-2xl font-black tracking-widest uppercase bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] bg-clip-text text-transparent">
-              Webmake <span className="text-sm font-bold tracking-wider text-[var(--text-primary)]/50">by Digifox</span>
-            </span>
-            <p className="text-[var(--text-secondary)] text-sm mt-2 max-w-sm">
-              Build your dream website in minutes with the power of AI. Fast, beautiful, and fully customizable.
-            </p>
-          </div>
-          <div className="flex gap-6 justify-center">
-            <a href="/ai-builder/terms" className="text-[var(--text-secondary)] hover:text-[#3b82f6] transition-colors text-xs font-black uppercase tracking-widest">Terms</a>
-            <a href="/ai-builder/privacy" className="text-[var(--text-secondary)] hover:text-[#3b82f6] transition-colors text-xs font-black uppercase tracking-widest">Privacy</a>
-            <a href="/ai-builder/contact" className="text-[var(--text-secondary)] hover:text-[#3b82f6] transition-colors text-xs font-black uppercase tracking-widest">Contact Us</a>
-          </div>
-        </div>
-        <div className="border-t border-[var(--border-subtle)] pt-6 text-center">
-          <p className="text-[var(--text-secondary)] text-sm font-bold opacity-60">
-            &copy; 2026 Webmake. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <WebamekFooter />
     </main>
   );
 };

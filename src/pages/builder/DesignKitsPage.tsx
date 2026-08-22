@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { WebamekNav } from "../../components/builder/WebamekNav";
+import { WebamekFooter } from "../../components/builder/WebamekFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 import { predefinedTemplates } from "../../data/templates";
 
@@ -191,6 +192,7 @@ export const DesignKitsPage: React.FC = () => {
           </div>
         )}
       </AnimatePresence>
-    </div>
+      <WebamekFooter />
+</div>
   );
 };

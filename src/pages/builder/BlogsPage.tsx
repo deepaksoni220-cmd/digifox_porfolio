@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { WebamekNav } from "../../components/builder/WebamekNav";
+import { WebamekFooter } from "../../components/builder/WebamekFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 
 export const BlogsPage: React.FC = () => {
@@ -128,6 +129,7 @@ export const BlogsPage: React.FC = () => {
           ))}
         </div>
       </div>
-    </div>
+      <WebamekFooter />
+</div>
   );
 };

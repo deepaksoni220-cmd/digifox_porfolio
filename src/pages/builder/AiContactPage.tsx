@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { WebamekNav } from "../../components/builder/WebamekNav";
+import { WebamekFooter } from "../../components/builder/WebamekFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 
 export const AiContactPage: React.FC = () => {
@@ -191,6 +192,7 @@ export const AiContactPage: React.FC = () => {
 
         </div>
       </div>
-    </div>
+      <WebamekFooter />
+</div>
   );
 };

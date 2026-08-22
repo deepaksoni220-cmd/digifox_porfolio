@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { WebamekNav } from "../../components/builder/WebamekNav";
+import { WebamekFooter } from "../../components/builder/WebamekFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 import { PRICING_DATA } from "../../data/pricingPlans";
 
@@ -305,6 +306,7 @@ export const PricingPage: React.FC = () => {
           ))}
         </div>
       </div>
-    </div>
+      <WebamekFooter />
+</div>
   );
 };

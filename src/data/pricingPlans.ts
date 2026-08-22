@@ -46,14 +46,16 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
         description: "Immersive 3D physics, interactive WebGL models, and rich animations for standout brands.",
         features: [
           "1 Interactive 3D WebGL Website",
+          "Free Unlimited Customizations",
+          "Free SSL Certificate",
+          "Free Global Edge CDN Servers",
           "20 GB High-Speed CDN Bandwidth / month",
           "Free *.digifox.world Subdomain",
           "Connect 1 Custom Domain (yourbrand.com)",
           "Dynamic Particle & Physics Canvas",
           "Direct Click-to-Edit Visual Studio",
           "Instant Lead Capture & WhatsApp Integration",
-          "Ultra-Smooth 60 FPS Performance",
-          "Global Edge CDN & Automated SSL"
+          "Ultra-Smooth 60 FPS Performance"
         ]
       },
       bundle: {
@@ -71,6 +73,9 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
         description: "Launch 3 separate 3D WebGL websites for multiple brands, clients, or product launches.",
         features: [
           "3 Interactive 3D WebGL Websites",
+          "Free Unlimited Customizations on All Sites",
+          "Free SSL Certificate for Every Domain",
+          "Free Global Edge CDN Servers",
           "20 GB High-Speed Bandwidth per website (60 GB Total)",
           "3 Separate Free *.digifox.world Subdomains",
           "Connect 3 Custom Domains (1 per site)",
@@ -95,12 +100,14 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
         description: "Perfect for local businesses, portfolios, and fast-converting landing pages.",
         features: [
           "1 High-Speed Responsive 2D Website",
+          "Free Unlimited Customizations",
+          "Free SSL Certificate",
+          "Free Global Edge CDN Servers",
           "20 GB High-Speed CDN Bandwidth / month",
           "Free *.digifox.world Subdomain",
           "Connect 1 Custom Domain (yourbrand.com)",
           "Direct Click-to-Edit Visual Content Editor",
           "Instant Lead Capture & WhatsApp Integration",
-          "Global Edge CDN & Automated SSL",
           "SEO & Meta Tags Customization",
           "Mobile & Tablet Optimized"
         ]
@@ -120,6 +127,9 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
         description: "Deploy 5 independent 2D websites for your agency clients, local stores, or projects.",
         features: [
           "5 High-Speed Responsive 2D Websites",
+          "Free Unlimited Customizations on All Sites",
+          "Free SSL Certificate for Every Domain",
+          "Free Global Edge CDN Servers",
           "20 GB High-Speed Bandwidth per website (100 GB Total)",
           "5 Separate Free *.digifox.world Subdomains",
           "Connect 5 Custom Domains (1 per site)",
@@ -149,14 +159,16 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
         description: "Cutting-edge 3D animated web experience designed to maximize brand authority and engagement.",
         features: [
           "1 Interactive 3D WebGL Website",
+          "Free Unlimited Customizations",
+          "Free SSL Certificate",
+          "Free Global Edge CDN Servers",
           "20 GB High-Speed CDN Bandwidth / month",
           "Free *.digifox.world Subdomain",
           "Connect 1 Custom Domain (yourbrand.com)",
           "Dynamic Particle & Physics Canvas",
           "Direct Click-to-Edit Visual Studio",
           "Instant Lead Capture & WhatsApp Integration",
-          "Ultra-Smooth 60 FPS Performance",
-          "Global Edge CDN & Automated SSL"
+          "Ultra-Smooth 60 FPS Performance"
         ]
       },
       bundle: {
@@ -174,6 +186,9 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
         description: "Launch 3 separate 3D WebGL websites for multiple brands, clients, or product launches.",
         features: [
           "3 Interactive 3D WebGL Websites",
+          "Free Unlimited Customizations on All Sites",
+          "Free SSL Certificate for Every Domain",
+          "Free Global Edge CDN Servers",
           "20 GB High-Speed Bandwidth per website (60 GB Total)",
           "3 Separate Free *.digifox.world Subdomains",
           "Connect 3 Custom Domains (1 per site)",
@@ -198,12 +213,14 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
         description: "Ideal for startups, creators, and modern businesses wanting a high-converting presence.",
         features: [
           "1 High-Speed Responsive 2D Website",
+          "Free Unlimited Customizations",
+          "Free SSL Certificate",
+          "Free Global Edge CDN Servers",
           "20 GB High-Speed CDN Bandwidth / month",
           "Free *.digifox.world Subdomain",
           "Connect 1 Custom Domain (yourbrand.com)",
           "Direct Click-to-Edit Visual Content Editor",
           "Instant Lead Capture & WhatsApp Integration",
-          "Global Edge CDN & Automated SSL",
           "SEO & Meta Tags Customization",
           "Mobile & Tablet Optimized"
         ]
@@ -223,6 +240,9 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
         description: "Deploy 5 independent 2D websites for your agency clients, local stores, or projects.",
         features: [
           "5 High-Speed Responsive 2D Websites",
+          "Free Unlimited Customizations on All Sites",
+          "Free SSL Certificate for Every Domain",
+          "Free Global Edge CDN Servers",
           "20 GB High-Speed Bandwidth per website (100 GB Total)",
           "5 Separate Free *.digifox.world Subdomains",
           "Connect 5 Custom Domains (1 per site)",

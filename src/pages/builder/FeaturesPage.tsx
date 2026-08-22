@@ -10,7 +10,7 @@ export const FeaturesPage: React.FC = () => {
     {
       icon: "⚡",
       tag: "AI Intelligence",
-      title: "Prompt to High-Converting Website",
+      title: "Prompt to Your Sales Machine Website",
       desc: "Simply describe your business, niche, or product in plain words. Webamek generates structured sections, headlines, benefit blocks, and call-to-actions instantly.",
       gradient: "from-blue-500/20 to-indigo-500/10",
       border: "border-blue-500/30"
@@ -141,7 +141,7 @@ export const FeaturesPage: React.FC = () => {
                     {feat.tag}
                   </span>
                 </div>
-                <h3 className="text-2xl font-black tracking-tight mb-3 text-white">
+                <h3 className="text-xl sm:text-2xl font-semibold tracking-tight mb-3 text-white/95 leading-snug">
                   {feat.title}
                 </h3>
                 <p className="text-sm text-white/70 leading-relaxed font-light">

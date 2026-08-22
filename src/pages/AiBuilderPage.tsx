@@ -1855,22 +1855,13 @@ export const AiBuilderPage: React.FC = () => {
               </div>
 
               <TemplateGallery 
+                maxLimit={6}
                 onSelect={(_, data) => {
                   setPreviewData(data);
                   // Scroll down to preview area smoothly
                   window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
                 }} 
               />
-
-              <div className="mt-8 text-center">
-                <Link
-                  to="/ai-builder/design-kits"
-                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/15 text-white text-xs font-black uppercase tracking-wider transition-all hover:scale-105 shadow-xl"
-                >
-                  <span>View All 3D & 2D Design Kits (Templates)</span>
-                  <span>↗</span>
-                </Link>
-              </div>
             </div>
 
             {/* 5 Easy Steps Process Section with Progressive Bar Animations */}

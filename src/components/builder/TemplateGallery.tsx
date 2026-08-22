@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { GeneratedWebsiteData } from '../../services/aiBuilderService';
 import { predefinedTemplates } from '../../data/templates';
 
 interface TemplateGalleryProps {
   onSelect: (templateId: string, data: GeneratedWebsiteData) => void;
+  maxLimit?: number;
 }
 
 interface TemplateCardProps {
@@ -131,7 +133,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   );
 };
 
-export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) => {
+export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect, maxLimit = 6 }) => {
   const [activeTab, setActiveTab] = useState<'all' | '3d' | '2d'>('all');
   const [activePreview, setActivePreview] = useState<{ id: string, data: GeneratedWebsiteData } | null>(null);
 
@@ -144,6 +146,8 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
     : activeTab === '3d' 
       ? templates3D 
       : templates2D;
+
+  const displayedTemplates = maxLimit ? currentTemplates.slice(0, maxLimit) : currentTemplates;
 
   return (
     <div className="w-full flex flex-col gap-6">
@@ -199,7 +203,7 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       >
         <AnimatePresence mode="popLayout">
-          {currentTemplates.map(([id, template], i) => (
+          {displayedTemplates.map(([id, template], i) => (
             <TemplateCard 
               key={id} 
               id={id} 
@@ -211,6 +215,17 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
           ))}
         </AnimatePresence>
       </motion.div>
+
+      {/* Explore More Templates Button */}
+      <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+        <Link
+          to="/ai-builder/design-kits"
+          className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#3b82f6]/20 via-[#8b5cf6]/20 to-[#ec4899]/20 hover:from-[#3b82f6]/35 hover:via-[#8b5cf6]/35 hover:to-[#ec4899]/35 border border-white/20 hover:border-[#60a5fa]/60 text-white font-black text-xs sm:text-sm uppercase tracking-wider shadow-[0_0_30px_rgba(59,130,246,0.25)] hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] hover:scale-105 transition-all duration-300 cursor-pointer"
+        >
+          <span>Explore all Design Kits</span>
+          <span className="group-hover:translate-x-1 transition-transform text-base font-black">→</span>
+        </Link>
+      </div>
 
       {/* Modern Pop-up Live Preview Modal */}
       <AnimatePresence>

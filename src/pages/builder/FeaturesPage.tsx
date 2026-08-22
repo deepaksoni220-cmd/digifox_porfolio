@@ -5,7 +5,6 @@ import { ChevronDown } from "lucide-react";
 import { WebMakeNav } from "../../components/builder/WebMakeNav";
 import { WebMakeFooter } from "../../components/builder/WebMakeFooter";
 import { SEOMeta } from "../../components/SEOMeta";
-import { AnimatedTestimonials } from "../../components/ui/animated-testimonials";
 
 export const FeaturesPage: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -160,92 +159,6 @@ export const FeaturesPage: React.FC = () => {
           ))}
         </div>
       </div>
-
-      {/* ================= REVIEWS / TESTIMONIALS SECTION ================= */}
-      <section className="py-20 border-t border-white/10 relative overflow-hidden bg-[#0a0b14]">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-[#60a5fa] text-xs font-bold uppercase tracking-widest mb-4">
-              <span>⭐️</span>
-              <span>Client Reviews & Proof</span>
-            </div>
-            
-            <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white">
-              Loved by Founders & <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">Agencies Globally</span>
-            </h2>
-            <p className="text-sm sm:text-base text-white/70 mt-3 max-w-xl mx-auto font-light">
-              See what creators, entrepreneurs, and design agencies build with WebMake.
-            </p>
-
-            {/* Quick Metrics Bar */}
-            <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10 mt-8 pt-6 border-t border-white/10 text-xs uppercase tracking-widest font-bold text-white/60">
-              <div className="flex items-center gap-2">
-                <span className="text-xl font-black text-white">4.9/5</span>
-                <span className="text-yellow-400 text-sm">★★★★★</span>
-                <span className="opacity-70">(380+ Reviews)</span>
-              </div>
-              <div className="hidden sm:block text-white/20">•</div>
-              <div className="flex items-center gap-2">
-                <span className="text-xl font-black text-white">700+</span>
-                <span className="opacity-70">Sites Launched</span>
-              </div>
-            </div>
-          </div>
-
-          {/* 3D Animated Testimonials Component */}
-          <AnimatedTestimonials 
-            autoplay={true}
-            testimonials={[
-              {
-                country: 'United States',
-                flag: '🇺🇸',
-                tag: 'Portfolio & Agency Website',
-                quote: 'WebMake turned our agency branding into an ultra-smooth, 3D interactive web showcase in under 15 minutes. The inline text styling and live animations saved our team weeks of development work. Incredible platform.',
-                name: 'Marcus Vance',
-                designation: 'Founder, NexaStudio • Austin, Texas, USA',
-                src: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1200&auto=format&fit=crop'
-              },
-              {
-                country: 'United States',
-                flag: '🇺🇸',
-                tag: 'E-Commerce & Retail Store',
-                quote: 'We launched our entire summer collection website with WebMake. The layout adapts smoothly to all screens, and our conversion rate jumped 35% thanks to the snappy load speeds and clean UX.',
-                name: 'Sarah Jenkins',
-                designation: 'E-Commerce Director, Aura Luxe • New York, USA',
-                src: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1200&auto=format&fit=crop'
-              },
-              {
-                country: 'United States',
-                flag: '🇺🇸',
-                tag: 'SaaS & Tech Landing Page',
-                quote: 'The AI prompt generation matched our niche branding instantly. Being able to live-edit every heading, button, and image without touching code is a superpower for fast product launches.',
-                name: 'David Miller',
-                designation: 'Co-Founder, CloudPulse Tech • San Francisco, USA',
-                src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200&auto=format&fit=crop'
-              },
-              {
-                country: 'Australia',
-                flag: '🇦🇺',
-                tag: 'Creative Studio & Portfolio',
-                quote: 'The responsiveness and visual polish of the generated sites are world-class. Our Australian clients loved how easy it was to connect the live WhatsApp button and customize branding details on the fly.',
-                name: 'Chloe Henderson',
-                designation: 'Creative Director, Veloce Media • Sydney, Australia',
-                src: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1200&auto=format&fit=crop'
-              },
-              {
-                country: 'United Kingdom',
-                flag: '🇬🇧',
-                tag: 'Digital Agency Showcase',
-                quote: 'The 3D WebGL effects run at a locked 60 FPS on every mobile phone we tested. We migrated 4 client projects to WebMake within the first week alone.',
-                name: 'Liam Wright',
-                designation: 'Managing Director, Apex Digital • London, UK',
-                src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200&auto=format&fit=crop'
-              }
-            ]}
-          />
-        </div>
-      </section>
 
       {/* ================= ANIMATED FAQ SECTION ================= */}
       <section className="py-24 border-t border-white/10 relative overflow-hidden bg-[#07080e]">

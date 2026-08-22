@@ -22,6 +22,11 @@ import { ProtectedPage } from './components/ProtectedPage';
 import { TermsPage } from './pages/TermsPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { ContactUsPage } from './pages/ContactUsPage';
+import { FeaturesPage } from './pages/builder/FeaturesPage';
+import { DesignKitsPage } from './pages/builder/DesignKitsPage';
+import { PricingPage } from './pages/builder/PricingPage';
+import { BlogsPage } from './pages/builder/BlogsPage';
+import { AiContactPage } from './pages/builder/AiContactPage';
 
 function Portfolio() {
   const [isLoading, setIsLoading] = useState(true);
@@ -122,6 +127,16 @@ function App() {
               <AiBuilderPage />
             </ProtectedPage>
           } />
+          <Route path="/ai-builder/features" element={<FeaturesPage />} />
+          <Route path="/ai-builder/design-kits" element={<DesignKitsPage />} />
+          <Route path="/ai-builder/templates" element={<DesignKitsPage />} />
+          <Route path="/ai-builder/pricing" element={<PricingPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/ai-builder/blogs" element={<BlogsPage />} />
+          <Route path="/blogs" element={<BlogsPage />} />
+          <Route path="/ai-builder/contact" element={<AiContactPage />} />
+          <Route path="/ai-builder/contact-us" element={<AiContactPage />} />
+
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/terms-and-conditions" element={<TermsPage />} />
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
@@ -134,12 +149,10 @@ function App() {
           <Route path="/ai-builder/terms-and-conditions" element={<TermsPage />} />
           <Route path="/ai-builder/privacy" element={<PrivacyPolicyPage />} />
           <Route path="/ai-builder/privacy-policy" element={<PrivacyPolicyPage />} />
-          <Route path="/ai-builder/contact" element={<ContactUsPage />} />
-          <Route path="/ai-builder/contact-us" element={<ContactUsPage />} />
           <Route path="/aibuilder/terms" element={<TermsPage />} />
           <Route path="/aibuilder/privacy" element={<PrivacyPolicyPage />} />
-          <Route path="/aibuilder/contact" element={<ContactUsPage />} />
-          <Route path="/aibuilder/contact-us" element={<ContactUsPage />} />
+          <Route path="/aibuilder/contact" element={<AiContactPage />} />
+          <Route path="/aibuilder/contact-us" element={<AiContactPage />} />
 
           <Route path="/generated-site" element={<GeneratedSitePage />} />
         </Routes>

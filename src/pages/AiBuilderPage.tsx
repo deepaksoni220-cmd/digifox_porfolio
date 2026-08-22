@@ -5,11 +5,11 @@ import { publishWebsite, getPublishedWebsite } from '../services/firebase';
 import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 import { TemplateGallery } from '../components/builder/TemplateGallery';
 import { SEOMeta } from '../components/SEOMeta';
-import { ThemeToggle } from '../components/ThemeToggle';
 import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown, Layers, Wand2, Coins, Orbit } from 'lucide-react';
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
 import CursorGrid from '../components/ui/CursorGrid';
 import { StepsProgressBarSection } from '../components/builder/StepsProgressBarSection';
+import { WebamekNav } from '../components/builder/WebamekNav';
 
 export const AiBuilderPage: React.FC = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
@@ -1600,22 +1600,8 @@ export const AiBuilderPage: React.FC = () => {
         description="Instantly generate and customize your website using our advanced AI consultant."
       />
 
-      {/* Floating Top Header with Logo, Nav Links & ThemeToggle for all screen sizes */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 py-3 bg-black/60 backdrop-blur-md border-b border-white/10 shadow-lg shadow-black/20 text-white">
-        <a href="/" className="flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-widest text-white hover:text-[#3b82f6] transition-colors">
-          <span>←</span>
-          <span>DIGIFOX</span>
-        </a>
-        <div className="flex items-center gap-3 sm:gap-5">
-          <div className="flex items-center gap-3 sm:gap-4 text-xs font-bold uppercase tracking-wider text-white/70">
-            <a href="/ai-builder/contact" className="hover:text-white transition-colors">Contact Us</a>
-            <a href="/ai-builder/terms" className="hover:text-white transition-colors hidden sm:inline-block">Terms</a>
-            <a href="/ai-builder/privacy" className="hover:text-white transition-colors hidden sm:inline-block">Privacy</a>
-          </div>
-          <div className="w-px h-4 bg-white/20" />
-          <ThemeToggle />
-        </div>
-      </header>
+      {/* Floating Webamek Top Navigation Bar */}
+      <WebamekNav activePage="studio" />
       
       {/* 1st Section Atmospheric Background Video */}
       <div className="absolute top-0 left-0 right-0 h-[850px] overflow-hidden pointer-events-none z-0 select-none bg-[#060709]">

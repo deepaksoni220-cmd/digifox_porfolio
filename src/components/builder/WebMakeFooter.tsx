@@ -19,7 +19,7 @@ export const WebMakeFooter: React.FC = () => {
               </div>
               <div className="flex flex-col">
                 <span className="font-[Kanit] font-black text-xl tracking-tight text-white group-hover:text-[#60a5fa] transition-colors">
-                  WebMake <span className="text-xs font-extrabold uppercase px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">AI</span>
+                  WebMake
                 </span>
                 <span className="text-[10px] text-white/40 tracking-wider -mt-1 font-medium">
                   by digifox.world

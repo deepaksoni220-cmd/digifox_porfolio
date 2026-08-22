@@ -50,9 +50,6 @@ export const WebMakeNav: React.FC<WebMakeNavProps> = ({ activePage }) => {
               <span className="font-[Kanit] font-black text-xl tracking-tight text-white group-hover:text-[#60a5fa] transition-colors">
                 WebMake
               </span>
-              <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-widest bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                AI
-              </span>
             </div>
           </Link>
         </div>

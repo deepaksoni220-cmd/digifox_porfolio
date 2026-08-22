@@ -9,7 +9,7 @@ import { PRICING_DATA, type PlanPackage } from "../../data/pricingPlans";
 export const PricingPage: React.FC = () => {
   const [country, setCountry] = useState<"IN" | "GLOBAL">("IN");
   const [isAnnual, setIsAnnual] = useState(true);
-  const [planCategory, setPlanCategory] = useState<"3d" | "2d" | "all">("3d");
+  const [planCategory, setPlanCategory] = useState<"3d" | "2d">("3d");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   useEffect(() => {
@@ -219,17 +219,6 @@ export const PricingPage: React.FC = () => {
                 1 Site & 5 Sites
               </span>
             </button>
-
-            <button
-              onClick={() => setPlanCategory("all")}
-              className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
-                planCategory === "all"
-                  ? "bg-white/20 text-white shadow"
-                  : "text-white/50 hover:text-white hover:bg-white/[0.04]"
-              }`}
-            >
-              <span>Compare All Plans</span>
-            </button>
           </div>
         </div>
 
@@ -317,46 +306,6 @@ export const PricingPage: React.FC = () => {
             >
               {renderCard(currentPricing.twoD.single, false)}
               {renderCard(currentPricing.twoD.bundle, false)}
-            </motion.div>
-          )}
-
-          {/* ================= ALL / SIDE-BY-SIDE VIEW ================= */}
-          {planCategory === "all" && (
-            <motion.div
-              key="all-plans-view"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="flex flex-col gap-12"
-            >
-              {/* 3D Section */}
-              <div>
-                <div className="flex items-center gap-3 mb-6 pb-2 border-b border-blue-500/30">
-                  <span className="text-2xl">🎮</span>
-                  <h3 className="text-xl font-black uppercase tracking-wider text-[#60a5fa]">
-                    3D Animated Websites
-                  </h3>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-                  {renderCard(currentPricing.threeD.single, true)}
-                  {renderCard(currentPricing.threeD.bundle, true)}
-                </div>
-              </div>
-
-              {/* 2D Section */}
-              <div>
-                <div className="flex items-center gap-3 mb-6 pb-2 border-b border-pink-500/30">
-                  <span className="text-2xl">⚡</span>
-                  <h3 className="text-xl font-black uppercase tracking-wider text-[#f472b6]">
-                    2D Animated Websites
-                  </h3>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-                  {renderCard(currentPricing.twoD.single, false)}
-                  {renderCard(currentPricing.twoD.bundle, false)}
-                </div>
-              </div>
             </motion.div>
           )}
 

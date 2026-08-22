@@ -132,33 +132,54 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
 };
 
 export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) => {
-  const [activeTab, setActiveTab] = useState<'3d' | '2d'>('3d');
+  const [activeTab, setActiveTab] = useState<'all' | '3d' | '2d'>('all');
   const [activePreview, setActivePreview] = useState<{ id: string, data: GeneratedWebsiteData } | null>(null);
 
-  const templates3D = Object.entries(predefinedTemplates).filter(([_, t]) => t.category === '3d');
-  const templates2D = Object.entries(predefinedTemplates).filter(([_, t]) => t.category === '2d' || !t.category);
+  const allTemplates = Object.entries(predefinedTemplates);
+  const templates3D = allTemplates.filter(([_, t]) => t.category === '3d');
+  const templates2D = allTemplates.filter(([_, t]) => t.category === '2d' || !t.category);
+
+  const currentTemplates = activeTab === 'all' 
+    ? allTemplates 
+    : activeTab === '3d' 
+      ? templates3D 
+      : templates2D;
 
   return (
     <div className="w-full flex flex-col gap-6">
       {/* Tab Switcher */}
-      <div className="flex gap-6 border-b border-[#1b1d30] pb-2 relative">
+      <div className="flex flex-wrap gap-4 sm:gap-6 border-b border-[#1b1d30] pb-2 relative">
+        <button
+          onClick={() => setActiveTab('all')}
+          className="text-xs sm:text-sm font-bold uppercase tracking-widest pb-3 relative z-10 transition-colors duration-300 cursor-pointer"
+          style={{ color: activeTab === 'all' ? '#60a5fa' : '#8e95a5' }}
+        >
+          All Design Kits
+          {activeTab === 'all' && (
+            <motion.div 
+              layoutId="activeTabUnderline" 
+              className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#60a5fa]"
+              transition={{ type: "spring", stiffness: 380, damping: 30 }}
+            />
+          )}
+        </button>
         <button
           onClick={() => setActiveTab('3d')}
-          className="text-sm font-bold uppercase tracking-widest pb-3 relative z-10 transition-colors duration-300 cursor-pointer"
-          style={{ color: activeTab === '3d' ? '#3b82f6' : '#8e95a5' }}
+          className="text-xs sm:text-sm font-bold uppercase tracking-widest pb-3 relative z-10 transition-colors duration-300 cursor-pointer"
+          style={{ color: activeTab === '3d' ? '#a855f7' : '#8e95a5' }}
         >
           3D Animated Websites
           {activeTab === '3d' && (
             <motion.div 
               layoutId="activeTabUnderline" 
-              className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#3b82f6]"
+              className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#a855f7]"
               transition={{ type: "spring", stiffness: 380, damping: 30 }}
             />
           )}
         </button>
         <button
           onClick={() => setActiveTab('2d')}
-          className="text-sm font-bold uppercase tracking-widest pb-3 relative z-10 transition-colors duration-300 cursor-pointer"
+          className="text-xs sm:text-sm font-bold uppercase tracking-widest pb-3 relative z-10 transition-colors duration-300 cursor-pointer"
           style={{ color: activeTab === '2d' ? '#ec4899' : '#8e95a5' }}
         >
           2D Animated Websites
@@ -178,28 +199,16 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect }) =>
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       >
         <AnimatePresence mode="popLayout">
-          {activeTab === '3d' 
-            ? templates3D.map(([id, template], i) => (
-                <TemplateCard 
-                  key={id} 
-                  id={id} 
-                  template={template} 
-                  index={i} 
-                  onSelect={onSelect}
-                  onPreviewClick={(previewId, previewData) => setActivePreview({ id: previewId, data: previewData })} 
-                />
-              ))
-            : templates2D.map(([id, template], i) => (
-                <TemplateCard 
-                  key={id} 
-                  id={id} 
-                  template={template} 
-                  index={i} 
-                  onSelect={onSelect}
-                  onPreviewClick={(previewId, previewData) => setActivePreview({ id: previewId, data: previewData })} 
-                />
-              ))
-          }
+          {currentTemplates.map(([id, template], i) => (
+            <TemplateCard 
+              key={id} 
+              id={id} 
+              template={template} 
+              index={i} 
+              onSelect={onSelect}
+              onPreviewClick={(previewId, previewData) => setActivePreview({ id: previewId, data: previewData })} 
+            />
+          ))}
         </AnimatePresence>
       </motion.div>
 

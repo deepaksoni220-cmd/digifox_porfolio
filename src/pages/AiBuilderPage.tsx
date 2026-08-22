@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { generateWebsite, planWebsite, patchWebsite, type GeneratedWebsiteData, type ChatMessage } from '../services/aiBuilderService';
 import { publishWebsite, getPublishedWebsite } from '../services/firebase';
@@ -1835,9 +1836,24 @@ export const AiBuilderPage: React.FC = () => {
 
             {/* Template Gallery Section */}
             <div className="mb-16">
-              <h2 className="text-2xl font-black uppercase tracking-widest mb-6 border-b border-[var(--border-strong)] pb-4">
-                Or Start From a Premium Design
-              </h2>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b border-[var(--border-strong)] pb-4 gap-4">
+                <div>
+                  <h2 className="text-2xl font-black uppercase tracking-widest text-white">
+                    Or Start From a Premium Design
+                  </h2>
+                  <p className="text-xs sm:text-sm text-[var(--text-primary)]/60 mt-1 font-light">
+                    Pick an interactive 3D or 2D design kit and customize it directly in Web Studio.
+                  </p>
+                </div>
+                <Link
+                  to="/ai-builder/design-kits"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#3b82f6]/20 to-[#8b5cf6]/20 hover:from-[#3b82f6]/30 hover:to-[#8b5cf6]/30 border border-[#3b82f6]/40 text-white text-xs font-black uppercase tracking-wider transition-all hover:scale-105 shadow-[0_0_20px_rgba(59,130,246,0.2)] shrink-0 cursor-pointer"
+                >
+                  <span>Explore All Design Kits</span>
+                  <span className="text-sm">→</span>
+                </Link>
+              </div>
+
               <TemplateGallery 
                 onSelect={(_, data) => {
                   setPreviewData(data);
@@ -1845,6 +1861,16 @@ export const AiBuilderPage: React.FC = () => {
                   window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
                 }} 
               />
+
+              <div className="mt-8 text-center">
+                <Link
+                  to="/ai-builder/design-kits"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/15 text-white text-xs font-black uppercase tracking-wider transition-all hover:scale-105 shadow-xl"
+                >
+                  <span>View All 3D & 2D Design Kits (Templates)</span>
+                  <span>↗</span>
+                </Link>
+              </div>
             </div>
 
             {/* 5 Easy Steps Process Section with Progressive Bar Animations */}

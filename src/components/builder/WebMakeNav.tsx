@@ -46,17 +46,12 @@ export const WebMakeNav: React.FC<WebMakeNavProps> = ({ activePage }) => {
                 </span>
               </div>
             </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-1.5">
-                <span className="font-[Kanit] font-black text-xl tracking-tight text-white group-hover:text-[#60a5fa] transition-colors">
-                  WebMake
-                </span>
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-widest bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                  AI
-                </span>
-              </div>
-              <span className="text-[10px] text-white/40 tracking-wider -mt-1 font-medium hidden sm:block">
-                by digifox.world
+            <div className="flex items-center gap-1.5">
+              <span className="font-[Kanit] font-black text-xl tracking-tight text-white group-hover:text-[#60a5fa] transition-colors">
+                WebMake
+              </span>
+              <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-widest bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                AI
               </span>
             </div>
           </Link>

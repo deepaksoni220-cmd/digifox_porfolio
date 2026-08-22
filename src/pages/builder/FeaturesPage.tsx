@@ -49,8 +49,8 @@ export const FeaturesPage: React.FC = () => {
     },
     {
       icon: "🚀",
-      tag: "Ultra-Fast Edge",
-      title: "100/100 Core Web Vitals & Global CDN",
+      tag: "Speed & SEO",
+      title: "100/100 Core Web Vitals & SEO , GEO Optimized",
       desc: "Optimized for lightning-fast speeds, SEO ranking, and GEO readiness across Google, Bing, and AI search engines like ChatGPT and Perplexity.",
       gradient: "from-cyan-500/20 to-sky-500/10",
       border: "border-cyan-500/30"

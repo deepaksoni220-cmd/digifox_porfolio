@@ -35,9 +35,9 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
     threeD: {
       single: {
         id: "3d-single",
-        name: "1 3D Website",
+        name: "Business Package",
         siteCount: 1,
-        siteCountLabel: "1 Website License",
+        siteCountLabel: "1 3D Website License",
         monthly: 999,
         annualMonthly: 790,
         annualTotal: 9480,
@@ -60,11 +60,11 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
       },
       bundle: {
         id: "3d-bundle",
-        name: "3 3D Websites",
+        name: "Agency Package",
         badge: "Best Value • Save 33%",
         popular: true,
         siteCount: 3,
-        siteCountLabel: "3 Websites Pack",
+        siteCountLabel: "3 3D Websites Pack",
         monthly: 2000,
         annualMonthly: 1590,
         annualTotal: 19080,
@@ -89,9 +89,9 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
     twoD: {
       single: {
         id: "2d-single",
-        name: "1 2D Website",
+        name: "Business Package",
         siteCount: 1,
-        siteCountLabel: "1 Website License",
+        siteCountLabel: "1 2D Website License",
         monthly: 599,
         annualMonthly: 496,
         annualTotal: 5952,
@@ -114,11 +114,11 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
       },
       bundle: {
         id: "2d-bundle",
-        name: "5 2D Websites",
+        name: "Agency Package",
         badge: "Agency Pack • Save 33%",
         popular: true,
         siteCount: 5,
-        siteCountLabel: "5 Websites Pack",
+        siteCountLabel: "5 2D Websites Pack",
         monthly: 2000,
         annualMonthly: 1590,
         annualTotal: 19080,
@@ -148,9 +148,9 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
     threeD: {
       single: {
         id: "3d-single",
-        name: "1 3D Website",
+        name: "Business Package",
         siteCount: 1,
-        siteCountLabel: "1 Website License",
+        siteCountLabel: "1 3D Website License",
         monthly: 15,
         annualMonthly: 12.5,
         annualTotal: 150,
@@ -173,11 +173,11 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
       },
       bundle: {
         id: "3d-bundle",
-        name: "3 3D Websites",
+        name: "Agency Package",
         badge: "Best Value • Save 33%",
         popular: true,
         siteCount: 3,
-        siteCountLabel: "3 Websites Pack",
+        siteCountLabel: "3 3D Websites Pack",
         monthly: 30,
         annualMonthly: 24,
         annualTotal: 288,
@@ -202,9 +202,9 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
     twoD: {
       single: {
         id: "2d-single",
-        name: "1 2D Website",
+        name: "Business Package",
         siteCount: 1,
-        siteCountLabel: "1 Website License",
+        siteCountLabel: "1 2D Website License",
         monthly: 9,
         annualMonthly: 6.75,
         annualTotal: 81,
@@ -227,11 +227,11 @@ export const PRICING_DATA: Record<"IN" | "GLOBAL", RegionPricingData> = {
       },
       bundle: {
         id: "2d-bundle",
-        name: "5 2D Websites",
+        name: "Agency Package",
         badge: "Agency Pack • Save 33%",
         popular: true,
         siteCount: 5,
-        siteCountLabel: "5 Websites Pack",
+        siteCountLabel: "5 2D Websites Pack",
         monthly: 30,
         annualMonthly: 24,
         annualTotal: 288,

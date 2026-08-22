@@ -60,12 +60,12 @@ export const WebMakeFooter: React.FC = () => {
           {/* Col 5: Support & Ecosystem */}
           <div className="flex flex-col gap-3">
             <h4 className="text-xs font-black uppercase tracking-widest text-white/90 mb-1">Direct Support</h4>
-            <a href="https://wa.me/919999999999" target="_blank" rel="noopener noreferrer" className="text-xs text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1.5">
+            <a href="https://wa.me/918696755996" target="_blank" rel="noopener noreferrer" className="text-xs text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1.5">
               <span>WhatsApp Chat</span>
               <span>💬</span>
             </a>
-            <a href="mailto:contact@digifox.world" className="text-xs text-white/60 hover:text-white transition-colors">
-              contact@digifox.world
+            <a href="mailto:digifox5d@icloud.com" className="text-xs text-white/60 hover:text-white transition-colors">
+              digifox5d@icloud.com
             </a>
             <Link to="/" className="text-xs text-purple-400 hover:text-purple-300 font-medium pt-2">
               Digifox Agency Portfolio →

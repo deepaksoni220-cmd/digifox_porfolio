@@ -8,6 +8,13 @@ import { SEOMeta } from "../../components/SEOMeta";
 export const AiContactPage: React.FC = () => {
   const [formData, setFormData] = useState({ name: "", email: "", subject: "Website Customization Support", message: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText("digifox5d@icloud.com");
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2500);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,50 +56,76 @@ export const AiContactPage: React.FC = () => {
           
           {/* Contact Info Cards */}
           <div className="flex flex-col gap-6 lg:col-span-1">
+            
+            {/* Email Us */}
+            <div className="p-8 rounded-3xl bg-[#0c0d1a] border border-white/10 shadow-2xl flex flex-col gap-4">
+              <span className="text-3xl">📧</span>
+              <div>
+                <h3 className="text-xl font-bold text-white">Email Us</h3>
+                <p className="text-xs text-white/60 font-light mt-1">
+                  Send us your design ideas, custom domain requests, or billing questions.
+                </p>
+              </div>
+
+              <a
+                href="mailto:digifox5d@icloud.com"
+                className="text-base font-black text-[#60a5fa] hover:underline break-all"
+              >
+                digifox5d@icloud.com
+              </a>
+
+              <button
+                onClick={handleCopyEmail}
+                className="inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
+              >
+                <span>{copiedEmail ? "✓ Copied to Clipboard!" : "Copy email address"}</span>
+                {!copiedEmail && <span>📋</span>}
+              </button>
+            </div>
+
+            {/* WhatsApp / Direct */}
             <div className="p-8 rounded-3xl bg-[#0c0d1a] border border-white/10 shadow-2xl flex flex-col gap-4">
               <span className="text-3xl">🚀</span>
-              <h3 className="text-xl font-bold text-white">Instant WhatsApp Support</h3>
-              <p className="text-xs text-white/60 font-light leading-relaxed">
-                Connect directly with our engineering & design team on WhatsApp for quick questions and priority onboarding.
-              </p>
+              <div>
+                <h3 className="text-xl font-bold text-white">WhatsApp / Direct</h3>
+                <p className="text-xs text-white/60 font-light mt-1">
+                  Connect directly with our engineering & design team for fast answers.
+                </p>
+              </div>
+
+              <span className="text-base font-black text-emerald-400">
+                +91-8696755996
+              </span>
+
               <a
-                href="https://wa.me/919999999999"
+                href="https://wa.me/918696755996"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg transition-all"
+                className="inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg transition-all"
               >
-                <span>Chat on WhatsApp</span>
+                <span>Open Instant WhatsApp Chat ↗</span>
                 <span>💬</span>
               </a>
             </div>
 
-            <div className="p-8 rounded-3xl bg-[#0c0d1a] border border-white/10 shadow-2xl flex flex-col gap-4">
-              <span className="text-3xl">📧</span>
-              <h3 className="text-xl font-bold text-white">Email Inquiries</h3>
-              <p className="text-xs text-white/60 font-light leading-relaxed">
-                Send us your design ideas, custom domain requests, or feedback directly.
-              </p>
-              <a
-                href="mailto:contact@digifox.world"
-                className="text-xs font-bold text-[#60a5fa] hover:underline"
-              >
-                contact@digifox.world
-              </a>
-            </div>
-
+            {/* Location & Reach */}
             <div className="p-8 rounded-3xl bg-[#0c0d1a] border border-white/10 shadow-2xl flex flex-col gap-4">
               <span className="text-3xl">🌐</span>
-              <h3 className="text-xl font-bold text-white">Main Company Portfolio</h3>
-              <p className="text-xs text-white/60 font-light leading-relaxed">
-                Looking for our full-service bespoke agency and case studies?
-              </p>
+              <div>
+                <h3 className="text-xl font-bold text-white">Location & Reach</h3>
+                <p className="text-xs text-white/60 font-light mt-1">
+                  Based in India, serving global clients across USA, Europe, UAE, and Asia.
+                </p>
+              </div>
+
               <Link
                 to="/"
-                className="text-xs font-bold text-[#a855f7] hover:underline"
+                className="text-xs font-bold text-[#a855f7] hover:underline pt-2"
               >
                 Visit Digifox Agency Portfolio →
               </Link>
             </div>
+
           </div>
 
           {/* Form */}

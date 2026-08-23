@@ -496,6 +496,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     templateStyle: "riskaLuxury",
     category: "2d",
     previewUrl: "/templates/style demo 1/biska_luxury.aura.build/riska-luxury.aura.build/index.html",
+    previewVideoUrl: "https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/generated-videos/2e815afb-cac1-4c01-90e1-cf3810246e35/1784904481060-b97cf00c-3e60-47ad-a69b-6a7d1e37987d.mp4",
     shortDescription: "A high-end cinematic luxury clothing website designed for bespoke fashion labels and material studies.",
     thumbnailUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop",
     hero: {
@@ -540,6 +541,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     templateStyle: "studioFashion",
     category: "2d",
     previewUrl: "/templates/stylg demo 2/studio_fashion.aura.build/studio-fashion.aura.build/index.html",
+    previewVideoUrl: "https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/generated-videos/2e815afb-cac1-4c01-90e1-cf3810246e35/1784912221857-e030d797-9716-40fb-bab3-626c8a46fd8b.mp4",
     shortDescription: "A high-end editorial fashion & beauty eCommerce landing page with clean minimalist aesthetic and product showcases.",
     thumbnailUrl: "/templates/stylg demo 2/studio_fashion.aura.build/hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/07b03058-049e-4bf0-be3e-505e30435ece_1600w.png",
     hero: {

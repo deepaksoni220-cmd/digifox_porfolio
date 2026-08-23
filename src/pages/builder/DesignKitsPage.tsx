@@ -89,7 +89,16 @@ export const DesignKitsPage: React.FC = () => {
               >
                 {/* Visual Thumbnail */}
                 <div className="relative aspect-[16/10] overflow-hidden bg-[#151728]">
-                  {template.thumbnailUrl ? (
+                  {template.previewVideoUrl ? (
+                    <video
+                      src={template.previewVideoUrl}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                    />
+                  ) : template.thumbnailUrl ? (
                     <img
                       src={template.thumbnailUrl}
                       alt={template.hero?.title || id}

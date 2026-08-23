@@ -55,7 +55,16 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
 
       {/* Thumbnail Area */}
       <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#121424]">
-        {template.previewUrl && hovered ? (
+        {template.previewVideoUrl ? (
+          <video
+            src={template.previewVideoUrl}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+          />
+        ) : template.previewUrl && hovered ? (
           <div className="w-full h-full relative pointer-events-none select-none overflow-hidden">
             <iframe
               src={template.previewUrl}

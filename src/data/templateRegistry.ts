@@ -119,6 +119,16 @@ export const TEMPLATE_REGISTRY: TemplateMetadata[] = [
     sections: ["hero", "about", "items", "contact"],
     previewUrl: "/templates/lesaa/www.lesa.app/www.lesa.app/index.html",
     thumbnailUrl: "https://framerusercontent.com/images/j7UksNIBHOx3WkHFQfRE3XtU68.png"
+  },
+  {
+    template_id: "riskaLuxury",
+    name: "Riska Haute Couture & Material Studies",
+    industries: ["fashion", "luxury", "clothing", "portfolio", "couture", "atelier", "apparel"],
+    styles: ["luxury", "editorial", "cinematic", "dark", "minimalist", "high-end"],
+    features: ["hero", "material-studies", "lookbook", "atelier-craft", "consultation", "contact"],
+    sections: ["hero", "about", "items", "contact"],
+    previewUrl: "http://localhost:7006",
+    thumbnailUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop"
   }
 ];
 

@@ -490,6 +490,50 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
       primaryColor: "#ED2C95",
       secondaryColor: "#5EEF90"
     }
+  },
+  riskaLuxury: {
+    websiteType: "Portfolio",
+    templateStyle: "riskaLuxury",
+    category: "2d",
+    previewUrl: "http://localhost:7006",
+    shortDescription: "A high-end cinematic landing page designed for luxury fashion labels and material studies.",
+    thumbnailUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop",
+    hero: {
+      title: "Riska Luxury",
+      subtitle: "Cinematic fashion and luxury material studies.",
+      ctaText: "Explore Collection",
+      imagePrompt: "cinematic luxury fashion editorial high end minimalist lighting"
+    },
+    about: {
+      heading: "The Atelier",
+      description: "Crafting bespoke garments and architectural fashion silhouettes.",
+      imagePrompt: "luxury atelier haute couture workshop clean aesthetic"
+    },
+    items: [
+      {
+        title: "Haute Couture",
+        description: "Handcrafted architectural silhouettes.",
+        icon: "👗"
+      },
+      {
+        title: "Material Studies",
+        description: "Exploration of tactile fabrics and drape.",
+        icon: "✨"
+      },
+      {
+        title: "Runway Archive",
+        description: "Seasonal curated showcases.",
+        icon: "🏛️"
+      }
+    ],
+    contact: {
+      heading: "Inquire for Private Consultation",
+      buttonText: "Book Appointment"
+    },
+    theme: {
+      primaryColor: "#c084fc",
+      secondaryColor: "#1e1b4b"
+    }
   }
 };
 

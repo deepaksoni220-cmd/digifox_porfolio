@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en"><head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Riska — Objects in Motion. Autumn–Winter 2026 tailoring, sculptural form and material studies.">
+<meta name="theme-color" content="#161514">
+<title>Riska — Objects in Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script><!-- aura-ga4-start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2M6V79H761"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+
+  <body class="m-0 overflow-x-clip bg-[#e9e2d6] text-[#161514] antialiased selection:bg-[#d53527] selection:text-white" style="font-family:'DM Sans',Arial,sans-serif;">
+    <div id="grain" class="pointer-events-none fixed inset-0 z-[190] opacity-[0.055] mix-blend-soft-light" aria-hidden="true" style="background-image:url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.94' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E&quot;);"></div>
+
+    <div id="progress" class="pointer-events-none fixed left-0 top-0 z-[200] h-[0.1875rem] w-full origin-left scale-x-0 bg-[#d58d3f]" aria-hidden="true"></div>
+
+    <header id="siteHeader" class="fixed inset-x-0 top-0 z-[100] grid h-20 grid-cols-[1fr_auto_1fr] items-center px-[3vw] text-white mix-blend-difference max-md:h-16 max-md:grid-cols-[1fr_auto] max-md:px-[5vw]">
+      <a href="#top" aria-label="Riska home" class="w-max origin-left scale-x-[0.88] text-3xl font-semibold leading-none tracking-[-0.145em]">
+        RISKΛ
+      </a>
+
+      <nav class="flex items-center gap-8 max-md:hidden" aria-label="Primary navigation">
+        <a class="nav-link relative py-2 text-xs font-medium uppercase tracking-[0.15em]" href="#story">
+          Story
+        </a>
+        <a class="nav-link relative py-2 text-xs font-medium uppercase tracking-[0.15em]" href="#collection">
+          Collection
+        </a>
+        <a class="nav-link relative py-2 text-xs font-medium uppercase tracking-[0.15em]" href="#journal">
+          Journal
+        </a>
+      </nav>
+
+      <div class="flex items-center justify-end gap-8 max-md:gap-5">
+        <a href="#collection" class="text-xs font-medium uppercase tracking-[0.15em]">
+          Collection
+        </a>
+        <button id="menuButton" type="button" class="bg-transparent py-2 text-xs font-medium uppercase tracking-[0.15em]" aria-expanded="false" aria-controls="menuOverlay">
+          Menu
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section id="top" class="relative h-[185vh] bg-[#791a17]" aria-labelledby="heroTitle">
+        <div class="sticky top-0 h-screen min-h-[38rem] overflow-hidden bg-[#791a17] text-white">
+          <div class="hero-parallax absolute -inset-[7%] will-change-transform">
+            <video class="h-full w-full object-cover object-[center_38%] max-md:object-[61%_center]" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/generated-videos/2e815afb-cac1-4c01-90e1-cf3810246e35/1784904481060-b97cf00c-3e60-47ad-a69b-6a7d1e37987d.mp4" poster="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/44290882-1988-48f6-9c19-73819fc8b143_3840w.png" muted="" playsinline="" autoplay="" loop="" preload="metadata" aria-label="Model in sculptural red tailoring moving through an architectural space"></video>
+          </div>
+
+          <div class="absolute inset-0 bg-[#120705]/35"></div>
+          <div class="hero-wipe absolute inset-0 bg-[#d53527]/80 mix-blend-multiply" style="clip-path:polygon(66% 0,100% 0,100% 100%,52% 100%);"></div>
+
+          <div class="absolute bottom-[7vh] left-[6vw] right-[5vw] z-10 max-md:bottom-[5vh] max-md:left-[5vw] max-md:right-[5vw]">
+            <div class="mb-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <p class="text-xs font-medium uppercase tracking-[0.18em]">
+                Autumn—Winter 2026
+              </p>
+
+              <div class="flex h-7 items-center overflow-hidden border-l border-white/40 pl-5" aria-label="Pages, products and marketing">
+                <div id="rotatingWords" class="relative h-7 min-w-28">
+                  <span class="kinetic-word absolute inset-0 flex items-center text-xs font-medium uppercase tracking-[0.18em]">
+                    Pages
+                  </span>
+                  <span class="kinetic-word absolute inset-0 flex items-center text-xs font-medium uppercase tracking-[0.18em]">
+                    Products
+                  </span>
+                  <span class="kinetic-word absolute inset-0 flex items-center text-xs font-medium uppercase tracking-[0.18em]">
+                    Marketing
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <h1 id="heroTitle" class="word-reveal m-0 max-w-[90vw] text-[clamp(5.2rem,13.2vw,13.5rem)] leading-[0.72] tracking-[-0.065em]" style="font-family:'DM Serif Display',Georgia,serif;">
+              Objects
+              <em class="block pl-[11vw] font-normal max-md:pl-0">
+                in motion.
+              </em>
+            </h1>
+
+            <div class="mt-10 grid grid-cols-[minmax(15rem,25rem)_auto] items-end justify-end gap-[5vw] pl-[29vw] max-md:grid-cols-[1fr_auto] max-md:gap-4 max-md:pl-0">
+              <p class="reveal-copy m-0 max-w-sm text-xs leading-7">
+                A cinematic study of modern tailoring, vivid color and the body
+                in space.
+              </p>
+
+              <a href="#story" class="magnetic flex h-24 w-24 items-center justify-center rounded-full border border-white text-xs uppercase tracking-[0.13em] transition-colors hover:bg-white hover:text-[#161514] max-md:h-20 max-md:w-20">
+                Scroll ↓
+              </a>
+            </div>
+          </div>
+
+          <div class="absolute bottom-0 left-0 right-0 z-10 h-px origin-left bg-white/35"></div>
+        </div>
+      </section>
+
+      <section id="story" class="relative flex min-h-screen items-center overflow-hidden bg-[#e9e2d6] px-[6vw] py-[10vw] max-md:px-[5vw] max-md:py-[30vw]" aria-labelledby="storyTitle">
+        <div class="absolute left-[3vw] right-[3vw] top-8 grid grid-cols-[1fr_auto_1fr] gap-4 border-t border-[#161514]/40 pt-3 text-xs font-medium uppercase tracking-[0.15em] max-md:left-[5vw] max-md:right-[5vw] max-md:grid-cols-2">
+          <span>R / 01</span>
+          <span class="max-md:hidden">House notes</span>
+          <span class="text-right">Singapore · Paris</span>
+        </div>
+
+        <div class="relative z-10 w-full">
+          <h2 id="storyTitle" class="word-reveal m-0 text-[clamp(4.2rem,9.3vw,10rem)] leading-[0.87] tracking-[-0.055em]" style="font-family:'DM Serif Display',Georgia,serif;">
+            Clothing that holds a room—
+            <em class="block pl-[8vw] font-normal text-[#d53527] max-md:pl-0">
+              then moves through it.
+            </em>
+          </h2>
+
+          <p class="reveal-copy ml-auto mt-16 max-w-sm text-sm leading-7 max-md:mt-12 max-md:max-w-[70vw]">
+            Riska creates considered pieces with cinematic presence: concise,
+            tactile and built to become personal.
+          </p>
+        </div>
+
+        <div class="story-orbit absolute -right-[12vw] top-[18%] h-[38vw] w-[38vw] rounded-full border border-[#d53527]/30" aria-hidden="true"></div>
+        <div class="story-orbit absolute -right-[5vw] top-[25%] h-[24vw] w-[24vw] rounded-full border border-[#d53527]/20" aria-hidden="true"></div>
+      </section>
+
+      <section id="editorial" class="relative bg-[#161514] text-white">
+        <article class="story-panel relative min-h-[160vh] bg-[#213497]">
+          <div class="sticky top-0 grid h-screen overflow-hidden md:grid-cols-[42%_58%]">
+            <div class="relative z-10 flex flex-col justify-center px-[5.5vw] py-[10vw]">
+              <div class="absolute left-[4vw] right-[4vw] top-9 flex justify-between border-t border-white/60 pt-3 text-xs font-medium uppercase tracking-[0.15em]">
+                <span>01</span>
+                <span>The new form</span>
+              </div>
+
+              <h2 class="word-reveal mb-8 text-[clamp(4rem,7.1vw,7.8rem)] leading-[0.84] tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+                Softness,
+                <br>
+                <em class="pl-[2.5vw] font-normal">with intent.</em>
+              </h2>
+
+              <p class="reveal-copy max-w-sm text-sm leading-7">
+                A study in contrast. Fluid silhouettes meet exacting
+                construction, cut for the space between stillness and motion.
+              </p>
+
+              <a href="#collection" class="reveal-link group mt-7 w-max border-b border-current pb-2 text-xs font-medium uppercase tracking-[0.13em]">
+                Discover the edit
+                <span class="ml-2 inline-block transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+                  ↗
+                </span>
+              </a>
+            </div>
+
+            <div class="panel-media relative min-h-screen overflow-hidden bg-[#161514]">
+              <img class="panel-parallax absolute -inset-[12%] h-[124%] w-[124%] max-w-none object-cover object-[54%_center]" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/452f30c3-9ddb-4660-bea0-21da72977eb8_1600w.png" alt="Model wearing a structured cobalt fashion silhouette">
+              <span class="absolute right-8 top-8 grid h-20 w-20 place-items-center border border-white text-3xl" style="font-family:'DM Serif Display',Georgia,serif;">
+                24
+              </span>
+              <span class="image-curtain absolute inset-y-0 right-0 w-[17%] border-l border-white/50 bg-white/5 backdrop-blur-sm"></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="story-panel relative min-h-[160vh] bg-[#d53527]">
+          <div class="sticky top-0 grid h-screen overflow-hidden md:grid-cols-[58%_42%]">
+            <div class="panel-media relative min-h-screen overflow-hidden bg-[#161514]">
+              <img class="panel-parallax absolute -inset-[12%] h-[124%] w-[124%] max-w-none object-cover object-[42%_center]" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fe5e52af-7385-4cf6-a576-f258ca01f631_3840w.png" alt="Vermillion tailoring photographed with architectural shadows">
+              <span class="absolute right-8 top-8 grid h-20 w-20 place-items-center border border-white text-3xl" style="font-family:'DM Serif Display',Georgia,serif;">
+                25
+              </span>
+              <span class="image-curtain absolute inset-y-0 right-0 w-[17%] border-l border-white/50 bg-white/5 backdrop-blur-sm"></span>
+            </div>
+
+            <div class="relative z-10 flex flex-col justify-center px-[5.5vw] py-[10vw]">
+              <div class="absolute left-[4vw] right-[4vw] top-9 flex justify-between border-t border-white/60 pt-3 text-xs font-medium uppercase tracking-[0.15em]">
+                <span>02</span>
+                <span>The red room</span>
+              </div>
+
+              <h2 class="word-reveal mb-8 text-[clamp(4rem,7.1vw,7.8rem)] leading-[0.84] tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+                Color as
+                <br>
+                <em class="pl-[2.5vw] font-normal">character.</em>
+              </h2>
+
+              <p class="reveal-copy max-w-sm text-sm leading-7">
+                Saturated lacquer, raw silk and sculpted wool. A vivid wardrobe
+                for entering the room before you do.
+              </p>
+
+              <a href="#collection" class="reveal-link group mt-7 w-max border-b border-current pb-2 text-xs font-medium uppercase tracking-[0.13em]">
+                Discover the edit
+                <span class="ml-2 inline-block transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+                  ↗
+                </span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="story-panel relative min-h-[160vh] bg-[#f4f0e8] text-[#161514]">
+          <div class="sticky top-0 grid h-screen overflow-hidden md:grid-cols-[42%_58%]">
+            <div class="relative z-10 flex flex-col justify-center px-[5.5vw] py-[10vw]">
+              <div class="absolute left-[4vw] right-[4vw] top-9 flex justify-between border-t border-[#161514]/60 pt-3 text-xs font-medium uppercase tracking-[0.15em]">
+                <span>03</span>
+                <span>Private study</span>
+              </div>
+
+              <h2 class="word-reveal mb-8 text-[clamp(4rem,7.1vw,7.8rem)] leading-[0.84] tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+                Details speak
+                <br>
+                <em class="pl-[2.5vw] font-normal">quietly.</em>
+              </h2>
+
+              <p class="reveal-copy max-w-sm text-sm leading-7">
+                Hand-finished seams, decisive proportions and materials selected
+                for how beautifully they change over time.
+              </p>
+
+              <a href="#collection" class="reveal-link group mt-7 w-max border-b border-current pb-2 text-xs font-medium uppercase tracking-[0.13em]">
+                Discover the edit
+                <span class="ml-2 inline-block transition-transform group-hover:translate-x-1 group-hover:-translate-y-1">
+                  ↗
+                </span>
+              </a>
+            </div>
+
+            <div class="panel-media relative min-h-screen overflow-hidden bg-[#161514]">
+              <img class="panel-parallax absolute -inset-[12%] h-[124%] w-[124%] max-w-none object-cover object-[64%_center]" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/0025658e-5287-45b3-8528-83b9be92721e_1600w.png" alt="Close view of precise cream tailoring and dark leather accessories">
+              <span class="absolute right-8 top-8 grid h-20 w-20 place-items-center border border-white text-3xl text-white" style="font-family:'DM Serif Display',Georgia,serif;">
+                26
+              </span>
+              <span class="image-curtain absolute inset-y-0 right-0 w-[17%] border-l border-white/50 bg-white/5 backdrop-blur-sm"></span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section id="journal" class="relative h-[115vh] min-h-[44rem] overflow-hidden bg-[#180706] text-[#f4e4d1]" aria-labelledby="journalTitle">
+        <div class="journal-parallax absolute -inset-[12%]">
+          <img class="h-full w-full object-cover opacity-70" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5d8004fd-6d9c-46e2-b21f-95eaa5cbd110_3840w.webp" alt="Sculptural dark fashion silhouette">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-b from-[#180706]/20 via-[#180706]/35 to-[#180706]"></div>
+
+        <div class="absolute bottom-[8vh] left-[6vw] right-[5vw] z-10 max-md:left-[5vw] max-md:right-[5vw]">
+          <p class="reveal-copy text-xs font-medium uppercase tracking-[0.18em]">
+            Material study / Move through the light
+          </p>
+
+          <h2 id="journalTitle" class="word-reveal my-5 max-w-5xl text-[clamp(5.3rem,11.5vw,12rem)] leading-[0.75] tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+            Light,
+            <em class="block pl-[7vw] font-normal max-md:pl-0">cut in silk.</em>
+          </h2>
+
+          <p class="reveal-copy ml-[35vw] max-w-sm text-sm leading-7 max-md:ml-[20vw]">
+            Amber light follows, revealing the folds and sheen that make every
+            material feel alive.
+          </p>
+        </div>
+      </section>
+
+      <section id="collection" class="relative bg-[#e9e2d6]" aria-labelledby="collectionTitle">
+        <div class="collection-intro flex min-h-screen items-center px-[4vw] py-[10vw] max-md:px-[5vw]">
+          <div class="w-full">
+            <p class="reveal-copy text-xs font-medium uppercase tracking-[0.18em]">
+              Selected pieces / 001—005
+            </p>
+
+            <div class="mt-4 flex items-end justify-between gap-8 max-md:block">
+              <h2 id="collectionTitle" class="word-reveal text-[clamp(4.5rem,9.4vw,10rem)] leading-[0.82] tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+                The collection
+              </h2>
+              <p class="reveal-copy mb-3 text-sm leading-7 max-md:mt-8">
+                Foundational forms.
+                <br>
+                Made in limited runs.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div id="productStory" class="relative">
+          <div class="sticky top-0 h-screen overflow-hidden bg-[#d8cfc1]">
+            <div class="absolute left-[4vw] right-[4vw] top-8 z-20 flex items-center justify-between border-t border-[#161514]/40 pt-3 text-xs font-medium uppercase tracking-[0.15em] max-md:left-[5vw] max-md:right-[5vw]">
+              <span>Selected forms</span>
+              <span id="productCounter">01 / 05</span>
+            </div>
+
+            <div id="productTrack" class="flex h-full w-max will-change-transform">
+              <article class="product-slide grid h-screen w-screen shrink-0 md:grid-cols-[45%_55%]">
+                <div class="relative z-10 flex flex-col justify-end px-[5vw] pb-[8vh] pt-28">
+                  <p class="product-meta text-xs font-medium uppercase tracking-[0.18em]">
+                    001 / Brushed wool
+                  </p>
+                  <h3 class="product-title mt-4 text-[clamp(4rem,7vw,8rem)] leading-[0.82] tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+                    The Blaise Cape
+                  </h3>
+                  <p class="product-copy mt-7 max-w-sm text-sm leading-7">
+                    Oxblood double-face wool shaped with a soft architectural
+                    shoulder.
+                  </p>
+                  <button class="product-action magnetic mt-8 flex h-20 w-20 items-center justify-center rounded-full border border-[#161514] bg-transparent text-xs font-medium uppercase tracking-[0.12em] hover:bg-[#161514] hover:text-white">
+                    View
+                  </button>
+                </div>
+                <div class="product-visual relative h-full overflow-hidden">
+                  <img class="product-image absolute -inset-[8%] h-[116%] w-[116%] max-w-none object-cover object-[57%_center]" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c4429d2d-9c1c-4b9b-bf05-2d97996f567d_3840w.png" alt="The Blaise Cape in brushed oxblood wool">
+                </div>
+              </article>
+
+              <article class="product-slide grid h-screen w-screen shrink-0 bg-[#d53527] text-white md:grid-cols-[45%_55%]">
+                <div class="relative z-10 flex flex-col justify-end px-[5vw] pb-[8vh] pt-28">
+                  <p class="product-meta text-xs font-medium uppercase tracking-[0.18em]">
+                    002 / Italian twill
+                  </p>
+                  <h3 class="product-title mt-4 text-[clamp(4rem,7vw,8rem)] leading-[0.82] tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+                    Le Monde Blazer
+                  </h3>
+                  <p class="product-copy mt-7 max-w-sm text-sm leading-7">
+                    Decisive vermillion tailoring with a sculpted waist and
+                    elongated line.
+                  </p>
+                  <button class="product-action magnetic mt-8 flex h-20 w-20 items-center justify-center rounded-full border border-white bg-transparent text-xs font-medium uppercase tracking-[0.12em] hover:bg-white hover:text-[#161514]">
+                    View
+                  </button>
+                </div>
+                <div class="product-visual relative h-full overflow-hidden">
+                  <img class="product-image absolute -inset-[8%] h-[116%] w-[116%] max-w-none object-cover object-[45%_center]" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/806e135e-88ce-4a66-9546-8f917bf977b8_3840w.png" alt="Le Monde Blazer in structured Italian twill">
+                </div>
+              </article>
+
+              <article class="product-slide grid h-screen w-screen shrink-0 bg-[#161514] text-white md:grid-cols-[45%_55%]">
+                <div class="relative z-10 flex flex-col justify-end px-[5vw] pb-[8vh] pt-28">
+                  <p class="product-meta text-xs font-medium uppercase tracking-[0.18em]">
+                    003 / Supple leather
+                  </p>
+                  <h3 class="product-title mt-4 text-[clamp(4rem,7vw,8rem)] leading-[0.82] tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+                    The Blake Trouser
+                  </h3>
+                  <p class="product-copy mt-7 max-w-sm text-sm leading-7">
+                    Deep ink leather cut with fluid volume and a precise
+                    tailored waist.
+                  </p>
+                  <button class="product-action magnetic mt-8 flex h-20 w-20 items-center justify-center rounded-full border border-white bg-transparent text-xs font-medium uppercase tracking-[0.12em] hover:bg-white hover:text-[#161514]">
+                    View
+                  </button>
+                </div>
+                <div class="product-visual relative h-full overflow-hidden">
+                  <img class="product-image absolute -inset-[8%] h-[116%] w-[116%] max-w-none object-cover object-center" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6dbbbbe0-0fea-44f4-97a1-a9493024f5dc_3840w.png" alt="The Blake Trouser in deep ink leather">
+                </div>
+              </article>
+
+              <article class="product-slide grid h-screen w-screen shrink-0 bg-[#d8cfc1] md:grid-cols-[45%_55%]">
+                <div class="relative z-10 flex flex-col justify-end px-[5vw] pb-[8vh] pt-28">
+                  <p class="product-meta text-xs font-medium uppercase tracking-[0.18em]">
+                    004 / Heavy cashmere
+                  </p>
+                  <h3 class="product-title mt-4 text-[clamp(4rem,7vw,8rem)] leading-[0.82] tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+                    The Arlo Coat
+                  </h3>
+                  <p class="product-copy mt-7 max-w-sm text-sm leading-7">
+                    Camel cashmere with a generous stance and exacting
+                    architectural proportion.
+                  </p>
+                  <button class="product-action magnetic mt-8 flex h-20 w-20 items-center justify-center rounded-full border border-[#161514] bg-transparent text-xs font-medium uppercase tracking-[0.12em] hover:bg-[#161514] hover:text-white">
+                    View
+                  </button>
+                </div>
+                <div class="product-visual relative h-full overflow-hidden">
+                  <img class="product-image absolute -inset-[8%] h-[116%] w-[116%] max-w-none object-cover object-center" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/be5e4a00-4a9d-4373-8880-888910268027_1600w.png" alt="The Arlo Coat in camel cashmere">
+                </div>
+              </article>
+
+              <article class="product-slide grid h-screen w-screen shrink-0 bg-[#f4f0e8] md:grid-cols-[45%_55%]">
+                <div class="relative z-10 flex flex-col justify-end px-[5vw] pb-[8vh] pt-28">
+                  <p class="product-meta text-xs font-medium uppercase tracking-[0.18em]">
+                    005 / Silk organza
+                  </p>
+                  <h3 class="product-title mt-4 text-[clamp(4rem,7vw,8rem)] leading-[0.82] tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+                    The Silas Shirt
+                  </h3>
+                  <p class="product-copy mt-7 max-w-sm text-sm leading-7">
+                    Translucent ivory silk balanced by quiet structure and
+                    hand-finished seams.
+                  </p>
+                  <button class="product-action magnetic mt-8 flex h-20 w-20 items-center justify-center rounded-full border border-[#161514] bg-transparent text-xs font-medium uppercase tracking-[0.12em] hover:bg-[#161514] hover:text-white">
+                    View
+                  </button>
+                </div>
+                <div class="product-visual relative h-full overflow-hidden">
+                  <img class="product-image absolute -inset-[8%] h-[116%] w-[116%] max-w-none object-cover object-center" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c2c54aa4-1748-4be5-9394-f2a7838a2d39_1600w.png" alt="The Silas Shirt in ivory silk">
+                </div>
+              </article>
+            </div>
+
+            <div class="absolute bottom-0 left-0 z-30 h-1 w-full bg-black/10">
+              <div id="productProgress" class="h-full w-full origin-left scale-x-0 bg-[#d58d3f]"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="relative flex min-h-screen flex-col justify-center overflow-hidden bg-[#213497] px-[8vw] py-[10vw] text-white max-md:px-[5vw]" aria-labelledby="newsletterTitle">
+        <div class="newsletter-shape absolute -right-[15vw] -top-[15vw] h-[50vw] w-[50vw] rounded-full border border-white/15" aria-hidden="true"></div>
+        <div class="newsletter-shape absolute -right-[4vw] top-[3vw] h-[28vw] w-[28vw] rounded-full border border-white/10" aria-hidden="true"></div>
+
+        <p class="reveal-copy relative z-10 text-xs font-medium uppercase tracking-[0.18em]">
+          Private correspondence
+        </p>
+
+        <h2 id="newsletterTitle" class="word-reveal relative z-10 my-5 max-w-6xl text-[clamp(4.6rem,10vw,10.5rem)] leading-[0.83] tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+          Notes from
+          <br>
+          the atelier.
+        </h2>
+
+        <form id="newsletterForm" class="reveal-copy relative z-10 mt-8 w-full max-w-4xl">
+          <label for="email" class="mb-3 block text-xs font-medium uppercase tracking-[0.16em]">
+            Email address
+          </label>
+          <div class="relative border-b border-white/75">
+            <input id="email" name="email" type="email" required="" autocomplete="email" placeholder="name@example.com" class="w-full border-0 bg-transparent py-4 pr-20 text-[clamp(1.7rem,3vw,3.25rem)] outline-none placeholder:text-white/40" style="font-family:'DM Serif Display',Georgia,serif;">
+            <button type="submit" aria-label="Subscribe to atelier notes" class="magnetic absolute bottom-2 right-0 grid h-14 w-14 place-items-center rounded-full bg-white text-[#213497]">
+              <iconify-icon icon="solar:arrow-right-linear" width="24" height="24" style="stroke-width:1.5;"></iconify-icon>
+            </button>
+          </div>
+          <p id="formStatus" class="mt-4 min-h-6 text-sm" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="relative flex min-h-[55vh] items-end justify-between overflow-hidden bg-[#161514] px-[4vw] py-[3vw] text-white max-md:block max-md:min-h-[40vh]">
+      <a href="#top" class="footer-mark origin-left scale-x-90 text-[clamp(7rem,21vw,21rem)] font-semibold leading-[0.7] tracking-[-0.11em]">
+        RISKΛ
+      </a>
+      <p class="mb-2 text-right text-xs uppercase leading-7 tracking-[0.14em] max-md:mt-16 max-md:text-left">
+        © 2026 Riska Studio
+        <br>
+        Singapore · Paris
+      </p>
+    </footer>
+
+    <aside id="menuOverlay" class="fixed inset-0 z-[300] invisible flex translate-y-full flex-col bg-[#d53527] px-[6vw] py-[8vh] text-white" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="menuTitle">
+      <button id="menuClose" type="button" aria-label="Close menu" class="absolute right-8 top-6 grid h-14 w-14 place-items-center bg-transparent">
+        <iconify-icon icon="solar:close-circle-linear" width="36" height="36" style="stroke-width:1.5;"></iconify-icon>
+      </button>
+
+      <p id="menuTitle" class="text-xs font-medium uppercase tracking-[0.18em]">
+        Index / Autumn—Winter 2026
+      </p>
+
+      <nav class="mt-[10vh] flex flex-col border-t border-white">
+        <a class="menu-link flex items-center justify-between border-b border-white py-4 text-[clamp(4rem,8.6vw,9rem)] leading-[0.95] tracking-tight" href="#story" style="font-family:'DM Serif Display',Georgia,serif;">
+          <span>Story</span>
+          <iconify-icon icon="solar:arrow-right-up-linear" style="stroke-width:1.5;"></iconify-icon>
+        </a>
+        <a class="menu-link flex items-center justify-between border-b border-white py-4 text-[clamp(4rem,8.6vw,9rem)] leading-[0.95] tracking-tight" href="#collection" style="font-family:'DM Serif Display',Georgia,serif;">
+          <span>Collection</span>
+          <iconify-icon icon="solar:arrow-right-up-linear" style="stroke-width:1.5;"></iconify-icon>
+        </a>
+        <a class="menu-link flex items-center justify-between border-b border-white py-4 text-[clamp(4rem,8.6vw,9rem)] leading-[0.95] tracking-tight" href="#journal" style="font-family:'DM Serif Display',Georgia,serif;">
+          <span>Journal</span>
+          <iconify-icon icon="solar:arrow-right-up-linear" style="stroke-width:1.5;"></iconify-icon>
+        </a>
+      </nav>
+    </aside>
+
+    <script>
+      (() => {
+        "use strict";
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const body = document.body;
+
+        function splitWords(element) {
+          if (element.dataset.wordsReady === "true") return [];
+
+          const walker = document.createTreeWalker(
+            element,
+            NodeFilter.SHOW_TEXT,
+            {
+              acceptNode(node) {
+                return node.nodeValue.trim()
+                  ? NodeFilter.FILTER_ACCEPT
+                  : NodeFilter.FILTER_REJECT;
+              }
+            }
+          );
+
+          const nodes = [];
+          while (walker.nextNode()) nodes.push(walker.currentNode);
+
+          nodes.forEach(node => {
+            const fragment = document.createDocumentFragment();
+            const parts = node.nodeValue.split(/(\s+)/);
+
+            parts.forEach(part => {
+              if (!part.trim()) {
+                fragment.appendChild(document.createTextNode(part));
+                return;
+              }
+
+              const mask = document.createElement("span");
+              const word = document.createElement("span");
+
+              mask.className = "word-mask";
+              word.className = "reveal-word";
+
+              mask.style.display = "inline-block";
+              mask.style.overflow = "hidden";
+              mask.style.verticalAlign = "bottom";
+              mask.style.paddingBottom = "0.08em";
+              mask.style.marginBottom = "-0.08em";
+
+              word.style.display = "inline-block";
+              word.style.willChange = "transform, opacity, filter";
+              word.textContent = part;
+
+              mask.appendChild(word);
+              fragment.appendChild(mask);
+            });
+
+            node.parentNode.replaceChild(fragment, node);
+          });
+
+          element.dataset.wordsReady = "true";
+          return Array.from(element.querySelectorAll(".reveal-word"));
+        }
+
+        const wordRevealElements = Array.from(document.querySelectorAll(".word-reveal"));
+
+        wordRevealElements.forEach((element, index) => {
+          const words = splitWords(element);
+
+          if (reducedMotion) {
+            gsap.set(words, { clearProps: "all" });
+            return;
+          }
+
+          gsap.fromTo(
+            words,
+            {
+              yPercent: 125,
+              opacity: 0,
+              filter: "blur(0.75rem)",
+              rotateX: -35,
+              transformOrigin: "50% 100%"
+            },
+            {
+              yPercent: 0,
+              opacity: 1,
+              filter: "blur(0rem)",
+              rotateX: 0,
+              duration: 1.15,
+              stagger: 0.055,
+              ease: "power4.out",
+              scrollTrigger: {
+                trigger: element,
+                start: index === 0 ? "top 96%" : "top 82%",
+                toggleActions: "play none none reverse"
+              }
+            }
+          );
+        });
+
+        if (!reducedMotion) {
+          gsap.utils.toArray(".reveal-copy, .reveal-link").forEach((element, index) => {
+            gsap.fromTo(
+              element,
+              {
+                y: 38,
+                opacity: 0,
+                filter: "blur(0.65rem)"
+              },
+              {
+                y: 0,
+                opacity: 1,
+                filter: "blur(0rem)",
+                duration: 1,
+                delay: (index % 3) * 0.04,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: element,
+                  start: "top 88%",
+                  toggleActions: "play none none reverse"
+                }
+              }
+            );
+          });
+        }
+
+        const words = gsap.utils.toArray(".kinetic-word");
+
+        if (words.length) {
+          gsap.set(words, {
+            yPercent: 120,
+            opacity: 0,
+            filter: "blur(0.5rem)"
+          });
+
+          const wordTimeline = gsap.timeline({ repeat: -1 });
+
+          words.forEach(word => {
+            wordTimeline
+              .to(word, {
+                yPercent: 0,
+                opacity: 1,
+                filter: "blur(0rem)",
+                duration: 0.7,
+                ease: "power4.out"
+              })
+              .to(word, {
+                yPercent: 0,
+                opacity: 1,
+                duration: 1.1
+              })
+              .to(word, {
+                yPercent: -120,
+                opacity: 0,
+                filter: "blur(0.5rem)",
+                duration: 0.65,
+                ease: "power4.in"
+              });
+          });
+        }
+
+        if (!reducedMotion) {
+          gsap.to(".hero-parallax", {
+            yPercent: 14,
+            scale: 1.08,
+            ease: "none",
+            scrollTrigger: {
+              trigger: "#top",
+              start: "top top",
+              end: "bottom top",
+              scrub: 1.4
+            }
+          });
+
+          gsap.fromTo(
+            ".hero-wipe",
+            { yPercent: 110 },
+            {
+              yPercent: -18,
+              ease: "none",
+              scrollTrigger: {
+                trigger: "#top",
+                start: "top top",
+                end: "bottom top",
+                scrub: 1.2
+              }
+            }
+          );
+
+          gsap.to("#heroTitle", {
+            yPercent: -24,
+            scale: 0.96,
+            opacity: 0.2,
+            ease: "none",
+            scrollTrigger: {
+              trigger: "#top",
+              start: "45% top",
+              end: "bottom top",
+              scrub: 1.2
+            }
+          });
+
+          gsap.utils.toArray(".story-orbit").forEach((shape, index) => {
+            gsap.to(shape, {
+              xPercent: index ? -24 : -42,
+              yPercent: index ? 30 : -20,
+              rotate: index ? -35 : 42,
+              scale: index ? 1.2 : 0.86,
+              ease: "none",
+              scrollTrigger: {
+                trigger: "#story",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.5
+              }
+            });
+          });
+
+          gsap.utils.toArray(".story-panel").forEach(panel => {
+            const media = panel.querySelector(".panel-parallax");
+            const curtain = panel.querySelector(".image-curtain");
+            const copy = panel.querySelector(".reveal-copy");
+            const link = panel.querySelector(".reveal-link");
+
+            gsap.fromTo(
+              media,
+              { yPercent: -6, scale: 1.06 },
+              {
+                yPercent: 7,
+                scale: 1,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: panel,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: 1.5
+                }
+              }
+            );
+
+            gsap.fromTo(
+              curtain,
+              { xPercent: 115 },
+              {
+                xPercent: -15,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: panel,
+                  start: "top 70%",
+                  end: "bottom 35%",
+                  scrub: 1.1
+                }
+              }
+            );
+
+            gsap.fromTo(
+              [copy, link],
+              { y: 50, opacity: 0, filter: "blur(0.6rem)" },
+              {
+                y: 0,
+                opacity: 1,
+                filter: "blur(0rem)",
+                stagger: 0.12,
+                duration: 1,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: panel,
+                  start: "top 52%",
+                  toggleActions: "play none none reverse"
+                }
+              }
+            );
+          });
+
+          gsap.to(".journal-parallax", {
+            yPercent: 18,
+            scale: 1.08,
+            ease: "none",
+            scrollTrigger: {
+              trigger: "#journal",
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.5
+            }
+          });
+
+          gsap.utils.toArray(".newsletter-shape").forEach((shape, index) => {
+            gsap.to(shape, {
+              xPercent: index ? -16 : -35,
+              yPercent: index ? 25 : 50,
+              rotate: index ? 30 : -45,
+              ease: "none",
+              scrollTrigger: {
+                trigger: shape.closest("section"),
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.6
+              }
+            });
+          });
+        }
+
+        const productStory = document.getElementById("productStory");
+        const productTrack = document.getElementById("productTrack");
+        const productSlides = gsap.utils.toArray(".product-slide");
+        const productCounter = document.getElementById("productCounter");
+        const productProgress = document.getElementById("productProgress");
+
+        if (productStory && productTrack && productSlides.length) {
+          const horizontalTween = gsap.to(productTrack, {
+            x: () => -(productTrack.scrollWidth - window.innerWidth),
+            ease: "none",
+            scrollTrigger: {
+              trigger: productStory,
+              start: "top top",
+              end: () => `+=${productTrack.scrollWidth - window.innerWidth}`,
+              pin: true,
+              scrub: 1.15,
+              invalidateOnRefresh: true,
+              anticipatePin: 1,
+              onUpdate(self) {
+                const activeIndex = Math.min(
+                  productSlides.length - 1,
+                  Math.round(self.progress * (productSlides.length - 1))
+                );
+
+                productCounter.textContent =
+                  String(activeIndex + 1).padStart(2, "0") +
+                  " / " +
+                  String(productSlides.length).padStart(2, "0");
+
+                gsap.set(productProgress, { scaleX: self.progress });
+              }
+            }
+          });
+
+          productSlides.forEach(slide => {
+            const image = slide.querySelector(".product-image");
+            const elements = slide.querySelectorAll(".product-meta, .product-title, .product-copy, .product-action");
+
+            if (!reducedMotion) {
+              gsap.fromTo(
+                image,
+                { xPercent: -6, scale: 1.1 },
+                {
+                  xPercent: 6,
+                  scale: 1,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: slide,
+                    containerAnimation: horizontalTween,
+                    start: "left right",
+                    end: "right left",
+                    scrub: 1.2
+                  }
+                }
+              );
+
+              gsap.fromTo(
+                elements,
+                {
+                  y: 54,
+                  opacity: 0,
+                  filter: "blur(0.7rem)"
+                },
+                {
+                  y: 0,
+                  opacity: 1,
+                  filter: "blur(0rem)",
+                  stagger: 0.1,
+                  duration: 1,
+                  ease: "power3.out",
+                  scrollTrigger: {
+                    trigger: slide,
+                    containerAnimation: horizontalTween,
+                    start: "left 72%",
+                    toggleActions: "play none none reverse"
+                  }
+                }
+              );
+            }
+          });
+        }
+
+        gsap.to("#progress", {
+          scaleX: 1,
+          ease: "none",
+          scrollTrigger: {
+            start: 0,
+            end: "max",
+            scrub: 0.4
+          }
+        });
+
+        if (window.matchMedia("(pointer:fine)").matches && !reducedMotion) {
+          document.querySelectorAll(".magnetic").forEach(element => {
+            const moveX = gsap.quickTo(element, "x", { duration: 0.55, ease: "power3.out" });
+            const moveY = gsap.quickTo(element, "y", { duration: 0.55, ease: "power3.out" });
+
+            element.addEventListener("pointermove", event => {
+              const rect = element.getBoundingClientRect();
+              moveX((event.clientX - rect.left - rect.width / 2) * 0.2);
+              moveY((event.clientY - rect.top - rect.height / 2) * 0.2);
+            });
+
+            element.addEventListener("pointerleave", () => {
+              moveX(0);
+              moveY(0);
+            });
+          });
+        }
+
+        const menuButton = document.getElementById("menuButton");
+        const menuClose = document.getElementById("menuClose");
+        const menuOverlay = document.getElementById("menuOverlay");
+        const menuLinks = gsap.utils.toArray(".menu-link");
+        let menuOpen = false;
+
+        function openMenu() {
+          if (menuOpen) return;
+          menuOpen = true;
+          body.style.overflow = "hidden";
+          menuButton.setAttribute("aria-expanded", "true");
+          menuOverlay.setAttribute("aria-hidden", "false");
+          menuOverlay.style.visibility = "visible";
+
+          gsap.timeline()
+            .to(menuOverlay, {
+              yPercent: -100,
+              duration: 0
+            })
+            .set(menuOverlay, {
+              yPercent: 100
+            })
+            .to(menuOverlay, {
+              yPercent: 0,
+              duration: 0.85,
+              ease: "power4.inOut"
+            })
+            .fromTo(
+              menuLinks,
+              {
+                yPercent: 70,
+                opacity: 0,
+                filter: "blur(0.7rem)"
+              },
+              {
+                yPercent: 0,
+                opacity: 1,
+                filter: "blur(0rem)",
+                stagger: 0.08,
+                duration: 0.8,
+                ease: "power4.out"
+              },
+              "-=0.35"
+            );
+        }
+
+        function closeMenu() {
+          if (!menuOpen) return;
+          menuOpen = false;
+          menuButton.setAttribute("aria-expanded", "false");
+
+          gsap.to(menuOverlay, {
+            yPercent: -100,
+            duration: 0.75,
+            ease: "power4.inOut",
+            onComplete() {
+              menuOverlay.style.visibility = "hidden";
+              menuOverlay.setAttribute("aria-hidden", "true");
+              body.style.overflow = "";
+              gsap.set(menuOverlay, { yPercent: 100 });
+            }
+          });
+        }
+
+        menuButton.addEventListener("click", openMenu);
+        menuClose.addEventListener("click", closeMenu);
+        menuLinks.forEach(link => link.addEventListener("click", closeMenu));
+
+        document.addEventListener("keydown", event => {
+          if (event.key === "Escape") closeMenu();
+        });
+
+        const newsletterForm = document.getElementById("newsletterForm");
+        const formStatus = document.getElementById("formStatus");
+
+        newsletterForm.addEventListener("submit", event => {
+          event.preventDefault();
+
+          if (!newsletterForm.checkValidity()) {
+            newsletterForm.reportValidity();
+            formStatus.textContent = "Please enter a valid email address.";
+            return;
+          }
+
+          const email = newsletterForm.email.value.trim();
+          formStatus.textContent = `Thank you. Atelier notes will be sent to ${email}.`;
+          newsletterForm.reset();
+
+          gsap.fromTo(
+            formStatus,
+            { y: 12, opacity: 0, filter: "blur(0.4rem)" },
+            { y: 0, opacity: 1, filter: "blur(0rem)", duration: 0.7, ease: "power3.out" }
+          );
+        });
+
+        document.fonts.ready.then(() => {
+          ScrollTrigger.refresh();
+        });
+
+        window.addEventListener("load", () => {
+          ScrollTrigger.refresh();
+        }, { once: true });
+      })();
+    </script>
+
+    <script>
+      (()=>{const section=document.getElementById('story');if(!section||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;requestAnimationFrame(()=>{const words=Array.from(section.querySelectorAll('#storyTitle .reveal-word'));const copy=section.querySelector('.reveal-copy');const targets=copy?[...words,copy]:words;targets.forEach(target=>gsap.getTweensOf(target).forEach(tween=>tween.kill()));gsap.set(words,{yPercent:115,opacity:0,filter:'none',rotateX:0});if(copy)gsap.set(copy,{y:32,opacity:0,filter:'none'});const timeline=gsap.timeline({scrollTrigger:{trigger:section,start:'top 72%',toggleActions:'play none none reverse'}});timeline.to(words,{yPercent:0,opacity:1,duration:1.05,stagger:0.055,ease:'power4.out'});if(copy)timeline.to(copy,{y:0,opacity:1,duration:0.8,ease:'power3.out'},'-=0.55');});})();
+    </script>
+  
+</body></html>

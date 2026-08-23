@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "admin": "node server/local-cms.js"
+    "admin": "node server/local-cms.js",
+    "templates": "node server/serve-templates.js"
   },
   "dependencies": {
     "@types/cors": "^2.8.19",

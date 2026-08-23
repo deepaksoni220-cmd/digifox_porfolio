@@ -496,10 +496,10 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     templateStyle: "riskaLuxury",
     category: "2d",
     previewUrl: "http://localhost:7006",
-    shortDescription: "A high-end cinematic landing page designed for luxury fashion labels and material studies.",
+    shortDescription: "A high-end cinematic luxury clothing website designed for bespoke fashion labels and material studies.",
     thumbnailUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop",
     hero: {
-      title: "Riska Luxury",
+      title: "Biska Luxury Clothing Website",
       subtitle: "Cinematic fashion and luxury material studies.",
       ctaText: "Explore Collection",
       imagePrompt: "cinematic luxury fashion editorial high end minimalist lighting"

@@ -122,7 +122,7 @@ export const TEMPLATE_REGISTRY: TemplateMetadata[] = [
   },
   {
     template_id: "riskaLuxury",
-    name: "Riska Haute Couture & Material Studies",
+    name: "Biska Luxury Clothing Website",
     industries: ["fashion", "luxury", "clothing", "portfolio", "couture", "atelier", "apparel"],
     styles: ["luxury", "editorial", "cinematic", "dark", "minimalist", "high-end"],
     features: ["hero", "material-studies", "lookbook", "atelier-craft", "consultation", "contact"],

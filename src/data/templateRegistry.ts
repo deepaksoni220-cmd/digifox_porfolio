@@ -127,7 +127,7 @@ export const TEMPLATE_REGISTRY: TemplateMetadata[] = [
     styles: ["luxury", "editorial", "cinematic", "dark", "minimalist", "high-end"],
     features: ["hero", "material-studies", "lookbook", "atelier-craft", "consultation", "contact"],
     sections: ["hero", "about", "items", "contact"],
-    previewUrl: "http://localhost:7006",
+    previewUrl: "/templates/style demo 1/biska_luxury.aura.build/riska-luxury.aura.build/index.html",
     thumbnailUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop"
   }
 ];

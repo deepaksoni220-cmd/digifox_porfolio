@@ -1015,6 +1015,21 @@ export const AiBuilderPage: React.FC = () => {
     }
   };
 
+  // Pick up any template chosen from DesignKitsPage or external link
+  useEffect(() => {
+    const stored = sessionStorage.getItem("selectedTemplateData");
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        sessionStorage.removeItem("selectedTemplateData");
+        setPreviewData(parsed);
+        setIsModifyMode(true);
+      } catch (e) {
+        console.error("Failed to load selected template from sessionStorage", e);
+      }
+    }
+  }, []);
+
   const viewportWidth = { desktop: '100%', tablet: '768px', mobile: '390px' };
 
   if (previewData && !isBuilding) {

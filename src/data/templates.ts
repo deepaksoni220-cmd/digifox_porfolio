@@ -495,7 +495,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     websiteType: "Portfolio",
     templateStyle: "riskaLuxury",
     category: "2d",
-    previewUrl: "http://localhost:7006",
+    previewUrl: "/templates/style demo 1/biska_luxury.aura.build/riska-luxury.aura.build/index.html",
     shortDescription: "A high-end cinematic luxury clothing website designed for bespoke fashion labels and material studies.",
     thumbnailUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop",
     hero: {

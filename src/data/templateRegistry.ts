@@ -129,6 +129,16 @@ export const TEMPLATE_REGISTRY: TemplateMetadata[] = [
     sections: ["hero", "about", "items", "contact"],
     previewUrl: "/templates/style demo 1/biska_luxury.aura.build/riska-luxury.aura.build/index.html",
     thumbnailUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop"
+  },
+  {
+    template_id: "studioFashion",
+    name: "STUDIO Fashion & Beauty eCommerce",
+    industries: ["fashion", "beauty", "ecommerce", "store", "clothing", "skincare", "cosmetics"],
+    styles: ["editorial", "minimalist", "modern", "clean", "luxury"],
+    features: ["hero", "product-showcase", "campaigns", "journal", "services", "contact"],
+    sections: ["hero", "about", "items", "contact"],
+    previewUrl: "/templates/stylg demo 2/studio_fashion.aura.build/studio-fashion.aura.build/index.html",
+    thumbnailUrl: "/templates/stylg demo 2/studio_fashion.aura.build/hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/07b03058-049e-4bf0-be3e-505e30435ece_1600w.png"
   }
 ];
 

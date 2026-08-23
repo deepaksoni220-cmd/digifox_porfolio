@@ -534,6 +534,50 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
       primaryColor: "#c084fc",
       secondaryColor: "#1e1b4b"
     }
+  },
+  studioFashion: {
+    websiteType: "E-Commerce Store",
+    templateStyle: "studioFashion",
+    category: "2d",
+    previewUrl: "/templates/stylg demo 2/studio_fashion.aura.build/studio-fashion.aura.build/index.html",
+    shortDescription: "A high-end editorial fashion & beauty eCommerce landing page with clean minimalist aesthetic and product showcases.",
+    thumbnailUrl: "/templates/stylg demo 2/studio_fashion.aura.build/hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/07b03058-049e-4bf0-be3e-505e30435ece_1600w.png",
+    hero: {
+      title: "STUDIO Fashion & Beauty",
+      subtitle: "Shaping digital experiences for premium fashion and beauty brands.",
+      ctaText: "Explore Shop",
+      imagePrompt: "minimalist high end fashion and beauty studio clean aesthetic editorial"
+    },
+    about: {
+      heading: "Design Practice",
+      description: "We partner with visionary fashion and beauty brands to build immersive eCommerce platforms.",
+      imagePrompt: "fashion beauty editorial studio photoshoot neutral tones"
+    },
+    items: [
+      {
+        title: "eCommerce Design",
+        description: "High-converting digital flagship stores.",
+        icon: "✨"
+      },
+      {
+        title: "Art Direction",
+        description: "Cinematic campaigns & editorial photography.",
+        icon: "🎨"
+      },
+      {
+        title: "Brand Strategy",
+        description: "Positioning luxury and lifestyle labels.",
+        icon: "💎"
+      }
+    ],
+    contact: {
+      heading: "Start a Project with STUDIO",
+      buttonText: "Get in Touch"
+    },
+    theme: {
+      primaryColor: "#111111",
+      secondaryColor: "#e5e5e0"
+    }
   }
 };
 

@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en"><head><script id="aura-preview-performance-controller">
+(function() {
+if (window.__auraPreviewPerformanceController) return;
+const nativeRequestAnimationFrame = window.requestAnimationFrame
+? window.requestAnimationFrame.bind(window)
+: function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+const nativeCancelAnimationFrame = window.cancelAnimationFrame
+? window.cancelAnimationFrame.bind(window)
+: window.clearTimeout.bind(window);
+const nativeSetInterval = window.setInterval.bind(window);
+let paused = false;
+let nextFrameId = 1;
+const frameRecords = new Map();
+const pausedFrameCallbacks = new Map();
+const style = document.createElement('style');
+style.id = 'aura-preview-performance-style';
+style.textContent = [
+'html[data-aura-preview-paused="true"] *,',
+'html[data-aura-preview-paused="true"] *::before,',
+'html[data-aura-preview-paused="true"] *::after {',
+'  animation-play-state: paused !important;',
+'  transition-duration: 0s !important;',
+'  scroll-behavior: auto !important;',
+'}'
+].join('\n');
+document.head.appendChild(style);
+window.requestAnimationFrame = function(callback) {
+const frameId = nextFrameId++;
+if (paused) {
+pausedFrameCallbacks.set(frameId, callback);
+frameRecords.set(frameId, { paused: true });
+return frameId;
+}
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+return frameId;
+};
+window.cancelAnimationFrame = function(frameId) {
+const record = frameRecords.get(frameId);
+pausedFrameCallbacks.delete(frameId);
+if (record && typeof record.nativeFrameId !== 'undefined') {
+nativeCancelAnimationFrame(record.nativeFrameId);
+}
+frameRecords.delete(frameId);
+};
+window.setInterval = function(callback, delay) {
+const args = Array.prototype.slice.call(arguments, 2);
+return nativeSetInterval(function() {
+if (paused) return;
+callback.apply(this, args);
+}, delay);
+};
+const flushPausedFrames = function() {
+const callbacks = Array.from(pausedFrameCallbacks.entries());
+pausedFrameCallbacks.clear();
+callbacks.forEach(function(entry) {
+const frameId = entry[0];
+const callback = entry[1];
+const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+frameRecords.delete(frameId);
+callback(timestamp);
+});
+frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+});
+};
+const setPaused = function(nextPaused) {
+const shouldPause = Boolean(nextPaused);
+if (paused === shouldPause) return;
+paused = shouldPause;
+document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+if (!paused) {
+flushPausedFrames();
+}
+};
+window.__auraPreviewPerformanceController = {
+setPaused: setPaused,
+get paused() {
+return paused;
+}
+};
+window.addEventListener('message', function(event) {
+if (event.source !== window.parent) return;
+if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+setPaused(event.data.paused);
+});
+})();
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="STUDIO is a premium fashion and beauty eCommerce design practice shaping digital experiences.">
+<meta name="theme-color" content="#f7f7f4">
+<title>STUDIO — Fashion &amp; Beauty Design Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=Caveat+Brush&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script><!-- aura-ga4-start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2M6V79H761"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-2M6V79H761');
+</script>
+<!-- aura-ga4-end -->
+</head>
+
+  <body class="m-0 overflow-x-hidden bg-[#f7f7f4] text-[#070707] antialiased selection:bg-[#ef6f79] selection:text-[#070707] scroll-smooth" style="font-family:Arial,Helvetica,sans-serif">
+    <!-- Preloader -->
+    <div id="preloader" class="fixed inset-0 z-[100] grid place-items-center overflow-hidden bg-[#070707] text-white" aria-hidden="true" style=" pointer-events: none;">
+      <div class="w-[min(72vw,52rem)] text-center">
+        <div id="preloaderWord" class="text-[clamp(4rem,14vw,11rem)] font-semibold leading-[0.72] tracking-[-0.08em]">
+          STUDIO
+        </div>
+        <div class="mx-auto mt-10 h-[0.1875rem] w-full origin-left scale-x-0 bg-[#ef6f79]" id="preloaderLine"></div>
+      </div>
+    </div>
+
+    <!-- Document progress -->
+    <div id="progress" class="fixed left-0 top-0 z-[90] h-[0.1875rem] w-full origin-left scale-x-0 bg-[#ef6f79]"></div>
+
+    <!-- Custom cursor -->
+    <div id="viewCursor" class="pointer-events-none fixed left-0 top-0 z-[95] hidden h-[2.875rem] w-[2.875rem] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[#070707] text-xs font-semibold uppercase tracking-[0.18em] text-white lg:grid" style="will-change:transform">View</div>
+
+    <!-- Fixed navigation -->
+    <header class="pointer-events-none fixed inset-x-0 top-0 z-50 flex items-start justify-between px-[4vw] pt-8 text-white mix-blend-difference">
+      <a href="#top" class="magnetic pointer-events-auto text-xs font-semibold tracking-[-0.06em] outline-none focus-visible:ring-2 focus-visible:ring-[#ef6f79]">
+        STUDIO
+      </a>
+
+      <button type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="menuPanel" class="magnetic pointer-events-auto relative h-8 w-9 outline-none focus-visible:ring-2 focus-visible:ring-[#ef6f79]" id="menuButton">
+        <span class="absolute left-1/2 top-[0.65rem] block h-px w-7 -translate-x-1/2 bg-current" id="menuLineOne"></span>
+        <span id="menuLineTwo" class="absolute left-1/2 top-[1.25rem] block h-px w-7 -translate-x-1/2 bg-current"></span>
+      </button>
+    </header>
+
+    <!-- Fullscreen menu -->
+    <aside id="menuPanel" class="fixed inset-0 z-40 flex flex-col justify-between bg-[#ef6f79] px-6 pb-8 pt-24 opacity-0 lg:px-[4vw] lg:pb-12" style="clip-path:inset(0 0 100% 0)" aria-hidden="true">
+      <nav aria-label="Primary navigation" class="flex flex-col">
+        <a href="#work" class="menuLink group flex items-start border-b border-black/15 py-1 text-[clamp(3.5rem,8.6vw,8rem)] leading-[0.82] tracking-[-0.07em] outline-none focus-visible:ring-2 focus-visible:ring-black" style="font-family:'Bodoni Moda',Georgia,serif">
+          <span class="mr-4 mt-2 text-xs font-semibold tracking-[0.16em]" style="font-family:Arial,Helvetica,sans-serif">
+            01
+          </span>
+          Work
+        </a>
+        <a href="#studio" class="menuLink group flex items-start border-b border-black/15 py-1 text-[clamp(3.5rem,8.6vw,8rem)] leading-[0.82] tracking-[-0.07em] outline-none focus-visible:ring-2 focus-visible:ring-black" style="font-family:'Bodoni Moda',Georgia,serif">
+          <span class="mr-4 mt-2 text-xs font-semibold tracking-[0.16em]" style="font-family:Arial,Helvetica,sans-serif">
+            02
+          </span>
+          Studio
+        </a>
+        <a href="#services" class="menuLink group flex items-start border-b border-black/15 py-1 text-[clamp(3.5rem,8.6vw,8rem)] leading-[0.82] tracking-[-0.07em] outline-none focus-visible:ring-2 focus-visible:ring-black" style="font-family:'Bodoni Moda',Georgia,serif">
+          <span class="mr-4 mt-2 text-xs font-semibold tracking-[0.16em]" style="font-family:Arial,Helvetica,sans-serif">
+            03
+          </span>
+          Services
+        </a>
+        <a href="#journal" class="menuLink group flex items-start border-b border-black/15 py-1 text-[clamp(3.5rem,8.6vw,8rem)] leading-[0.82] tracking-[-0.07em] outline-none focus-visible:ring-2 focus-visible:ring-black" style="font-family:'Bodoni Moda',Georgia,serif">
+          <span class="mr-4 mt-2 text-xs font-semibold tracking-[0.16em]" style="font-family:Arial,Helvetica,sans-serif">
+            04
+          </span>
+          Journal
+        </a>
+        <a href="#faq" class="menuLink group flex items-start border-b border-black/15 py-1 text-[clamp(3.5rem,8.6vw,8rem)] leading-[0.82] tracking-[-0.07em] outline-none focus-visible:ring-2 focus-visible:ring-black" style="font-family:'Bodoni Moda',Georgia,serif">
+          <span class="mr-4 mt-2 text-xs font-semibold tracking-[0.16em]" style="font-family:Arial,Helvetica,sans-serif">
+            05
+          </span>
+          FAQ
+        </a>
+        <a href="#contact" class="menuLink group flex items-start py-1 text-[clamp(3.5rem,8.6vw,8rem)] leading-[0.82] tracking-[-0.07em] outline-none focus-visible:ring-2 focus-visible:ring-black" style="font-family:'Bodoni Moda',Georgia,serif">
+          <span class="mr-4 mt-2 text-xs font-semibold tracking-[0.16em]" style="font-family:Arial,Helvetica,sans-serif">
+            06
+          </span>
+          Contact
+        </a>
+      </nav>
+
+      <div class="flex flex-col gap-3 border-t border-black/20 pt-5 text-xs font-semibold uppercase tracking-[0.14em] sm:flex-row sm:justify-between">
+        <span>Fashion &amp; Beauty eCommerce Agency</span>
+        <a href="mailto:hello@studio.agency" class="underline underline-offset-4">
+          hello@studio.agency
+        </a>
+      </div>
+    </aside>
+
+    <main class="">
+      <!-- Hero -->
+      <section class="min-h-[112svh] overflow-hidden text-[#070707] bg-[#b7baa9] bg-[url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/cfecdd56-5f0b-4e05-bf86-cf7e38e53c87_3840w.webp)] bg-cover bg-center relative" id="top">
+        <div class="grid min-h-[112svh] grid-cols-1 lg:grid-cols-[48%_52%]">
+          <div class="relative z-10 flex min-h-[62svh] flex-col justify-between px-6 pb-8 pt-28 lg:min-h-[112svh] lg:px-[4vw] lg:pb-10 lg:pt-[18svh]">
+            
+            <div id="floral-parallax-wrapper" class="absolute left-[-10vw] top-[15svh] z-[-1] w-[80vw] max-w-[600px] pointer-events-none opacity-85 mix-blend-multiply lg:left-[2vw] lg:top-[20svh] lg:w-[45vw]" style="will-change: transform; transition: transform 0.1s ease-out;">
+  <img id="floral-img" src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/66b1c5ed-4e79-4d51-aba4-25988f656577_1600w.png" alt="Elegant Pastel Floral Bouquet" class="w-full h-auto" style="will-change: transform;">
+</div>
+
+            <div class="absolute left-[4vw] top-[36svh] whitespace-nowrap text-[34vw] font-semibold leading-[0.65] tracking-[-0.11em] text-transparent" style="will-change:transform" id="heroWord">
+  <span style="background-image: url('https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/generated-videos/2e815afb-cac1-4c01-90e1-cf3810246e35/1784912221857-e030d797-9716-40fb-bab3-626c8a46fd8b.mp4'); background-size: cover; background-position: center 62%; -webkit-background-clip: text; background-clip: text; color: transparent; mix-blend-mode: multiply" class="">
+                STUDIO
+              </span>
+</div>
+            <div class="mt-16 flex items-center justify-between text-xs font-normal uppercase tracking-[0.14em]">
+              <span class="">Scroll to explore ↓</span>
+              <span>01 / 04</span>
+            </div>
+          </div>
+
+          <div class="min-h-[72svh] overflow-hidden lg:min-h-[112svh] lg:border-l lg:border-t-0 bg-[#aeb1a0]/25 border-black/15 border-t relative">
+            <div class="absolute inset-0 opacity-20" style="background-image: linear-gradient(rgba(7, 7, 7, 0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(7, 7, 7, 0.18) 1px, transparent 1px); background-size: 4rem 4rem;"></div>
+            <div class="absolute left-6 top-7 z-20 flex flex-wrap gap-2 lg:left-[3vw] lg:top-10">
+              <span class="border border-black/30 bg-[#b7baa9]/80 px-3 py-2 text-[0.6rem] font-normal uppercase tracking-[0.14em] backdrop-blur-sm">
+                Collection / 24
+              </span>
+              <span class="border border-black/30 bg-[#b7baa9]/80 px-3 py-2 text-[0.6rem] font-normal uppercase tracking-[0.14em] backdrop-blur-sm">
+                Built for commerce
+              </span>
+              <span class="border border-black/30 bg-[#b7baa9]/80 px-3 py-2 text-[0.6rem] font-normal uppercase tracking-[0.14em] backdrop-blur-sm">
+                Elegant / refined / direct
+              </span>
+            </div>
+
+            <div class="absolute overflow-visible inset-x-0 bottom-20 top-16 flex items-center justify-center lg:bottom-24 lg:top-20">
+              <div class="absolute text-[52vw] font-light leading-none tracking-tight text-black/[0.045] lg:text-[25vw]">
+                A
+              </div>
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1cc1a53c-7d12-41bf-91bb-35aace9ae02d_1600w.png" alt="Platinum-haired model in a close beauty crop" class="relative z-10 h-full max-h-[90%] w-full max-w-[85%] overflow-visible object-contain object-center">
+            </div>
+
+            <div class="absolute inset-x-6 bottom-7 z-20 grid grid-cols-3 border border-black/30 bg-[#b7baa9]/85 backdrop-blur-sm lg:inset-x-[3vw] lg:bottom-10" role="group" aria-label="Studio focus">
+              <div class="border-r border-black/30 bg-[#070707] px-4 py-3 text-white">
+                <b class="block text-[0.6rem] tracking-[0.14em]">01</b>
+                <span class="mt-1 block text-xs font-normal uppercase tracking-[0.12em]">
+                  Fashion
+                </span>
+              </div>
+              <div class="border-r border-black/30 px-4 py-3">Beauty</div>
+              <div class="px-4 py-3">eCommerce</div>
+            </div>
+          </div>
+
+          <script>
+            (function() {
+              const wrapper = document.getElementById('floral-parallax-wrapper');
+              const img = document.getElementById('floral-img');
+              if(!wrapper || !img) return;
+
+              document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth - 0.5) * -40;
+                const y = (e.clientY / window.innerHeight - 0.5) * -40;
+                wrapper.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+              });
+
+              let start = null;
+              function step(timestamp) {
+                if (!start) start = timestamp;
+                const progress = timestamp - start;
+                const y = Math.sin(progress / 1200) * 12; 
+                const rot = Math.sin(progress / 1500) * 2; 
+                img.style.transform = `translateY(${y}px) rotate(${rot}deg)`;
+                window.requestAnimationFrame(step);
+              }
+              window.requestAnimationFrame(step);
+            })();
+          </script>
+        </div>
+      </section>
+
+      <!-- Horizontal project rail -->
+      <section class="relative h-auto bg-[#f7f7f4]" id="work" style="height: 7291px;">
+        <div class="overflow-hidden lg:sticky lg:top-0 lg:h-screen">
+          <div id="projectRail" class="flex w-full flex-col lg:h-screen lg:w-max lg:flex-row" style="will-change:transform">
+            <!-- Index slide -->
+            <article class="relative grid min-h-screen w-full shrink-0 place-items-center overflow-hidden px-6 text-center lg:h-screen lg:w-screen lg:px-[4vw]">
+              <div id="ghostWord" class="absolute left-[-5vw] top-1/2 -translate-y-1/2 whitespace-nowrap text-[28vw] font-semibold leading-none tracking-[-0.1em] text-black/[0.025]" style="will-change:transform">
+                STUDIO
+              </div>
+              <div class="relative z-10">
+                <p class="mb-8 text-xs font-semibold uppercase tracking-[0.18em]">
+                  Selected work / 2024–2027
+                </p>
+                <h2 class="reveal text-[clamp(5rem,12vw,11rem)] leading-[0.72] tracking-[-0.075em]" style="font-family: &quot;Bodoni Moda&quot;, Georgia, serif;">
+                  OUR
+                  <br>
+                  WORK
+                </h2>
+                <p class="mt-7 text-[clamp(2rem,4vw,4rem)] leading-none text-[#ef6f79]" style="font-family:'Bodoni Moda',Georgia,serif">
+                  (10)
+                </p>
+              </div>
+            </article>
+
+            <!-- Common Future -->
+            <article class="grid min-h-screen w-full shrink-0 grid-cols-1 bg-white lg:h-screen lg:w-screen lg:grid-cols-[62%_38%]">
+              <a href="#common" class="tilt projectImage relative block min-h-[72svh] overflow-hidden lg:min-h-0" data-cursor="view" style=" transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);">
+                <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/833329e2-1e76-439b-9eed-240e429525dc_1600w.png" alt="Close editorial beauty portrait with pale hair" class="drift-image h-full w-full scale-[1.02] object-cover object-[50%_35%]">
+                <span class="absolute right-[-2.4rem] top-1/2 hidden h-24 w-24 -translate-y-1/2 place-items-center rounded-full bg-[#070707] text-xs font-semibold uppercase tracking-[0.15em] text-white lg:grid">
+                  View
+                </span>
+              </a>
+              <div class="flex flex-col justify-center border-l border-black/10 px-6 py-20 lg:px-[5vw]">
+                <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#777]">
+                  eCommerce / Fashion / 2026
+                </p>
+                <h3 class="reveal mt-8 text-[clamp(3.5rem,5vw,5.5rem)] leading-[0.85] tracking-[-0.06em]" style="font-family:'Bodoni Moda',Georgia,serif">
+                  Maison
+                  <br>
+                  Luxe
+                </h3>
+                <p class="mt-9 max-w-[30rem] text-xs leading-[1.65] text-[#777]">
+                  A high-end eCommerce experience built to showcase premium
+                  fashion collections with effortless elegance and seamless
+                  conversion.
+                </p>
+                <a href="#common" class="arrow-link magnetic mt-16 w-fit border-b border-black pb-1 text-xs font-semibold uppercase tracking-[0.12em]">
+                  More Info
+                  <span class="inline-block">↗</span>
+                </a>
+              </div>
+            </article>
+
+            <!-- Lumen Path -->
+            <article class="grid min-h-screen w-full shrink-0 grid-cols-1 bg-[#f3d6dc] lg:h-screen lg:w-screen lg:grid-cols-[62%_38%]">
+              <a href="#lumen" class="tilt projectImage relative block min-h-[72svh] overflow-hidden" data-cursor="view" style=" transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);">
+                <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fcd5d181-ae0e-4afe-8c7d-7a3ef7bca33a_1600w.png" alt="Soft pink skincare products and flowers" class="drift-image h-full w-full scale-[1.02] object-cover">
+                <span class="absolute right-[-2.4rem] top-1/2 hidden h-24 w-24 -translate-y-1/2 place-items-center rounded-full bg-[#070707] text-xs font-semibold uppercase tracking-[0.15em] text-white lg:grid">
+                  View
+                </span>
+              </a>
+              <div class="flex flex-col justify-center bg-white px-6 py-20 lg:px-[5vw]">
+                <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#777]">
+                  Web / Beauty / 2026
+                </p>
+                <h3 class="reveal mt-8 text-[clamp(3.5rem,5vw,5.5rem)] leading-[0.85] tracking-[-0.06em]" style="font-family:'Bodoni Moda',Georgia,serif">
+                  Lumière
+                  <br>
+                  Beauté
+                </h3>
+                <p class="mt-9 max-w-[30rem] text-xs leading-[1.65] text-[#777]">
+                  A refined digital boutique for premium skincare, focusing on
+                  tactile product storytelling and elegant conversion pathways.
+                </p>
+                <a href="#lumen" class="arrow-link magnetic mt-16 w-fit border-b border-black pb-1 text-xs font-semibold uppercase tracking-[0.12em]">
+                  More Info
+                  <span class="inline-block">↗</span>
+                </a>
+              </div>
+            </article>
+            <article class="grid min-h-screen w-full shrink-0 grid-cols-1 bg-[#e4e5e0] lg:h-screen lg:w-screen lg:grid-cols-[62%_38%]">
+              <a href="#nova-couture" class="grid min-h-screen w-full grid-cols-1 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#ef6f79] lg:h-screen lg:grid-cols-[62%_38%]" aria-label="View Nova Couture project">
+                <div class="projectImage relative min-h-[72svh] overflow-hidden" data-cursor="view" style="transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);">
+                  <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/285c36d3-74b7-4b79-830e-20250b406ef8_1600w.png" alt="Fashion model wearing a minimal elegant outfit" class="drift-image h-full w-full scale-[1.02] object-cover">
+                  <span class="absolute right-[-2.4rem] top-1/2 hidden h-24 w-24 -translate-y-1/2 place-items-center rounded-full bg-[#070707] text-xs font-normal uppercase tracking-[0.15em] text-white lg:grid">
+                    View
+                  </span>
+                </div>
+                <div class="flex flex-col justify-center bg-white px-6 py-20 lg:px-[5vw]">
+                  <p class="text-xs font-normal uppercase tracking-[0.16em] text-[#777]">
+                    eCommerce / Fashion / 2026
+                  </p>
+                  <h3 class="reveal mt-8 text-[clamp(3.5rem,5vw,5.5rem)] leading-[0.85] tracking-tight" style="font-family:'Bodoni Moda',Georgia,serif">
+                    Nova
+                    <br>
+                    Couture
+                  </h3>
+                  <p class="mt-9 max-w-[30rem] text-xs leading-[1.65] text-[#777]">
+                    A cutting-edge digital lookbook and eCommerce platform for
+                    an avant-garde fashion label, emphasizing bold imagery and
+                    fluid, seamless transitions.
+                  </p>
+                  <span class="arrow-link mt-16 w-fit border-b border-black pb-1 text-xs font-normal uppercase tracking-[0.12em]">
+                    Case Study
+                    <span class="inline-block">↗</span>
+                  </span>
+                </div>
+              </a>
+            </article>
+            <article class="min-h-screen w-full shrink-0 bg-[#071521] text-white lg:h-screen lg:w-screen">
+              <a href="#apparel" class="grid min-h-screen w-full grid-cols-1 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#ef6f79] lg:h-screen lg:grid-cols-[62%_38%]" aria-label="View Aura Activewear project">
+                <div class="projectImage relative min-h-[72svh] overflow-hidden lg:min-h-0" data-cursor="view" style="transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);">
+                  <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/39a2b3ee-8b05-45b7-abf5-315ca580ca21_1600w.png" alt="Athletic fashion campaign in dramatic blue light" class="drift-image h-full w-full scale-[1.02] object-cover">
+                  <span class="absolute right-[-2.4rem] top-1/2 hidden h-24 w-24 -translate-y-1/2 place-items-center rounded-full bg-[#ef6f79] text-xs font-semibold uppercase tracking-[0.15em] text-[#070707] lg:grid">
+                    View
+                  </span>
+                </div>
+                <div class="flex flex-col justify-center border-l border-white/15 bg-[#071521] px-6 py-20 lg:px-[5vw]">
+                  <p class="text-xs font-semibold uppercase tracking-[0.16em] text-white/60">
+                    eCommerce / Apparel / 2025
+                  </p>
+                  <h3 class="reveal mt-8 text-[clamp(3.5rem,5vw,5.5rem)] leading-[0.85] tracking-[-0.06em]" style="font-family:'Bodoni Moda',Georgia,serif">
+                    Aura
+                    <br>
+                    Activewear
+                  </h3>
+                  <p class="mt-9 max-w-[30rem] text-xs leading-[1.65] text-white/60">
+                    A premium fashion eCommerce experience where athletic
+                    precision meets elevated lifestyle apparel, optimized for
+                    seamless shopping on every screen.
+                  </p>
+                  <span class="arrow-link mt-16 w-fit border-b border-white pb-1 text-xs font-semibold uppercase tracking-[0.12em]">
+                    View project
+                    <span class="inline-block">↗</span>
+                  </span>
+                </div>
+              </a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Common Future case study -->
+      <section class="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-[72%_28%]" id="common">
+        <div class="flex min-h-[72svh] flex-col justify-between px-6 pb-10 pt-24 lg:min-h-screen lg:px-[4vw] lg:pb-12">
+          <p class="text-xs font-semibold uppercase tracking-[0.16em]">
+            STUDIO / ECOMMERCE
+          </p>
+          <h2 class="reveal text-[clamp(4.5rem,8vw,8rem)] leading-[0.78] tracking-[-0.07em]" style="font-family: &quot;Bodoni Moda&quot;, Georgia, serif">
+            MAISON
+            <br>
+            LUXE
+          </h2>
+          <dl class="grid grid-cols-1 gap-5 text-xs uppercase tracking-[0.12em] sm:grid-cols-3">
+            <div class="border-t border-black/15 pt-3">
+              <dt class="mb-2 text-[#999]">Year</dt>
+              <dd class="">2026</dd>
+            </div>
+            <div class="border-t border-black/15 pt-3">
+              <dt class="mb-2 text-[#999]">Type</dt>
+              <dd class="">Fashion / Web</dd>
+            </div>
+            <div class="border-t border-black/15 pt-3">
+              <dt class="mb-2 text-[#999]">Timeframe</dt>
+              <dd class="">14 weeks</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="projectImage min-h-[76svh] overflow-hidden" data-cursor="view">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/a105c024-0136-4ab5-9c7a-c0e4c765fec0_800w.png" alt="Platinum-haired model in a close beauty crop" class="drift-image h-full w-full scale-[1.02] object-cover">
+        </div>
+      </section>
+
+      <section class="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-[56%_44%]">
+        <div class="projectImage min-h-[76svh] overflow-hidden" style=" transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/1366adb0-6622-49a5-81b2-abfd42c2378f_1600w.jpg" alt="Close-cropped freckled beauty portrait" class="drift-image h-full w-full scale-[1.02] object-cover">
+        </div>
+        <article class="flex min-h-[68svh] flex-col justify-between border-l border-black/10 px-6 py-20 lg:min-h-screen lg:px-[7vw] lg:pb-12 lg:pt-[17svh]">
+          <div class="max-w-[30rem]">
+            <h3 class="text-[clamp(3rem,4.5vw,4.5rem)] leading-none tracking-[-0.05em]" style="font-family:'Bodoni Moda',Georgia,serif" data-revealed="true">
+              Overview
+            </h3>
+            <p class="mt-8 text-xs leading-[1.65] text-[#777]">
+              Maison Luxe required a flagship digital storefront that mirrored
+              the elegance of their physical boutiques. We crafted a seamless
+              eCommerce platform where immersive fashion photography, refined
+              typography, and intuitive browsing elevate the path to purchase.
+            </p>
+            <p class="mt-5 text-xs leading-[1.65] text-[#777]">
+              The result is a measured system where editorial imagery, calm
+              typography, and purposeful motion make every transaction feel
+              personal.
+            </p>
+          </div>
+          <span class="text-xs font-semibold tracking-[0.18em] text-[#999]">
+            /01
+          </span>
+        </article>
+      </section>
+
+      <section class="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-[42%_58%]">
+        <article class="order-2 flex min-h-[68svh] flex-col justify-between border-r border-black/10 px-6 py-20 lg:order-1 lg:min-h-screen lg:px-[7vw] lg:pb-12 lg:pt-[17svh]">
+          <div class="max-w-[30rem]">
+            <h3 class="text-[clamp(3rem,4.5vw,4.5rem)] leading-none tracking-[-0.05em]" style="font-family:'Bodoni Moda',Georgia,serif" data-revealed="true">
+              Challenge
+            </h3>
+            <p class="mt-8 text-xs leading-[1.65] text-[#777]">
+              The luxury fashion space demands distinction and flawless
+              usability. Our challenge was to merge high-end editorial
+              aesthetics with a high-performing eCommerce architecture.
+            </p>
+            <p class="mt-5 text-xs leading-[1.65] text-[#777]">
+              We created a premium identity that stays human across product
+              pages, campaigns, and personalized shopping journeys.
+            </p>
+          </div>
+          <span class="text-xs font-semibold tracking-[0.18em] text-[#999]">
+            /02
+          </span>
+        </article>
+        <div class="projectImage order-1 min-h-[76svh] overflow-hidden lg:order-2" style=" transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/9a740685-3a05-4439-9442-a00579a50c30_1600w.jpg" alt="Minimal white skincare jar held in manicured hands" class="drift-image h-full w-full scale-[1.02] object-cover">
+        </div>
+      </section>
+
+      <section class="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-[56%_44%]">
+        <div class="projectImage min-h-[76svh] overflow-hidden bg-[#f1f1ed]" style=" transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/112b92fc-a025-4bd7-bb4c-46a6378caaa4_1600w.webp" alt="White fragrance packaging beside delicate blossoms" class="drift-image h-full w-full scale-[1.02] object-cover">
+        </div>
+        <article class="flex min-h-[68svh] flex-col justify-between px-6 py-20 lg:min-h-screen lg:px-[7vw] lg:pb-12 lg:pt-[17svh]">
+          <div class="max-w-[30rem]">
+            <h3 class="text-[clamp(3rem,4.5vw,4.5rem)] leading-none tracking-[-0.05em]" style="font-family:'Bodoni Moda',Georgia,serif" data-revealed="true">
+              Approach
+            </h3>
+            <p class="mt-8 text-xs leading-[1.65] text-[#777]">
+              A minimalist foundation allows the garments and editorial
+              campaigns to command attention. Each crop is intentionally close
+              and immersive.
+            </p>
+            <p class="mt-5 text-xs leading-[1.65] text-[#777]">
+              The final system is modular, scalable, and optimized for
+              international sales without losing its character.
+            </p>
+          </div>
+          <span class="text-xs font-semibold tracking-[0.18em] text-[#999]">
+            /03
+          </span>
+        </article>
+      </section>
+
+      <!-- Lumen -->
+      <section class="grid min-h-screen grid-cols-1 bg-[#f5d9df] lg:grid-cols-[60%_40%]" id="lumen">
+        <div class="projectImage min-h-[78svh] overflow-hidden" style=" transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ce52ec9c-5b9c-4246-8a1f-89d2e51f447f_1600w.png" alt="Pastel cosmetics with pink flowers" class="drift-image h-full w-full scale-[1.02] object-cover">
+        </div>
+        <article class="flex flex-col justify-between px-6 py-20 lg:px-[5vw] lg:py-[14svh]">
+          <p class="text-xs font-semibold uppercase tracking-[0.16em]">
+            Lumière Beauté / 2026
+          </p>
+          <div class="">
+            <h2 class="reveal text-[clamp(4rem,7vw,7rem)] leading-[0.8] tracking-[-0.065em]" style="font-family:'Bodoni Moda',Georgia,serif">
+              Flawless
+              <br>
+              beauty.
+            </h2>
+            <p class="mt-9 max-w-[30rem] text-xs leading-[1.65] text-[#777]">
+              We paired delicate tones with a conversion-focused grid, making
+              space for premium skincare to shine in a seamless digital
+              boutique.
+            </p>
+          </div>
+          <a href="#paper" class="arrow-link w-fit border-b border-black pb-1 text-xs font-semibold uppercase tracking-[0.12em]">
+            Next project
+            <span class="inline-block" style=" transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);">
+              ↗
+            </span>
+          </a>
+        </article>
+      </section>
+
+      <!-- Paper Bloom -->
+      <section id="paper" class="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-[33%_33%_34%]">
+        <article class="flex min-h-[55svh] flex-col justify-between border-r border-black/10 px-6 py-20 lg:min-h-screen lg:px-[5vw] lg:py-[14svh]">
+          <div class="">
+            <span class="text-xs font-medium text-[#999999]">/01</span>
+            <h3 class="text-[clamp(3rem,4.5vw,4.5rem)] leading-none tracking-tight" style="font-family:'Bodoni Moda',Georgia,serif">
+              Overview
+            </h3>
+            <p class="mt-8 max-w-[30rem] text-xs leading-[1.65] text-[#777]">
+              A premium digital boutique crafted for Lumière Beauté, showcasing
+              elegant skincare and refined cosmetics in a flawless online
+              experience.
+            </p>
+          </div>
+        </article>
+        <article class="flex min-h-[55svh] flex-col justify-between border-r border-black/10 px-6 py-20 lg:min-h-screen lg:px-[5vw] lg:py-[14svh]">
+          <div class="">
+            <span class="text-xs font-medium text-[#999999]">/02</span>
+            <h3 class="text-[clamp(3rem,4.5vw,4.5rem)] leading-none tracking-tight" style="font-family:'Bodoni Moda',Georgia,serif">
+              Challenge
+            </h3>
+            <p class="mt-8 max-w-[30rem] text-xs leading-[1.65] text-[#777]">
+              Balance delicate pastel aesthetics with a conversion-optimized
+              grid, ensuring a seamless journey from editorial inspiration to
+              checkout.
+            </p>
+          </div>
+        </article>
+        <div class="projectImage min-h-[80svh] overflow-hidden" style=" transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/2e7c2cdf-7a21-44f8-ad10-7678eeaf4297_1600w.jpg" alt="Pastel cosmetics with pink flowers" class="drift-image h-full w-full scale-[1.02] object-cover">
+        </div>
+      </section>
+      <section class="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-[56%_44%]">
+        <div class="projectImage min-h-[76svh] overflow-hidden bg-[#f1f1ed]" style="transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4c118134-cc70-4d08-be4c-1a25d25ae7e6_1600w.webp" alt="White fragrance packaging beside delicate blossoms" class="drift-image h-full w-full scale-[1.02] object-cover">
+        </div>
+        <article class="flex min-h-[68svh] flex-col justify-between px-6 py-20 lg:min-h-screen lg:px-[7vw] lg:pb-12 lg:pt-[17svh]">
+          <div class="max-w-[30rem]">
+            <h3 class="text-[clamp(3rem,4.5vw,4.5rem)] leading-none tracking-tight" style="font-family:'Bodoni Moda',Georgia,serif" data-revealed="true">
+              Approach
+            </h3>
+            <p class="mt-8 text-xs leading-[1.65] text-[#777]">
+              A minimalist foundation allows the premium cosmetics and editorial
+              beauty campaigns to command attention. Each crop is intentionally
+              intimate and immersive.
+            </p>
+            <p class="mt-5 text-xs leading-[1.65] text-[#777]">
+              The final digital experience is modular, scalable, and optimized
+              for seamless online conversions without losing its elegant,
+              boutique character.
+            </p>
+          </div>
+          <span class="text-xs font-medium tracking-[0.18em] text-[#999]">
+            /03
+          </span>
+        </article>
+      </section>
+
+      <!-- Third Light -->
+      <section id="nova-couture" class="bg-white">
+        <div class="grid min-h-screen grid-cols-1 bg-[#e4e5e0] lg:grid-cols-[62%_38%]">
+          <div class="projectImage min-h-[78svh] overflow-hidden" data-cursor="view" style="transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);">
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/b83cd74b-9b9d-463b-b2d8-386243bd3f8e_1600w.png" alt="Nova Couture campaign model wearing a minimal elegant outfit" class="drift-image h-full w-full scale-[1.02] object-cover">
+          </div>
+          <article class="flex min-h-[72svh] flex-col justify-between border-l border-black/10 bg-white px-6 py-20 lg:min-h-screen lg:px-[5vw] lg:py-[13svh]">
+            <p class="text-xs font-medium uppercase tracking-[0.16em] text-[#777]">
+              Nova Couture / 2026
+            </p>
+            <div>
+              <h2 class="reveal text-[clamp(4rem,7vw,7rem)] leading-[0.8] tracking-tight" style="font-family:'Bodoni Moda',Georgia,serif">
+                Nova
+                <br>
+                Couture
+              </h2>
+              <p class="mt-9 max-w-[30rem] text-xs leading-[1.65] text-[#777]">
+                A bold digital flagship for an avant-garde fashion house.
+                Editorial storytelling, immersive campaign imagery, and a
+                frictionless commerce system come together in one refined
+                experience.
+              </p>
+            </div>
+            <dl class="grid grid-cols-2 gap-5 text-xs uppercase tracking-[0.12em]">
+              <div class="border-t border-black/15 pt-3">
+                <dt class="mb-2 text-[#999]">Category</dt>
+                <dd>Fashion / eCommerce</dd>
+              </div>
+              <div class="border-t border-black/15 pt-3">
+                <dt class="mb-2 text-[#999]">Year</dt>
+                <dd>2026</dd>
+              </div>
+            </dl>
+          </article>
+        </div>
+
+        <div class="grid min-h-screen grid-cols-1 lg:grid-cols-[42%_58%]">
+          <article class="flex min-h-[68svh] flex-col justify-between border-r border-black/10 px-6 py-20 lg:min-h-screen lg:px-[7vw] lg:py-[14svh]">
+            <div class="max-w-[31rem]">
+              <p class="text-xs font-medium uppercase tracking-[0.16em] text-[#999]">
+                Project overview
+              </p>
+              <h3 class="reveal mt-8 text-[clamp(3rem,4.5vw,4.5rem)] leading-none tracking-tight" style="font-family:'Bodoni Moda',Georgia,serif">
+                Designed for a new fashion language.
+              </h3>
+              <p class="mt-9 text-xs leading-[1.65] text-[#777]">
+                Nova Couture needed a digital presence as directional as its
+                collections. We created a modular storefront that balances
+                dramatic art direction with clear product discovery, intuitive
+                navigation, and a seamless path to purchase.
+              </p>
+              <p class="mt-5 text-xs leading-[1.65] text-[#777]">
+                The system adapts effortlessly across seasonal campaigns,
+                editorial stories, product launches, and international
+                storefronts without losing the label’s distinct point of view.
+              </p>
+            </div>
+            <span class="text-xs font-medium tracking-[0.18em] text-[#999]">
+              /01
+            </span>
+          </article>
+          <div class="projectImage min-h-[76svh] overflow-hidden bg-[#e4e5e0]" style="transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);">
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ec6a5cab-715c-44c6-9cd8-aff440c886f6_1600w.webp" alt="Close editorial portrait from the Nova Couture visual campaign" class="drift-image h-full w-full scale-[1.02] object-cover">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 border-y border-black/15 bg-[#f7f7f4] lg:grid-cols-[42%_58%]">
+          <div class="px-6 py-20 lg:px-[7vw] lg:py-[12svh]">
+            <p class="text-xs font-medium uppercase tracking-[0.16em] text-[#999]">
+              Key features
+            </p>
+            <h3 class="mt-8 text-[clamp(3rem,4.5vw,4.5rem)] leading-none tracking-tight" style="font-family:'Bodoni Moda',Georgia,serif">
+              A flexible digital flagship.
+            </h3>
+          </div>
+          <div class="divide-y divide-black/15 border-t border-black/15 px-6 py-10 lg:border-l lg:border-t-0 lg:px-[6vw] lg:py-[10svh]">
+            <div class="flex items-start justify-between gap-8 py-6">
+              <span class="text-xs text-[#ef6f79]">01</span>
+              <p class="max-w-[26rem] text-xs leading-[1.65] text-[#777]">
+                <strong class="font-medium text-[#070707]">
+                  Editorial commerce
+                </strong>
+                <br>
+                Campaign-led layouts connect visual storytelling directly to
+                shoppable collections.
+              </p>
+            </div>
+            <div class="flex items-start justify-between gap-8 py-6">
+              <span class="text-xs text-[#ef6f79]">02</span>
+              <p class="max-w-[26rem] text-xs leading-[1.65] text-[#777]">
+                <strong class="font-medium text-[#070707]">
+                  Immersive lookbooks
+                </strong>
+                <br>
+                Fluid galleries and considered transitions showcase every
+                collection with impact.
+              </p>
+            </div>
+            <div class="flex items-start justify-between gap-8 py-6">
+              <span class="text-xs text-[#ef6f79]">03</span>
+              <p class="max-w-[26rem] text-xs leading-[1.65] text-[#777]">
+                <strong class="font-medium text-[#070707]">
+                  Refined product discovery
+                </strong>
+                <br>
+                Flexible filtering, quick views, and mobile-first navigation
+                reduce friction.
+              </p>
+            </div>
+            <div class="flex items-start justify-between gap-8 py-6">
+              <span class="text-xs text-[#ef6f79]">04</span>
+              <p class="max-w-[26rem] text-xs leading-[1.65] text-[#777]">
+                <strong class="font-medium text-[#070707]">
+                  Global-ready system
+                </strong>
+                <br>
+                A scalable foundation supports seasonal launches, localization,
+                and growth.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-6 py-20 lg:px-[4vw] lg:py-[12svh]">
+          <div class="mb-12 flex items-end justify-between border-b border-black/15 pb-6">
+            <h3 class="text-[clamp(3.5rem,6vw,6rem)] leading-none tracking-tight" style="font-family:'Bodoni Moda',Georgia,serif">
+              Visual gallery
+            </h3>
+            <span class="hidden text-xs font-medium uppercase tracking-[0.16em] text-[#999] sm:block">
+              Campaign / Digital / Commerce
+            </span>
+          </div>
+          <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <div class="projectImage min-h-[72svh] overflow-hidden bg-[#e4e5e0]">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/07b03058-049e-4bf0-be3e-505e30435ece_1600w.png" alt="Nova Couture editorial beauty portrait" class="drift-image h-full w-full scale-[1.02] object-cover object-[50%_35%]">
+            </div>
+            <div class="projectImage min-h-[72svh] overflow-hidden bg-[#e4e5e0]">
+              <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/79cbc29a-f2f5-46c6-a314-922347764561_1600w.png" alt="Monochrome portrait from the Nova Couture campaign" class="drift-image h-full w-full scale-[1.02] object-cover grayscale">
+            </div>
+          </div>
+        </div>
+
+        <div class="grid min-h-[72svh] grid-cols-1 bg-[#070707] text-white lg:grid-cols-[55%_45%]">
+          <div class="px-6 py-20 lg:px-[7vw] lg:py-[13svh]">
+            <p class="text-xs font-medium uppercase tracking-[0.16em] text-white/50">
+              Project details
+            </p>
+            <h3 class="reveal mt-10 max-w-[46rem] text-[clamp(3.5rem,6vw,6rem)] leading-[0.88] tracking-tight" style="font-family:'Bodoni Moda',Georgia,serif">
+              A distinctive identity, built to perform.
+            </h3>
+          </div>
+          <dl class="divide-y divide-white/15 border-t border-white/15 px-6 py-10 text-xs uppercase tracking-[0.12em] lg:border-l lg:border-t-0 lg:px-[5vw] lg:py-[11svh]">
+            <div class="flex justify-between gap-8 py-6">
+              <dt class="text-white/45">Client</dt>
+              <dd class="text-right">Nova Couture</dd>
+            </div>
+            <div class="flex justify-between gap-8 py-6">
+              <dt class="text-white/45">Services</dt>
+              <dd class="text-right">Strategy / UX / Art Direction</dd>
+            </div>
+            <div class="flex justify-between gap-8 py-6">
+              <dt class="text-white/45">Platform</dt>
+              <dd class="text-right">Shopify Plus</dd>
+            </div>
+            <div class="flex justify-between gap-8 py-6">
+              <dt class="text-white/45">Timeframe</dt>
+              <dd class="text-right">16 weeks</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+      <section class="grid min-h-screen grid-cols-1 bg-[#071521] text-white lg:grid-cols-[55%_45%]" id="apparel">
+        <div class="projectImage min-h-[80svh] overflow-hidden" style="transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/39a2b3ee-8b05-45b7-abf5-315ca580ca21_1600w.png" alt="Athletic silhouette holding a ball against deep blue light" class="drift-image h-full w-full scale-[1.02] object-cover">
+        </div>
+        <article class="flex flex-col justify-between border-l border-white/15 px-6 py-20 lg:px-[6vw] lg:py-[14svh]">
+          <p class="text-xs font-semibold uppercase tracking-[0.16em] text-white/60">
+            eCommerce / Apparel / 2025
+          </p>
+          <div class="">
+            <h2 class="reveal text-[clamp(4rem,7vw,7rem)] leading-[0.8] tracking-[-0.065em]" style="font-family: &quot;Bodoni Moda&quot;, Georgia, serif;">
+              Aura
+              <br>
+              Activewear
+            </h2>
+            <p class="mt-9 max-w-[30rem] text-xs leading-[1.65] text-white/60">
+              A high-performance digital store where athletic precision meets
+              premium lifestyle apparel—built for seamless mobile shopping.
+            </p>
+          </div>
+          <a href="#studio" class="arrow-link w-fit border-b border-white pb-1 text-xs font-semibold uppercase tracking-[0.12em]">
+            Enter the studio
+            <span class="inline-block">↗</span>
+          </a>
+        </article>
+      </section>
+
+      <!-- Next project -->
+      <section class="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-2">
+        <div class="flex min-h-[58svh] flex-col justify-center px-6 lg:px-[7vw]">
+          <p class="mb-8 text-xs font-semibold uppercase tracking-[0.16em] text-[#999]">
+            Continue exploring
+          </p>
+          <h2 class="reveal text-[clamp(5rem,10vw,10rem)] leading-[0.72] tracking-[-0.075em]" style="font-family: &quot;Bodoni Moda&quot;, Georgia, serif;">
+            NEXT
+            <br>
+            PROJECT
+          </h2>
+          <a href="#work" class="arrow-link mt-14 w-fit border-b border-black pb-1 text-xs font-semibold uppercase tracking-[0.12em]">
+            All projects
+            <span class="inline-block">↗</span>
+          </a>
+        </div>
+        <div class="projectImage min-h-[76svh] overflow-hidden">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/85441009-b07a-4a25-ba64-aca68117736e_1600w.png" alt="Athlete in a dramatic blue environment" class="drift-image h-full w-full scale-[1.02] object-cover">
+        </div>
+      </section>
+
+      <!-- Studio manifesto -->
+      <section id="studio" class="min-h-screen bg-[#f7f7f4] px-6 py-[15svh] lg:px-[7vw]">
+        <blockquote class="reveal max-w-[76rem] text-[clamp(2.5rem,5vw,5rem)] leading-[0.96] tracking-[-0.05em]" style="font-family:'Bodoni Moda',Georgia,serif">
+          “A premium digital storefront is never just a catalog—it’s how
+          customers experience and desire your products.
+          <span class="text-[#ef6f79]">
+            We design eCommerce that captivates and converts.
+          </span>
+          ”
+        </blockquote>
+        <div class="mt-[16svh] grid grid-cols-1 gap-10 lg:grid-cols-[60%_40%]">
+          <p class="text-xs font-semibold uppercase tracking-[0.16em]">
+            STUDIO / NEW YORK
+          </p>
+          <p class="max-w-[30rem] text-xs leading-[1.65] text-[#777]">
+            We’re Studio—a fashion and beauty digital agency based in New York.
+            We help premium brands launch high-converting eCommerce experiences
+            that elevate their products. Small by design, senior by default.
+          </p>
+        </div>
+      </section>
+
+      <!-- Team -->
+      <section class="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-2">
+        <div class="projectImage min-h-[78svh] overflow-hidden grayscale">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8a324cd7-998a-45d7-a553-62bc42350527_1600w.png" alt="Monochrome portrait of a creative director" class="drift-image h-full w-full scale-[1.02] object-cover">
+        </div>
+        <div class="grid min-h-[70svh] grid-rows-2">
+          <article class="flex flex-col justify-end border-b border-black/10 px-6 py-14 lg:px-[6vw]">
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#999]">
+              Creative Director, Fashion
+            </p>
+            <h3 class="mt-5 text-[clamp(3rem,5vw,5rem)] leading-[0.88] tracking-[-0.055em]" style="font-family:'Bodoni Moda',Georgia,serif">
+              Clara Vance
+            </h3>
+          </article>
+          <article class="flex flex-col justify-end px-6 py-14 lg:px-[6vw]">
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#999]">
+              Head of eCommerce Strategy
+            </p>
+            <h3 class="mt-5 text-[clamp(3rem,5vw,5rem)] leading-[0.88] tracking-[-0.055em]" style="font-family:'Bodoni Moda',Georgia,serif">
+              Julian Thorne
+            </h3>
+          </article>
+        </div>
+      </section>
+
+      <!-- Dark statement -->
+      <section class="relative grid min-h-screen place-items-center overflow-hidden bg-black px-6 text-center text-white">
+        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/852b32e9-ab5a-488a-af58-db18898de616_3840w.png" alt="" class="drift-image absolute inset-0 h-full w-full scale-[1.02] object-cover grayscale">
+        <div class="absolute inset-0 bg-black/80"></div>
+        <div class="relative z-10">
+          <p class="mb-10 text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
+            Designed for conversion
+          </p>
+          <h2 class="reveal text-[clamp(4rem,8.5vw,8.5rem)] leading-[0.8] tracking-[-0.07em]" style="font-family: &quot;Bodoni Moda&quot;, Georgia, serif;">
+            NOT JUST ANOTHER
+            <br>
+            <span class="text-[#ef6f79]">ECOMMERCE</span>
+            AGENCY
+          </h2>
+          <a href="#results" class="arrow-link mt-14 inline-block border-b border-white pb-1 text-xs font-semibold uppercase tracking-[0.14em]">
+            And here’s why
+            <span class="inline-block">↗</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Results -->
+      <section id="results" class="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-[55%_45%]">
+        <div class="projectImage min-h-[76svh] overflow-hidden bg-[#e7e7e4]">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/94e97a31-5000-434f-a857-5cd4ba1b86ee_1600w.jpg" alt="Monochrome aluminum can covered in condensation" class="drift-image h-full w-full scale-[1.02] object-cover grayscale">
+        </div>
+        <div class="flex flex-col justify-between px-6 py-20 lg:px-[6vw] lg:py-[13svh]">
+          <p class="max-w-[30rem] text-xs leading-[1.65] text-[#777]">
+            <strong class="font-semibold text-[#070707]">
+              Metrics that matter
+            </strong>
+            —because they reflect real revenue growth, increased average order
+            value, and exceptional user experiences.
+          </p>
+          <div class="divide-y divide-black/15">
+            <div class="flex items-end justify-between py-7">
+              <span class="text-xs font-semibold uppercase tracking-[0.12em] text-[#999]">
+                Conversion Lift
+              </span>
+              <span>150%+</span>
+            </div>
+            <div class="flex items-end justify-between py-7">
+              <span class="text-xs font-semibold uppercase tracking-[0.12em] text-[#999]">
+                Generated Rev
+              </span>
+              <span>$4.2M</span>
+            </div>
+            <div class="flex items-end justify-between py-7">
+              <span class="text-xs font-semibold uppercase tracking-[0.12em] text-[#999]">
+                AOV Increase
+              </span>
+              <span>38%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Services -->
+      <section id="services" class="grid min-h-screen grid-cols-1 bg-[#f7f7f4] lg:grid-cols-[42%_34%_24%]">
+        <div class="grid min-h-[58svh] place-items-center px-6 text-center">
+          <div>
+            <h2 class="reveal text-[clamp(5rem,9vw,9rem)] leading-[0.74] tracking-[-0.075em]" style="font-family:'Bodoni Moda',Georgia,serif">
+              OUR
+              <br>
+              SERVICES
+            </h2>
+            <span class="mt-7 block text-4xl text-[#ef6f79]" style="font-family:'Bodoni Moda',Georgia,serif">
+              (3)
+            </span>
+          </div>
+        </div>
+        <div class="projectImage min-h-[78svh] overflow-hidden">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/8aa56f2c-2c8f-4566-84bc-14bf25ecb483_1600w.webp" alt="Close-cropped freckled eye" class="drift-image h-full w-full scale-[1.02] object-cover grayscale">
+        </div>
+        <div class="flex items-start px-6 py-20 lg:px-[3vw] lg:pt-[20svh]">
+          <p class="max-w-[30rem] text-xs leading-[1.65] text-[#777]">
+            <strong class="font-semibold text-[#070707]">
+              From storefront design to checkout optimization,
+            </strong>
+            we help premium brands scale their direct-to-consumer channels
+            without sacrificing aesthetic.
+          </p>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 bg-white lg:grid-cols-3">
+        <article class="group flex min-h-[72svh] flex-col justify-between border-b border-r border-black/15 px-6 py-16 lg:px-[4vw] lg:py-[12svh]">
+          <span class="text-xs font-semibold text-[#ef6f79]">01</span>
+          <div class="">
+            <h3 class="text-[clamp(3rem,4.5vw,4.5rem)] leading-none tracking-[-0.05em]" style="font-family:'Bodoni Moda',Georgia,serif">
+              eCommerce Design
+            </h3>
+            <p class="mt-8 max-w-[30rem] text-xs leading-[1.65] text-[#777]">
+              Custom Shopify and headless commerce architectures built for
+              luxury fashion and beauty brands.
+            </p>
+          </div>
+          <iconify-icon icon="solar:arrow-right-up-linear" width="30" height="30" stroke-width="1.5" class="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"></iconify-icon>
+        </article>
+
+        <article class="group flex min-h-[72svh] flex-col justify-between border-b border-r border-black/15 px-6 py-16 lg:px-[4vw] lg:py-[12svh]">
+          <span class="text-xs font-semibold text-[#ef6f79]">02</span>
+          <div class="">
+            <h3 class="text-[clamp(3rem,4.5vw,4.5rem)] leading-none tracking-[-0.05em]" style="font-family:'Bodoni Moda',Georgia,serif">
+              UX/UI Optimization
+            </h3>
+            <p class="mt-8 max-w-[30rem] text-xs leading-[1.65] text-[#777]">
+              Data-driven conversion rate optimization and seamless mobile
+              shopping experiences.
+            </p>
+          </div>
+          <iconify-icon icon="solar:arrow-right-up-linear" width="30" height="30" stroke-width="1.5" class="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"></iconify-icon>
+        </article>
+
+        <article class="group flex min-h-[72svh] flex-col justify-between border-b border-black/15 px-6 py-16 lg:px-[4vw] lg:py-[12svh]">
+          <span class="text-xs font-semibold text-[#ef6f79]">03</span>
+          <div>
+            <h3 class="text-[clamp(3rem,4.5vw,4.5rem)] leading-none tracking-[-0.05em]" style="font-family:'Bodoni Moda',Georgia,serif">
+              Art Direction
+            </h3>
+            <p class="mt-8 max-w-[30rem] text-xs leading-[1.65] text-[#777]">
+              High-end product photography, campaign styling, and editorial
+              content creation.
+            </p>
+          </div>
+          <iconify-icon icon="solar:arrow-right-up-linear" width="30" height="30" stroke-width="1.5" class="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"></iconify-icon>
+        </article>
+      </section>
+
+      <!-- Pricing -->
+      <section class="relative min-h-screen overflow-hidden bg-black text-white">
+        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/85a9d732-c650-44c7-9ea1-909707c926ca_3840w.webp" alt="" class="absolute inset-0 h-full w-full object-cover grayscale">
+        <div class="absolute inset-0 bg-black/75"></div>
+
+        <div class="relative z-10 grid min-h-screen grid-cols-1 lg:grid-cols-4">
+          <div class="flex flex-col justify-between border-b border-white/15 px-6 py-16 sm:px-8 lg:border-b-0 lg:border-r lg:px-[4vw] lg:py-[13svh]">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.16em] text-white/55">
+                Flexible engagements
+              </p>
+              <h2 class="mt-8 text-[clamp(4rem,6vw,6rem)] leading-[0.85] tracking-[-0.06em]" style="font-family:'Bodoni Moda',Georgia,serif">
+                Pricing
+              </h2>
+            </div>
+            <div class="mt-16">
+              <p class="max-w-[30rem] text-xs leading-[1.65] text-white/55">
+                Choose a plan that fits your pace, your team, and your goals.
+                Every engagement is led by senior creatives.
+              </p>
+              <p class="mt-6 text-xs leading-[1.65] text-white/40">
+                All prices are starting points and exclude production costs,
+                licensing, and applicable taxes.
+              </p>
+            </div>
+          </div>
+
+          <article class="group flex min-h-[68svh] flex-col border-b border-white/15 bg-black/45 px-6 py-14 transition-colors duration-300 hover:bg-black/35 sm:px-8 lg:min-h-screen lg:border-b-0 lg:border-r lg:px-[3vw] lg:py-[13svh]">
+            <div>
+              <div class="flex items-center justify-between gap-4">
+                <span class="text-xs font-semibold text-[#ef6f79]">01</span>
+                <span class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-white/45">
+                  2–3 weeks
+                </span>
+              </div>
+              <h3 class="mt-10 text-[clamp(2.75rem,4vw,4.5rem)] leading-[0.9] tracking-[-0.05em]" style="font-family:'Bodoni Moda',Georgia,serif">
+                Store Setup
+              </h3>
+              <p class="mt-6 text-xs leading-[1.65] text-white/55">
+                A rapid launch package for emerging fashion brands needing a
+                robust Shopify foundation.
+              </p>
+              <div class="mt-10 border-t border-white/15 pt-8">
+                <p class="text-xs uppercase tracking-[0.14em] text-white/40">
+                  Starting at
+                </p>
+                <p class="mt-3 text-3xl tracking-tight">$4,200</p>
+              </div>
+              <ul class="mt-10 space-y-4 text-xs leading-[1.55] text-white/65">
+                <li class="flex gap-3">
+                  <span class="text-[#ef6f79]">—</span>
+                  <span>Theme setup and configuration</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-[#ef6f79]">—</span>
+                  <span>Product catalog import</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-[#ef6f79]">—</span>
+                  <span>Basic styling and branding</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-[#ef6f79]">—</span>
+                  <span>Payment and shipping integration</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#contact" class="mt-auto flex w-fit items-center gap-3 border-b border-white/70 pb-1 pt-14 text-xs font-semibold uppercase tracking-[0.12em] transition-colors hover:border-[#ef6f79] hover:text-[#ef6f79]">
+              Start a conversation
+              <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
+                ↗
+              </span>
+            </a>
+          </article>
+
+          <article class="group flex min-h-[68svh] flex-col border-b border-white/15 bg-black/55 px-6 py-14 transition-colors duration-300 hover:bg-black/45 sm:px-8 lg:min-h-screen lg:border-b-0 lg:border-r lg:px-[3vw] lg:py-[13svh]">
+            <div>
+              <div class="flex items-center justify-between gap-4">
+                <span class="text-xs font-semibold text-[#ef6f79]">02</span>
+                <span class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-white/45">
+                  4–6 weeks
+                </span>
+              </div>
+              <h3 class="mt-10 text-[clamp(2.75rem,4vw,4.5rem)] leading-[0.9] tracking-[-0.05em]" style="font-family:'Bodoni Moda',Georgia,serif">
+                Custom Flagship
+              </h3>
+              <p class="mt-6 text-xs leading-[1.65] text-white/55">
+                A fully bespoke eCommerce experience designed for established
+                beauty and apparel brands.
+              </p>
+              <div class="mt-10 border-t border-white/15 pt-8">
+                <p class="text-xs uppercase tracking-[0.14em] text-white/40">
+                  Starting at
+                </p>
+                <p class="mt-3 text-3xl tracking-tight">$7,500</p>
+              </div>
+              <ul class="mt-10 space-y-4 text-xs leading-[1.55] text-white/65">
+                <li class="flex gap-3">
+                  <span class="text-[#ef6f79]">—</span>
+                  <span>Custom Shopify theme design</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-[#ef6f79]">—</span>
+                  <span>Advanced UX/UI layouts</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-[#ef6f79]">—</span>
+                  <span>Conversion rate optimization</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-[#ef6f79]">—</span>
+                  <span>Custom app integrations</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#contact" class="mt-auto flex w-fit items-center gap-3 border-b border-white/70 pb-1 pt-14 text-xs font-semibold uppercase tracking-[0.12em] transition-colors hover:border-[#ef6f79] hover:text-[#ef6f79]">
+              Build your identity
+              <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
+                ↗
+              </span>
+            </a>
+          </article>
+
+          <article class="group flex min-h-[68svh] flex-col bg-black/65 px-6 py-14 transition-colors duration-300 hover:bg-black/55 sm:px-8 lg:min-h-screen lg:px-[3vw] lg:py-[13svh]">
+            <div>
+              <div class="flex items-center justify-between gap-4">
+                <span class="text-xs font-semibold text-[#ef6f79]">03</span>
+                <span class="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-white/45">
+                  8–12 weeks
+                </span>
+              </div>
+              <h3 class="mt-10 text-[clamp(2.75rem,4vw,4.5rem)] leading-[0.9] tracking-[-0.05em]" style="font-family:'Bodoni Moda',Georgia,serif">
+                Omnichannel
+              </h3>
+              <p class="mt-6 text-xs leading-[1.65] text-white/55">
+                An end-to-end partnership for enterprise retail brands moving to
+                headless architecture.
+              </p>
+              <div class="mt-10 border-t border-white/15 pt-8">
+                <p class="text-xs uppercase tracking-[0.14em] text-white/40">
+                  Starting at
+                </p>
+                <p class="mt-3 text-3xl tracking-tight">$11,000</p>
+              </div>
+              <ul class="mt-10 space-y-4 text-xs leading-[1.55] text-white/65">
+                <li class="flex gap-3">
+                  <span class="text-[#ef6f79]">—</span>
+                  <span>Headless commerce build</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-[#ef6f79]">—</span>
+                  <span>ERP and fulfillment integration</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-[#ef6f79]">—</span>
+                  <span>Omnichannel strategy</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-[#ef6f79]">—</span>
+                  <span>Dedicated growth support</span>
+                </li>
+              </ul>
+            </div>
+            <a href="#contact" class="mt-auto flex w-fit items-center gap-3 border-b border-white/70 pb-1 pt-14 text-xs font-semibold uppercase tracking-[0.12em] transition-colors hover:border-[#ef6f79] hover:text-[#ef6f79]">
+              Plan your launch
+              <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
+                ↗
+              </span>
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <!-- Journal -->
+      <section id="journal" class="bg-white">
+        <header class="flex items-end justify-between border-b border-black/15 px-6 py-16 lg:px-[4vw]">
+          <h2 class="text-[clamp(4rem,8vw,8rem)] leading-none tracking-[-0.07em]" style="font-family:'Bodoni Moda',Georgia,serif">
+            Journal
+          </h2>
+          <span class="hidden text-xs font-semibold uppercase tracking-[0.15em] sm:block">
+            Ideas / Process / Perspective
+          </span>
+        </header>
+
+        <article class="grid min-h-[82svh] grid-cols-1 border-b border-black/15 lg:grid-cols-[42%_58%]">
+          <div class="projectImage min-h-[72svh] overflow-hidden">
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/7bdd8785-617e-45a5-a39f-5bc26b9116f2_1600w.png" alt="Surreal green botanical landscape" class="drift-image h-full w-full scale-[1.02] object-cover">
+          </div>
+          <div class="flex flex-col justify-between px-6 py-16 lg:px-[7vw] lg:py-[12svh]">
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#999]">
+              August 14, 2026 / eCommerce
+            </p>
+            <h3 class="reveal my-16 max-w-[48rem] text-[clamp(3.25rem,6vw,6rem)] leading-[0.86] tracking-[-0.06em]" style="font-family:'Bodoni Moda',Georgia,serif">
+              The future of headless commerce in luxury fashion
+            </h3>
+            <a href="#" class="arrow-link w-fit border-b border-black pb-1 text-xs font-semibold uppercase tracking-[0.12em]">
+              Read article
+              <span class="inline-block">↗</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="grid min-h-[82svh] grid-cols-1 lg:grid-cols-[42%_58%]">
+          <div class="projectImage min-h-[72svh] overflow-hidden bg-[#e9d214]">
+            <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/3d42d213-d655-4e69-9bc3-3d180817e0a8_1600w.png" alt="Abstract yellow tennis-ball still life" class="drift-image h-full w-full scale-[1.02] object-cover">
+          </div>
+          <div class="flex flex-col justify-between px-6 py-16 lg:px-[7vw] lg:py-[12svh]">
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#999]">
+              July 22, 2026 / Conversion
+            </p>
+            <h3 class="reveal my-16 max-w-[48rem] text-[clamp(3.25rem,6vw,6rem)] leading-[0.86] tracking-[-0.06em]" style="font-family:'Bodoni Moda',Georgia,serif">
+              Maximizing average order value for premium beauty brands
+            </h3>
+            <a href="#" class="arrow-link w-fit border-b border-black pb-1 text-xs font-semibold uppercase tracking-[0.12em]">
+              Read article
+              <span class="inline-block">↗</span>
+            </a>
+          </div>
+        </article>
+      </section>
+
+      <!-- Newsletter -->
+      <section class="grid min-h-screen grid-cols-1 overflow-hidden bg-[#f7f7f4] lg:grid-cols-[40%_60%]">
+        <div id="keysScene" class="relative grid min-h-[62svh] place-items-center overflow-hidden border-r border-black/15">
+          <div class="relative h-[24rem] w-full max-w-[34rem]" aria-label="Floating Studio letter keys">
+            <div data-key="" class="absolute left-[8%] top-[24%] grid h-32 w-32 rotate-[-8deg] place-items-center bg-[#070707] text-5xl font-semibold text-white shadow-[1rem_1rem_0_rgba(0,0,0,0.12)]">
+              S
+            </div>
+            <div data-key="" class="absolute left-[39%] top-[42%] grid h-32 w-32 rotate-[6deg] place-items-center bg-[#070707] text-5xl font-semibold text-white shadow-[1rem_1rem_0_rgba(0,0,0,0.12)]">
+              T
+            </div>
+            <div data-key="" class="absolute right-[5%] top-[16%] grid h-32 w-32 rotate-[-5deg] place-items-center bg-[#070707] text-5xl font-semibold text-white shadow-[1rem_1rem_0_rgba(0,0,0,0.12)]">
+              U
+            </div>
+          </div>
+        </div>
+
+        <form id="newsletterForm" class="flex flex-col justify-center px-6 py-20 lg:px-[9vw]">
+          Conversion tactics, retail trends, and DTC strategies for fashion
+          &amp; beauty brands. No spam—just value.
+        </form>
+      </section>
+
+      <!-- Recognition -->
+      <section class="relative min-h-screen overflow-hidden bg-black px-6 py-[14svh] text-white lg:px-[7vw]">
+        <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/dabf2468-7b3c-4380-87d4-06c6d274ff39_3840w.webp" alt="" class="absolute inset-0 h-full w-full object-cover grayscale">
+        <div class="absolute inset-0 bg-black/80"></div>
+        <div class="relative z-10 grid min-h-[72svh] grid-cols-1 gap-16 lg:grid-cols-2">
+          <div class="flex flex-col justify-between">
+            <h2 class="reveal text-[clamp(4.5rem,9vw,9rem)] leading-[0.74] tracking-[-0.075em]" style="font-family: &quot;Bodoni Moda&quot;, Georgia, serif;">
+              CLIENTS
+              <br>
+              <span class="text-[#ef6f79]">(12)</span>
+            </h2>
+            <div class="grid grid-cols-2 gap-x-8 gap-y-5 text-xs font-semibold uppercase tracking-[0.16em] text-white/55">
+              <span>Maison Luxe</span>
+              <span>Lumière Beauté</span>
+              <span>Aura Activewear</span>
+              <span>Botanique</span>
+              <span>Silk &amp; Co.</span>
+              <span>Noir Studios</span>
+            </div>
+          </div>
+          <div class="flex flex-col justify-end">
+            Sarah Jenkins / Founder, Maison Luxe
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ and contact -->
+      <section id="faq" class="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-[52%_28%_20%]">
+        <div class="px-6 py-20 lg:px-[5vw] lg:py-[12svh]">
+          <h2 class="text-[clamp(5rem,8vw,8rem)] leading-none tracking-[-0.07em]" style="font-family:'Bodoni Moda',Georgia,serif">
+            FAQ
+          </h2>
+
+          <div class="mt-16" id="accordion">
+            <article class="faqItem border-t border-black/15">
+              <button type="button" class="faqButton flex w-full items-center justify-between gap-8 py-6 text-left text-xs font-semibold uppercase tracking-[0.12em]" aria-expanded="true">
+                What eCommerce platforms do you work with?
+                <span class="faqIcon text-xl font-normal">×</span>
+              </button>
+              <div class="faqAnswer grid grid-rows-[1fr] transition-[grid-template-rows] duration-500">
+                <div class="overflow-hidden">
+                  We specialize in Shopify Plus, Commerce Layer, and bespoke
+                  headless architectures for premium retail brands.
+                </div>
+              </div>
+            </article>
+
+            <article class="faqItem border-t border-black/15">
+              <button type="button" class="faqButton flex w-full items-center justify-between gap-8 py-6 text-left text-xs font-semibold uppercase tracking-[0.12em]" aria-expanded="false">
+                How do you approach conversion optimization?
+                <span class="faqIcon text-xl font-normal">+</span>
+              </button>
+              <div class="faqAnswer grid grid-rows-[0fr] transition-[grid-template-rows] duration-500">
+                <div class="overflow-hidden">
+                  We blend data analysis with elevated UX design to remove
+                  friction without compromising your luxury aesthetic.
+                </div>
+              </div>
+            </article>
+
+            <article class="faqItem border-t border-black/15">
+              <button type="button" class="faqButton flex w-full items-center justify-between gap-8 py-6 text-left text-xs font-semibold uppercase tracking-[0.12em]" aria-expanded="false">
+                Do you provide post-launch support?
+                <span class="faqIcon text-xl font-normal">+</span>
+              </button>
+              <div class="faqAnswer grid grid-rows-[0fr] transition-[grid-template-rows] duration-500">
+                <div class="overflow-hidden">
+                  Yes. We offer ongoing retention and optimization retainers to
+                  ensure your storefront continually performs at its peak.
+                </div>
+              </div>
+            </article>
+
+            <article class="faqItem border-y border-black/15">
+              <button type="button" class="faqButton flex w-full items-center justify-between gap-8 py-6 text-left text-xs font-semibold uppercase tracking-[0.12em]" aria-expanded="false">
+                How long does a custom storefront take?
+                <span class="faqIcon text-xl font-normal">+</span>
+              </button>
+              <div class="faqAnswer grid grid-rows-[0fr] transition-[grid-template-rows] duration-500">
+                <div class="overflow-hidden">
+                  Most bespoke eCommerce builds run between eight and sixteen
+                  weeks, depending on technical complexity and integrations.
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div id="contact" class="border-l border-black/15 px-6 py-20 lg:px-[3vw] lg:py-[12svh]">
+          <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#999]">
+            Start a conversation
+          </p>
+
+          <div class="mt-16">
+            <p class="text-xs uppercase tracking-[0.14em] text-[#999]">Email</p>
+            <a href="mailto:hello@studio.agency" class="arrow-link mt-3 block text-3xl leading-tight tracking-[-0.04em]" style="font-family:'Bodoni Moda',Georgia,serif">
+              hello@studio.agency
+              <span class="inline-block">↗</span>
+            </a>
+          </div>
+
+          <div class="mt-14">
+            <p class="text-xs uppercase tracking-[0.14em] text-[#999]">Phone</p>
+            <a href="tel:+12125550198" class="mt-3 block text-3xl leading-tight tracking-[-0.04em]" style="font-family:'Bodoni Moda',Georgia,serif">
+              +1 212 555 0198
+            </a>
+          </div>
+
+          <div class="mt-14">
+            <p class="text-xs uppercase tracking-[0.14em] text-[#999]">
+              Studio
+            </p>
+            <address class="mt-3 text-xs not-italic leading-[1.65] text-[#777]">
+              450 West 31st Street
+              <br>
+              New York, NY 10001
+            </address>
+          </div>
+        </div>
+
+        <div class="projectImage min-h-[76svh] overflow-hidden bg-[#dfdfdc]">
+          <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/13341b76-0e14-4dfe-9cbe-9834546e9a21_800w.webp" alt="Monochrome gray embroidered agency cap" class="drift-image h-full w-full scale-[1.02] object-cover grayscale">
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="grid min-h-[58svh] grid-cols-1 gap-20 border-t border-black/15 bg-[#f7f7f4] px-6 py-20 lg:grid-cols-2 lg:px-[7vw] lg:py-[12svh]">
+      <div class="flex flex-col justify-between">
+        Fashion &amp; Beauty eCommerce Agency / New York
+      </div>
+
+      <div class="flex flex-col justify-between">
+        <nav class="grid grid-cols-1 gap-5 text-xs font-semibold uppercase tracking-[0.14em] sm:grid-cols-2">
+          <a href="#top" class="arrow-link border-b border-black/15 pb-4">
+            Home
+            <span class="inline-block">↗</span>
+          </a>
+          <a href="#work" class="arrow-link border-b border-black/15 pb-4">
+            Work
+            <span class="inline-block">↗</span>
+          </a>
+          <a href="#studio" class="arrow-link border-b border-black/15 pb-4">
+            Studio
+            <span class="inline-block">↗</span>
+          </a>
+          <a href="#services" class="arrow-link border-b border-black/15 pb-4">
+            Services
+            <span class="inline-block">↗</span>
+          </a>
+          <a href="#journal" class="arrow-link border-b border-black/15 pb-4">
+            Journal
+            <span class="inline-block">↗</span>
+          </a>
+          <a href="#contact" class="arrow-link border-b border-black/15 pb-4">
+            Contact
+            <span class="inline-block">↗</span>
+          </a>
+        </nav>
+
+        <div class="mt-20 flex flex-col gap-4 text-xs uppercase tracking-[0.12em] text-[#777] sm:flex-row sm:items-end sm:justify-between">
+          <span>© 2027 STUDIO®</span>
+          <div class="flex gap-5">
+            <a href="#">Instagram</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">Privacy</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.querySelectorAll('.reveal[data-revealed]').forEach(element => element.removeAttribute('data-revealed'));
+    </script>
+    <script>
+      (() => {
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const finePointer = window.matchMedia('(pointer: fine)').matches;
+        const desktop = () => window.innerWidth >= 900;
+        const easing = 'cubic-bezier(0.16,1,0.3,1)';
+
+        const preloader = document.getElementById('preloader');
+        const preloaderWord = document.getElementById('preloaderWord');
+        const preloaderLine = document.getElementById('preloaderLine');
+
+        if (reducedMotion) {
+          preloader.remove();
+        } else {
+          preloaderLine.animate(
+            [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }],
+            { duration: 620, easing, fill: 'forwards' }
+          );
+
+          preloaderWord.animate(
+            [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-1.25rem)' }],
+            { duration: 420, delay: 430, easing, fill: 'forwards' }
+          );
+
+          preloader.animate(
+            [{ opacity: 1 }, { opacity: 0 }],
+            { duration: 300, delay: 620, easing, fill: 'forwards' }
+          ).finished.then(() => {
+            preloader.style.visibility = 'hidden';
+            preloader.style.pointerEvents = 'none';
+          });
+        }
+
+        const menuButton = document.getElementById('menuButton');
+        const menuPanel = document.getElementById('menuPanel');
+        const menuLineOne = document.getElementById('menuLineOne');
+        const menuLineTwo = document.getElementById('menuLineTwo');
+        let menuOpen = false;
+
+        const setMenu = (open) => {
+          menuOpen = open;
+          menuButton.setAttribute('aria-expanded', String(open));
+          menuButton.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+          menuPanel.setAttribute('aria-hidden', String(!open));
+
+          if (open) {
+            menuPanel.classList.remove('invisible');
+            menuPanel.animate(
+              [
+                { clipPath: 'inset(0 0 100% 0)', opacity: 1 },
+                { clipPath: 'inset(0 0 0% 0)', opacity: 1 }
+              ],
+              { duration: reducedMotion ? 1 : 650, easing, fill: 'forwards' }
+            );
+            menuLineOne.animate(
+              [{ transform: 'translateX(-50%) translateY(0) rotate(0deg)' }, { transform: 'translateX(-50%) translateY(0.3rem) rotate(45deg)' }],
+              { duration: 350, easing, fill: 'forwards' }
+            );
+            menuLineTwo.animate(
+              [{ transform: 'translateX(-50%) translateY(0) rotate(0deg)' }, { transform: 'translateX(-50%) translateY(-0.3rem) rotate(-45deg)' }],
+              { duration: 350, easing, fill: 'forwards' }
+            );
+            document.body.style.overflow = 'hidden';
+          } else {
+            const animation = menuPanel.animate(
+              [
+                { clipPath: 'inset(0 0 0% 0)', opacity: 1 },
+                { clipPath: 'inset(0 0 100% 0)', opacity: 1 }
+              ],
+              { duration: reducedMotion ? 1 : 520, easing, fill: 'forwards' }
+            );
+            animation.finished.then(() => menuPanel.classList.add('invisible'));
+
+            menuLineOne.animate(
+              [{ transform: 'translateX(-50%) translateY(0.3rem) rotate(45deg)' }, { transform: 'translateX(-50%) translateY(0) rotate(0deg)' }],
+              { duration: 350, easing, fill: 'forwards' }
+            );
+            menuLineTwo.animate(
+              [{ transform: 'translateX(-50%) translateY(-0.3rem) rotate(-45deg)' }, { transform: 'translateX(-50%) translateY(0) rotate(0deg)' }],
+              { duration: 350, easing, fill: 'forwards' }
+            );
+            document.body.style.overflow = '';
+          }
+        };
+
+        menuButton.addEventListener('click', () => setMenu(!menuOpen));
+        document.querySelectorAll('.menuLink').forEach(link => link.addEventListener('click', () => setMenu(false)));
+        document.addEventListener('keydown', event => {
+          if (event.key === 'Escape' && menuOpen) setMenu(false);
+        });
+
+        const revealObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting || entry.target.dataset.revealed) return;
+            entry.target.dataset.revealed = 'true';
+            entry.target.animate(
+              [
+                { opacity: 0, transform: 'translateY(3rem)' },
+                { opacity: 1, transform: 'translateY(0)' }
+              ],
+              { duration: reducedMotion ? 1 : 950, easing, fill: 'both' }
+            );
+          });
+        }, { threshold: 0.14 });
+
+        document.querySelectorAll('.reveal').forEach(element => {
+          if (!reducedMotion) {
+            element.style.opacity = '0';
+            revealObserver.observe(element);
+          }
+        });
+
+        const progress = document.getElementById('progress');
+        const railSection = document.getElementById('work');
+        const rail = document.getElementById('projectRail');
+        const heroWord = document.getElementById('heroWord');
+        const ghostWord = document.getElementById('ghostWord');
+        const driftImages = [...document.querySelectorAll('.drift-image')];
+        let ticking = false;
+
+        const updateScroll = () => {
+          const scrollTop = window.scrollY;
+          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+          const documentProgress = maxScroll > 0 ? scrollTop / maxScroll : 0;
+          progress.style.transform = `scaleX(${documentProgress})`;
+
+          if (!reducedMotion) {
+            heroWord.style.transform = `translate3d(${Math.sin(scrollTop / 850) * 1.2}vw, ${Math.min(scrollTop * 0.08, 7)}vh, 0)`;
+
+            if (desktop()) {
+              const start = railSection.offsetTop;
+              const distance = railSection.offsetHeight - window.innerHeight;
+              const railProgress = Math.max(0, Math.min(1, (scrollTop - start) / distance));
+              rail.style.transform = `translate3d(${-railProgress * 200}vw,0,0)`;
+              ghostWord.style.transform = `translate3d(${railProgress * 3.5}vw,-50%,0)`;
+            } else {
+              rail.style.transform = '';
+            }
+
+            driftImages.forEach(image => {
+              const rect = image.getBoundingClientRect();
+              if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+              const local = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+              const scale = 1.02 - Math.max(0, Math.min(1, local)) * 0.02;
+              const shift = (local - 0.5) * -4;
+              image.style.transform = `scale(${scale}) translate3d(0,${shift}%,0)`;
+            });
+          }
+
+          ticking = false;
+        };
+
+        const requestScrollUpdate = () => {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(updateScroll);
+          }
+        };
+
+        addEventListener('scroll', requestScrollUpdate, { passive: true });
+        addEventListener('resize', requestScrollUpdate);
+        updateScroll();
+
+        document.querySelectorAll('.faqButton').forEach(button => {
+          button.addEventListener('click', () => {
+            const activeItem = button.closest('.faqItem');
+            const isOpen = button.getAttribute('aria-expanded') === 'true';
+
+            document.querySelectorAll('.faqItem').forEach(item => {
+              item.querySelector('.faqButton').setAttribute('aria-expanded', 'false');
+              item.querySelector('.faqAnswer').classList.remove('grid-rows-[1fr]');
+              item.querySelector('.faqAnswer').classList.add('grid-rows-[0fr]');
+              item.querySelector('.faqIcon').textContent = '+';
+            });
+
+            if (!isOpen) {
+              button.setAttribute('aria-expanded', 'true');
+              activeItem.querySelector('.faqAnswer').classList.remove('grid-rows-[0fr]');
+              activeItem.querySelector('.faqAnswer').classList.add('grid-rows-[1fr]');
+              activeItem.querySelector('.faqIcon').textContent = '×';
+            }
+          });
+        });
+
+        const cursor = document.getElementById('viewCursor');
+
+        if (finePointer && !reducedMotion) {
+          let cursorX = innerWidth / 2;
+          let cursorY = innerHeight / 2;
+          let currentX = cursorX;
+          let currentY = cursorY;
+          let cursorScale = 1;
+
+          document.addEventListener('mousemove', event => {
+            cursorX = event.clientX;
+            cursorY = event.clientY;
+          });
+
+          const animateCursor = () => {
+            currentX += (cursorX - currentX) * 0.2;
+            currentY += (cursorY - currentY) * 0.2;
+            cursor.style.transform = `translate3d(${currentX}px,${currentY}px,0) translate(-50%,-50%) scale(${cursorScale})`;
+            requestAnimationFrame(animateCursor);
+          };
+          animateCursor();
+
+          document.querySelectorAll('a,button').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+              cursorScale = 1.35;
+              cursor.style.backgroundColor = '#ef6f79';
+              cursor.textContent = 'Open';
+            });
+            element.addEventListener('mouseleave', () => {
+              cursorScale = 1;
+              cursor.style.backgroundColor = '#070707';
+              cursor.textContent = 'View';
+            });
+          });
+
+          document.querySelectorAll('.projectImage').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+              cursor.style.opacity = '1';
+              cursor.textContent = 'View';
+            });
+            element.addEventListener('mousemove', event => {
+              if (!desktop()) return;
+              const rect = element.getBoundingClientRect();
+              const x = (event.clientX - rect.left) / rect.width - 0.5;
+              const y = (event.clientY - rect.top) / rect.height - 0.5;
+              element.style.transform = `perspective(68.75rem) rotateX(${-y * 6}deg) rotateY(${x * 8}deg)`;
+              element.style.transition = 'transform 200ms cubic-bezier(0.16,1,0.3,1)';
+            });
+            element.addEventListener('mouseleave', () => {
+              element.style.transform = 'perspective(68.75rem) rotateX(0deg) rotateY(0deg)';
+            });
+          });
+
+          document.querySelectorAll('.magnetic').forEach(element => {
+            element.addEventListener('mousemove', event => {
+              const rect = element.getBoundingClientRect();
+              const x = (event.clientX - rect.left - rect.width / 2) * 0.18;
+              const y = (event.clientY - rect.top - rect.height / 2) * 0.18;
+              element.style.transform = `translate3d(${Math.max(-8, Math.min(8, x))}px,${Math.max(-8, Math.min(8, y))}px,0)`;
+            });
+            element.addEventListener('mouseleave', () => {
+              element.style.transform = 'translate3d(0,0,0)';
+            });
+          });
+
+          const keysScene = document.getElementById('keysScene');
+          const keys = [...document.querySelectorAll('[data-key]')];
+
+          keysScene.addEventListener('mousemove', event => {
+            const rect = keysScene.getBoundingClientRect();
+            const x = (event.clientX - rect.left) / rect.width - 0.5;
+            const y = (event.clientY - rect.top) / rect.height - 0.5;
+
+            keys.forEach((key, index) => {
+              const factor = index + 1;
+              key.style.transform = `translate3d(${x * factor * 8}px,${y * factor * 8}px,0) rotateX(${20 + y * 5}deg) rotateY(${30 + x * 7}deg) rotateZ(${index === 1 ? 6 : -6}deg)`;
+              key.style.transition = 'transform 200ms ease-out';
+            });
+          });
+
+          keysScene.addEventListener('mouseleave', () => {
+            keys.forEach(key => key.style.transform = '');
+          });
+        } else {
+          cursor.remove();
+        }
+
+        document.querySelectorAll('.arrow-link').forEach(link => {
+          const arrow = link.querySelector('span');
+          if (!arrow) return;
+          link.addEventListener('mouseenter', () => {
+            arrow.style.transform = 'translate3d(0.25rem,-0.25rem,0)';
+            arrow.style.transition = 'transform 250ms cubic-bezier(0.16,1,0.3,1)';
+          });
+          link.addEventListener('mouseleave', () => {
+            arrow.style.transform = 'translate3d(0,0,0)';
+          });
+        });
+
+        const newsletterForm = document.getElementById('newsletterForm');
+        const formStatus = document.getElementById('formStatus');
+
+        newsletterForm.addEventListener('submit', event => {
+          event.preventDefault();
+          formStatus.textContent = 'Thank you. Your first studio note is on its way.';
+          newsletterForm.reset();
+        });
+      })();
+    </script>
+
+    <script>
+      (()=>{const section=document.getElementById('work');const rail=document.getElementById('projectRail');const ghost=document.getElementById('ghostWord');const horizontal=window.matchMedia('(min-width: 1024px)');let frame=0;const update=()=>{frame=0;if(!horizontal.matches){section.style.height='auto';rail.style.transform='';return;}const distance=Math.max(0,rail.scrollWidth-window.innerWidth);section.style.height=`${distance+window.innerHeight}px`;const progress=distance?Math.max(0,Math.min(1,(window.scrollY-section.offsetTop)/distance)):0;rail.style.transform=`translate3d(${-progress*distance}px,0,0)`;if(ghost)ghost.style.transform=`translate3d(${progress*3.5}vw,-50%,0)`;};const requestUpdate=()=>{if(!frame)frame=requestAnimationFrame(update);};window.addEventListener('scroll',requestUpdate,{passive:true});window.addEventListener('resize',requestUpdate);window.addEventListener('load',update);horizontal.addEventListener?.('change',update);update();})();
+    </script>
+  
+</body></html>

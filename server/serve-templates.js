@@ -211,3 +211,19 @@ appStyleDemo1.use((req, res) => {
 appStyleDemo1.listen(7006, () => {
   console.log('✨ Style Demo 1 (Riska Luxury) running at: http://localhost:7006');
 });
+
+// Template 4: Style Demo 2 (Studio Fashion & Beauty eCommerce)
+const appStyleDemo2 = express();
+const styleDemo2Dir = path.join(__dirname, '../public/templates/stylg demo 2/studio_fashion.aura.build/studio-fashion.aura.build');
+const styleDemo2SupabaseDir = path.join(__dirname, '../public/templates/stylg demo 2/studio_fashion.aura.build/hoirqrkdgbmvpwutwuwj.supabase.co');
+
+appStyleDemo2.use('/storage', express.static(path.join(styleDemo2SupabaseDir, 'storage')));
+appStyleDemo2.use(express.static(styleDemo2Dir));
+appStyleDemo2.use((req, res) => {
+  res.sendFile(path.join(styleDemo2Dir, 'index.html'));
+});
+
+appStyleDemo2.listen(7007, () => {
+  console.log('💄 Style Demo 2 (Studio Fashion) running at: http://localhost:7007');
+});
+

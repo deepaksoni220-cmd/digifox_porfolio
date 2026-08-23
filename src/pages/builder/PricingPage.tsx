@@ -201,9 +201,6 @@ export const PricingPage: React.FC = () => {
               }`}
             >
               <span>🎮 3D Animated Websites</span>
-              <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-widest bg-white/20 text-white border border-white/30 hidden sm:inline-block">
-                1 Site & 3 Sites
-              </span>
             </button>
 
             <button
@@ -215,9 +212,6 @@ export const PricingPage: React.FC = () => {
               }`}
             >
               <span>⚡ 2D Animated Websites</span>
-              <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-widest bg-white/20 text-white border border-white/30 hidden sm:inline-block">
-                1 Site & 5 Sites
-              </span>
             </button>
           </div>
         </div>

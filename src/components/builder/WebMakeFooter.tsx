@@ -67,9 +67,6 @@ export const WebMakeFooter: React.FC = () => {
             <a href="mailto:digifox5d@icloud.com" className="text-xs text-white/60 hover:text-white transition-colors">
               digifox5d@icloud.com
             </a>
-            <Link to="/" className="text-xs text-purple-400 hover:text-purple-300 font-medium pt-2">
-              Digifox Agency Portfolio →
-            </Link>
           </div>
 
         </div>

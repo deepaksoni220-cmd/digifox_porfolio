@@ -1838,7 +1838,7 @@ export const AiBuilderPage: React.FC = () => {
             <div className="mb-16">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b border-[var(--border-strong)] pb-4 gap-4">
                 <div>
-                  <h2 className="text-2xl font-black uppercase tracking-widest text-white">
+                  <h2 className="text-2xl font-black uppercase tracking-widest text-white [.light_&]:text-[#2563eb] dark:text-white">
                     Or Start From a Premium Design
                   </h2>
                   <p className="text-xs sm:text-sm text-[var(--text-primary)]/60 mt-1 font-light">

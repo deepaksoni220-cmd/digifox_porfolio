@@ -951,11 +951,10 @@ gtag('config', 'G-2M6V79H761');
                 </button>
                 <button id="tab3dBtn" type="button" class="flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer">
                   <iconify-icon icon="solar:box-minimalistic-linear" width="16" height="16" class="text-[#d58d3f]"></iconify-icon>
-                  <span>3D GLB Model (360°)</span>
+                  <span>Biska 3D View</span>
                   <span class="w-2 h-2 rounded-full bg-[#d58d3f] animate-pulse"></span>
                 </button>
               </div>
-              <span id="mediaModeBadge" class="text-[10px] uppercase tracking-widest text-white/50 hidden sm:inline">High-Res Atelier Capture</span>
             </div>
 
             <!-- Photos Gallery Container -->
@@ -2002,7 +2001,6 @@ gtag('config', 'G-2M6V79H761');
           model3dViewContainer.classList.add('hidden');
           tabPhotosBtn.className = 'flex items-center gap-2 border border-white bg-white text-[#161514] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
           tab3dBtn.className = 'flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
-          if (mediaModeBadge) mediaModeBadge.textContent = 'High-Res Atelier Capture';
         }
 
         function show3dTab() {
@@ -2010,7 +2008,6 @@ gtag('config', 'G-2M6V79H761');
           model3dViewContainer.classList.remove('hidden');
           tab3dBtn.className = 'flex items-center gap-2 border border-[#d58d3f] bg-[#d58d3f] text-[#161514] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
           tabPhotosBtn.className = 'flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
-          if (mediaModeBadge) mediaModeBadge.textContent = 'Interactive 3D WebGL Mesh (360°)';
         }
 
         function syncDetailSizeButtons() {

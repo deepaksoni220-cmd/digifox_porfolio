@@ -578,7 +578,7 @@ gtag('config', 'G-2M6V79H761');
                     The Blaise Cape Coat
                   </h3>
                   <span class="text-xl font-medium tracking-tight text-[#d58d3f]">
-                    $1,480
+                    ₹2,000
                   </span>
                 </div>
 
@@ -605,7 +605,7 @@ gtag('config', 'G-2M6V79H761');
                 <button type="button" class="add-to-cart-btn flex items-center gap-2 bg-[#e9e2d6] text-[#161514] hover:bg-[#d53527] hover:text-white px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] transition-all cursor-pointer active:scale-95"
                   data-id="p1"
                   data-name="The Blaise Cape Coat"
-                  data-price="1480"
+                  data-price="2000"
                   data-img="images/products 1.jpeg"
                   data-meta="Brushed Oxblood Wool">
                   <iconify-icon icon="solar:bag-3-linear" width="16" height="16"></iconify-icon>
@@ -650,7 +650,7 @@ gtag('config', 'G-2M6V79H761');
                     Le Monde Sculpted Blazer
                   </h3>
                   <span class="text-xl font-medium tracking-tight text-[#d58d3f]">
-                    $1,850
+                    ₹2,000
                   </span>
                 </div>
 
@@ -677,7 +677,7 @@ gtag('config', 'G-2M6V79H761');
                 <button type="button" class="add-to-cart-btn flex items-center gap-2 bg-[#e9e2d6] text-[#161514] hover:bg-[#d53527] hover:text-white px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] transition-all cursor-pointer active:scale-95"
                   data-id="p2"
                   data-name="Le Monde Sculpted Blazer"
-                  data-price="1850"
+                  data-price="2000"
                   data-img="images/produtcs 2.jpeg"
                   data-meta="Structured Vermillion Twill">
                   <iconify-icon icon="solar:bag-3-linear" width="16" height="16"></iconify-icon>
@@ -791,7 +791,7 @@ gtag('config', 'G-2M6V79H761');
         </div>
         <div class="flex items-baseline justify-between mb-6">
           <span class="text-xs font-medium uppercase tracking-[0.16em]">Total</span>
-          <span id="cartSubtotal" class="text-2xl font-bold tracking-tight text-[#d58d3f]" style="font-family:'DM Serif Display',Georgia,serif;">$0</span>
+          <span id="cartSubtotal" class="text-2xl font-bold tracking-tight text-[#d58d3f]" style="font-family:'DM Serif Display',Georgia,serif;">₹0</span>
         </div>
         <button id="proceedToCheckoutBtn" type="button" class="w-full bg-[#d53527] hover:bg-[#b52a1d] text-white py-4 text-xs font-bold uppercase tracking-[0.18em] transition-all cursor-pointer disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-2">
           <span>Proceed to Order</span>
@@ -844,7 +844,7 @@ gtag('config', 'G-2M6V79H761');
             </div>
             <div>
               <label for="orderCountry" class="mb-1.5 block text-[11px] font-medium uppercase tracking-[0.14em] text-[#e9e2d6]/80">Country *</label>
-              <input id="orderCountry" type="text" required placeholder="France" class="w-full border border-white/20 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-[#d53527] transition-colors">
+              <input id="orderCountry" type="text" required placeholder="India" class="w-full border border-white/20 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-[#d53527] transition-colors">
             </div>
           </div>
 
@@ -857,7 +857,7 @@ gtag('config', 'G-2M6V79H761');
           <div class="mt-2 border border-white/10 bg-white/[0.03] p-4">
             <div class="flex items-center justify-between text-xs text-[#e9e2d6]/80 mb-1">
               <span id="checkoutItemSummary">Selected pieces (0)</span>
-              <span id="checkoutSubtotalDisplay" class="font-bold text-white">$0</span>
+              <span id="checkoutSubtotalDisplay" class="font-bold text-white">₹0</span>
             </div>
             <div class="flex items-center justify-between text-[11px] text-[#e9e2d6]/60">
               <span>Insured International Courier</span>
@@ -1107,9 +1107,9 @@ gtag('config', 'G-2M6V79H761');
 
               <div class="mt-4 flex items-baseline gap-4">
                 <span id="detailPrice" class="text-3xl font-bold tracking-tight text-[#d58d3f]" style="font-family:'DM Serif Display',Georgia,serif;">
-                  $1,480
+                  ₹2,000
                 </span>
-                <span class="text-xs uppercase tracking-widest text-[#e9e2d6]/50">USD · Tax & Courier Included</span>
+                <span class="text-xs uppercase tracking-widest text-[#e9e2d6]/50">INR · Tax & Courier Included</span>
               </div>
 
               <p id="detailDescription" class="mt-6 text-sm leading-7 text-[#e9e2d6]/80">
@@ -1773,7 +1773,7 @@ gtag('config', 'G-2M6V79H761');
 
           if (cartCountBadge) cartCountBadge.textContent = totalCount;
           if (cartDrawerCountPill) cartDrawerCountPill.textContent = `${totalCount} ${totalCount === 1 ? 'Item' : 'Items'}`;
-          if (cartSubtotal) cartSubtotal.textContent = `$${totalPrice.toLocaleString()}`;
+          if (cartSubtotal) cartSubtotal.textContent = `₹${totalPrice.toLocaleString('en-IN')}`;
 
           if (proceedToCheckoutBtn) {
             proceedToCheckoutBtn.disabled = cart.length === 0;
@@ -1810,7 +1810,7 @@ gtag('config', 'G-2M6V79H761');
                     <span class="h-6 px-2 text-xs flex items-center font-mono">${item.quantity}</span>
                     <button type="button" onclick="changeQty(${index}, 1)" class="h-6 w-6 grid place-items-center text-white/60 hover:text-white hover:bg-white/10 transition-colors text-xs">+</button>
                   </div>
-                  <span class="text-sm font-semibold text-[#d58d3f]">$${(item.price * item.quantity).toLocaleString()}</span>
+                  <span class="text-sm font-semibold text-[#d58d3f]">₹${(item.price * item.quantity).toLocaleString('en-IN')}</span>
                 </div>
               </div>
             </div>
@@ -1853,7 +1853,7 @@ gtag('config', 'G-2M6V79H761');
             e.preventDefault();
             const id = btn.dataset.id;
             const name = btn.dataset.name;
-            const price = parseInt(btn.dataset.price, 10) || 1000;
+            const price = parseInt(btn.dataset.price, 10) || 2000;
             const img = btn.dataset.img;
             const meta = btn.dataset.meta;
             const size = selectedSizes[id] || 'S';
@@ -1881,7 +1881,7 @@ gtag('config', 'G-2M6V79H761');
           const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
           const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
           if (checkoutItemSummary) checkoutItemSummary.textContent = `${totalCount} ${totalCount === 1 ? 'Piece' : 'Pieces'} Selected`;
-          if (checkoutSubtotalDisplay) checkoutSubtotalDisplay.textContent = `$${totalPrice.toLocaleString()}`;
+          if (checkoutSubtotalDisplay) checkoutSubtotalDisplay.textContent = `₹${totalPrice.toLocaleString('en-IN')}`;
           checkoutModal.style.opacity = '1';
           checkoutModal.style.pointerEvents = 'auto';
           body.style.overflow = 'hidden';
@@ -1931,7 +1931,7 @@ gtag('config', 'G-2M6V79H761');
           p1: {
             id: 'p1',
             name: 'The Blaise Cape Coat',
-            price: 1480,
+            price: 2000,
             meta: 'Brushed Oxblood Wool',
             edition: '001 / Edition of 40 Handcrafted Pieces',
             description: 'Oxblood double-face wool shaped with a soft architectural shoulder line, concealed horn closures, and structured thermal drape. Designed for sharp cold-weather silhouette sculpting.',
@@ -1947,7 +1947,7 @@ gtag('config', 'G-2M6V79H761');
           p2: {
             id: 'p2',
             name: 'Le Monde Sculpted Blazer',
-            price: 1850,
+            price: 2000,
             meta: 'Structured Vermillion Twill',
             edition: '002 / Edition of 25 Handcrafted Pieces',
             description: 'Decisive vermillion tailoring with a sculpted waist, elongated contour lines, hand-stitched lapels, and pure cupro lining. An iconic atelier centerpiece.',
@@ -1999,7 +1999,7 @@ gtag('config', 'G-2M6V79H761');
 
           if (detailBreadcrumb) detailBreadcrumb.textContent = product.name;
           if (detailTitle) detailTitle.textContent = product.name;
-          if (detailPrice) detailPrice.textContent = `$${product.price.toLocaleString()}`;
+          if (detailPrice) detailPrice.textContent = `₹${product.price.toLocaleString('en-IN')}`;
           if (detailDescription) detailDescription.textContent = product.description;
           if (detailEditionBadge) detailEditionBadge.textContent = product.edition;
           if (detailComposition) detailComposition.textContent = product.composition;
@@ -2212,7 +2212,7 @@ gtag('config', 'G-2M6V79H761');
             edition: 'Edition of 40',
             img: 'images/products 1.jpeg',
             productId: 'p1',
-            price: 1480,
+            price: 2000,
             has3D: true
           },
           {
@@ -2225,7 +2225,7 @@ gtag('config', 'G-2M6V79H761');
             edition: 'Edition of 25',
             img: 'images/produtcs 2.jpeg',
             productId: 'p2',
-            price: 1850,
+            price: 2000,
             has3D: true
           },
           {
@@ -2238,7 +2238,7 @@ gtag('config', 'G-2M6V79H761');
             edition: 'Edition of 30',
             img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6dbbbbe0-0fea-44f4-97a1-a9493024f5dc_3840w.png',
             productId: null,
-            price: 1120,
+            price: 2000,
             has3D: false
           },
           {
@@ -2251,7 +2251,7 @@ gtag('config', 'G-2M6V79H761');
             edition: 'Edition of 20',
             img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/be5e4a00-4a9d-4373-8880-888910268027_1600w.png',
             productId: null,
-            price: 2200,
+            price: 2000,
             has3D: false
           },
           {
@@ -2264,7 +2264,7 @@ gtag('config', 'G-2M6V79H761');
             edition: 'Edition of 35',
             img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/44290882-1988-48f6-9c19-73819fc8b143_3840w.png',
             productId: null,
-            price: 1650,
+            price: 2000,
             has3D: false
           }
         ];
@@ -2309,7 +2309,7 @@ gtag('config', 'G-2M6V79H761');
                     <h3 class="text-xl font-normal tracking-tight text-white sm:text-2xl" style="font-family:'DM Serif Display',Georgia,serif;">
                       ${look.title}
                     </h3>
-                    <span class="text-sm font-semibold text-[#d58d3f]">$${look.price.toLocaleString()}</span>
+                    <span class="text-sm font-semibold text-[#d58d3f]">₹${look.price.toLocaleString('en-IN')}</span>
                   </div>
                   <p class="mt-2 text-xs text-[#e9e2d6]/80 font-medium">${look.fabric}</p>
                   <p class="mt-1 text-[11px] text-[#e9e2d6]/60 leading-relaxed">${look.silhouette}</p>

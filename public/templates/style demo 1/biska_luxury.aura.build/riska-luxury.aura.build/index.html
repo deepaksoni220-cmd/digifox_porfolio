@@ -126,7 +126,7 @@ gtag('config', 'G-2M6V79H761');
         <a class="nav-link relative py-2 text-xs font-medium uppercase tracking-[0.15em]" href="#story">
           Story
         </a>
-        <a class="nav-link relative py-2 text-xs font-medium uppercase tracking-[0.15em]" href="#collection">
+        <a class="nav-link coll-open-btn relative py-2 text-xs font-medium uppercase tracking-[0.15em] cursor-pointer" href="#collection-page">
           Collection
         </a>
         <a class="nav-link relative py-2 text-xs font-medium uppercase tracking-[0.15em]" href="#shop">
@@ -371,18 +371,24 @@ gtag('config', 'G-2M6V79H761');
         <div class="collection-intro flex min-h-screen items-center px-[4vw] py-[10vw] max-md:px-[5vw]">
           <div class="w-full">
             <p class="reveal-copy text-xs font-medium uppercase tracking-[0.18em]">
-              Selected pieces / 001—005
+              Selected pieces / 001—008
             </p>
 
-            <div class="mt-4 flex items-end justify-between gap-8 max-md:block">
+            <div class="mt-4 flex flex-col md:flex-row md:items-end md:justify-between gap-8">
               <h2 id="collectionTitle" class="word-reveal text-[clamp(4.5rem,9.4vw,10rem)] leading-[0.82] tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
                 The collection
               </h2>
-              <p class="reveal-copy mb-3 text-sm leading-7 max-md:mt-8">
-                Foundational forms.
-                <br>
-                Made in limited runs.
-              </p>
+              <div class="flex flex-col items-start md:items-end gap-4 mb-3">
+                <p class="reveal-copy text-sm leading-7">
+                  Foundational forms.
+                  <br>
+                  Made in limited runs.
+                </p>
+                <button type="button" id="openCollectionPageMainBtn" class="flex items-center gap-2 border border-[#161514] bg-[#161514] text-white hover:bg-[#d53527] hover:border-[#d53527] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.16em] transition-all cursor-pointer shadow-lg active:scale-95">
+                  <iconify-icon icon="solar:gallery-wide-bold" width="16" height="16"></iconify-icon>
+                  <span>Open Collection Page ↗</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -737,7 +743,7 @@ gtag('config', 'G-2M6V79H761');
           <span>Story</span>
           <iconify-icon icon="solar:arrow-right-up-linear" style="stroke-width:1.5;"></iconify-icon>
         </a>
-        <a class="menu-link flex items-center justify-between border-b border-white py-4 text-[clamp(4rem,8.6vw,9rem)] leading-[0.95] tracking-tight" href="#collection" style="font-family:'DM Serif Display',Georgia,serif;">
+        <a class="menu-link coll-open-btn flex items-center justify-between border-b border-white py-4 text-[clamp(4rem,8.6vw,9rem)] leading-[0.95] tracking-tight cursor-pointer" href="#collection-page" style="font-family:'DM Serif Display',Georgia,serif;">
           <span>Collection</span>
           <iconify-icon icon="solar:arrow-right-up-linear" style="stroke-width:1.5;"></iconify-icon>
         </a>
@@ -909,6 +915,81 @@ gtag('config', 'G-2M6V79H761');
     <div id="cartToast" class="fixed top-24 right-6 z-[360] flex items-center gap-3 border border-[#d58d3f]/40 bg-[#161514]/95 px-5 py-3.5 text-xs text-white shadow-2xl backdrop-blur-md opacity-0 pointer-events-none translate-y-3 transition-all duration-300">
       <iconify-icon icon="solar:check-circle-bold" width="18" height="18" class="text-[#d58d3f]"></iconify-icon>
       <span id="cartToastText" class="font-medium uppercase tracking-[0.12em]">Added to Atelier Bag</span>
+    </div>
+
+    <!-- DEDICATED COLLECTION PAGE / LOOKBOOK MODAL -->
+    <div id="collectionPageModal" class="fixed inset-0 z-[370] flex flex-col bg-[#141312] text-white opacity-0 pointer-events-none transition-opacity duration-300 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="collectionPageHeading">
+      
+      <!-- Top Sticky Navigation Bar -->
+      <div class="sticky top-0 z-30 flex items-center justify-between border-b border-white/15 bg-[#161514]/95 px-[4vw] py-4 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+          <button id="collectionPageCloseBtn" type="button" class="flex items-center gap-2 border border-white/20 bg-white/5 hover:bg-white hover:text-[#161514] px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition-all cursor-pointer">
+            <iconify-icon icon="solar:arrow-left-linear" width="16" height="16"></iconify-icon>
+            <span>Back to Atelier</span>
+          </button>
+          <span class="text-xs text-white/40 hidden sm:inline">|</span>
+          <span class="text-xs text-[#d58d3f] uppercase tracking-widest hidden sm:inline">Autumn—Winter 2026 Collection</span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <button id="collectionPageCartBtn" type="button" class="flex items-center gap-1.5 bg-transparent py-1.5 px-3 text-xs font-medium uppercase tracking-[0.15em] border border-white/20 hover:border-white transition-colors cursor-pointer">
+            <iconify-icon icon="solar:bag-3-linear" width="16" height="16"></iconify-icon>
+            <span>Bag</span>
+            <span id="collectionPageCartCount" class="font-bold text-[#d58d3f]">0</span>
+          </button>
+          <button id="collectionPageCloseIconBtn" type="button" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer" aria-label="Close Collection Page">
+            <iconify-icon icon="solar:close-circle-linear" width="24" height="24"></iconify-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Hero Header for Collection Page -->
+      <div class="border-b border-white/15 bg-[#191716] px-[4vw] py-12 sm:py-16">
+        <div class="mx-auto max-w-7xl">
+          <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.22em] text-[#d58d3f]">
+                Autumn—Winter 2026 / Complete Archive
+              </p>
+              <h1 id="collectionPageHeading" class="mt-2 text-[clamp(3rem,6.5vw,6rem)] leading-[0.88] tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+                The Collection
+              </h1>
+              <p class="mt-4 max-w-xl text-sm leading-relaxed text-[#e9e2d6]/75">
+                Foundational forms and sculptural silhouettes tailored in limited allocations. Explore all 8 runway looks with material studies and 3D garment inspection.
+              </p>
+            </div>
+            
+            <!-- Category Filter Pills -->
+            <div class="flex flex-wrap gap-2" id="collectionCategoryFilters">
+              <button type="button" class="coll-filter-btn border border-[#d53527] bg-[#d53527] text-white px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer" data-filter="all">
+                All Looks (08)
+              </button>
+              <button type="button" class="coll-filter-btn border border-white/20 bg-white/5 hover:border-white text-white/80 px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer" data-filter="outerwear">
+                Outerwear
+              </button>
+              <button type="button" class="coll-filter-btn border border-white/20 bg-white/5 hover:border-white text-white/80 px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer" data-filter="tailoring">
+                Tailoring
+              </button>
+              <button type="button" class="coll-filter-btn border border-white/20 bg-white/5 hover:border-white text-white/80 px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer" data-filter="evening">
+                Leather & Drapes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Looks Grid Container -->
+      <div class="mx-auto w-full max-w-7xl px-[4vw] py-12 sm:py-16">
+        <div id="collectionLooksGrid" class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+          <!-- Dynamically populated look cards with rich visuals and 3D links -->
+        </div>
+      </div>
+
+      <!-- Atelier Guarantee Footer -->
+      <div class="border-t border-white/15 bg-[#161514] px-[4vw] py-12 text-center text-[#e9e2d6]/60">
+        <p class="text-xs uppercase tracking-[0.2em] text-[#d58d3f] mb-2">Handcrafted Atelier Allocations</p>
+        <p class="text-xs max-w-md mx-auto leading-relaxed">Each piece is individually numbered and cut upon allocation in Singapore & Paris. Complimentary insured international courier.</p>
+      </div>
     </div>
 
     <!-- PRODUCT DETAIL & 3D GLB MODEL MODAL / PAGE -->
@@ -2109,12 +2190,274 @@ gtag('config', 'G-2M6V79H761');
           });
         }
 
-        // Also update modal cart count when updateCartUI runs
+        /* =========================================================
+           DEDICATED COLLECTION PAGE / LOOKBOOK CONTROLLER
+        ========================================================= */
+        const collectionLooks = [
+          {
+            id: 'look-01',
+            number: '01',
+            title: 'The Blaise Cape Coat',
+            category: 'outerwear',
+            fabric: 'Double-Face Oxblood Wool · 680 gsm',
+            silhouette: 'Soft Architectural Shoulder Stance',
+            edition: 'Edition of 40',
+            img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c4429d2d-9c1c-4b9b-bf05-2d97996f567d_3840w.png',
+            productId: 'p1',
+            price: 1480,
+            has3D: true
+          },
+          {
+            id: 'look-02',
+            number: '02',
+            title: 'Le Monde Sculpted Blazer',
+            category: 'tailoring',
+            fabric: 'High-Twist Vermillion Italian Twill',
+            silhouette: 'Sculpted Waist & Elongated Contour',
+            edition: 'Edition of 25',
+            img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/806e135e-88ce-4a66-9546-8f917bf977b8_3840w.png',
+            productId: 'p2',
+            price: 1850,
+            has3D: true
+          },
+          {
+            id: 'look-03',
+            number: '03',
+            title: 'The Blake Fluid Trouser',
+            category: 'evening',
+            fabric: 'Deep Ink Supple Lambskin Leather',
+            silhouette: 'High-Waist Fluid Wide Silhouette',
+            edition: 'Edition of 30',
+            img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/6dbbbbe0-0fea-44f4-97a1-a9493024f5dc_3840w.png',
+            productId: null,
+            price: 1120,
+            has3D: false
+          },
+          {
+            id: 'look-04',
+            number: '04',
+            title: 'The Arlo Architectural Overcoat',
+            category: 'outerwear',
+            fabric: 'Heavy Double-Faced Camel Cashmere',
+            silhouette: 'Voluminous Stance & Hand-Basted Lapels',
+            edition: 'Edition of 20',
+            img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/be5e4a00-4a9d-4373-8880-888910268027_1600w.png',
+            productId: null,
+            price: 2200,
+            has3D: false
+          },
+          {
+            id: 'look-05',
+            number: '05',
+            title: 'L’Éclipse Structured Kimono Coat',
+            category: 'outerwear',
+            fabric: 'Midnight Wool Melton & Sanded Silk',
+            silhouette: 'Minimalist Wrap with Silk Ribbon Closure',
+            edition: 'Edition of 35',
+            img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/44290882-1988-48f6-9c19-73819fc8b143_3840w.png',
+            productId: null,
+            price: 1650,
+            has3D: false
+          },
+          {
+            id: 'look-06',
+            number: '06',
+            title: 'The Vesper Sculpted Vest & Silk Drapes',
+            category: 'tailoring',
+            fabric: 'Heavy Raw-Silk Twill & Cupro Lining',
+            silhouette: 'Asymmetrical Buttoning & Darted Waist',
+            edition: 'Edition of 45',
+            img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/452f30c3-9ddb-4660-bea0-21da72977eb8_1600w.png',
+            productId: null,
+            price: 980,
+            has3D: false
+          },
+          {
+            id: 'look-07',
+            number: '07',
+            title: 'Nocturne Fluted Trench',
+            category: 'outerwear',
+            fabric: 'High-Density Waterproof Cotton Gabardine',
+            silhouette: 'Architectural Fluted Storm Flaps',
+            edition: 'Edition of 50',
+            img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fe5e52af-7385-4cf6-a576-f258ca01f631_3840w.png',
+            productId: null,
+            price: 1750,
+            has3D: false
+          },
+          {
+            id: 'look-08',
+            number: '08',
+            title: 'Aura Monolith Cape',
+            category: 'evening',
+            fabric: 'Raw Edge Boiled Wool & Silk Weft',
+            silhouette: 'Full-Length Draped Monolithic Silhouette',
+            edition: 'Edition of 15',
+            img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5d8004fd-6d9c-46e2-b21f-95eaa5cbd110_3840w.webp',
+            productId: null,
+            price: 1920,
+            has3D: false
+          }
+        ];
+
+        const collectionPageModal = document.getElementById('collectionPageModal');
+        const collectionPageCloseBtn = document.getElementById('collectionPageCloseBtn');
+        const collectionPageCloseIconBtn = document.getElementById('collectionPageCloseIconBtn');
+        const collectionPageCartBtn = document.getElementById('collectionPageCartBtn');
+        const collectionPageCartCount = document.getElementById('collectionPageCartCount');
+        const collectionLooksGrid = document.getElementById('collectionLooksGrid');
+        const collectionCategoryFilters = document.getElementById('collectionCategoryFilters');
+        const openCollectionPageMainBtn = document.getElementById('openCollectionPageMainBtn');
+
+        function renderCollectionLooks(filter = 'all') {
+          if (!collectionLooksGrid) return;
+          const filtered = filter === 'all' 
+            ? collectionLooks 
+            : collectionLooks.filter(look => look.category === filter);
+
+          collectionLooksGrid.innerHTML = filtered.map(look => `
+            <article class="group relative flex flex-col justify-between border border-white/15 bg-[#1c1a19] p-6 transition-all duration-500 hover:border-[#d58d3f]/60 sm:p-7">
+              <div>
+                <div class="relative aspect-[3/4] w-full overflow-hidden bg-[#141312]">
+                  <img src="${look.img}" alt="${look.title}" class="h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105">
+                  <span class="absolute left-3.5 top-3.5 border border-white/30 bg-[#161514]/80 px-2.5 py-1 text-[10px] font-mono uppercase tracking-[0.15em] text-white backdrop-blur-sm">
+                    LOOK ${look.number}
+                  </span>
+                  ${look.has3D ? `
+                    <button type="button" onclick="closeCollectionPage(); openProductDetail('${look.productId}')" class="absolute bottom-3.5 right-3.5 flex items-center gap-1.5 border border-[#d58d3f] bg-black/85 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#d58d3f] backdrop-blur-md hover:bg-[#d58d3f] hover:text-[#161514] transition-all cursor-pointer">
+                      <iconify-icon icon="solar:cube-bold" width="13" height="13"></iconify-icon>
+                      <span>Biska 3D View</span>
+                    </button>
+                  ` : `
+                    <span class="absolute bottom-3.5 right-3.5 border border-white/20 bg-black/60 px-2.5 py-0.5 text-[9px] uppercase tracking-widest text-[#e9e2d6]/70 backdrop-blur-md">
+                      ${look.edition}
+                    </span>
+                  `}
+                </div>
+
+                <div class="mt-5">
+                  <div class="flex items-baseline justify-between gap-2">
+                    <h3 class="text-xl font-normal tracking-tight text-white sm:text-2xl" style="font-family:'DM Serif Display',Georgia,serif;">
+                      ${look.title}
+                    </h3>
+                    <span class="text-sm font-semibold text-[#d58d3f]">$${look.price.toLocaleString()}</span>
+                  </div>
+                  <p class="mt-2 text-xs text-[#e9e2d6]/80 font-medium">${look.fabric}</p>
+                  <p class="mt-1 text-[11px] text-[#e9e2d6]/60 leading-relaxed">${look.silhouette}</p>
+                </div>
+              </div>
+
+              <div class="mt-6 pt-5 border-t border-white/10 flex items-center justify-between gap-3">
+                ${look.productId ? `
+                  <button type="button" onclick="closeCollectionPage(); openProductDetail('${look.productId}')" class="w-full flex items-center justify-center gap-2 bg-[#e9e2d6] text-[#161514] hover:bg-[#d53527] hover:text-white py-3 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer">
+                    <span>Inspect Piece & 3D</span>
+                    <iconify-icon icon="solar:arrow-right-up-linear" width="15" height="15"></iconify-icon>
+                  </button>
+                ` : `
+                  <button type="button" onclick="quickAddLookToCart('${look.title}', ${look.price}, '${look.img}', '${look.fabric}')" class="w-full flex items-center justify-center gap-2 border border-white/20 bg-white/5 hover:border-white hover:bg-white/10 text-white py-3 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer">
+                    <iconify-icon icon="solar:bag-3-linear" width="15" height="15"></iconify-icon>
+                    <span>Reserve Allocation</span>
+                  </button>
+                `}
+              </div>
+            </article>
+          `).join('');
+        }
+
+        window.quickAddLookToCart = function(name, price, img, meta) {
+          const id = 'look-' + Math.floor(Math.random() * 10000);
+          cart.push({
+            id,
+            name,
+            price,
+            img,
+            meta,
+            size: 'S',
+            quantity: 1
+          });
+          updateCartUI();
+          showToast(`Added ${name} to Atelier Bag`);
+          openCartDrawer();
+        };
+
+        window.openCollectionPage = function() {
+          if (!collectionPageModal) return;
+          renderCollectionLooks('all');
+          collectionPageModal.style.opacity = '1';
+          collectionPageModal.style.pointerEvents = 'auto';
+          body.style.overflow = 'hidden';
+          collectionPageModal.scrollTop = 0;
+          if (history.pushState) {
+            history.pushState(null, null, '#collection-page');
+          }
+        };
+
+        window.closeCollectionPage = function() {
+          if (!collectionPageModal) return;
+          collectionPageModal.style.opacity = '0';
+          collectionPageModal.style.pointerEvents = 'none';
+          body.style.overflow = '';
+          if (location.hash === '#collection-page') {
+            history.pushState(null, null, ' ');
+          }
+        };
+
+        if (openCollectionPageMainBtn) openCollectionPageMainBtn.addEventListener('click', openCollectionPage);
+        if (collectionPageCloseBtn) collectionPageCloseBtn.addEventListener('click', closeCollectionPage);
+        if (collectionPageCloseIconBtn) collectionPageCloseIconBtn.addEventListener('click', closeCollectionPage);
+        if (collectionPageCartBtn) collectionPageCartBtn.addEventListener('click', () => { openCartDrawer(); });
+
+        if (collectionCategoryFilters) {
+          collectionCategoryFilters.querySelectorAll('.coll-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              collectionCategoryFilters.querySelectorAll('.coll-filter-btn').forEach(b => {
+                b.className = 'coll-filter-btn border border-white/20 bg-white/5 hover:border-white text-white/80 px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer';
+              });
+              btn.className = 'coll-filter-btn border border-[#d53527] bg-[#d53527] text-white px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer';
+              const filter = btn.dataset.filter || 'all';
+              renderCollectionLooks(filter);
+            });
+          });
+        }
+
+        // Intercept Collection slide "View" buttons to open collection or product detail
+        document.querySelectorAll('.product-slide .product-action').forEach((btn, index) => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (index === 0) {
+              openProductDetail('p1');
+            } else if (index === 1) {
+              openProductDetail('p2');
+            } else {
+              openCollectionPage();
+            }
+          });
+        });
+
+        document.querySelectorAll('.coll-open-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openCollectionPage();
+          });
+        });
+
+        // Check hash on page load and hash changes
+        if (window.location.hash === '#collection-page') {
+          openCollectionPage();
+        }
+        window.addEventListener('hashchange', () => {
+          if (window.location.hash === '#collection-page') {
+            openCollectionPage();
+          }
+        });
+
+        // Also update modal & collection cart count when updateCartUI runs
         const originalUpdateCartUI = updateCartUI;
         updateCartUI = function() {
           originalUpdateCartUI();
           const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
           if (modalCartCount) modalCartCount.textContent = totalCount;
+          if (collectionPageCartCount) collectionPageCartCount.textContent = totalCount;
         };
 
         document.fonts.ready.then(() => {

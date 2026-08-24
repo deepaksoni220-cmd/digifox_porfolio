@@ -123,9 +123,9 @@ export const TEMPLATE_REGISTRY: TemplateMetadata[] = [
   {
     template_id: "riskaLuxury",
     name: "Biska Luxury Clothing Website",
-    industries: ["fashion", "luxury", "clothing", "portfolio", "couture", "atelier", "apparel"],
+    industries: ["fashion", "luxury", "clothing", "ecommerce", "portfolio", "couture", "atelier", "apparel"],
     styles: ["luxury", "editorial", "cinematic", "dark", "minimalist", "high-end"],
-    features: ["hero", "material-studies", "lookbook", "atelier-craft", "consultation", "contact"],
+    features: ["hero", "material-studies", "lookbook", "products", "cart", "ordering", "atelier-craft", "consultation", "contact"],
     sections: ["hero", "about", "items", "contact"],
     previewUrl: "/templates/style demo 1/biska_luxury.aura.build/riska-luxury.aura.build/index.html",
     thumbnailUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop"

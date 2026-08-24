@@ -128,15 +128,23 @@ gtag('config', 'G-2M6V79H761');
         <a class="nav-link relative py-2 text-xs font-medium uppercase tracking-[0.15em]" href="#collection">
           Collection
         </a>
+        <a class="nav-link relative py-2 text-xs font-medium uppercase tracking-[0.15em]" href="#shop">
+          Pieces
+        </a>
         <a class="nav-link relative py-2 text-xs font-medium uppercase tracking-[0.15em]" href="#journal">
           Journal
         </a>
       </nav>
 
-      <div class="flex items-center justify-end gap-8 max-md:gap-5">
-        <a href="#collection" class="text-xs font-medium uppercase tracking-[0.15em]">
-          Collection
+      <div class="flex items-center justify-end gap-6 max-md:gap-4">
+        <a href="#shop" class="text-xs font-medium uppercase tracking-[0.15em] hover:text-[#d53527] transition-colors max-sm:hidden">
+          Shop
         </a>
+        <button id="cartOpenBtn" type="button" class="relative flex items-center gap-1.5 bg-transparent py-2 text-xs font-medium uppercase tracking-[0.15em] cursor-pointer hover:text-[#d53527] transition-colors" aria-label="Open Shopping Bag">
+          <iconify-icon icon="solar:bag-3-linear" width="16" height="16"></iconify-icon>
+          <span>Bag</span>
+          <span id="cartCountBadge" class="inline-flex items-center justify-center min-w-4 h-4 px-1 rounded-full bg-[#d53527] text-white text-[9px] font-bold">0</span>
+        </button>
         <button id="menuButton" type="button" class="bg-transparent py-2 text-xs font-medium uppercase tracking-[0.15em]" aria-expanded="false" aria-controls="menuOverlay">
           Menu
         </button>
@@ -499,6 +507,127 @@ gtag('config', 'G-2M6V79H761');
         </div>
       </section>
 
+      <!-- CURATED PIECES / SHOP SECTION -->
+      <section id="shop" class="relative bg-[#161514] text-white px-[4vw] py-[14vh] max-md:px-[5vw]" aria-labelledby="shopTitle">
+        <div class="mx-auto max-w-7xl">
+          <!-- Section Header -->
+          <div class="flex flex-col justify-between border-b border-white/20 pb-8 md:flex-row md:items-end">
+            <div>
+              <p class="text-xs font-medium uppercase tracking-[0.2em] text-[#d58d3f] mb-3">
+                Atelier Direct / Autumn—Winter 2026
+              </p>
+              <h2 id="shopTitle" class="text-[clamp(3.5rem,7vw,6.5rem)] leading-[0.88] tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+                Curated Pieces
+              </h2>
+            </div>
+            <p class="mt-4 max-w-sm text-sm leading-relaxed text-[#e9e2d6]/70 md:mt-0">
+              Limited handcrafted allocations tailored in our Singapore & Paris ateliers. Direct worldwide express delivery with bespoke garment packaging.
+            </p>
+          </div>
+
+          <!-- 2 Products Grid -->
+          <div class="mt-14 grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
+            
+            <!-- Product 1: The Blaise Cape Coat -->
+            <article class="group relative flex flex-col justify-between border border-white/15 bg-[#1c1a19] p-6 transition-all duration-500 hover:border-[#d53527]/60 sm:p-8">
+              <div>
+                <div class="relative aspect-[4/5] w-full overflow-hidden bg-[#161514]">
+                  <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c4429d2d-9c1c-4b9b-bf05-2d97996f567d_3840w.png" alt="The Blaise Cape Coat in brushed oxblood wool" class="h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105">
+                  <span class="absolute left-4 top-4 border border-white/30 bg-[#161514]/80 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-white backdrop-blur-sm">
+                    001 / Edition of 40
+                  </span>
+                </div>
+
+                <div class="mt-6 flex items-baseline justify-between">
+                  <h3 class="text-2xl font-normal tracking-tight sm:text-3xl" style="font-family:'DM Serif Display',Georgia,serif;">
+                    The Blaise Cape Coat
+                  </h3>
+                  <span class="text-xl font-medium tracking-tight text-[#d58d3f]">
+                    $1,480
+                  </span>
+                </div>
+
+                <p class="mt-3 text-xs leading-6 text-[#e9e2d6]/75">
+                  Oxblood double-face wool shaped with a soft architectural shoulder line, concealed horn closures, and structured thermal drape.
+                </p>
+
+                <!-- Size selector -->
+                <div class="mt-6 flex items-center gap-3">
+                  <span class="text-[10px] font-medium uppercase tracking-[0.18em] text-[#e9e2d6]/60">Size:</span>
+                  <div class="flex gap-2" id="p1-sizes">
+                    <button type="button" class="size-opt px-3 py-1 text-xs uppercase tracking-wider border border-[#d53527] bg-[#d53527] text-white transition-all cursor-pointer" data-size="S">S</button>
+                    <button type="button" class="size-opt px-3 py-1 text-xs uppercase tracking-wider border border-white/20 bg-transparent text-white/70 hover:border-white transition-all cursor-pointer" data-size="M">M</button>
+                    <button type="button" class="size-opt px-3 py-1 text-xs uppercase tracking-wider border border-white/20 bg-transparent text-white/70 hover:border-white transition-all cursor-pointer" data-size="L">L</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 pt-6 border-t border-white/10 flex items-center justify-between gap-4">
+                <span class="text-[11px] uppercase tracking-wider text-[#e9e2d6]/50">Includes Dust Bag & Hanger</span>
+                <button type="button" class="add-to-cart-btn flex items-center gap-2 bg-[#e9e2d6] text-[#161514] hover:bg-[#d53527] hover:text-white px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] transition-all cursor-pointer active:scale-95"
+                  data-id="p1"
+                  data-name="The Blaise Cape Coat"
+                  data-price="1480"
+                  data-img="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c4429d2d-9c1c-4b9b-bf05-2d97996f567d_3840w.png"
+                  data-meta="Brushed Oxblood Wool">
+                  <iconify-icon icon="solar:bag-3-linear" width="16" height="16"></iconify-icon>
+                  <span>Add to Bag</span>
+                </button>
+              </div>
+            </article>
+
+            <!-- Product 2: Le Monde Sculpted Blazer -->
+            <article class="group relative flex flex-col justify-between border border-white/15 bg-[#1c1a19] p-6 transition-all duration-500 hover:border-[#d53527]/60 sm:p-8">
+              <div>
+                <div class="relative aspect-[4/5] w-full overflow-hidden bg-[#161514]">
+                  <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/806e135e-88ce-4a66-9546-8f917bf977b8_3840w.png" alt="Le Monde Sculpted Blazer in structured Italian twill" class="h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105">
+                  <span class="absolute left-4 top-4 border border-white/30 bg-[#161514]/80 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-white backdrop-blur-sm">
+                    002 / Edition of 25
+                  </span>
+                </div>
+
+                <div class="mt-6 flex items-baseline justify-between">
+                  <h3 class="text-2xl font-normal tracking-tight sm:text-3xl" style="font-family:'DM Serif Display',Georgia,serif;">
+                    Le Monde Sculpted Blazer
+                  </h3>
+                  <span class="text-xl font-medium tracking-tight text-[#d58d3f]">
+                    $1,850
+                  </span>
+                </div>
+
+                <p class="mt-3 text-xs leading-6 text-[#e9e2d6]/75">
+                  Decisive vermillion tailoring with a sculpted waist, elongated contour lines, hand-stitched lapels, and pure cupro lining.
+                </p>
+
+                <!-- Size selector -->
+                <div class="mt-6 flex items-center gap-3">
+                  <span class="text-[10px] font-medium uppercase tracking-[0.18em] text-[#e9e2d6]/60">Size:</span>
+                  <div class="flex gap-2" id="p2-sizes">
+                    <button type="button" class="size-opt px-3 py-1 text-xs uppercase tracking-wider border border-[#d53527] bg-[#d53527] text-white transition-all cursor-pointer" data-size="S">S</button>
+                    <button type="button" class="size-opt px-3 py-1 text-xs uppercase tracking-wider border border-white/20 bg-transparent text-white/70 hover:border-white transition-all cursor-pointer" data-size="M">M</button>
+                    <button type="button" class="size-opt px-3 py-1 text-xs uppercase tracking-wider border border-white/20 bg-transparent text-white/70 hover:border-white transition-all cursor-pointer" data-size="L">L</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 pt-6 border-t border-white/10 flex items-center justify-between gap-4">
+                <span class="text-[11px] uppercase tracking-wider text-[#e9e2d6]/50">Includes Atelier Certificate</span>
+                <button type="button" class="add-to-cart-btn flex items-center gap-2 bg-[#e9e2d6] text-[#161514] hover:bg-[#d53527] hover:text-white px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] transition-all cursor-pointer active:scale-95"
+                  data-id="p2"
+                  data-name="Le Monde Sculpted Blazer"
+                  data-price="1850"
+                  data-img="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/806e135e-88ce-4a66-9546-8f917bf977b8_3840w.png"
+                  data-meta="Structured Vermillion Twill">
+                  <iconify-icon icon="solar:bag-3-linear" width="16" height="16"></iconify-icon>
+                  <span>Add to Bag</span>
+                </button>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
       <section class="relative flex min-h-screen flex-col justify-center overflow-hidden bg-[#213497] px-[8vw] py-[10vw] text-white max-md:px-[5vw]" aria-labelledby="newsletterTitle">
         <div class="newsletter-shape absolute -right-[15vw] -top-[15vw] h-[50vw] w-[50vw] rounded-full border border-white/15" aria-hidden="true"></div>
         <div class="newsletter-shape absolute -right-[4vw] top-[3vw] h-[28vw] w-[28vw] rounded-full border border-white/10" aria-hidden="true"></div>
@@ -557,12 +686,175 @@ gtag('config', 'G-2M6V79H761');
           <span>Collection</span>
           <iconify-icon icon="solar:arrow-right-up-linear" style="stroke-width:1.5;"></iconify-icon>
         </a>
+        <a class="menu-link flex items-center justify-between border-b border-white py-4 text-[clamp(4rem,8.6vw,9rem)] leading-[0.95] tracking-tight" href="#shop" style="font-family:'DM Serif Display',Georgia,serif;">
+          <span>Pieces</span>
+          <iconify-icon icon="solar:arrow-right-up-linear" style="stroke-width:1.5;"></iconify-icon>
+        </a>
         <a class="menu-link flex items-center justify-between border-b border-white py-4 text-[clamp(4rem,8.6vw,9rem)] leading-[0.95] tracking-tight" href="#journal" style="font-family:'DM Serif Display',Georgia,serif;">
           <span>Journal</span>
           <iconify-icon icon="solar:arrow-right-up-linear" style="stroke-width:1.5;"></iconify-icon>
         </a>
       </nav>
     </aside>
+
+    <!-- SHOPPING BAG BACKDROP -->
+    <div id="cartBackdrop" class="fixed inset-0 z-[340] bg-black/75 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-400" aria-hidden="true"></div>
+
+    <!-- SHOPPING BAG SLIDE-OUT DRAWER -->
+    <aside id="cartDrawer" class="fixed inset-y-0 right-0 z-[350] flex w-full max-w-md flex-col justify-between border-l border-white/15 bg-[#161514] p-6 text-white shadow-2xl translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:p-8" role="dialog" aria-modal="true" aria-labelledby="cartDrawerTitle">
+      <div>
+        <div class="flex items-center justify-between border-b border-white/15 pb-5">
+          <div class="flex items-center gap-3">
+            <h2 id="cartDrawerTitle" class="text-xs font-semibold uppercase tracking-[0.2em] text-[#d58d3f]">
+              Atelier Bag
+            </h2>
+            <span id="cartDrawerCountPill" class="border border-white/20 px-2 py-0.5 text-[10px] font-bold">0 Items</span>
+          </div>
+          <button id="cartCloseBtn" type="button" aria-label="Close Shopping Bag" class="grid h-10 w-10 place-items-center text-white/70 hover:text-white transition-colors cursor-pointer">
+            <iconify-icon icon="solar:close-circle-linear" width="28" height="28" style="stroke-width:1.5;"></iconify-icon>
+          </button>
+        </div>
+
+        <!-- Cart items list container -->
+        <div id="cartItemsList" class="mt-6 flex flex-col gap-5 overflow-y-auto max-h-[52vh] pr-1">
+          <!-- Dynamic Items inserted here via JS -->
+        </div>
+      </div>
+
+      <!-- Bag Footer / Checkout Area -->
+      <div id="cartFooterArea" class="border-t border-white/15 pt-6">
+        <div class="flex items-center justify-between text-xs text-[#e9e2d6]/70 mb-2">
+          <span>Shipping</span>
+          <span class="text-white font-medium">Complimentary Courier</span>
+        </div>
+        <div class="flex items-baseline justify-between mb-6">
+          <span class="text-xs font-medium uppercase tracking-[0.16em]">Total</span>
+          <span id="cartSubtotal" class="text-2xl font-bold tracking-tight text-[#d58d3f]" style="font-family:'DM Serif Display',Georgia,serif;">$0</span>
+        </div>
+        <button id="proceedToCheckoutBtn" type="button" class="w-full bg-[#d53527] hover:bg-[#b52a1d] text-white py-4 text-xs font-bold uppercase tracking-[0.18em] transition-all cursor-pointer disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-2">
+          <span>Proceed to Order</span>
+          <iconify-icon icon="solar:arrow-right-linear" width="16" height="16"></iconify-icon>
+        </button>
+        <p class="mt-3 text-center text-[10px] uppercase tracking-wider text-[#e9e2d6]/50">
+          Handcrafted in Limited Atelier Allocations
+        </p>
+      </div>
+    </aside>
+
+    <!-- CHECKOUT MODAL -->
+    <div id="checkoutModal" class="fixed inset-0 z-[400] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="checkoutModalTitle">
+      <div class="relative w-full max-w-xl border border-white/20 bg-[#1c1a19] p-6 text-white shadow-2xl max-h-[90vh] overflow-y-auto sm:p-10">
+        <button id="checkoutCloseBtn" type="button" aria-label="Close Checkout Modal" class="absolute right-5 top-5 grid h-10 w-10 place-items-center text-white/70 hover:text-white transition-colors cursor-pointer">
+          <iconify-icon icon="solar:close-circle-linear" width="28" height="28"></iconify-icon>
+        </button>
+
+        <p class="text-xs font-medium uppercase tracking-[0.2em] text-[#d58d3f]">
+          Bespoke Dispatch
+        </p>
+        <h3 id="checkoutModalTitle" class="mt-1 text-3xl font-normal tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+          Place Your Atelier Order
+        </h3>
+        <p class="mt-2 text-xs text-[#e9e2d6]/70">
+          Please provide your delivery details. Your allocated pieces will be prepared and couriered in custom Biska garment packaging.
+        </p>
+
+        <form id="orderForm" class="mt-6 flex flex-col gap-4">
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label for="orderName" class="mb-1.5 block text-[11px] font-medium uppercase tracking-[0.14em] text-[#e9e2d6]/80">Full Name *</label>
+              <input id="orderName" type="text" required placeholder="Elena Rostova" class="w-full border border-white/20 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-[#d53527] transition-colors">
+            </div>
+            <div>
+              <label for="orderEmail" class="mb-1.5 block text-[11px] font-medium uppercase tracking-[0.14em] text-[#e9e2d6]/80">Email Address *</label>
+              <input id="orderEmail" type="email" required placeholder="elena@example.com" class="w-full border border-white/20 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-[#d53527] transition-colors">
+            </div>
+          </div>
+
+          <div>
+            <label for="orderAddress" class="mb-1.5 block text-[11px] font-medium uppercase tracking-[0.14em] text-[#e9e2d6]/80">Delivery Address *</label>
+            <input id="orderAddress" type="text" required placeholder="74 Rue du Faubourg Saint-Honoré" class="w-full border border-white/20 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-[#d53527] transition-colors">
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="orderCity" class="mb-1.5 block text-[11px] font-medium uppercase tracking-[0.14em] text-[#e9e2d6]/80">City *</label>
+              <input id="orderCity" type="text" required placeholder="Paris" class="w-full border border-white/20 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-[#d53527] transition-colors">
+            </div>
+            <div>
+              <label for="orderCountry" class="mb-1.5 block text-[11px] font-medium uppercase tracking-[0.14em] text-[#e9e2d6]/80">Country *</label>
+              <input id="orderCountry" type="text" required placeholder="France" class="w-full border border-white/20 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-[#d53527] transition-colors">
+            </div>
+          </div>
+
+          <div>
+            <label for="orderNotes" class="mb-1.5 block text-[11px] font-medium uppercase tracking-[0.14em] text-[#e9e2d6]/80">Special Tailoring Notes (Optional)</label>
+            <textarea id="orderNotes" rows="2" placeholder="Custom sleeve alteration or courier instructions..." class="w-full border border-white/20 bg-white/5 px-4 py-3 text-sm text-white outline-none focus:border-[#d53527] transition-colors resize-none"></textarea>
+          </div>
+
+          <!-- Order summary box -->
+          <div class="mt-2 border border-white/10 bg-white/[0.03] p-4">
+            <div class="flex items-center justify-between text-xs text-[#e9e2d6]/80 mb-1">
+              <span id="checkoutItemSummary">Selected pieces (0)</span>
+              <span id="checkoutSubtotalDisplay" class="font-bold text-white">$0</span>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-[#e9e2d6]/60">
+              <span>Insured International Courier</span>
+              <span class="text-[#d58d3f]">Complimentary</span>
+            </div>
+          </div>
+
+          <button type="submit" id="submitOrderBtn" class="mt-3 w-full bg-[#d53527] hover:bg-[#b52a1d] text-white py-4 text-xs font-bold uppercase tracking-[0.18em] transition-all cursor-pointer flex items-center justify-center gap-2">
+            <span>Confirm & Place Order</span>
+            <iconify-icon icon="solar:check-read-linear" width="18" height="18"></iconify-icon>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ORDER SUCCESS CONFIRMATION MODAL -->
+    <div id="orderSuccessModal" class="fixed inset-0 z-[450] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true">
+      <div class="relative w-full max-w-lg border border-[#d58d3f]/40 bg-[#161514] p-8 text-center text-white shadow-2xl sm:p-10">
+        <div class="mx-auto grid h-16 w-16 place-items-center rounded-full border border-[#d58d3f] bg-[#d58d3f]/10 text-[#d58d3f]">
+          <iconify-icon icon="solar:verified-check-bold" width="36" height="36"></iconify-icon>
+        </div>
+
+        <p class="mt-6 text-xs font-medium uppercase tracking-[0.2em] text-[#d58d3f]">
+          Order Confirmed
+        </p>
+        <h3 class="mt-2 text-3xl font-normal tracking-tight" style="font-family:'DM Serif Display',Georgia,serif;">
+          Atelier Allocation Reserved
+        </h3>
+        
+        <p class="mt-4 text-sm leading-relaxed text-[#e9e2d6]/80" id="orderSuccessMessage">
+          Thank you. Your order has been registered with the atelier.
+        </p>
+
+        <div class="mt-6 border border-white/15 bg-white/[0.04] p-4 text-left">
+          <div class="flex justify-between text-xs text-[#e9e2d6]/70 mb-2">
+            <span>Order Reference:</span>
+            <span id="orderSuccessRef" class="font-mono font-bold text-white tracking-wider">#BK-2026-8492</span>
+          </div>
+          <div class="flex justify-between text-xs text-[#e9e2d6]/70 mb-2">
+            <span>Estimated Courier:</span>
+            <span class="text-white">2—4 Business Days</span>
+          </div>
+          <div class="flex justify-between text-xs text-[#e9e2d6]/70">
+            <span>Garment Packaging:</span>
+            <span class="text-[#d58d3f]">Hand-numbered Atelier Box</span>
+          </div>
+        </div>
+
+        <button id="orderSuccessDoneBtn" type="button" class="mt-8 w-full border border-white bg-white text-[#161514] hover:bg-[#d53527] hover:border-[#d53527] hover:text-white py-4 text-xs font-bold uppercase tracking-[0.18em] transition-all cursor-pointer">
+          Continue Exploring
+        </button>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="cartToast" class="fixed top-24 right-6 z-[360] flex items-center gap-3 border border-[#d58d3f]/40 bg-[#161514]/95 px-5 py-3.5 text-xs text-white shadow-2xl backdrop-blur-md opacity-0 pointer-events-none translate-y-3 transition-all duration-300">
+      <iconify-icon icon="solar:check-circle-bold" width="18" height="18" class="text-[#d58d3f]"></iconify-icon>
+      <span id="cartToastText" class="font-medium uppercase tracking-[0.12em]">Added to Atelier Bag</span>
+    </div>
 
     <script>
       (() => {
@@ -1070,6 +1362,234 @@ gtag('config', 'G-2M6V79H761');
             { y: 0, opacity: 1, filter: "blur(0rem)", duration: 0.7, ease: "power3.out" }
           );
         });
+
+        /* =========================================================
+           BISKA LUXURY SHOPPING BAG & BESPOKE ORDER CONTROLLER
+        ========================================================= */
+        const cart = [];
+        const selectedSizes = { p1: 'S', p2: 'S' };
+
+        // Size button selection handlers
+        document.querySelectorAll('[id$="-sizes"]').forEach(group => {
+          const prodId = group.id.replace('-sizes', '');
+          group.querySelectorAll('.size-opt').forEach(btn => {
+            btn.addEventListener('click', () => {
+              group.querySelectorAll('.size-opt').forEach(b => {
+                b.className = 'size-opt px-3 py-1 text-xs uppercase tracking-wider border border-white/20 bg-transparent text-white/70 hover:border-white transition-all cursor-pointer';
+              });
+              btn.className = 'size-opt px-3 py-1 text-xs uppercase tracking-wider border border-[#d53527] bg-[#d53527] text-white transition-all cursor-pointer';
+              selectedSizes[prodId] = btn.dataset.size || 'S';
+            });
+          });
+        });
+
+        // DOM elements
+        const cartOpenBtn = document.getElementById('cartOpenBtn');
+        const cartCloseBtn = document.getElementById('cartCloseBtn');
+        const cartDrawer = document.getElementById('cartDrawer');
+        const cartBackdrop = document.getElementById('cartBackdrop');
+        const cartCountBadge = document.getElementById('cartCountBadge');
+        const cartDrawerCountPill = document.getElementById('cartDrawerCountPill');
+        const cartItemsList = document.getElementById('cartItemsList');
+        const cartSubtotal = document.getElementById('cartSubtotal');
+        const proceedToCheckoutBtn = document.getElementById('proceedToCheckoutBtn');
+        const cartToast = document.getElementById('cartToast');
+        const cartToastText = document.getElementById('cartToastText');
+
+        const checkoutModal = document.getElementById('checkoutModal');
+        const checkoutCloseBtn = document.getElementById('checkoutCloseBtn');
+        const orderForm = document.getElementById('orderForm');
+        const checkoutItemSummary = document.getElementById('checkoutItemSummary');
+        const checkoutSubtotalDisplay = document.getElementById('checkoutSubtotalDisplay');
+
+        const orderSuccessModal = document.getElementById('orderSuccessModal');
+        const orderSuccessMessage = document.getElementById('orderSuccessMessage');
+        const orderSuccessRef = document.getElementById('orderSuccessRef');
+        const orderSuccessDoneBtn = document.getElementById('orderSuccessDoneBtn');
+
+        let isCartOpen = false;
+        let toastTimeout = null;
+
+        function showToast(msg) {
+          if (!cartToast) return;
+          cartToastText.textContent = msg;
+          cartToast.style.opacity = '1';
+          cartToast.style.pointerEvents = 'auto';
+          cartToast.style.transform = 'translateY(0)';
+          clearTimeout(toastTimeout);
+          toastTimeout = setTimeout(() => {
+            cartToast.style.opacity = '0';
+            cartToast.style.pointerEvents = 'none';
+            cartToast.style.transform = 'translateY(12px)';
+          }, 3000);
+        }
+
+        function updateCartUI() {
+          const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+          const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+          if (cartCountBadge) cartCountBadge.textContent = totalCount;
+          if (cartDrawerCountPill) cartDrawerCountPill.textContent = `${totalCount} ${totalCount === 1 ? 'Item' : 'Items'}`;
+          if (cartSubtotal) cartSubtotal.textContent = `$${totalPrice.toLocaleString()}`;
+
+          if (proceedToCheckoutBtn) {
+            proceedToCheckoutBtn.disabled = cart.length === 0;
+          }
+
+          if (!cartItemsList) return;
+
+          if (cart.length === 0) {
+            cartItemsList.innerHTML = `
+              <div class="py-16 text-center">
+                <iconify-icon icon="solar:bag-3-linear" width="44" height="44" class="mx-auto text-white/30 mb-4"></iconify-icon>
+                <p class="text-sm font-medium tracking-tight text-white/80">Your Atelier Bag is Empty</p>
+                <p class="mt-2 text-xs text-[#e9e2d6]/50 max-w-xs mx-auto leading-relaxed">Explore our handcrafted Autumn—Winter 2026 curated pieces.</p>
+                <a href="#shop" onclick="closeCartDrawer()" class="mt-6 inline-block border border-white/30 px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-white hover:bg-white hover:text-[#161514] transition-colors">Explore Pieces</a>
+              </div>
+            `;
+            return;
+          }
+
+          cartItemsList.innerHTML = cart.map((item, index) => `
+            <div class="flex gap-4 border border-white/10 bg-[#1c1a19] p-3.5 relative group">
+              <img src="${item.img}" alt="${item.name}" class="h-20 w-16 object-cover bg-black/40 flex-shrink-0">
+              <div class="flex flex-1 flex-col justify-between">
+                <div>
+                  <div class="flex items-start justify-between gap-2">
+                    <h4 class="text-sm font-medium text-white leading-tight">${item.name}</h4>
+                    <button type="button" onclick="removeFromCart(${index})" class="text-white/40 hover:text-[#d53527] transition-colors text-xs p-1" title="Remove">✕</button>
+                  </div>
+                  <p class="text-[11px] text-[#e9e2d6]/60 mt-0.5">${item.meta} · Size: <span class="font-bold text-white">${item.size}</span></p>
+                </div>
+                <div class="flex items-center justify-between mt-2">
+                  <div class="flex items-center border border-white/20">
+                    <button type="button" onclick="changeQty(${index}, -1)" class="h-6 w-6 grid place-items-center text-white/60 hover:text-white hover:bg-white/10 transition-colors text-xs">-</button>
+                    <span class="h-6 px-2 text-xs flex items-center font-mono">${item.quantity}</span>
+                    <button type="button" onclick="changeQty(${index}, 1)" class="h-6 w-6 grid place-items-center text-white/60 hover:text-white hover:bg-white/10 transition-colors text-xs">+</button>
+                  </div>
+                  <span class="text-sm font-semibold text-[#d58d3f]">$${(item.price * item.quantity).toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        window.removeFromCart = function(index) {
+          cart.splice(index, 1);
+          updateCartUI();
+        };
+
+        window.changeQty = function(index, delta) {
+          if (!cart[index]) return;
+          cart[index].quantity += delta;
+          if (cart[index].quantity <= 0) {
+            cart.splice(index, 1);
+          }
+          updateCartUI();
+        };
+
+        function openCartDrawer() {
+          isCartOpen = true;
+          cartDrawer.classList.remove('translate-x-full');
+          cartBackdrop.style.opacity = '1';
+          cartBackdrop.style.pointerEvents = 'auto';
+          body.style.overflow = 'hidden';
+        }
+
+        window.closeCartDrawer = function() {
+          isCartOpen = false;
+          cartDrawer.classList.add('translate-x-full');
+          cartBackdrop.style.opacity = '0';
+          cartBackdrop.style.pointerEvents = 'none';
+          body.style.overflow = '';
+        };
+
+        // Add to cart buttons listener
+        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const id = btn.dataset.id;
+            const name = btn.dataset.name;
+            const price = parseInt(btn.dataset.price, 10) || 1000;
+            const img = btn.dataset.img;
+            const meta = btn.dataset.meta;
+            const size = selectedSizes[id] || 'S';
+
+            const existing = cart.find(item => item.id === id && item.size === size);
+            if (existing) {
+              existing.quantity += 1;
+            } else {
+              cart.push({ id, name, price, img, meta, size, quantity: 1 });
+            }
+
+            updateCartUI();
+            showToast(`Added ${name} (Size ${size}) to Bag`);
+            openCartDrawer();
+          });
+        });
+
+        if (cartOpenBtn) cartOpenBtn.addEventListener('click', openCartDrawer);
+        if (cartCloseBtn) cartCloseBtn.addEventListener('click', closeCartDrawer);
+        if (cartBackdrop) cartBackdrop.addEventListener('click', closeCartDrawer);
+
+        // Checkout Modal interactions
+        function openCheckoutModal() {
+          closeCartDrawer();
+          const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+          const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+          if (checkoutItemSummary) checkoutItemSummary.textContent = `${totalCount} ${totalCount === 1 ? 'Piece' : 'Pieces'} Selected`;
+          if (checkoutSubtotalDisplay) checkoutSubtotalDisplay.textContent = `$${totalPrice.toLocaleString()}`;
+          checkoutModal.style.opacity = '1';
+          checkoutModal.style.pointerEvents = 'auto';
+          body.style.overflow = 'hidden';
+        }
+
+        function closeCheckoutModal() {
+          checkoutModal.style.opacity = '0';
+          checkoutModal.style.pointerEvents = 'none';
+          body.style.overflow = '';
+        }
+
+        if (proceedToCheckoutBtn) proceedToCheckoutBtn.addEventListener('click', openCheckoutModal);
+        if (checkoutCloseBtn) checkoutCloseBtn.addEventListener('click', closeCheckoutModal);
+
+        if (orderForm) {
+          orderForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('orderName').value.trim();
+            const email = document.getElementById('orderEmail').value.trim();
+            const randomId = Math.floor(1000 + Math.random() * 9000);
+            const orderRef = `#BK-2026-${randomId}`;
+
+            closeCheckoutModal();
+
+            if (orderSuccessMessage) {
+              orderSuccessMessage.innerHTML = `Thank you, <strong class="text-white">${name}</strong>. Your bespoke allocation has been confirmed. Detailed dispatch and insurance documents have been transmitted to <strong class="text-white">${email}</strong>.`;
+            }
+            if (orderSuccessRef) {
+              orderSuccessRef.textContent = orderRef;
+            }
+
+            orderSuccessModal.style.opacity = '1';
+            orderSuccessModal.style.pointerEvents = 'auto';
+            body.style.overflow = 'hidden';
+
+            // Clear cart
+            cart.length = 0;
+            updateCartUI();
+            orderForm.reset();
+          });
+        }
+
+        if (orderSuccessDoneBtn) {
+          orderSuccessDoneBtn.addEventListener('click', () => {
+            orderSuccessModal.style.opacity = '0';
+            orderSuccessModal.style.pointerEvents = 'none';
+            body.style.overflow = '';
+          });
+        }
+
+        updateCartUI();
 
         document.fonts.ready.then(() => {
           ScrollTrigger.refresh();

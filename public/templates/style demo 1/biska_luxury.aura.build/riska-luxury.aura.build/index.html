@@ -791,10 +791,10 @@ gtag('config', 'G-2M6V79H761');
     </aside>
 
     <!-- SHOPPING BAG BACKDROP -->
-    <div id="cartBackdrop" class="fixed inset-0 z-[340] bg-black/75 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-400" aria-hidden="true"></div>
+    <div id="cartBackdrop" class="fixed inset-0 z-[380] bg-black/75 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-400" aria-hidden="true"></div>
 
     <!-- SHOPPING BAG SLIDE-OUT DRAWER -->
-    <aside id="cartDrawer" class="fixed inset-y-0 right-0 z-[350] flex w-full max-w-md flex-col justify-between border-l border-white/15 bg-[#161514] p-6 text-white shadow-2xl translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:p-8" role="dialog" aria-modal="true" aria-labelledby="cartDrawerTitle">
+    <aside id="cartDrawer" class="fixed inset-y-0 right-0 z-[390] flex w-full max-w-md flex-col justify-between border-l border-white/15 bg-[#161514] p-6 text-white shadow-2xl translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:p-8" role="dialog" aria-modal="true" aria-labelledby="cartDrawerTitle">
       <div>
         <div class="flex items-center justify-between border-b border-white/15 pb-5">
           <div class="flex items-center gap-3">
@@ -950,7 +950,7 @@ gtag('config', 'G-2M6V79H761');
     </div>
 
     <!-- DEDICATED COLLECTION PAGE / LOOKBOOK MODAL -->
-    <div id="collectionPageModal" class="fixed inset-0 z-[370] flex flex-col bg-[#141312] text-white opacity-0 pointer-events-none transition-opacity duration-300 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="collectionPageHeading">
+    <div id="collectionPageModal" class="fixed inset-0 z-[330] flex flex-col bg-[#141312] text-white opacity-0 pointer-events-none transition-opacity duration-300 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="collectionPageHeading">
       
       <!-- Top Sticky Navigation Bar -->
       <div class="sticky top-0 z-30 flex items-center justify-between border-b border-white/15 bg-[#161514]/95 px-[4vw] py-4 backdrop-blur-md">
@@ -964,7 +964,7 @@ gtag('config', 'G-2M6V79H761');
         </div>
 
         <div class="flex items-center gap-4">
-          <button id="collectionPageCartBtn" type="button" class="flex items-center gap-1.5 bg-transparent py-1.5 px-3 text-xs font-medium uppercase tracking-[0.15em] border border-white/20 hover:border-white transition-colors cursor-pointer">
+          <button id="collectionPageCartBtn" onclick="openCartDrawer()" type="button" class="flex items-center gap-1.5 bg-transparent py-1.5 px-3 text-xs font-medium uppercase tracking-[0.15em] border border-white/20 hover:border-white transition-colors cursor-pointer">
             <iconify-icon icon="solar:bag-3-linear" width="16" height="16"></iconify-icon>
             <span>Bag</span>
             <span id="collectionPageCartCount" class="font-bold text-[#d58d3f]">0</span>
@@ -1025,7 +1025,7 @@ gtag('config', 'G-2M6V79H761');
     </div>
 
     <!-- PRODUCT DETAIL & 3D GLB MODEL MODAL / PAGE -->
-    <div id="productDetailModal" class="fixed inset-0 z-[380] flex flex-col bg-[#121110] text-white opacity-0 pointer-events-none transition-opacity duration-300 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <div id="productDetailModal" class="fixed inset-0 z-[350] flex flex-col bg-[#121110] text-white opacity-0 pointer-events-none transition-opacity duration-300 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
       <!-- Sticky Top Header -->
       <div class="sticky top-0 z-30 flex items-center justify-between border-b border-white/15 bg-[#161514]/95 px-[4vw] py-4 backdrop-blur-md">
         <div class="flex items-center gap-3">
@@ -1038,7 +1038,7 @@ gtag('config', 'G-2M6V79H761');
         </div>
 
         <div class="flex items-center gap-4">
-          <button id="modalCartBtn" type="button" class="flex items-center gap-1.5 bg-transparent py-1.5 px-3 text-xs font-medium uppercase tracking-[0.15em] border border-white/20 hover:border-white transition-colors cursor-pointer">
+          <button id="modalCartBtn" onclick="openCartDrawer()" type="button" class="flex items-center gap-1.5 bg-transparent py-1.5 px-3 text-xs font-medium uppercase tracking-[0.15em] border border-white/20 hover:border-white transition-colors cursor-pointer">
             <iconify-icon icon="solar:bag-3-linear" width="16" height="16"></iconify-icon>
             <span>Bag</span>
             <span id="modalCartCount" class="font-bold text-[#d58d3f]">0</span>
@@ -1815,6 +1815,8 @@ gtag('config', 'G-2M6V79H761');
           if (cartCountBadge) cartCountBadge.textContent = totalCount;
           if (cartDrawerCountPill) cartDrawerCountPill.textContent = `${totalCount} ${totalCount === 1 ? 'Item' : 'Items'}`;
           if (cartSubtotal) cartSubtotal.textContent = `₹${totalPrice.toLocaleString('en-IN')}`;
+          if (modalCartCount) modalCartCount.textContent = totalCount;
+          if (collectionPageCartCount) collectionPageCartCount.textContent = totalCount;
 
           if (proceedToCheckoutBtn) {
             proceedToCheckoutBtn.disabled = cart.length === 0;
@@ -1872,20 +1874,28 @@ gtag('config', 'G-2M6V79H761');
           updateCartUI();
         };
 
-        function openCartDrawer() {
+        window.openCartDrawer = function() {
           isCartOpen = true;
-          cartDrawer.classList.remove('translate-x-full');
-          cartBackdrop.style.opacity = '1';
-          cartBackdrop.style.pointerEvents = 'auto';
+          if (cartDrawer) cartDrawer.classList.remove('translate-x-full');
+          if (cartBackdrop) {
+            cartBackdrop.style.opacity = '1';
+            cartBackdrop.style.pointerEvents = 'auto';
+          }
           body.style.overflow = 'hidden';
-        }
+        };
 
         window.closeCartDrawer = function() {
           isCartOpen = false;
-          cartDrawer.classList.add('translate-x-full');
-          cartBackdrop.style.opacity = '0';
-          cartBackdrop.style.pointerEvents = 'none';
-          body.style.overflow = '';
+          if (cartDrawer) cartDrawer.classList.add('translate-x-full');
+          if (cartBackdrop) {
+            cartBackdrop.style.opacity = '0';
+            cartBackdrop.style.pointerEvents = 'none';
+          }
+          if ((collectionPageModal && collectionPageModal.style.opacity === '1') || (productDetailModal && productDetailModal.style.opacity === '1')) {
+            body.style.overflow = 'hidden';
+          } else {
+            body.style.overflow = '';
+          }
         };
 
         // Add to cart buttons listener

@@ -1057,28 +1057,53 @@ gtag('config', 'G-2M6V79H761');
           <div class="lg:col-span-7 flex flex-col">
             <!-- Mode Switcher Tabs -->
             <div class="flex items-center justify-between border-b border-white/15 pb-3 mb-6">
-              <div class="flex gap-3">
-                <button id="tabPhotosBtn" type="button" class="flex items-center gap-2 border border-white bg-white text-[#161514] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer">
+              <div class="flex flex-wrap gap-2 sm:gap-3">
+                <button id="tabPhotosBtn" type="button" class="flex items-center gap-2 border border-white bg-white text-[#161514] px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer">
                   <iconify-icon icon="solar:gallery-wide-linear" width="16" height="16"></iconify-icon>
-                  <span>Editorial Photos</span>
+                  <span>Catalogues</span>
                 </button>
-                <button id="tab3dBtn" type="button" class="flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer">
+                <button id="tabVideoBtn" type="button" class="flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer">
+                  <iconify-icon icon="solar:play-circle-linear" width="16" height="16" class="text-[#d53527]"></iconify-icon>
+                  <span>Runway Video</span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#d53527] animate-pulse"></span>
+                </button>
+                <button id="tab3dBtn" type="button" class="flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer">
                   <iconify-icon icon="solar:box-minimalistic-linear" width="16" height="16" class="text-[#d58d3f]"></iconify-icon>
                   <span>Biska 3D View</span>
-                  <span class="w-2 h-2 rounded-full bg-[#d58d3f] animate-pulse"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#d58d3f]"></span>
                 </button>
               </div>
             </div>
 
             <!-- Photos Gallery Container -->
-            <div id="photosViewContainer" class="flex flex-col gap-4">
+            <div id="photosViewContainer" class="flex flex-col gap-3">
               <div class="relative aspect-[4/5] w-full overflow-hidden bg-[#1c1a19] border border-white/15">
                 <img id="detailMainImg" src="" alt="Product view" class="h-full w-full object-cover object-top transition-all duration-500">
                 <span id="detailImgBadge" class="absolute top-4 left-4 border border-white/20 bg-black/70 px-3 py-1 text-[10px] uppercase tracking-widest text-white backdrop-blur-sm">Front Angle</span>
               </div>
               <!-- Thumbnail selector strip -->
-              <div id="detailThumbnails" class="grid grid-cols-4 gap-3">
+              <div id="detailThumbnails" class="grid grid-cols-6 gap-2 sm:gap-2.5">
                 <!-- Injected dynamically via JS -->
+              </div>
+            </div>
+
+            <!-- Runway Video Container -->
+            <div id="videoViewContainer" class="hidden flex-col">
+              <div class="relative aspect-[4/5] w-full overflow-hidden bg-[#0c0d12] border border-white/20">
+                <video
+                  id="detailProductVideo"
+                  src="images/blaise_cape_runway.mp4"
+                  class="h-full w-full object-cover"
+                  controls
+                  playsinline
+                  loop
+                  preload="metadata"
+                  poster="images/products 1.jpeg"
+                ></video>
+                <div class="absolute top-4 left-4 border border-white/20 bg-black/70 px-3 py-1 text-[10px] uppercase tracking-widest text-white backdrop-blur-sm flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-[#d53527] animate-ping"></span>
+                  <span>Runway Studio · 1080p</span>
+                </div>
               </div>
             </div>
 
@@ -1954,10 +1979,13 @@ gtag('config', 'G-2M6V79H761');
             composition: '100% Double-Face Italian Virgin Wool · 680 gsm',
             images: [
               { url: 'images/products 1.jpeg', label: 'Editorial Shot' },
-              { url: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/c4429d2d-9c1c-4b9b-bf05-2d97996f567d_3840w.png', label: 'Front Stance' },
-              { url: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/44290882-1988-48f6-9c19-73819fc8b143_3840w.png', label: 'Model Motion' },
-              { url: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/be5e4a00-4a9d-4373-8880-888910268027_1600w.png', label: 'Textile Drape' }
+              { url: 'images/blaise_cape_catalog_1.jpeg', label: 'Studio Catalog 01' },
+              { url: 'images/blaise_cape_catalog_2.jpeg', label: 'Studio Catalog 02' },
+              { url: 'images/c4429d2d-9c1c-4b9b-bf05-2d97996f567d_3840w.png', label: 'Front Stance' },
+              { url: 'images/44290882-1988-48f6-9c19-73819fc8b143_3840w.png', label: 'Model Motion' },
+              { url: 'images/be5e4a00-4a9d-4373-8880-888910268027_1600w.png', label: 'Textile Drape' }
             ],
+            video: 'images/blaise_cape_runway.mp4',
             glbModel: 'images/biska_model.glb'
           },
           p2: {
@@ -1974,6 +2002,7 @@ gtag('config', 'G-2M6V79H761');
               { url: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fe5e52af-7385-4cf6-a576-f258ca01f631_3840w.png', label: 'Sculpted Profile' },
               { url: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/452f30c3-9ddb-4660-bea0-21da72977eb8_1600w.png', label: 'Atelier Seams' }
             ],
+            video: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/generated-videos/2e815afb-cac1-4c01-90e1-cf3810246e35/1784904481060-b97cf00c-3e60-47ad-a69b-6a7d1e37987d.mp4',
             glbModel: 'images/biska_model.glb'
           }
         };
@@ -1995,8 +2024,11 @@ gtag('config', 'G-2M6V79H761');
         const detailThumbnails = document.getElementById('detailThumbnails');
         const productModelViewer = document.getElementById('productModelViewer');
         const tabPhotosBtn = document.getElementById('tabPhotosBtn');
+        const tabVideoBtn = document.getElementById('tabVideoBtn');
         const tab3dBtn = document.getElementById('tab3dBtn');
         const photosViewContainer = document.getElementById('photosViewContainer');
+        const videoViewContainer = document.getElementById('videoViewContainer');
+        const detailProductVideo = document.getElementById('detailProductVideo');
         const model3dViewContainer = document.getElementById('model3dViewContainer');
         const mediaModeBadge = document.getElementById('mediaModeBadge');
         const toggle3dRotateBtn = document.getElementById('toggle3dRotateBtn');
@@ -2033,7 +2065,7 @@ gtag('config', 'G-2M6V79H761');
             detailThumbnails.innerHTML = product.images.map((img, idx) => `
               <button type="button" class="thumbnail-btn relative aspect-square overflow-hidden border ${idx === 0 ? 'border-[#d53527]' : 'border-white/20 hover:border-white'} bg-black transition-all cursor-pointer" data-idx="${idx}">
                 <img src="${img.url}" alt="${img.label}" class="h-full w-full object-cover">
-                <span class="absolute bottom-0 inset-x-0 bg-black/70 text-[9px] text-white py-0.5 truncate text-center">${img.label}</span>
+                <span class="absolute bottom-0 inset-x-0 bg-black/75 text-[8px] sm:text-[9px] text-white py-0.5 truncate text-center font-medium">${img.label}</span>
               </button>
             `).join('');
 
@@ -2051,6 +2083,14 @@ gtag('config', 'G-2M6V79H761');
                 }
               });
             });
+          }
+
+          // Setup Runway Video
+          if (product.video && detailProductVideo) {
+            detailProductVideo.src = product.video;
+            if (tabVideoBtn) tabVideoBtn.classList.remove('hidden');
+          } else if (tabVideoBtn) {
+            tabVideoBtn.classList.add('hidden');
           }
 
           // Setup 3D GLB Model Viewer
@@ -2075,6 +2115,7 @@ gtag('config', 'G-2M6V79H761');
         window.closeProductDetail = function() {
           productDetailModal.style.opacity = '0';
           productDetailModal.style.pointerEvents = 'none';
+          if (detailProductVideo) detailProductVideo.pause();
           if (collectionPageModal && collectionPageModal.style.opacity === '1') {
             body.style.overflow = 'hidden';
           } else {
@@ -2083,17 +2124,39 @@ gtag('config', 'G-2M6V79H761');
         };
 
         function showPhotosTab() {
-          photosViewContainer.classList.remove('hidden');
-          model3dViewContainer.classList.add('hidden');
-          tabPhotosBtn.className = 'flex items-center gap-2 border border-white bg-white text-[#161514] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
-          tab3dBtn.className = 'flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
+          if (photosViewContainer) photosViewContainer.classList.remove('hidden');
+          if (videoViewContainer) videoViewContainer.classList.add('hidden');
+          if (model3dViewContainer) model3dViewContainer.classList.add('hidden');
+          if (detailProductVideo) detailProductVideo.pause();
+
+          if (tabPhotosBtn) tabPhotosBtn.className = 'flex items-center gap-2 border border-white bg-white text-[#161514] px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
+          if (tabVideoBtn) tabVideoBtn.className = 'flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
+          if (tab3dBtn) tab3dBtn.className = 'flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
+        }
+
+        function showVideoTab() {
+          if (photosViewContainer) photosViewContainer.classList.add('hidden');
+          if (videoViewContainer) videoViewContainer.classList.remove('hidden');
+          if (model3dViewContainer) model3dViewContainer.classList.add('hidden');
+          if (detailProductVideo) {
+            detailProductVideo.play().catch(() => {});
+          }
+
+          if (tabVideoBtn) tabVideoBtn.className = 'flex items-center gap-2 border border-[#d53527] bg-[#d53527] text-white px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
+          if (tabPhotosBtn) tabPhotosBtn.className = 'flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
+          if (tab3dBtn) tab3dBtn.className = 'flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
         }
 
         function show3dTab() {
-          photosViewContainer.classList.add('hidden');
-          model3dViewContainer.classList.remove('hidden');
-          tab3dBtn.className = 'flex items-center gap-2 border border-[#d58d3f] bg-[#d58d3f] text-[#161514] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
-          tabPhotosBtn.className = 'flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
+          if (photosViewContainer) photosViewContainer.classList.add('hidden');
+          if (videoViewContainer) videoViewContainer.classList.add('hidden');
+          if (model3dViewContainer) model3dViewContainer.classList.remove('hidden');
+          if (detailProductVideo) detailProductVideo.pause();
+
+          if (tab3dBtn) tab3dBtn.className = 'flex items-center gap-2 border border-[#d58d3f] bg-[#d58d3f] text-[#161514] px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
+          if (tabPhotosBtn) tabPhotosBtn.className = 'flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
+          if (tabVideoBtn) tabVideoBtn.className = 'flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-3.5 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
+
           if (productModelViewer) {
             if (productModelViewer.src !== currentDetailProduct.glbModel) {
               productModelViewer.src = currentDetailProduct.glbModel;
@@ -2124,6 +2187,7 @@ gtag('config', 'G-2M6V79H761');
         if (detailCloseIconBtn) detailCloseIconBtn.addEventListener('click', closeProductDetail);
 
         if (tabPhotosBtn) tabPhotosBtn.addEventListener('click', showPhotosTab);
+        if (tabVideoBtn) tabVideoBtn.addEventListener('click', showVideoTab);
         if (tab3dBtn) tab3dBtn.addEventListener('click', show3dTab);
 
         if (toggle3dRotateBtn && productModelViewer) {

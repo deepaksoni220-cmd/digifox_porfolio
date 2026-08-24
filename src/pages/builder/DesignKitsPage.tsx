@@ -56,7 +56,7 @@ export const DesignKitsPage: React.FC = () => {
           {[
             { id: "all", label: "All Design Kits" },
             { id: "3d", label: "⚡ 3D Animated (WebGL)" },
-            { id: "2d", label: "✨ 2D High-Speed" }
+            { id: "2d", label: "✨ 2D Animated" }
           ].map((tab) => (
             <button
               key={tab.id}

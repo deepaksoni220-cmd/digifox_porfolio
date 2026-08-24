@@ -955,14 +955,14 @@ gtag('config', 'G-2M6V79H761');
                 The Collection
               </h1>
               <p class="mt-4 max-w-xl text-sm leading-relaxed text-[#e9e2d6]/75">
-                Foundational forms and sculptural silhouettes tailored in limited allocations. Explore all 8 runway looks with material studies and 3D garment inspection.
+                Foundational forms and sculptural silhouettes tailored in limited allocations. Explore all 5 runway looks with material studies and 3D garment inspection.
               </p>
             </div>
             
             <!-- Category Filter Pills -->
             <div class="flex flex-wrap gap-2" id="collectionCategoryFilters">
               <button type="button" class="coll-filter-btn border border-[#d53527] bg-[#d53527] text-white px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer" data-filter="all">
-                All Looks (08)
+                All Looks (05)
               </button>
               <button type="button" class="coll-filter-btn border border-white/20 bg-white/5 hover:border-white text-white/80 px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer" data-filter="outerwear">
                 Outerwear
@@ -1057,8 +1057,10 @@ gtag('config', 'G-2M6V79H761');
                 <!-- Google Model Viewer -->
                 <model-viewer
                   id="productModelViewer"
-                  src="images/biska 2d glb.glb"
+                  src="images/biska_model.glb"
                   alt="3D Interactive Garment Model"
+                  loading="eager"
+                  bounds="tight"
                   auto-rotate
                   auto-rotate-delay="500"
                   rotation-per-second="25deg"
@@ -1943,7 +1945,7 @@ gtag('config', 'G-2M6V79H761');
               { url: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/44290882-1988-48f6-9c19-73819fc8b143_3840w.png', label: 'Model Motion' },
               { url: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/be5e4a00-4a9d-4373-8880-888910268027_1600w.png', label: 'Textile Drape' }
             ],
-            glbModel: 'images/biska 2d glb.glb'
+            glbModel: 'images/biska_model.glb'
           },
           p2: {
             id: 'p2',
@@ -1959,7 +1961,7 @@ gtag('config', 'G-2M6V79H761');
               { url: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fe5e52af-7385-4cf6-a576-f258ca01f631_3840w.png', label: 'Sculpted Profile' },
               { url: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/452f30c3-9ddb-4660-bea0-21da72977eb8_1600w.png', label: 'Atelier Seams' }
             ],
-            glbModel: 'images/biska 2d glb.glb'
+            glbModel: 'images/biska_model.glb'
           }
         };
 
@@ -1993,7 +1995,7 @@ gtag('config', 'G-2M6V79H761');
         const modalCartBtn = document.getElementById('modalCartBtn');
         const modalCartCount = document.getElementById('modalCartCount');
 
-        function openProductDetail(prodId) {
+        window.openProductDetail = function(prodId) {
           const product = productsData[prodId] || productsData.p1;
           currentDetailProduct = product;
           currentDetailSize = selectedSizes[prodId] || 'S';
@@ -2041,7 +2043,7 @@ gtag('config', 'G-2M6V79H761');
           // Setup 3D GLB Model Viewer
           if (productModelViewer) {
             productModelViewer.src = product.glbModel;
-            productModelViewer.alt = `3D GLB model of ${product.name}`;
+            productModelViewer.alt = `3D model of ${product.name}`;
           }
 
           // Reset to Photos tab
@@ -2055,13 +2057,17 @@ gtag('config', 'G-2M6V79H761');
           productDetailModal.style.pointerEvents = 'auto';
           body.style.overflow = 'hidden';
           productDetailModal.scrollTop = 0;
-        }
+        };
 
-        function closeProductDetail() {
+        window.closeProductDetail = function() {
           productDetailModal.style.opacity = '0';
           productDetailModal.style.pointerEvents = 'none';
-          body.style.overflow = '';
-        }
+          if (collectionPageModal && collectionPageModal.style.opacity === '1') {
+            body.style.overflow = 'hidden';
+          } else {
+            body.style.overflow = '';
+          }
+        };
 
         function showPhotosTab() {
           photosViewContainer.classList.remove('hidden');
@@ -2075,6 +2081,11 @@ gtag('config', 'G-2M6V79H761');
           model3dViewContainer.classList.remove('hidden');
           tab3dBtn.className = 'flex items-center gap-2 border border-[#d58d3f] bg-[#d58d3f] text-[#161514] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
           tabPhotosBtn.className = 'flex items-center gap-2 border border-white/20 bg-white/5 hover:border-white text-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer';
+          if (productModelViewer) {
+            if (productModelViewer.src !== currentDetailProduct.glbModel) {
+              productModelViewer.src = currentDetailProduct.glbModel;
+            }
+          }
         }
 
         function syncDetailSizeButtons() {
@@ -2258,45 +2269,6 @@ gtag('config', 'G-2M6V79H761');
             productId: null,
             price: 1650,
             has3D: false
-          },
-          {
-            id: 'look-06',
-            number: '06',
-            title: 'The Vesper Sculpted Vest & Silk Drapes',
-            category: 'tailoring',
-            fabric: 'Heavy Raw-Silk Twill & Cupro Lining',
-            silhouette: 'Asymmetrical Buttoning & Darted Waist',
-            edition: 'Edition of 45',
-            img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/452f30c3-9ddb-4660-bea0-21da72977eb8_1600w.png',
-            productId: null,
-            price: 980,
-            has3D: false
-          },
-          {
-            id: 'look-07',
-            number: '07',
-            title: 'Nocturne Fluted Trench',
-            category: 'outerwear',
-            fabric: 'High-Density Waterproof Cotton Gabardine',
-            silhouette: 'Architectural Fluted Storm Flaps',
-            edition: 'Edition of 50',
-            img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fe5e52af-7385-4cf6-a576-f258ca01f631_3840w.png',
-            productId: null,
-            price: 1750,
-            has3D: false
-          },
-          {
-            id: 'look-08',
-            number: '08',
-            title: 'Aura Monolith Cape',
-            category: 'evening',
-            fabric: 'Raw Edge Boiled Wool & Silk Weft',
-            silhouette: 'Full-Length Draped Monolithic Silhouette',
-            edition: 'Edition of 15',
-            img: 'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/5d8004fd-6d9c-46e2-b21f-95eaa5cbd110_3840w.webp',
-            productId: null,
-            price: 1920,
-            has3D: false
           }
         ];
 
@@ -2324,7 +2296,7 @@ gtag('config', 'G-2M6V79H761');
                     LOOK ${look.number}
                   </span>
                   ${look.has3D ? `
-                    <button type="button" onclick="closeCollectionPage(); openProductDetail('${look.productId}')" class="absolute bottom-3.5 right-3.5 flex items-center gap-1.5 border border-[#d58d3f] bg-black/85 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#d58d3f] backdrop-blur-md hover:bg-[#d58d3f] hover:text-[#161514] transition-all cursor-pointer">
+                    <button type="button" data-prod="${look.productId}" class="look-open-3d-btn absolute bottom-3.5 right-3.5 flex items-center gap-1.5 border border-[#d58d3f] bg-black/85 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#d58d3f] backdrop-blur-md hover:bg-[#d58d3f] hover:text-[#161514] transition-all cursor-pointer">
                       <iconify-icon icon="solar:cube-bold" width="13" height="13"></iconify-icon>
                       <span>Biska 3D View</span>
                     </button>
@@ -2349,7 +2321,7 @@ gtag('config', 'G-2M6V79H761');
 
               <div class="mt-6 pt-5 border-t border-white/10 flex items-center justify-between gap-3">
                 ${look.productId ? `
-                  <button type="button" onclick="closeCollectionPage(); openProductDetail('${look.productId}')" class="w-full flex items-center justify-center gap-2 bg-[#e9e2d6] text-[#161514] hover:bg-[#d53527] hover:text-white py-3 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer">
+                  <button type="button" data-prod="${look.productId}" class="look-open-detail-btn w-full flex items-center justify-center gap-2 bg-[#e9e2d6] text-[#161514] hover:bg-[#d53527] hover:text-white py-3 text-xs font-bold uppercase tracking-[0.14em] transition-all cursor-pointer">
                     <span>Inspect Piece & 3D</span>
                     <iconify-icon icon="solar:arrow-right-up-linear" width="15" height="15"></iconify-icon>
                   </button>
@@ -2362,6 +2334,15 @@ gtag('config', 'G-2M6V79H761');
               </div>
             </article>
           `).join('');
+
+          // Attach listeners to direct buttons
+          collectionLooksGrid.querySelectorAll('.look-open-detail-btn, .look-open-3d-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.preventDefault();
+              const prodId = btn.dataset.prod || 'p1';
+              openProductDetail(prodId);
+            });
+          });
         }
 
         window.quickAddLookToCart = function(name, price, img, meta) {

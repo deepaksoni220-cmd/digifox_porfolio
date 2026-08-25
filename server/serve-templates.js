@@ -227,3 +227,99 @@ appStyleDemo2.listen(7007, () => {
   console.log('💄 Style Demo 2 (Studio Fashion) running at: http://localhost:7007');
 });
 
+// Template 5: adidas CHILE20
+const appAdidasChile = express();
+const adidasChileDir = path.join(__dirname, '../public/templates/soe/adidaschile20.com/adidaschile20.com');
+const adidasChileParentDir = path.join(__dirname, '../public/templates/soe/adidaschile20.com');
+
+appAdidasChile.use((req, res, next) => {
+  const oldSend = res.send;
+  res.on('finish', () => {
+    if (res.statusCode >= 400) {
+      console.log(`[adidas 404/ERR] ${req.method} ${req.url} -> ${res.statusCode}`);
+    } else {
+      console.log(`[adidas OK] ${req.method} ${req.url} -> ${res.statusCode}`);
+    }
+  });
+  next();
+});
+
+appAdidasChile.get(['/', '/index.html', '/bomber/3.html'], (req, res) => {
+  const indexPath = path.join(adidasChileDir, 'index.html');
+  let html = fs.readFileSync(indexPath, 'utf8');
+  const killCookieScript = `
+<style>
+.CookiesBar, #Stage .CookiesBar, [class*="CookiesBar"], [class*="cookie"], [class*="Cookie"], .CookiesBar * {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+}
+</style>
+<script>
+(function() {
+  const removeCookies = () => {
+    document.querySelectorAll('.CookiesBar, #Stage .CookiesBar, [class*="CookiesBar"]').forEach(el => el.remove());
+  };
+  removeCookies();
+  setInterval(removeCookies, 50);
+  window.addEventListener('DOMContentLoaded', removeCookies);
+  window.addEventListener('load', removeCookies);
+})();
+</script>
+`;
+  html = html.replace('</head>', killCookieScript + '</head>');
+  res.type('html').send(html);
+});
+
+appAdidasChile.use(express.static(adidasChileDir));
+appAdidasChile.use(express.static(adidasChileParentDir));
+appAdidasChile.use((req, res) => {
+  console.log(`[adidas Fallback] Requested: ${req.url}`);
+  if (req.url.startsWith('/assets/')) {
+    res.status(404).send('Not found');
+  } else {
+    res.sendFile(path.join(adidasChileDir, 'index.html'));
+  }
+});
+
+appAdidasChile.listen(5005, () => {
+  console.log('👟 adidas CHILE20 running at: http://localhost:5005');
+});
+
+// Template 6: Dig Portfolio (Joseph Alexander - Creative Portfolio)
+const appDigPortfolio = express();
+const digPortfolioBaseDir = path.join(__dirname, '../public/templates/dig profolio/dig porfolio');
+const digPortfolioVercelDir = path.join(digPortfolioBaseDir, 'webild-components-version-4.vercel.app');
+const digPortfolioStorageDir = path.join(digPortfolioBaseDir, 'storage.googleapis.com');
+const digPortfolioRandomUserDir = path.join(digPortfolioBaseDir, 'randomuser.me');
+
+appDigPortfolio.use('/storage.googleapis.com', express.static(digPortfolioStorageDir));
+appDigPortfolio.use('/randomuser.me', express.static(digPortfolioRandomUserDir));
+appDigPortfolio.use('/assets', express.static(path.join(digPortfolioVercelDir, 'assets')));
+appDigPortfolio.use(express.static(digPortfolioVercelDir));
+appDigPortfolio.use(express.static(digPortfolioBaseDir));
+
+appDigPortfolio.get(['/', '/index.html', '/templates/creative-portfolio', '/components/templates/creative-portfolio.html'], (req, res) => {
+  res.sendFile(path.join(digPortfolioVercelDir, 'index.html'));
+});
+
+appDigPortfolio.use((req, res) => {
+  if (req.url.startsWith('/assets/')) {
+    res.status(404).send('Asset not found');
+  } else {
+    res.sendFile(path.join(digPortfolioVercelDir, 'index.html'));
+  }
+});
+
+appDigPortfolio.listen(5004, () => {
+  console.log('💼 Dig Portfolio (Creative Portfolio) running at: http://localhost:5004');
+});
+
+
+
+

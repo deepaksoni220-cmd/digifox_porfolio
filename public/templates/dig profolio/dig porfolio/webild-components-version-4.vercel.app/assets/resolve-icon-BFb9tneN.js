@@ -1,0 +1,1 @@
+import{H as e,J as t,X as n,k as r,t as i}from"./lucide-react-BAD9fcv4.js";var a={Linkedin:e,Twitter:e,Instagram:e,Facebook:e,Youtube:e,Github:t,Snapchat:e,Pinterest:e,Tiktok:e,Discord:r},o=e=>!!e&&(typeof e==`function`||typeof e==`object`&&`$$typeof`in e);function s(e){if(typeof e==`string`){let t=a[e];if(t)return t;let r=i[e];return o(r)?r:n}return o(e)?e:n}export{s as t};

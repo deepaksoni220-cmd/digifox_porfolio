@@ -580,6 +580,51 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
       primaryColor: "#111111",
       secondaryColor: "#e5e5e0"
     }
+  },
+  digPortfolio: {
+    websiteType: "Portfolio",
+    templateStyle: "digPortfolio",
+    category: "2d",
+    previewUrl: "http://localhost:5004",
+    shortDescription: "Interactive Creative Portfolio with Work Scroll Stack, Parallax Testimonials, Bento Services & Split Form.",
+    thumbnailUrl: "/templates/dig profolio/dig porfolio/storage.googleapis.com/webild/default/templates/creative-portfolio/screen-1.webp",
+    hero: {
+      title: "Joseph Alexander",
+      subtitle: "Design that commands attention. Engineered for performance, not just aesthetics.",
+      ctaText: "Book a call with me",
+      imagePrompt: "independent creative designer portfolio dark modern aesthetic"
+    },
+    about: {
+      heading: "About Joseph Alexander",
+      description: "I don't design to decorate — I design to solve. Sharp, intentional work that moves brands forward.",
+      imagePrompt: "creative director portrait studio lighting minimal"
+    },
+    items: [
+      {
+        title: "HydroFlow Product Launch",
+        description: "Beverage brand shoot. Every frame engineered to sell.",
+        icon: "📸"
+      },
+      {
+        title: "Webild Athlete Campaign",
+        description: "Sports tech shoot. Wearables captured in raw motion.",
+        icon: "⚡"
+      },
+      {
+        title: "Maru Residence",
+        description: "Architectural interior shoot. Minimal compositions.",
+        icon: "🏛️"
+      }
+    ],
+    contact: {
+      heading: "Let's Build Something Unforgettable",
+      buttonText: "Send Message"
+    },
+    theme: {
+      primaryColor: "#3b82f6",
+      secondaryColor: "#8b5cf6"
+    }
   }
 };
+
 

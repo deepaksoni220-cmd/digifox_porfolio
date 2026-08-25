@@ -15,7 +15,7 @@ export const WebMakeNav: React.FC<WebMakeNavProps> = ({ activePage }) => {
   const navLinks = [
     { label: "Web Studio", path: "/ai-builder", key: "studio", badge: "AI" },
     { label: "Features", path: "/ai-builder/features", key: "features" },
-    { label: "Auto SEO", path: "/ai-builder/auto-seo", key: "auto-seo", badge: "AUTO" },
+    { label: "Auto SEO & GEO", path: "/ai-builder/auto-seo", key: "auto-seo", badge: "AEO" },
     { label: "Design Kits", path: "/ai-builder/design-kits", key: "design-kits", badge: "3D" },
     { label: "Pricing", path: "/ai-builder/pricing", key: "pricing" },
     { label: "Blogs", path: "/ai-builder/blogs", key: "blogs" },

@@ -4,74 +4,30 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Search, 
   Sparkles, 
-  Zap, 
   Globe, 
   CheckCircle2, 
   ArrowRight, 
-  Layers, 
   Activity, 
-  Share2, 
   FileCode2, 
-  Bot, 
   Copy, 
   Check,
-  ChevronDown
+  ChevronDown,
+  Cpu,
+  Mic,
+  CheckCheck
 } from "lucide-react";
 import { WebMakeNav } from "../../components/builder/WebMakeNav";
 import { WebMakeFooter } from "../../components/builder/WebMakeFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 
 export const AutoSeoPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"audit" | "schema" | "geo" | "vitals">("audit");
-  const [simulatedUrl, setSimulatedUrl] = useState("mybrand.digifox.world");
-  const [simulatedKeyword, setSimulatedKeyword] = useState("Handcrafted Luxury Fashion Atelier");
+  const [engineMode, setEngineMode] = useState<"all" | "seo" | "geo" | "aeo">("all");
+  const [activeSimulatorTab, setActiveSimulatorTab] = useState<"seo-serp" | "geo-ai" | "aeo-voice" | "schema-code">("geo-ai");
+  const [brandName, setBrandName] = useState("Aura Studio");
+  const [businessCategory, setBusinessCategory] = useState("Handcrafted Luxury Fashion Atelier");
+  const [targetCity, setTargetCity] = useState("New Delhi · Global");
   const [copiedCode, setCopiedCode] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-
-  const seoFeatures = [
-    {
-      icon: <Bot className="w-6 h-6 text-blue-400" />,
-      tag: "Autonomous Intelligence",
-      title: "Zero-Click AI Semantic Tagging",
-      desc: "WebMake analyzes your generated website content, automatically drafting optimal H1-H6 hierarchy, semantic meta titles, keyword-dense descriptions, and alt tags for every image.",
-      badge: "Automated"
-    },
-    {
-      icon: <FileCode2 className="w-6 h-6 text-purple-400" />,
-      tag: "JSON-LD Schemas",
-      title: "Rich Snippets & Google Schema Markup",
-      desc: "Instantly injects structured JSON-LD schemas for Organizations, Products, FAQs, Local Businesses, and Breadcrumbs to dominate Google rich search carousels.",
-      badge: "Google Certified"
-    },
-    {
-      icon: <Globe className="w-6 h-6 text-emerald-400" />,
-      tag: "Local & Global Search",
-      title: "GEO-Targeting & Multi-Region SEO",
-      desc: "Optimized for Google Local Pack, Apple Maps, and local search queries. Automatically builds hreflang coordinates, region tags, and localized keyword intent.",
-      badge: "GEO Engine"
-    },
-    {
-      icon: <Zap className="w-6 h-6 text-amber-400" />,
-      tag: "Core Web Vitals",
-      title: "100/100 Google Speed & Lighthouse Score",
-      desc: "Instant sub-second loading through edge CDN minification, next-gen WebP/AVIF auto-compression, zero CLS shift, and asynchronous font preloading.",
-      badge: "100/100 CWV"
-    },
-    {
-      icon: <Share2 className="w-6 h-6 text-pink-400" />,
-      tag: "Social Graph",
-      title: "High-CTR OpenGraph & Twitter Cards",
-      desc: "Generates rich dynamic preview cards for WhatsApp, iMessage, Twitter/X, and LinkedIn so your links stand out with high-resolution imagery and compelling hooks.",
-      badge: "Viral CTR"
-    },
-    {
-      icon: <Activity className="w-6 h-6 text-cyan-400" />,
-      tag: "Continuous Indexing",
-      title: "Auto XML Sitemaps & Search Console Ping",
-      desc: "Automatically updates and pings your sitemap.xml and robots.txt to Google Search Console and Bing Webmaster the exact second you publish updates.",
-      badge: "Instant Index"
-    }
-  ];
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -79,57 +35,149 @@ export const AutoSeoPage: React.FC = () => {
     setTimeout(() => setCopiedCode(false), 2000);
   };
 
-  const sampleSchema = `{
+  const triplePillars = [
+    {
+      id: "seo",
+      icon: <Search className="w-7 h-7 text-blue-400" />,
+      badge: "Traditional Search",
+      tag: "Auto SEO",
+      headline: "Search Engine Optimization",
+      target: "Google · Bing · Yahoo · DuckDuckGo",
+      desc: "Autonomous keyword indexing, dynamic H1-H6 semantic hierarchy, and 100/100 Core Web Vitals to lock down 1st page organic rankings.",
+      color: "from-blue-500/20 via-blue-600/10 to-transparent",
+      borderColor: "border-blue-500/30",
+      accent: "text-blue-400",
+      features: [
+        "Automated semantic title tags & 155-char high-CTR meta descriptions",
+        "Auto XML Sitemaps synced directly with Google Search Console",
+        "Next-gen AVIF/WebP image compression & automatic alt-tagging",
+        "100/100 Google Lighthouse speed rating with sub-second LCP"
+      ]
+    },
+    {
+      id: "geo",
+      icon: <Cpu className="w-7 h-7 text-purple-400" />,
+      badge: "AI & Generative Search",
+      tag: "Auto GEO",
+      headline: "Generative Engine Optimization",
+      target: "Google SGE · Perplexity AI · Gemini · Copilot",
+      desc: "Structures your website into verified knowledge nodes and authority citations so AI Search Engines cite your brand as the primary source.",
+      color: "from-purple-500/20 via-pink-600/10 to-transparent",
+      borderColor: "border-purple-500/30",
+      accent: "text-purple-400",
+      features: [
+        "AI overview citation vectors & high-authority factual extracts",
+        "Local GEO mapping with latitude, longitude & ISO regional tags",
+        "Knowledge Graph entity linkage for Gemini & Claude retrieval",
+        "Dynamic citation snippet blocks designed for Perplexity source feeds"
+      ]
+    },
+    {
+      id: "aeo",
+      icon: <Mic className="w-7 h-7 text-emerald-400" />,
+      badge: "Direct Answers & Voice",
+      tag: "Auto AEO",
+      headline: "Answer Engine Optimization",
+      target: "ChatGPT Search · Siri · Alexa · Google Featured Snippets",
+      desc: "Formats content into natural-language conversational answers, capturing Google Zero-Click Position #0 and voice assistant recommendations.",
+      color: "from-emerald-500/20 via-teal-600/10 to-transparent",
+      borderColor: "border-emerald-500/30",
+      accent: "text-emerald-400",
+      features: [
+        "Conversational Q&A structure for Siri, Google Assistant & Alexa voice queries",
+        "Featured Snippet 'Position 0' formatted bullet lists and summary cards",
+        "Automated FAQPage & SpeakableSpecification JSON-LD schema",
+        "Instant intent-matching conversational vectors for LLM search queries"
+      ]
+    }
+  ];
+
+  const generatedSchema = `{
   "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "${simulatedKeyword}",
-  "url": "https://${simulatedUrl}",
-  "logo": "https://${simulatedUrl}/logo.png",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://${simulatedUrl}/search?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  },
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "contactType": "customer support",
-    "telephone": "+91-8696755996",
-    "areaServed": "Global"
-  }
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://${brandName.toLowerCase().replace(/\\s+/g, '')}.digifox.world/#organization",
+      "name": "${brandName}",
+      "url": "https://${brandName.toLowerCase().replace(/\\s+/g, '')}.digifox.world",
+      "logo": "https://${brandName.toLowerCase().replace(/\\s+/g, '')}.digifox.world/logo.png",
+      "description": "${businessCategory} serving ${targetCity}.",
+      "sameAs": [
+        "https://instagram.com/${brandName.toLowerCase().replace(/\\s+/g, '')}",
+        "https://twitter.com/${brandName.toLowerCase().replace(/\\s+/g, '')}"
+      ]
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": "https://${brandName.toLowerCase().replace(/\\s+/g, '')}.digifox.world/#local",
+      "name": "${brandName} Atelier",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "${targetCity}",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 28.6139,
+        "longitude": 77.2090
+      },
+      "priceRange": "₹₹₹",
+      "openingHours": "Mo-Sa 10:00-19:00"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://${brandName.toLowerCase().replace(/\\s+/g, '')}.digifox.world/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What makes ${brandName} unique in ${businessCategory}?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "${brandName} combines bespoke craftsmanship with interactive 3D WebGL visuals and complimentary worldwide express delivery."
+          }
+        }
+      ]
+    }
+  ]
 }`;
 
   return (
     <div className="min-h-screen bg-[#07080e] text-white font-sans selection:bg-[#3b82f6] selection:text-white">
       <SEOMeta
-        title="WebMake Auto SEO — Autonomous AI Search Engine & GEO Optimization Engine"
-        description="Rank #1 on Google effortlessly with WebMake Auto SEO. Automated JSON-LD schema generation, semantic metadata, GEO local pack targeting, and 100/100 Core Web Vitals."
+        title="WebMake Auto SEO, GEO & AEO — Autonomous Triple-Engine Search Suite"
+        description="Dominate Google 1st Page (SEO), get cited in AI Overviews (GEO on Perplexity & SGE), and capture voice assistant answers (AEO on Siri & ChatGPT) automatically with WebMake."
         url="https://digifox.world/ai-builder/auto-seo"
       />
 
       <WebMakeNav activePage="auto-seo" />
 
       {/* Hero Header */}
-      <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-[1300px] mx-auto text-center overflow-hidden">
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-[#3b82f6]/20 via-[#8b5cf6]/20 to-[#ec4899]/15 rounded-full blur-[150px] pointer-events-none" />
+      <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto text-center overflow-hidden">
+        <div className="absolute top-16 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-tr from-[#3b82f6]/20 via-[#8b5cf6]/20 to-[#10b981]/15 rounded-full blur-[160px] pointer-events-none" />
 
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 border border-blue-500/30 text-xs font-bold uppercase tracking-widest text-[#60a5fa] mb-6 backdrop-blur-md shadow-[0_0_20px_rgba(59,130,246,0.2)]"
+          className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-emerald-500/10 border border-white/15 text-xs font-bold uppercase tracking-widest text-white mb-6 backdrop-blur-md shadow-2xl"
         >
           <Sparkles className="w-3.5 h-3.5 text-yellow-400 animate-pulse" />
-          <span>Autonomous AI Search Engine Optimization</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400">
+            Autonomous Search Engine Suite
+          </span>
+          <span className="bg-white/10 text-white text-[10px] px-2 py-0.5 rounded-full font-black">
+            SEO + GEO + AEO
+          </span>
         </motion.div>
 
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight max-w-5xl mx-auto leading-[1.08]"
+          className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight max-w-5xl mx-auto leading-[1.06]"
         >
-          Rank #1 On Google <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#a855f7] to-[#ec4899]">
-            Without Touching A Line Of Code
+          Rank On Google. <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#c084fc] to-[#34d399]">
+            Get Cited By AI. Win Voice Search.
           </span>
         </motion.h1>
 
@@ -139,350 +187,445 @@ export const AutoSeoPage: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.15 }}
           className="mt-6 text-base sm:text-xl text-white/70 max-w-3xl mx-auto font-light leading-relaxed"
         >
-          WebMake <strong className="font-semibold text-white">AUTO SEO</strong> continuously scans, writes JSON-LD structured schemas, optimizes GEO keywords, and tunes Core Web Vitals to deliver maximum organic traffic on autopilot.
+          Search has evolved beyond simple blue links. WebMake is the first autonomous builder engineered with a <strong className="font-semibold text-white">Tri-Engine Search System</strong>: <strong>Auto SEO</strong> for organic Google algorithms, <strong>GEO</strong> for Perplexity & Gemini AI Overviews, and <strong>AEO</strong> for ChatGPT & Siri voice answers.
         </motion.p>
 
+        {/* Quick Filter Pill for Pillars */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.25 }}
-          className="mt-10 flex flex-wrap items-center justify-center gap-4"
+          className="mt-10 inline-flex flex-wrap items-center justify-center gap-2 bg-white/[0.04] border border-white/15 p-2 rounded-full backdrop-blur-xl"
         >
+          {[
+            { id: "all", label: "✨ Complete Tri-Engine Suite" },
+            { id: "seo", label: "🔍 Auto SEO (Google Rank)" },
+            { id: "geo", label: "🤖 GEO (AI Overviews & SGE)" },
+            { id: "aeo", label: "🎙️ AEO (Voice & Answer Engines)" }
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setEngineMode(tab.id as any)}
+              className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+                engineMode === tab.id
+                  ? "bg-gradient-to-r from-[#3b82f6] via-[#8b5cf6] to-[#10b981] text-white shadow-lg shadow-purple-500/25 scale-105"
+                  : "text-white/60 hover:text-white hover:bg-white/[0.06]"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </motion.div>
+
+        {/* Quick Action CTAs */}
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link
             to="/ai-builder"
             className="inline-flex items-center gap-2.5 bg-gradient-to-r from-[#3b82f6] via-[#6366f1] to-[#8b5cf6] hover:opacity-95 text-white px-8 py-4 rounded-full text-sm font-black uppercase tracking-wider shadow-[0_0_30px_rgba(59,130,246,0.4)] hover:shadow-[0_0_45px_rgba(59,130,246,0.7)] hover:scale-105 transition-all duration-300 cursor-pointer"
           >
-            <span>Launch Web Studio with Auto SEO</span>
+            <span>Launch Web Studio (Tri-Engine Enabled)</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
           <a
-            href="#live-simulator"
+            href="#live-tri-simulator"
             className="inline-flex items-center gap-2 border border-white/20 bg-white/[0.05] hover:bg-white/10 text-white px-7 py-4 rounded-full text-sm font-bold transition-all backdrop-blur-md"
           >
             <Activity className="w-4 h-4 text-emerald-400" />
-            <span>Try Live SEO Simulator</span>
+            <span>Simulate SEO · GEO · AEO Results</span>
           </a>
-        </motion.div>
-
-        {/* Metric Badges */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-          {[
-            { metric: "100 / 100", label: "Core Web Vitals", sub: "Google Lighthouse Speed" },
-            { metric: "< 24 Hrs", label: "Google Indexing", sub: "Automated Sitemap Push" },
-            { metric: "100%", label: "Rich Snippets", sub: "Valid JSON-LD Schema" },
-            { metric: "3.4x", label: "Organic CTR Boost", sub: "Semantic Meta Tags" }
-          ].map((item, idx) => (
-            <div key={idx} className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-sm text-center">
-              <div className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-                {item.metric}
-              </div>
-              <div className="text-xs font-bold text-white uppercase tracking-wider mt-1">{item.label}</div>
-              <div className="text-[11px] text-white/50">{item.sub}</div>
-            </div>
-          ))}
         </div>
       </section>
 
-      {/* Interactive Auto SEO Simulator */}
-      <section id="live-simulator" className="py-16 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">
-        <div className="rounded-3xl border border-white/15 bg-gradient-to-b from-[#0f111f] to-[#080911] p-6 sm:p-10 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
+      {/* The 3 Pillars Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#a855f7]">The Complete Search Architecture</span>
+          <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight mt-2">
+            Three Engines. Infinite Organic Reach.
+          </h2>
+        </div>
 
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {triplePillars
+            .filter((p) => engineMode === "all" || engineMode === p.id)
+            .map((pillar) => (
+              <motion.div
+                key={pillar.id}
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className={`flex flex-col justify-between p-8 sm:p-10 rounded-3xl bg-gradient-to-b ${pillar.color} bg-[#0b0c16] border ${pillar.borderColor} shadow-2xl relative overflow-hidden group`}
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="p-3.5 rounded-2xl bg-white/[0.06] border border-white/10 backdrop-blur-md group-hover:scale-110 transition-transform">
+                      {pillar.icon}
+                    </div>
+                    <span className={`text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-white/10 border border-white/15 ${pillar.accent}`}>
+                      {pillar.badge}
+                    </span>
+                  </div>
+
+                  <div className={`text-xs font-black uppercase tracking-widest ${pillar.accent} mb-1`}>
+                    {pillar.tag}
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2">
+                    {pillar.headline}
+                  </h3>
+                  <div className="text-[11px] font-mono text-white/50 mb-4 flex items-center gap-1.5">
+                    <span>Targets:</span>
+                    <span className="text-white/80 font-semibold">{pillar.target}</span>
+                  </div>
+
+                  <p className="text-sm text-white/70 font-light leading-relaxed mb-6">
+                    {pillar.desc}
+                  </p>
+
+                  <div className="pt-6 border-t border-white/10 space-y-3">
+                    {pillar.features.map((feat, idx) => (
+                      <div key={idx} className="flex items-start gap-2.5 text-xs text-white/85">
+                        <CheckCheck className={`w-4 h-4 ${pillar.accent} flex-shrink-0 mt-0.5`} />
+                        <span>{feat}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-white/10">
+                  <div className="flex items-center justify-between text-xs text-white/50">
+                    <span>Automation Status:</span>
+                    <span className="text-emerald-400 font-bold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      100% Autonomous
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+        </div>
+      </section>
+
+      {/* Live Tri-Engine Interactive Simulator */}
+      <section id="live-tri-simulator" className="py-20 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">
+        <div className="rounded-3xl border border-white/15 bg-gradient-to-b from-[#0f1122] via-[#090a14] to-[#05060b] p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[140px] pointer-events-none" />
+
+          {/* Simulator Header & Controls */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-8 border-b border-white/10">
             <div>
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#60a5fa] mb-2">
-                <Search className="w-4 h-4" />
-                <span>Interactive Auto SEO Simulator</span>
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#a855f7] mb-2">
+                <Activity className="w-4 h-4 text-emerald-400" />
+                <span>Live Tri-Engine Preview Simulator</span>
               </div>
               <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tight">
-                Live Meta & Schema Generation Preview
+                See How AI & Search Engines Perceive Your Brand
               </h2>
             </div>
 
-            {/* Subdomain Input Simulator */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <div className="flex items-center bg-black/50 border border-white/20 rounded-xl px-3 py-2">
-                <span className="text-xs text-white/40 mr-1">https://</span>
+            {/* Inputs for customization */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="flex flex-col">
+                <label className="text-[10px] text-white/50 uppercase tracking-wider mb-1">Brand Name</label>
                 <input
                   type="text"
-                  value={simulatedUrl}
-                  onChange={(e) => setSimulatedUrl(e.target.value)}
-                  placeholder="yourbrand.digifox.world"
-                  className="bg-transparent text-xs text-white outline-none w-48 font-mono"
+                  value={brandName}
+                  onChange={(e) => setBrandName(e.target.value)}
+                  className="bg-black/60 border border-white/20 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-[#3b82f6] font-medium"
                 />
               </div>
-              <div className="flex items-center bg-black/50 border border-white/20 rounded-xl px-3 py-2">
+              <div className="flex flex-col">
+                <label className="text-[10px] text-white/50 uppercase tracking-wider mb-1">Category / Offer</label>
                 <input
                   type="text"
-                  value={simulatedKeyword}
-                  onChange={(e) => setSimulatedKeyword(e.target.value)}
-                  placeholder="Primary Business Keyword"
-                  className="bg-transparent text-xs text-white outline-none w-52"
+                  value={businessCategory}
+                  onChange={(e) => setBusinessCategory(e.target.value)}
+                  className="bg-black/60 border border-white/20 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-[#3b82f6] font-medium"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label className="text-[10px] text-white/50 uppercase tracking-wider mb-1">GEO Target</label>
+                <input
+                  type="text"
+                  value={targetCity}
+                  onChange={(e) => setTargetCity(e.target.value)}
+                  className="bg-black/60 border border-white/20 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-[#3b82f6] font-medium"
                 />
               </div>
             </div>
           </div>
 
-          {/* Simulator Tabs */}
-          <div className="flex flex-wrap gap-2 mt-8">
+          {/* Engine Selector Tabs */}
+          <div className="flex flex-wrap gap-2.5 mt-8">
             {[
-              { id: "audit", label: "Google SERP Result Preview" },
-              { id: "schema", label: "Structured JSON-LD Schema" },
-              { id: "geo", label: "GEO & Local Pack Meta" },
-              { id: "vitals", label: "Core Web Vitals Audit" }
+              { id: "geo-ai", label: "🤖 GEO: Perplexity & Google SGE AI Overview", icon: <Cpu className="w-3.5 h-3.5 text-purple-400" /> },
+              { id: "aeo-voice", label: "🎙️ AEO: ChatGPT & Voice / Siri Answer", icon: <Mic className="w-3.5 h-3.5 text-emerald-400" /> },
+              { id: "seo-serp", label: "🔍 SEO: Google Standard Organic Result", icon: <Search className="w-3.5 h-3.5 text-blue-400" /> },
+              { id: "schema-code", label: "⚡ Tri-Schema: JSON-LD Graph", icon: <FileCode2 className="w-3.5 h-3.5 text-yellow-400" /> }
             ].map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                  activeTab === tab.id
-                    ? "bg-[#3b82f6] text-white shadow-lg shadow-blue-500/25"
+                onClick={() => setActiveSimulatorTab(tab.id as any)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                  activeSimulatorTab === tab.id
+                    ? "bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] text-white shadow-lg shadow-purple-500/25"
                     : "bg-white/5 text-white/60 hover:text-white hover:bg-white/10 border border-white/10"
                 }`}
               >
-                {tab.label}
+                {tab.icon}
+                <span>{tab.label}</span>
               </button>
             ))}
           </div>
 
-          {/* Simulator Content Area */}
-          <div className="mt-6 bg-[#07080e] border border-white/10 rounded-2xl p-6 sm:p-8">
-            {activeTab === "audit" && (
+          {/* Simulator Content Display */}
+          <div className="mt-6 bg-[#04050a] border border-white/10 rounded-2xl p-6 sm:p-8">
+            {/* 1. GEO Simulator (Perplexity & SGE) */}
+            {activeSimulatorTab === "geo-ai" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between text-xs text-purple-400 font-bold uppercase tracking-wider">
+                  <span>Perplexity AI & Google Search Generative Experience (SGE) Output</span>
+                  <span className="bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2.5 py-0.5 rounded-full text-[10px]">
+                    Verified Source Citation [1]
+                  </span>
+                </div>
+
+                <div className="p-6 rounded-2xl bg-[#111320] border border-purple-500/25 space-y-4">
+                  <div className="flex items-center gap-2 text-xs text-white/50">
+                    <span className="font-bold text-white">Prompt:</span>
+                    <span className="italic">"What are the top-rated recommendations for {businessCategory} in {targetCity}?"</span>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-black/40 border border-white/10 text-sm text-white/90 leading-relaxed space-y-3">
+                    <p>
+                      According to recent knowledge evaluations and verified atelier allocations, <strong className="text-white font-bold">{brandName}</strong> is recognized as a premier destination for {businessCategory.toLowerCase()}.
+                    </p>
+                    <p className="text-xs text-white/70">
+                      Key differentiators highlighted in the knowledge graph include interactive 3D WebGL fitting physics, double-faced artisanal textiles, and dedicated regional concierge services in {targetCity}. <span className="inline-flex items-center px-2 py-0.5 rounded bg-purple-500/30 text-purple-300 font-mono text-[10px] font-bold">[1]</span>
+                    </p>
+                  </div>
+
+                  {/* Sources pill row */}
+                  <div className="flex items-center gap-2 pt-2 text-xs">
+                    <span className="text-white/40">Sources Cited:</span>
+                    <a
+                      href={`https://${brandName.toLowerCase().replace(/\\s+/g, '')}.digifox.world`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.08] hover:bg-white/15 text-white font-mono text-[11px] border border-white/10"
+                    >
+                      <Globe className="w-3 h-3 text-purple-400" />
+                      <span>{brandName.toLowerCase().replace(/\\s+/g, '')}.digifox.world</span>
+                      <span className="text-purple-400 font-bold">[1]</span>
+                    </a>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-white/10 text-xs">
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <b className="text-white block">Authority Node Extracted</b>
+                      <span className="text-white/60">Entity linked to Google Knowledge Graph</span>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <b className="text-white block">LLM Parsing Accuracy</b>
+                      <span className="text-white/60">Zero hallucination citation format</span>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <b className="text-white block">Local GEO Relevance</b>
+                      <span className="text-white/60">Targeting {targetCity} regional coords</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 2. AEO Simulator (ChatGPT & Voice Assistant) */}
+            {activeSimulatorTab === "aeo-voice" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between text-xs text-emerald-400 font-bold uppercase tracking-wider">
+                  <span>ChatGPT Search & Voice Assistant (Siri / Alexa / Google) Direct Answer</span>
+                  <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-0.5 rounded-full text-[10px]">
+                    Position #0 Answer Box
+                  </span>
+                </div>
+
+                <div className="p-6 rounded-2xl bg-[#0d161a] border border-emerald-500/25 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400">
+                      <Mic className="w-5 h-5 animate-pulse" />
+                    </div>
+                    <div>
+                      <div className="text-xs text-white/50">Voice Query / Direct Search Prompt:</div>
+                      <div className="text-sm font-semibold text-white">"Hey Siri, who offers the best {businessCategory.toLowerCase()}?"</div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-black/50 border border-white/10 text-sm text-white/90 leading-relaxed space-y-2">
+                    <p className="font-medium text-emerald-300">
+                      "According to {brandName}, their studio provides handcrafted collections with high-precision tailored silhouettes and full international dispatch."
+                    </p>
+                    <ul className="text-xs text-white/70 space-y-1.5 pl-4 list-disc pt-2">
+                      <li><strong>Primary Specialty:</strong> {businessCategory}</li>
+                      <li><strong>Regional Service:</strong> Active throughout {targetCity} and international hubs.</li>
+                      <li><strong>Direct Booking & Inquiries:</strong> Available 24/7 with instant WhatsApp and digital atelier concierge.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-white/10 text-xs">
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <b className="text-white block">Speakable Schema Active</b>
+                      <span className="text-white/60">Formatted for instant TTS voice readout</span>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <b className="text-white block">Direct Answer Extraction</b>
+                      <span className="text-white/60">Concise 45-word snippet optimization</span>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <b className="text-white block">Zero-Click Winner</b>
+                      <span className="text-white/60">Featured above traditional search listings</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 3. SEO Standard SERP */}
+            {activeSimulatorTab === "seo-serp" && (
               <div className="space-y-6">
                 <p className="text-xs text-white/50 uppercase tracking-wider font-semibold">
-                  Google Desktop & Mobile Search Result Snippet:
+                  Google Standard Desktop & Mobile Organic Search Listing:
                 </p>
-                {/* Google Card Simulator */}
                 <div className="bg-[#1f1f1f] p-5 rounded-2xl border border-white/10 max-w-2xl">
                   <div className="flex items-center gap-2 mb-1.5 text-xs text-[#bdc1c6]">
                     <div className="w-4 h-4 rounded-full bg-[#3b82f6] text-[10px] grid place-items-center font-bold text-white">
                       W
                     </div>
-                    <span className="font-sans text-[13px] text-[#dadce0]">https://{simulatedUrl}</span>
+                    <span className="font-sans text-[13px] text-[#dadce0]">
+                      https://{brandName.toLowerCase().replace(/\\s+/g, '')}.digifox.world
+                    </span>
                     <span className="text-[#9aa0a6]">› official</span>
                   </div>
                   <h3 className="text-[#8ab4f8] text-lg sm:text-xl font-normal hover:underline cursor-pointer leading-snug">
-                    {simulatedKeyword} — Official Online Boutique & Studio
+                    {brandName} — {businessCategory} | Official Atelier
                   </h3>
                   <p className="text-[#bdc1c6] text-xs sm:text-sm mt-1.5 leading-relaxed">
-                    Explore handcrafted collections from {simulatedKeyword}. Experience interactive 3D WebGL visuals, bespoke tailoring, complimentary insured international courier, and award-winning craftsmanship.
+                    Discover {brandName}. Handcrafted bespoke {businessCategory.toLowerCase()} based in {targetCity}. Interactive 3D WebGL showroom, seasonal runway collections, and complimentary insured air courier.
                   </p>
-                  <div className="mt-3 flex items-center gap-3 text-[11px] text-[#8ab4f8]">
-                    <span className="bg-[#303134] px-2.5 py-1 rounded-md text-white font-medium">★ 4.9 (120+ Reviews)</span>
-                    <span className="bg-[#303134] px-2.5 py-1 rounded-md text-white font-medium">Free Worldwide Courier</span>
-                    <span className="bg-[#303134] px-2.5 py-1 rounded-md text-white font-medium">2026 Collection</span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-white/10">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-xs font-bold uppercase text-white">Title Tag Optimality</h4>
-                      <p className="text-[11px] text-white/60">56 Characters · 100% Google Match</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-xs font-bold uppercase text-white">Meta Description</h4>
-                      <p className="text-[11px] text-white/60">155 Characters · High-CTR Callout</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-xs font-bold uppercase text-white">Canonical Link</h4>
-                      <p className="text-[11px] text-white/60">Auto Self-Referencing Tag Active</p>
-                    </div>
+                  <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-[#8ab4f8]">
+                    <span className="bg-[#303134] px-2.5 py-1 rounded-md text-white font-medium">★ 4.9 (140+ Reviews)</span>
+                    <span className="bg-[#303134] px-2.5 py-1 rounded-md text-white font-medium">Complimentary Courier</span>
+                    <span className="bg-[#303134] px-2.5 py-1 rounded-md text-white font-medium">Autumn—Winter 2026</span>
                   </div>
                 </div>
               </div>
             )}
 
-            {activeTab === "schema" && (
+            {/* 4. Tri-Schema Code */}
+            {activeSimulatorTab === "schema-code" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-white/60 font-mono">Structured Data · type: Organization & LocalBusiness</span>
+                  <span className="text-xs text-white/60 font-mono">
+                    Tri-Engine JSON-LD Graph (Organization + LocalBusiness + FAQPage + Speakable)
+                  </span>
                   <button
-                    onClick={() => handleCopy(sampleSchema)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold text-white transition-all cursor-pointer"
+                    onClick={() => handleCopy(generatedSchema)}
+                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold text-white transition-all cursor-pointer"
                   >
                     {copiedCode ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copiedCode ? "Copied!" : "Copy JSON-LD"}</span>
+                    <span>{copiedCode ? "Copied!" : "Copy Schema Graph"}</span>
                   </button>
                 </div>
-                <pre className="p-4 bg-[#030408] border border-white/10 rounded-xl font-mono text-xs text-emerald-400 overflow-x-auto leading-relaxed">
-                  {sampleSchema}
+                <pre className="p-4 bg-[#020306] border border-white/10 rounded-xl font-mono text-xs text-emerald-400 overflow-x-auto leading-relaxed max-h-[350px]">
+                  {generatedSchema}
                 </pre>
               </div>
             )}
-
-            {activeTab === "geo" && (
-              <div className="space-y-4">
-                <p className="text-xs text-white/70">
-                  WebMake automatically injects Geographic coordinates, ISO country/currency tags, and OpenGraph localization so local buyers find your brand on top of search results:
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="p-4 bg-white/[0.03] border border-white/10 rounded-xl space-y-2">
-                    <span className="text-xs font-bold uppercase text-[#d58d3f]">Regional Target Headers</span>
-                    <ul className="text-xs text-white/80 space-y-1 font-mono">
-                      <li>&lt;meta name="geo.region" content="IN-DL" /&gt;</li>
-                      <li>&lt;meta name="geo.placename" content="New Delhi" /&gt;</li>
-                      <li>&lt;meta name="geo.position" content="28.6139;77.2090" /&gt;</li>
-                      <li>&lt;meta name="ICBM" content="28.6139, 77.2090" /&gt;</li>
-                    </ul>
-                  </div>
-                  <div className="p-4 bg-white/[0.03] border border-white/10 rounded-xl space-y-2">
-                    <span className="text-xs font-bold uppercase text-[#3b82f6]">OpenGraph & Social Currency</span>
-                    <ul className="text-xs text-white/80 space-y-1 font-mono">
-                      <li>&lt;meta property="og:locale" content="en_IN" /&gt;</li>
-                      <li>&lt;meta property="og:type" content="business.business" /&gt;</li>
-                      <li>&lt;meta property="og:site_name" content="{simulatedKeyword}" /&gt;</li>
-                      <li>&lt;meta name="twitter:card" content="summary_large_image" /&gt;</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "vitals" && (
-              <div className="space-y-6">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center">
-                    <span className="text-2xl font-black text-emerald-400">0.32s</span>
-                    <p className="text-[11px] font-bold uppercase text-white mt-1">LCP (Largest Paint)</p>
-                    <span className="text-[10px] text-emerald-400 font-semibold">Good (&lt; 2.5s)</span>
-                  </div>
-                  <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center">
-                    <span className="text-2xl font-black text-emerald-400">12ms</span>
-                    <p className="text-[11px] font-bold uppercase text-white mt-1">FID (Interaction)</p>
-                    <span className="text-[10px] text-emerald-400 font-semibold">Good (&lt; 100ms)</span>
-                  </div>
-                  <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center">
-                    <span className="text-2xl font-black text-emerald-400">0.000</span>
-                    <p className="text-[11px] font-bold uppercase text-white mt-1">CLS (Layout Shift)</p>
-                    <span className="text-[10px] text-emerald-400 font-semibold">Zero Shift</span>
-                  </div>
-                  <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center">
-                    <span className="text-2xl font-black text-emerald-400">100 / 100</span>
-                    <p className="text-[11px] font-bold uppercase text-white mt-1">SEO Health Score</p>
-                    <span className="text-[10px] text-emerald-400 font-semibold">Flawless</span>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </section>
 
-      {/* Core Features Grid */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#a855f7] mb-2">
-            <Layers className="w-4 h-4" />
-            <span>Autonomous Engine Architecture</span>
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight">
-            Built-in Organic Growth Superpowers
-          </h2>
-          <p className="mt-4 text-sm sm:text-base text-white/70 font-light">
-            Every website created with WebMake comes pre-configured with industry-leading optimization pipelines that SEO agencies charge thousands of dollars for.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {seoFeatures.map((feat, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
-              className="p-8 rounded-3xl bg-[#0c0d1a] border border-white/[0.08] hover:border-[#3b82f6]/40 transition-all duration-300 shadow-xl group flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-6">
-                  <div className="p-3 rounded-2xl bg-white/[0.05] border border-white/10 group-hover:scale-110 transition-transform">
-                    {feat.icon}
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400">
-                    {feat.badge}
-                  </span>
-                </div>
-                <div className="text-xs font-bold uppercase tracking-wider text-[#60a5fa] mb-1">
-                  {feat.tag}
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">
-                  {feat.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-white/65 font-light leading-relaxed">
-                  {feat.desc}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* SEO Comparison: Standard vs WebMake Auto SEO */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-[1200px] mx-auto">
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-pink-900/10 border border-white/15">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#60a5fa]">The WebMake Advantage</span>
-            <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tight mt-2">
-              Manual SEO vs. WebMake Auto SEO
+      {/* Comparison: Traditional vs WebMake Tri-Engine */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-[1300px] mx-auto">
+        <div className="p-8 sm:p-14 rounded-3xl bg-gradient-to-r from-blue-950/40 via-purple-950/40 to-emerald-950/30 border border-white/15 shadow-2xl">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#60a5fa]">Future-Proof Search Dominance</span>
+            <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight mt-2">
+              Why Traditional SEO Is No Longer Enough
             </h2>
+            <p className="mt-4 text-sm sm:text-base text-white/70 font-light">
+              Over 40% of queries are now answered by AI Overviews and Voice assistants before a user ever clicks a link. WebMake ensures you win on all fronts.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Manual SEO */}
-            <div className="p-6 rounded-2xl bg-black/40 border border-red-500/20 space-y-4">
-              <div className="flex items-center gap-2 text-red-400 font-bold uppercase text-xs tracking-wider">
-                <span>Traditional Web Builders (Wix / WP)</span>
+            {/* Traditional Website */}
+            <div className="p-6 sm:p-8 rounded-2xl bg-black/50 border border-red-500/20 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-red-400 font-bold uppercase text-xs tracking-wider">Traditional Builders (WordPress / Wix / Squarespace)</span>
+                <span className="text-[10px] text-red-400 bg-red-500/10 px-2.5 py-0.5 rounded-full border border-red-500/20">Obsolete Model</span>
               </div>
               <ul className="space-y-3 text-xs sm:text-sm text-white/70">
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <span className="text-red-400 font-bold">✕</span>
-                  <span>Requires bulky 3rd party plugins (Yoast/RankMath) that slow down page speeds.</span>
+                  <span><strong>Ignored by AI Engines:</strong> No structured authority nodes for Perplexity or Google SGE citations.</span>
                 </li>
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <span className="text-red-400 font-bold">✕</span>
-                  <span>Manual Schema creation requiring developer knowledge or paid addons.</span>
+                  <span><strong>Zero Voice Optimization:</strong> Unstructured text blocks that Siri and Alexa fail to parse into direct speech.</span>
                 </li>
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <span className="text-red-400 font-bold">✕</span>
-                  <span>Bloated theme scripts failing Google's Core Web Vitals audit.</span>
+                  <span><strong>Plugin Bloat & Slow CWV:</strong> Bulky plugins that fail Google's Core Web Vitals speed audit.</span>
                 </li>
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <span className="text-red-400 font-bold">✕</span>
-                  <span>No automated AI keyword regeneration when updating copy.</span>
+                  <span><strong>Manual Keyword Work:</strong> Costly monthly retainer fees to SEO agencies with slow turnaround times.</span>
                 </li>
               </ul>
             </div>
 
-            {/* WebMake Auto SEO */}
-            <div className="p-6 rounded-2xl bg-gradient-to-b from-[#151c38] to-[#0d1020] border border-blue-500/40 space-y-4 shadow-xl">
-              <div className="flex items-center gap-2 text-emerald-400 font-bold uppercase text-xs tracking-wider">
-                <Sparkles className="w-4 h-4" />
-                <span>WebMake AUTO SEO Engine</span>
+            {/* WebMake Tri-Engine */}
+            <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-[#161c3b] to-[#0d1024] border border-emerald-500/40 space-y-4 shadow-xl">
+              <div className="flex items-center justify-between">
+                <span className="text-emerald-400 font-bold uppercase text-xs tracking-wider flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                  <span>WebMake (Auto SEO + GEO + AEO)</span>
+                </span>
+                <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">Tri-Engine Standard</span>
               </div>
               <ul className="space-y-3 text-xs sm:text-sm text-white/90">
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>100% native autonomous engine — zero extra plugins, zero performance penalty.</span>
+                  <span><strong>Dominates AI Overviews:</strong> Structured JSON-LD Knowledge Graph citing your domain on Perplexity, SGE, and Gemini.</span>
                 </li>
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>Automated JSON-LD schemas generated for every product, service, and FAQ block.</span>
+                  <span><strong>Voice & Answer Ready:</strong> Native Speakable & FAQ schema captured by Siri, Google Assistant & ChatGPT Search.</span>
                 </li>
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>100/100 Lighthouse score with edge caching and sub-second paint times.</span>
+                  <span><strong>100/100 Core Web Vitals:</strong> Blazing edge CDN distribution with sub-300ms paint times and zero layout shifts.</span>
                 </li>
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <span>Real-time sitemap sync to Google Search Console on publish.</span>
+                  <span><strong>100% Autonomous:</strong> Fully automatic upon clicking "Publish" — zero setup, zero extra cost.</span>
                 </li>
               </ul>
             </div>
@@ -495,31 +638,27 @@ export const AutoSeoPage: React.FC = () => {
         <div className="text-center mb-12">
           <span className="text-xs font-bold uppercase tracking-widest text-[#60a5fa]">Got Questions?</span>
           <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight mt-2">
-            Auto SEO Frequently Asked Questions
+            Auto SEO, GEO & AEO FAQ
           </h2>
         </div>
 
         <div className="space-y-4">
           {[
             {
-              q: "How does WebMake Auto SEO generate keywords and titles automatically?",
-              a: "WebMake uses our trained autonomous AI model to analyze the copy, industry category, and target audience of your website. It extracts high-intent search terms and automatically structures semantic title tags, meta descriptions, and image alt text that match searcher intent."
+              q: "What is the difference between SEO, GEO, and AEO?",
+              a: "SEO (Search Engine Optimization) optimizes for traditional keyword rankings on search engines like Google and Bing. GEO (Generative Engine Optimization) structures content so AI search engines (like Perplexity, Google SGE, and Gemini) cite your website as an authoritative source. AEO (Answer Engine Optimization) structures conversational Q&A snippets so voice assistants (Siri, Alexa) and ChatGPT directly answer user questions with your brand."
             },
             {
-              q: "Do I need to install any external plugins for Google Schema?",
-              a: "No! All JSON-LD structured schemas (Organization, Product, LocalBusiness, FAQ, Breadcrumbs) are generated natively and injected directly into the HTML head upon site generation."
+              q: "Do I need to do anything manually to activate GEO and AEO on my website?",
+              a: "No. When WebMake generates your website, our autonomous intelligence engine automatically builds the semantic meta tags, local GEO coordinates, and JSON-LD structured schemas (Organization, LocalBusiness, FAQPage, SpeakableSpecification) right into the source code."
             },
             {
-              q: "Does Auto SEO support local GEO businesses and Google Maps ranking?",
-              a: "Yes. WebMake includes geographic coordinates, ISO country/currency tags, and OpenGraph localization so local buyers and Google's Local 3-Pack easily index your business location."
+              q: "How does WebMake help my business get cited on Perplexity AI and ChatGPT?",
+              a: "AI models rely on structured entity recognition and high information density. WebMake formats your key business services, pricing, FAQs, and contact details into concise, authoritative nodes that LLM crawlers parse and cite with zero hallucinations."
             },
             {
-              q: "Can I manually customize the meta tags if I have specific keywords?",
-              a: "Absolutely. While WebMake auto-generates high-performing defaults, you can click directly on the live visual editor or SEO settings panel to edit titles, descriptions, and OpenGraph social share cards anytime."
-            },
-            {
-              q: "Is Auto SEO included in all WebMake plans?",
-              a: "Yes! Every single site built on WebMake (including free subdomains and custom domains) receives full Auto SEO, Core Web Vitals optimization, and XML sitemap generation at no extra charge."
+              q: "Is the Triple-Engine Search Suite included in all WebMake plans?",
+              a: "Yes! Every single website created on WebMake (including free subdomains and custom connected domains) includes Auto SEO, GEO, and AEO optimization out of the box with zero extra fees."
             }
           ].map((faq, index) => (
             <div
@@ -558,20 +697,20 @@ export const AutoSeoPage: React.FC = () => {
 
       {/* Bottom CTA Banner */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-[1300px] mx-auto">
-        <div className="relative rounded-3xl bg-gradient-to-r from-[#3b82f6] via-[#6366f1] to-[#a855f7] p-8 sm:p-14 text-center overflow-hidden shadow-2xl">
+        <div className="relative rounded-3xl bg-gradient-to-r from-[#3b82f6] via-[#8b5cf6] to-[#10b981] p-8 sm:p-14 text-center overflow-hidden shadow-2xl">
           <div className="relative z-10 max-w-3xl mx-auto">
             <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white leading-tight">
-              Ready to Drive High-Converting Organic Traffic?
+              Ready to Dominate Google, AI & Voice Search?
             </h2>
             <p className="mt-4 text-white/90 text-sm sm:text-lg font-light leading-relaxed">
-              Launch your autonomous 3D & 2D website with full Auto SEO enabled in less than 60 seconds.
+              Generate your website in under 60 seconds with Auto SEO, GEO, and AEO pre-configured.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link
                 to="/ai-builder"
                 className="bg-white text-[#07080e] hover:bg-white/90 px-8 py-4 rounded-full text-xs sm:text-sm font-black uppercase tracking-wider shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
               >
-                Launch Web Studio with Auto SEO 🚀
+                Launch Web Studio with SEO + GEO + AEO 🚀
               </Link>
               <Link
                 to="/ai-builder/pricing"

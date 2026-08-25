@@ -282,7 +282,7 @@ export const AutoSeoPage: React.FC = () => {
           <div className="flex flex-wrap gap-2.5 mt-8">
             {[
               { id: "seo-serp", label: "🔍 SEO: Google Standard Organic Result", icon: <Search className="w-3.5 h-3.5 text-blue-400" /> },
-              { id: "geo-ai", label: "🤖 GEO: Perplexity & Google SGE AI Overview", icon: <Cpu className="w-3.5 h-3.5 text-purple-400" /> },
+              { id: "geo-ai", label: "🤖 GEO: GPT & Gemini AI Overviews", icon: <Cpu className="w-3.5 h-3.5 text-purple-400" /> },
               { id: "aeo-voice", label: "🎙️ AEO: ChatGPT & Voice / Siri Answer", icon: <Mic className="w-3.5 h-3.5 text-emerald-400" /> }
             ].map((tab) => (
               <button
@@ -302,11 +302,11 @@ export const AutoSeoPage: React.FC = () => {
 
           {/* Simulator Content Display */}
           <div className="mt-6 bg-[#04050a] border border-white/10 rounded-2xl p-6 sm:p-8">
-            {/* 1. GEO Simulator (Perplexity & SGE) */}
+            {/* 1. GEO Simulator (GPT & Gemini) */}
             {activeSimulatorTab === "geo-ai" && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between text-xs text-purple-400 font-bold uppercase tracking-wider">
-                  <span>Perplexity AI & Google Search Generative Experience (SGE) Output</span>
+                  <span>GPT & Gemini AI Overviews Output</span>
                   <span className="bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2.5 py-0.5 rounded-full text-[10px]">
                     Verified Source Citation [1]
                   </span>

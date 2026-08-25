@@ -21,7 +21,7 @@ import { WebMakeFooter } from "../../components/builder/WebMakeFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 
 export const AutoSeoPage: React.FC = () => {
-  const [activeSimulatorTab, setActiveSimulatorTab] = useState<"seo-serp" | "geo-ai" | "aeo-voice" | "schema-code">("geo-ai");
+  const [activeSimulatorTab, setActiveSimulatorTab] = useState<"seo-serp" | "geo-ai" | "aeo-voice" | "schema-code">("seo-serp");
   const [brandName, setBrandName] = useState("Aura Studio");
   const [businessCategory, setBusinessCategory] = useState("Handcrafted Luxury Fashion Atelier");
   const [targetCity, setTargetCity] = useState("New Delhi · Global");
@@ -340,9 +340,9 @@ export const AutoSeoPage: React.FC = () => {
           {/* Engine Selector Tabs */}
           <div className="flex flex-wrap gap-2.5 mt-8">
             {[
+              { id: "seo-serp", label: "🔍 SEO: Google Standard Organic Result", icon: <Search className="w-3.5 h-3.5 text-blue-400" /> },
               { id: "geo-ai", label: "🤖 GEO: Perplexity & Google SGE AI Overview", icon: <Cpu className="w-3.5 h-3.5 text-purple-400" /> },
               { id: "aeo-voice", label: "🎙️ AEO: ChatGPT & Voice / Siri Answer", icon: <Mic className="w-3.5 h-3.5 text-emerald-400" /> },
-              { id: "seo-serp", label: "🔍 SEO: Google Standard Organic Result", icon: <Search className="w-3.5 h-3.5 text-blue-400" /> },
               { id: "schema-code", label: "⚡ Tri-Schema: JSON-LD Graph", icon: <FileCode2 className="w-3.5 h-3.5 text-yellow-400" /> }
             ].map((tab) => (
               <button

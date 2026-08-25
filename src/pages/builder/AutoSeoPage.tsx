@@ -198,7 +198,7 @@ export const AutoSeoPage: React.FC = () => {
           className="mt-10 inline-flex flex-wrap items-center justify-center gap-2 bg-white/[0.04] border border-white/15 p-2 rounded-full backdrop-blur-xl"
         >
           {[
-            { id: "all", label: "✨ Complete Tri-Engine Suite" },
+            { id: "all", label: "✨ A Complete Engine" },
             { id: "seo", label: "🔍 Auto SEO (Google Rank)" },
             { id: "geo", label: "🤖 GEO (AI Overviews & SGE)" },
             { id: "aeo", label: "🎙️ AEO (Voice & Answer Engines)" }

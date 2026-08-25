@@ -316,6 +316,9 @@ appDigPortfolio.use((req, res) => {
   }
 });
 
+appDigPortfolio.listen(50020, () => {
+  console.log('💼 Dig Portfolio (Creative Portfolio) running at: http://localhost:50020');
+});
 appDigPortfolio.listen(5004, () => {
   console.log('💼 Dig Portfolio (Creative Portfolio) running at: http://localhost:5004');
 });

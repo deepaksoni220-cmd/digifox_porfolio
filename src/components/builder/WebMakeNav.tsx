@@ -96,11 +96,11 @@ export const WebMakeNav: React.FC<WebMakeNavProps> = ({ activePage }) => {
           <ThemeToggle />
           
           <Link
-            to="/ai-builder"
-            className="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-[#3b82f6] via-[#6366f1] to-[#8b5cf6] hover:opacity-95 text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-wider shadow-[0_0_20px_rgba(59,130,246,0.35)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] hover:scale-105 transition-all duration-300 cursor-pointer"
+            to="/ai-builder/auto-seo"
+            className="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-[#3b82f6] via-[#8b5cf6] to-[#10b981] hover:opacity-95 text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-wider shadow-[0_0_25px_rgba(139,92,246,0.35)] hover:shadow-[0_0_35px_rgba(139,92,246,0.6)] hover:scale-105 transition-all duration-300 cursor-pointer"
           >
-            <span>Launch Studio</span>
-            <span className="text-sm">🚀</span>
+            <span>Auto SEO & GEO</span>
+            <span className="text-xs">⚡</span>
           </Link>
 
           {/* Mobile Hamburger Toggle */}
@@ -164,11 +164,11 @@ export const WebMakeNav: React.FC<WebMakeNavProps> = ({ activePage }) => {
 
             <div className="pt-4 border-t border-white/10 flex flex-col gap-3">
               <Link
-                to="/ai-builder"
+                to="/ai-builder/auto-seo"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] text-white py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg"
+                className="w-full text-center bg-gradient-to-r from-[#3b82f6] via-[#8b5cf6] to-[#10b981] text-white py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg"
               >
-                Launch Web Studio 🚀
+                Auto SEO, GEO & AEO ⚡
               </Link>
               <div className="flex items-center justify-center text-xs text-white/50 px-2">
                 <Link to="/ai-builder/contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-white">Support & FAQs</Link>

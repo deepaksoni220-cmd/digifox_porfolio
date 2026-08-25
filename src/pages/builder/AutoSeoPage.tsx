@@ -21,7 +21,6 @@ import { WebMakeFooter } from "../../components/builder/WebMakeFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 
 export const AutoSeoPage: React.FC = () => {
-  const [engineMode, setEngineMode] = useState<"all" | "seo" | "geo" | "aeo">("all");
   const [activeSimulatorTab, setActiveSimulatorTab] = useState<"seo-serp" | "geo-ai" | "aeo-voice" | "schema-code">("geo-ai");
   const [brandName, setBrandName] = useState("Aura Studio");
   const [businessCategory, setBusinessCategory] = useState("Handcrafted Luxury Fashion Atelier");
@@ -190,31 +189,16 @@ export const AutoSeoPage: React.FC = () => {
           Search has evolved beyond simple blue links. WebMake is the first autonomous builder engineered with a <strong className="font-semibold text-white">Complete - Engine Search System</strong>: <strong>Auto SEO</strong> for organic Google algorithms, <strong>Blogs</strong>, <strong>GEO</strong> for Perplexity & Gemini AI Overviews, and <strong>AEO</strong> for ChatGPT & Siri voice answers.
         </motion.p>
 
-        {/* Quick Filter Pill for Pillars */}
+        {/* A Complete Engine Pill */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.25 }}
-          className="mt-10 inline-flex flex-wrap items-center justify-center gap-2 bg-white/[0.04] border border-white/15 p-2 rounded-full backdrop-blur-xl"
+          className="mt-10 inline-flex items-center justify-center bg-white/[0.04] border border-white/15 p-1.5 rounded-full backdrop-blur-xl"
         >
-          {[
-            { id: "all", label: "✨ A Complete Engine" },
-            { id: "seo", label: "🔍 Auto SEO (Google Rank)" },
-            { id: "geo", label: "🤖 GEO (AI Overviews & SGE)" },
-            { id: "aeo", label: "🎙️ AEO (Voice & Answer Engines)" }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setEngineMode(tab.id as any)}
-              className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 cursor-pointer ${
-                engineMode === tab.id
-                  ? "bg-gradient-to-r from-[#3b82f6] via-[#8b5cf6] to-[#10b981] text-white shadow-lg shadow-purple-500/25 scale-105"
-                  : "text-white/60 hover:text-white hover:bg-white/[0.06]"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+          <div className="px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-wider bg-gradient-to-r from-[#3b82f6] via-[#8b5cf6] to-[#10b981] text-white shadow-lg shadow-purple-500/25">
+            ✨ A Complete Engine
+          </div>
         </motion.div>
 
         {/* Quick Action CTAs */}
@@ -246,9 +230,7 @@ export const AutoSeoPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {triplePillars
-            .filter((p) => engineMode === "all" || engineMode === p.id)
-            .map((pillar) => (
+          {triplePillars.map((pillar) => (
               <motion.div
                 key={pillar.id}
                 layout

@@ -62,15 +62,15 @@ export const WebMakeNav: React.FC<WebMakeNavProps> = ({ activePage }) => {
               <Link
                 key={item.key}
                 to={item.path}
-                className={`relative px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200 flex items-center gap-1.5 ${
+                className={`relative px-3.5 py-1.5 rounded-full text-xs transition-all duration-200 flex items-center gap-1.5 tracking-wide ${
                   active
-                    ? "text-white bg-white/10 shadow-sm"
-                    : "text-white/60 hover:text-white hover:bg-white/[0.05]"
+                    ? "text-white font-normal bg-white/10 shadow-sm"
+                    : "text-white/70 font-light hover:text-white hover:bg-white/[0.05]"
                 }`}
               >
                 <span>{item.label}</span>
                 {item.badge && (
-                  <span className={`text-[9px] font-extrabold px-1.5 py-0.2 rounded-full uppercase ${
+                  <span className={`text-[9px] font-medium px-1.5 py-0.2 rounded-full uppercase ${
                     item.badge === "3D"
                       ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
                       : "bg-blue-500/20 text-blue-300 border border-blue-500/30"
@@ -96,7 +96,7 @@ export const WebMakeNav: React.FC<WebMakeNavProps> = ({ activePage }) => {
           
           <Link
             to="/ai-builder/auto-seo"
-            className="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-[#3b82f6] via-[#8b5cf6] to-[#10b981] hover:opacity-95 text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-wider shadow-[0_0_25px_rgba(139,92,246,0.35)] hover:shadow-[0_0_35px_rgba(139,92,246,0.6)] hover:scale-105 transition-all duration-300 cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-[#3b82f6] via-[#8b5cf6] to-[#10b981] hover:opacity-95 text-white px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider shadow-[0_0_25px_rgba(139,92,246,0.35)] hover:shadow-[0_0_35px_rgba(139,92,246,0.6)] hover:scale-105 transition-all duration-300 cursor-pointer"
           >
             <span>Auto SEO & GEO</span>
             <span className="text-xs">⚡</span>
@@ -144,15 +144,15 @@ export const WebMakeNav: React.FC<WebMakeNavProps> = ({ activePage }) => {
                     key={item.key}
                     to={item.path}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between transition-all ${
+                    className={`px-4 py-3 rounded-xl text-sm flex items-center justify-between transition-all tracking-wide ${
                       active
-                        ? "bg-[#3b82f6] text-white shadow-lg"
-                        : "text-white/70 hover:text-white hover:bg-white/[0.06]"
+                        ? "bg-[#3b82f6] text-white font-normal shadow-lg"
+                        : "text-white/70 font-light hover:text-white hover:bg-white/[0.06]"
                     }`}
                   >
                     <span>{item.label}</span>
                     {item.badge && (
-                      <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md uppercase bg-white/20 text-white">
+                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-md uppercase bg-white/20 text-white">
                         {item.badge}
                       </span>
                     )}
@@ -165,11 +165,11 @@ export const WebMakeNav: React.FC<WebMakeNavProps> = ({ activePage }) => {
               <Link
                 to="/ai-builder/auto-seo"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center bg-gradient-to-r from-[#3b82f6] via-[#8b5cf6] to-[#10b981] text-white py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg"
+                className="w-full text-center bg-gradient-to-r from-[#3b82f6] via-[#8b5cf6] to-[#10b981] text-white py-3 rounded-xl text-xs font-semibold uppercase tracking-wider shadow-lg"
               >
                 Auto SEO, GEO & AEO ⚡
               </Link>
-              <div className="flex items-center justify-center text-xs text-white/50 px-2">
+              <div className="flex items-center justify-center text-xs text-white/50 px-2 font-light">
                 <Link to="/ai-builder/contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-white">Support & FAQs</Link>
               </div>
             </div>

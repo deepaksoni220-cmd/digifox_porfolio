@@ -44,6 +44,10 @@ export const WebMakeFooter: React.FC = () => {
             <h4 className="text-xs font-black uppercase tracking-widest text-white/90 mb-1">Product</h4>
             <Link to="/ai-builder" className="text-xs text-white/60 hover:text-white transition-colors">Web Studio</Link>
             <Link to="/ai-builder/features" className="text-xs text-white/60 hover:text-white transition-colors">Features</Link>
+            <Link to="/ai-builder/auto-seo" className="text-xs text-white/60 hover:text-white transition-colors flex items-center gap-1.5">
+              <span>WebMake Auto SEO</span>
+              <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded uppercase bg-blue-500/20 text-blue-300 border border-blue-500/30">AI</span>
+            </Link>
             <Link to="/ai-builder/design-kits" className="text-xs text-white/60 hover:text-white transition-colors">3D & 2D Design Kits</Link>
             <Link to="/ai-builder/pricing" className="text-xs text-white/60 hover:text-white transition-colors">Pricing & Plans</Link>
           </div>

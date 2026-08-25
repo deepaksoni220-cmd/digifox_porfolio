@@ -23,6 +23,7 @@ import { TermsPage } from './pages/TermsPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { ContactUsPage } from './pages/ContactUsPage';
 import { FeaturesPage } from './pages/builder/FeaturesPage';
+import { AutoSeoPage } from './pages/builder/AutoSeoPage';
 import { DesignKitsPage } from './pages/builder/DesignKitsPage';
 import { PricingPage } from './pages/builder/PricingPage';
 import { BlogsPage } from './pages/builder/BlogsPage';
@@ -128,6 +129,11 @@ function App() {
             </ProtectedPage>
           } />
           <Route path="/ai-builder/features" element={<FeaturesPage />} />
+          <Route path="/ai-builder/auto-seo" element={<AutoSeoPage />} />
+          <Route path="/ai-builder/seo" element={<AutoSeoPage />} />
+          <Route path="/auto-seo" element={<AutoSeoPage />} />
+          <Route path="/seo" element={<AutoSeoPage />} />
+          <Route path="/aibuilder/auto-seo" element={<AutoSeoPage />} />
           <Route path="/ai-builder/design-kits" element={<DesignKitsPage />} />
           <Route path="/ai-builder/templates" element={<DesignKitsPage />} />
           <Route path="/ai-builder/pricing" element={<PricingPage />} />

@@ -187,7 +187,7 @@ export const AutoSeoPage: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.15 }}
           className="mt-6 text-base sm:text-xl text-white/70 max-w-3xl mx-auto font-light leading-relaxed"
         >
-          Search has evolved beyond simple blue links. WebMake is the first autonomous builder engineered with a <strong className="font-semibold text-white">Complete 0 Engine Search System</strong>: <strong>Auto SEO</strong> for organic Google algorithms, <strong>GEO</strong> for Perplexity & Gemini AI Overviews, and <strong>AEO</strong> for ChatGPT & Siri voice answers.
+          Search has evolved beyond simple blue links. WebMake is the first autonomous builder engineered with a <strong className="font-semibold text-white">Complete - Engine Search System</strong>: <strong>Auto SEO</strong> for organic Google algorithms, <strong>Blogs</strong>, <strong>GEO</strong> for Perplexity & Gemini AI Overviews, and <strong>AEO</strong> for ChatGPT & Siri voice answers.
         </motion.p>
 
         {/* Quick Filter Pill for Pillars */}

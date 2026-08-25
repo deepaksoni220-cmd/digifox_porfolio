@@ -8,9 +8,6 @@ import {
   CheckCircle2, 
   ArrowRight, 
   Activity, 
-  FileCode2, 
-  Copy, 
-  Check,
   ChevronDown,
   Cpu,
   Mic,
@@ -21,18 +18,11 @@ import { WebMakeFooter } from "../../components/builder/WebMakeFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 
 export const AutoSeoPage: React.FC = () => {
-  const [activeSimulatorTab, setActiveSimulatorTab] = useState<"seo-serp" | "geo-ai" | "aeo-voice" | "schema-code">("seo-serp");
+  const [activeSimulatorTab, setActiveSimulatorTab] = useState<"seo-serp" | "geo-ai" | "aeo-voice">("seo-serp");
   const [brandName, setBrandName] = useState("Aura Studio");
   const [businessCategory, setBusinessCategory] = useState("Handcrafted Luxury Fashion Atelier");
   const [targetCity, setTargetCity] = useState("New Delhi · Global");
-  const [copiedCode, setCopiedCode] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-
-  const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
-  };
 
   const triplePillars = [
     {
@@ -90,55 +80,6 @@ export const AutoSeoPage: React.FC = () => {
       ]
     }
   ];
-
-  const generatedSchema = `{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://${brandName.toLowerCase().replace(/\\s+/g, '')}.digifox.world/#organization",
-      "name": "${brandName}",
-      "url": "https://${brandName.toLowerCase().replace(/\\s+/g, '')}.digifox.world",
-      "logo": "https://${brandName.toLowerCase().replace(/\\s+/g, '')}.digifox.world/logo.png",
-      "description": "${businessCategory} serving ${targetCity}.",
-      "sameAs": [
-        "https://instagram.com/${brandName.toLowerCase().replace(/\\s+/g, '')}",
-        "https://twitter.com/${brandName.toLowerCase().replace(/\\s+/g, '')}"
-      ]
-    },
-    {
-      "@type": "LocalBusiness",
-      "@id": "https://${brandName.toLowerCase().replace(/\\s+/g, '')}.digifox.world/#local",
-      "name": "${brandName} Atelier",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "${targetCity}",
-        "addressCountry": "IN"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 28.6139,
-        "longitude": 77.2090
-      },
-      "priceRange": "₹₹₹",
-      "openingHours": "Mo-Sa 10:00-19:00"
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://${brandName.toLowerCase().replace(/\\s+/g, '')}.digifox.world/#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What makes ${brandName} unique in ${businessCategory}?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "${brandName} combines bespoke craftsmanship with interactive 3D WebGL visuals and complimentary worldwide express delivery."
-          }
-        }
-      ]
-    }
-  ]
-}`;
 
   return (
     <div className="min-h-screen bg-[#07080e] text-white font-sans selection:bg-[#3b82f6] selection:text-white">
@@ -342,8 +283,7 @@ export const AutoSeoPage: React.FC = () => {
             {[
               { id: "seo-serp", label: "🔍 SEO: Google Standard Organic Result", icon: <Search className="w-3.5 h-3.5 text-blue-400" /> },
               { id: "geo-ai", label: "🤖 GEO: Perplexity & Google SGE AI Overview", icon: <Cpu className="w-3.5 h-3.5 text-purple-400" /> },
-              { id: "aeo-voice", label: "🎙️ AEO: ChatGPT & Voice / Siri Answer", icon: <Mic className="w-3.5 h-3.5 text-emerald-400" /> },
-              { id: "schema-code", label: "⚡ Tri-Schema: JSON-LD Graph", icon: <FileCode2 className="w-3.5 h-3.5 text-yellow-400" /> }
+              { id: "aeo-voice", label: "🎙️ AEO: ChatGPT & Voice / Siri Answer", icon: <Mic className="w-3.5 h-3.5 text-emerald-400" /> }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -516,27 +456,6 @@ export const AutoSeoPage: React.FC = () => {
                     <span className="bg-[#303134] px-2.5 py-1 rounded-md text-white font-medium">Autumn—Winter 2026</span>
                   </div>
                 </div>
-              </div>
-            )}
-
-            {/* 4. Tri-Schema Code */}
-            {activeSimulatorTab === "schema-code" && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-white/60 font-mono">
-                    Tri-Engine JSON-LD Graph (Organization + LocalBusiness + FAQPage + Speakable)
-                  </span>
-                  <button
-                    onClick={() => handleCopy(generatedSchema)}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold text-white transition-all cursor-pointer"
-                  >
-                    {copiedCode ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copiedCode ? "Copied!" : "Copy Schema Graph"}</span>
-                  </button>
-                </div>
-                <pre className="p-4 bg-[#020306] border border-white/10 rounded-xl font-mono text-xs text-emerald-400 overflow-x-auto leading-relaxed max-h-[350px]">
-                  {generatedSchema}
-                </pre>
               </div>
             )}
           </div>

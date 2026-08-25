@@ -175,7 +175,7 @@ export const AutoSeoPage: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight max-w-5xl mx-auto leading-[1.06]"
         >
-          Rank On Google. GPT, Gemini .. <br />
+          Get Ranked On Google. GPT, Gemini .. <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#c084fc] to-[#34d399]">
             Get Cited By AI. Win Voice Search Engines
           </span>

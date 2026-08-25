@@ -589,13 +589,13 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     shortDescription: "Interactive Creative Portfolio with Work Scroll Stack, Parallax Testimonials, Bento Services & Split Form.",
     thumbnailUrl: "/templates/dig profolio/dig porfolio/storage.googleapis.com/webild/default/templates/creative-portfolio/screen-1.webp",
     hero: {
-      title: "Joseph Alexander",
+      title: "digifox porfolio",
       subtitle: "Design that commands attention. Engineered for performance, not just aesthetics.",
       ctaText: "Book a call with me",
       imagePrompt: "independent creative designer portfolio dark modern aesthetic"
     },
     about: {
-      heading: "About Joseph Alexander",
+      heading: "About digifox porfolio",
       description: "I don't design to decorate — I design to solve. Sharp, intentional work that moves brands forward.",
       imagePrompt: "creative director portrait studio lighting minimal"
     },

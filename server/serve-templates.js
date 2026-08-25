@@ -291,7 +291,7 @@ appAdidasChile.listen(5005, () => {
   console.log('👟 adidas CHILE20 running at: http://localhost:5005');
 });
 
-// Template 6: Dig Portfolio (Joseph Alexander - Creative Portfolio)
+// Template 6: Dig Portfolio (digifox porfolio - Creative Portfolio)
 const appDigPortfolio = express();
 const digPortfolioBaseDir = path.join(__dirname, '../public/templates/dig profolio/dig porfolio');
 const digPortfolioVercelDir = path.join(digPortfolioBaseDir, 'webild-components-version-4.vercel.app');

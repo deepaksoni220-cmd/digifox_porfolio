@@ -145,18 +145,24 @@ export const AutoSeoPage: React.FC = () => {
         {/* Quick Action CTAs */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link
-            to="/ai-builder"
-            className="inline-flex items-center gap-2.5 bg-gradient-to-r from-[#3b82f6] via-[#6366f1] to-[#8b5cf6] hover:opacity-95 text-white px-8 py-4 rounded-full text-sm font-black uppercase tracking-wider shadow-[0_0_30px_rgba(59,130,246,0.4)] hover:shadow-[0_0_45px_rgba(59,130,246,0.7)] hover:scale-105 transition-all duration-300 cursor-pointer"
+            to="/ai-builder/seo-dashboard"
+            className="inline-flex items-center gap-2.5 bg-gradient-to-r from-[#3b82f6] via-[#8b5cf6] to-[#10b981] hover:opacity-95 text-white px-8 py-4 rounded-full text-sm font-black uppercase tracking-wider shadow-[0_0_30px_rgba(139,92,246,0.5)] hover:shadow-[0_0_45px_rgba(139,92,246,0.8)] hover:scale-105 transition-all duration-300 cursor-pointer"
           >
-            <span>Launch Web Studio (Tri-Engine Enabled)</span>
+            <span>Open Client SEO Dashboard ⚡</span>
             <ArrowRight className="w-4 h-4" />
+          </Link>
+          <Link
+            to="/ai-builder"
+            className="inline-flex items-center gap-2.5 bg-white/[0.08] hover:bg-white/[0.14] border border-white/15 text-white px-7 py-4 rounded-full text-sm font-bold transition-all backdrop-blur-md"
+          >
+            <span>Launch Web Studio</span>
           </Link>
           <a
             href="#live-tri-simulator"
-            className="inline-flex items-center gap-2 border border-white/20 bg-white/[0.05] hover:bg-white/10 text-white px-7 py-4 rounded-full text-sm font-bold transition-all backdrop-blur-md"
+            className="inline-flex items-center gap-2 border border-white/15 bg-white/[0.04] hover:bg-white/10 text-white/80 hover:text-white px-6 py-4 rounded-full text-sm font-medium transition-all backdrop-blur-md"
           >
             <Activity className="w-4 h-4 text-emerald-400" />
-            <span>Simulate SEO · GEO · AEO Results</span>
+            <span>Simulate Results</span>
           </a>
         </div>
       </section>

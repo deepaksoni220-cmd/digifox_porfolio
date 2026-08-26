@@ -24,6 +24,7 @@ import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { ContactUsPage } from './pages/ContactUsPage';
 import { FeaturesPage } from './pages/builder/FeaturesPage';
 import { AutoSeoPage } from './pages/builder/AutoSeoPage';
+import { SeoDashboardPage } from './pages/builder/SeoDashboardPage';
 import { DesignKitsPage } from './pages/builder/DesignKitsPage';
 import { PricingPage } from './pages/builder/PricingPage';
 import { BlogsPage } from './pages/builder/BlogsPage';
@@ -134,6 +135,10 @@ function App() {
           <Route path="/auto-seo" element={<AutoSeoPage />} />
           <Route path="/seo" element={<AutoSeoPage />} />
           <Route path="/aibuilder/auto-seo" element={<AutoSeoPage />} />
+          <Route path="/ai-builder/seo-dashboard" element={<SeoDashboardPage />} />
+          <Route path="/seo-dashboard" element={<SeoDashboardPage />} />
+          <Route path="/dashboard/seo" element={<SeoDashboardPage />} />
+          <Route path="/ai-builder/dashboard" element={<SeoDashboardPage />} />
           <Route path="/ai-builder/design-kits" element={<DesignKitsPage />} />
           <Route path="/ai-builder/templates" element={<DesignKitsPage />} />
           <Route path="/ai-builder/pricing" element={<PricingPage />} />

@@ -122,7 +122,11 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Portfolio />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin" element={
+            <ProtectedPage>
+              <AdminPage />
+            </ProtectedPage>
+          } />
           <Route path="/basic_vs_exclusive" element={<PremiumLandingPage />} />
           <Route path="/ai-builder" element={
             <ProtectedPage>
@@ -135,10 +139,26 @@ function App() {
           <Route path="/auto-seo" element={<AutoSeoPage />} />
           <Route path="/seo" element={<AutoSeoPage />} />
           <Route path="/aibuilder/auto-seo" element={<AutoSeoPage />} />
-          <Route path="/ai-builder/seo-dashboard" element={<SeoDashboardPage />} />
-          <Route path="/seo-dashboard" element={<SeoDashboardPage />} />
-          <Route path="/dashboard/seo" element={<SeoDashboardPage />} />
-          <Route path="/ai-builder/dashboard" element={<SeoDashboardPage />} />
+          <Route path="/ai-builder/seo-dashboard" element={
+            <ProtectedPage>
+              <SeoDashboardPage />
+            </ProtectedPage>
+          } />
+          <Route path="/seo-dashboard" element={
+            <ProtectedPage>
+              <SeoDashboardPage />
+            </ProtectedPage>
+          } />
+          <Route path="/dashboard/seo" element={
+            <ProtectedPage>
+              <SeoDashboardPage />
+            </ProtectedPage>
+          } />
+          <Route path="/ai-builder/dashboard" element={
+            <ProtectedPage>
+              <SeoDashboardPage />
+            </ProtectedPage>
+          } />
           <Route path="/ai-builder/design-kits" element={<DesignKitsPage />} />
           <Route path="/ai-builder/templates" element={<DesignKitsPage />} />
           <Route path="/ai-builder/pricing" element={<PricingPage />} />

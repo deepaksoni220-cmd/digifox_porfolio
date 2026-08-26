@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Media } from '../components/Media';
 
 export const AdminPage: React.FC = () => {
@@ -72,15 +73,27 @@ export const AdminPage: React.FC = () => {
   return (
     <div className="p-10 text-[var(--text-strong)] bg-black min-h-screen font-sans">
       <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-10">
-          <h1 className="text-4xl font-bold">Local Content Manager</h1>
-          <button 
-            onClick={handleSave} 
-            disabled={saving || uploading}
-            className="bg-blue-600 hover:bg-blue-500 text-[var(--text-strong)] px-6 py-2 rounded font-bold"
-          >
-            {saving ? 'Saving...' : 'Save Changes'}
-          </button>
+        <div className="flex flex-wrap justify-between items-center gap-4 mb-10">
+          <div>
+            <h1 className="text-4xl font-bold">Admin Content & SEO Manager</h1>
+            <p className="text-sm text-gray-400 mt-1">Manage portfolio media, content, and autonomous client SEO engines.</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/ai-builder/seo-dashboard"
+              className="bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 hover:opacity-95 text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg flex items-center gap-2"
+            >
+              <span>Client SEO Dashboard</span>
+              <span>⚡</span>
+            </Link>
+            <button 
+              onClick={handleSave} 
+              disabled={saving || uploading}
+              className="bg-blue-600 hover:bg-blue-500 text-[var(--text-strong)] px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider"
+            >
+              {saving ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
         </div>
 
         {/* Hero Section */}

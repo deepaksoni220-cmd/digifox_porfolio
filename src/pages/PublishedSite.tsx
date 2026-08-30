@@ -275,10 +275,14 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
     }
   };
 
-  // Handle Static HTML Templates (Aero, Voya, Intik, etc.) if templateUrl is provided and not blacklane
-  if (siteData.type === 'html_template' && siteData.templateUrl && !siteData.data?.templateStyle?.includes('blacklane') && !siteData.templateUrl.includes('localhost:3009')) {
-    let effectiveUrl = siteData.templateUrl;
-    if (effectiveUrl.startsWith('http://localhost:') || effectiveUrl.startsWith('http://127.0.0.1:')) {
+  // Handle HTML Templates (Blacklane 3D, Aero, Voya, Bookcabs, Intik, etc.)
+  if (siteData.type === 'html_template' || siteData.templateUrl || siteData.data?.templateStyle === 'blacklaneLuxury') {
+    let effectiveUrl = siteData.templateUrl || siteData.data?.previewUrl;
+    
+    // Normalize Blacklane to the clean static production build
+    if (!effectiveUrl || effectiveUrl.includes('blacklane') || effectiveUrl.includes('localhost:3009') || effectiveUrl.includes('localhost:5009')) {
+      effectiveUrl = '/templates/blacklane web/www.blacklane.com/www.blacklane.com/en/index.html';
+    } else if (effectiveUrl.startsWith('http://localhost:') || effectiveUrl.startsWith('http://127.0.0.1:')) {
       try {
         const parsed = new URL(effectiveUrl);
         effectiveUrl = parsed.pathname;
@@ -287,17 +291,19 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
       }
     }
 
-    return (
-      <div className="w-full h-screen overflow-hidden bg-black">
-        <iframe 
-          src={effectiveUrl} 
-          onLoad={handleIframeLoad}
-          allow="autoplay; fullscreen; xr-spatial-tracking"
-          className="w-full h-full border-none"
-          title={`${subdomain} Template`}
-        />
-      </div>
-    );
+    if (effectiveUrl) {
+      return (
+        <div className="w-full h-screen overflow-hidden bg-black">
+          <iframe 
+            src={effectiveUrl} 
+            onLoad={handleIframeLoad}
+            allow="autoplay; fullscreen; xr-spatial-tracking"
+            className="w-full h-full border-none"
+            title={`${subdomain} Template`}
+          />
+        </div>
+      );
+    }
   }
 
   // Handle Full Production Responsive React Sites (Blacklane, AI Generated Sites, Customized Templates)

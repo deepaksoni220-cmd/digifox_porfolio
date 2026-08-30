@@ -1015,14 +1015,17 @@ export const AiBuilderPage: React.FC = () => {
 
     setIsPublishing(true);
     try {
-      // For rich React templates (like Blacklane) or localhost preview URLs, publish as native responsive React site
+      // Normalize template URL for production publishing
       let finalTemplateUrl = previewData?.previewUrl;
-      if (
-        previewData?.templateStyle === 'blacklaneLuxury' ||
-        finalTemplateUrl?.includes('localhost:3009') ||
-        finalTemplateUrl?.includes('localhost:5009')
-      ) {
-        finalTemplateUrl = undefined;
+      if (previewData?.templateStyle === 'blacklaneLuxury' || finalTemplateUrl?.includes('blacklane')) {
+        finalTemplateUrl = '/templates/blacklane web/www.blacklane.com/www.blacklane.com/en/index.html';
+      } else if (finalTemplateUrl?.startsWith('http://localhost:') || finalTemplateUrl?.startsWith('http://127.0.0.1:')) {
+        try {
+          const parsed = new URL(finalTemplateUrl);
+          finalTemplateUrl = parsed.pathname;
+        } catch {
+          // keep as is
+        }
       }
 
       await publishWebsite(

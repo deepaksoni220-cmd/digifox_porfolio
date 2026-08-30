@@ -1,23 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { GeneratedWebsiteData } from '../../services/aiBuilderService';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { 
-  Car, 
-  MapPin, 
-  Calendar, 
+  ChevronDown, 
   ChevronRight, 
   Star, 
-  Phone, 
-  CheckCircle2, 
+  ShieldCheck, 
+  Clock, 
   Sparkles, 
-  Plane, 
-  Compass, 
-  Crown,
-  RotateCw,
-  Eye
+  ArrowRight,
+  Globe
 } from 'lucide-react';
 
 interface BlacklaneTemplateProps {
@@ -40,657 +32,362 @@ export const BlacklaneLuxuryTemplate: React.FC<BlacklaneTemplateProps> = ({
   updateData,
   EditableField
 }) => {
-  const [activeTab, setActiveTab] = useState<'oneway' | 'hourly'>('oneway');
-  const [selectedFleet, setSelectedFleet] = useState<number>(0);
-  const [activeCarModel, setActiveCarModel] = useState<'audi' | 'tesla'>('audi');
-  const [carLoading, setCarLoading] = useState<boolean>(true);
-  const canvasContainerRef = useRef<HTMLDivElement>(null);
+  const [tripType, setTripType] = useState<'oneway' | 'hourly'>('oneway');
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-  // Interactive 3D WebGL Car Canvas
-  useEffect(() => {
-    const container = canvasContainerRef.current;
-    if (!container) return;
-
-    // Scene & Camera
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 1000);
-    camera.position.set(4.5, 1.8, 5.5);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.3;
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-    container.innerHTML = '';
-    container.appendChild(renderer.domElement);
-
-    // OrbitControls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.maxPolarAngle = Math.PI / 2 - 0.05; // don't go below floor
-    controls.minDistance = 3;
-    controls.maxDistance = 10;
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.8;
-
-    // Studio Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
-    scene.add(ambientLight);
-
-    const mainKeyLight = new THREE.DirectionalLight(0xfff5ea, 2.5);
-    mainKeyLight.position.set(5, 8, 5);
-    mainKeyLight.castShadow = true;
-    scene.add(mainKeyLight);
-
-    const blueRimLight = new THREE.DirectionalLight(0x38bdf8, 2.0);
-    blueRimLight.position.set(-6, 4, -5);
-    scene.add(blueRimLight);
-
-    const goldAccentLight = new THREE.PointLight(0xf59e0b, 3, 20);
-    goldAccentLight.position.set(0, 3, -3);
-    scene.add(goldAccentLight);
-
-    // Podium Disc
-    const discGeo = new THREE.CylinderGeometry(3.5, 3.6, 0.1, 64);
-    const discMat = new THREE.MeshStandardMaterial({
-      color: 0x11131a,
-      roughness: 0.2,
-      metalness: 0.8,
-    });
-    const disc = new THREE.Mesh(discGeo, discMat);
-    disc.position.y = -0.05;
-    disc.receiveShadow = true;
-    scene.add(disc);
-
-    // Subtle Glowing Ring on Podium
-    const ringGeo = new THREE.RingGeometry(3.4, 3.48, 64);
-    const ringMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, side: THREE.DoubleSide });
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.rotation.x = -Math.PI / 2;
-    ring.position.y = 0.01;
-    scene.add(ring);
-
-    // Load 3D GLB Model
-    const loader = new GLTFLoader();
-    const modelPath = activeCarModel === 'audi'
-      ? '/templates/blacklane/static.blacklane.com/assets/_next/static/media/audi_a7.glb'
-      : '/templates/blacklane/static.blacklane.com/assets/_next/static/media/tesla_model_s.glb';
-
-    let currentModel: THREE.Group | null = null;
-    setCarLoading(true);
-
-    loader.load(
-      modelPath,
-      (gltf) => {
-        currentModel = gltf.scene;
-        // Auto-center & scale
-        const box = new THREE.Box3().setFromObject(currentModel);
-        const size = box.getSize(new THREE.Vector3());
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 3.6 / maxDim;
-        currentModel.scale.setScalar(scale);
-
-        // Re-center on floor
-        box.setFromObject(currentModel);
-        const center = box.getCenter(new THREE.Vector3());
-        currentModel.position.x = -center.x;
-        currentModel.position.y = -box.min.y;
-        currentModel.position.z = -center.z;
-
-        currentModel.traverse((node) => {
-          if ((node as THREE.Mesh).isMesh) {
-            node.castShadow = true;
-            node.receiveShadow = true;
-          }
-        });
-
-        scene.add(currentModel);
-        setCarLoading(false);
-      },
-      undefined,
-      () => {
-        // Fallback procedural luxury car geometry if GLB is loading
-        const bodyGeo = new THREE.BoxGeometry(3.4, 0.9, 1.6);
-        const bodyMat = new THREE.MeshPhysicalMaterial({
-          color: 0x0a0c12,
-          metalness: 0.9,
-          roughness: 0.1,
-          clearcoat: 1.0,
-          clearcoatRoughness: 0.1
-        });
-        const mesh = new THREE.Mesh(bodyGeo, bodyMat);
-        mesh.position.y = 0.6;
-        mesh.castShadow = true;
-        scene.add(mesh);
-        setCarLoading(false);
-      }
-    );
-
-    let animationFrameId: number;
-    const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    const handleResize = () => {
-      if (!container) return;
-      camera.aspect = container.clientWidth / container.clientHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(container.clientWidth, container.clientHeight);
-    };
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', handleResize);
-      renderer.dispose();
-      if (container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
-      }
-    };
-  }, [activeCarModel]);
-
-  const defaultBento = [
+  const carouselCards = [
     {
-      tag: "Global Telemetry",
-      title: "Worldwide Flight Radar Tracking",
-      description: "Continuous flight radar monitoring automatically synchronizes driver dispatch with early arrivals or international tarmac delays.",
-      metric: "500+ Global Cities",
-      icon: "⚡"
+      tag: "AIRPORT TRANSFERS",
+      title: "Flight tracking & 1hr free wait time",
+      description: "Relax with 1 hour of complimentary wait time and real-time flight tracking.",
+      image: "/templates/blacklane/assets/_next/static/media/1.879377e626f27fdd.webp"
     },
     {
-      tag: "First-Class Fleet",
-      title: "Immaculate European Fleet",
-      description: "Late-model Mercedes-Benz S-Class, BMW 7 Series, and Mercedes V-Class sanitized before every journey.",
-      metric: "Euro NCAP 5★",
-      icon: "🛡️"
+      tag: "CITY TO CITY",
+      title: "Your hassle-free alternative to flights and trains",
+      description: "Save time and travel in comfort between global metropolitan hubs.",
+      image: "/templates/blacklane/assets/_next/static/media/2.9ae17562d88c590d.webp"
     },
     {
-      tag: "Financial Certainty",
-      title: "All-Inclusive Upfront Fixed Rates",
-      description: "Zero dynamic peak-hour surge pricing. All tolls, airport parking fees, and driver gratuities are 100% included.",
-      metric: "0% Surge Multiplier",
-      icon: "💎"
+      tag: "BY THE HOUR",
+      title: "A dedicated chauffeur for as long as you need",
+      description: "Total flexibility for business meetings, roadshows, and city exploration.",
+      image: "/templates/blacklane/assets/_next/static/media/3.a05cc4329bbe2ee0.webp"
     },
     {
-      tag: "VIP Protocol",
-      title: "Terminal Meet & Greet Escort",
-      description: "Professional suited chauffeurs meeting you inside the arrivals hall with personalized digital name tablets.",
-      metric: "VIP Baggage Escort",
-      icon: "👑"
+      tag: "CHAUFFEURED RIDES",
+      title: "First-class mobility on demand",
+      description: "Top-of-the-line European luxury fleet with licensed, suited chauffeurs.",
+      image: "/templates/blacklane/assets/_next/static/media/4.13f5624e9bdcc2ee.webp"
     }
   ];
-
-  const defaultFleet = [
-    {
-      title: "First Class Mercedes S-Class",
-      description: "The pinnacle of executive luxury. Reclining rear seats, acoustic glass, and ambient climate control.",
-      price: "$195 Fixed",
-      icon: "🚗",
-      passengers: "3 Guests",
-      luggage: "2 Bags"
-    },
-    {
-      title: "Business Class Mercedes E-Class",
-      description: "Sophisticated, punctual mobility for executive day commutes, meetings, and airport transfers.",
-      price: "$145 Fixed",
-      icon: "💼",
-      passengers: "3 Guests",
-      luggage: "2 Bags"
-    },
-    {
-      title: "Business Van Mercedes V-Class",
-      description: "Spacious luxury people mover seating up to 7 passengers with generous luggage capacity.",
-      price: "$210 Fixed",
-      icon: "🚐",
-      passengers: "6 Guests",
-      luggage: "6 Bags"
-    },
-    {
-      title: "By-the-Hour Private Chauffeur",
-      description: "Flexible hourly disposal for multi-stop corporate roadshows, diplomatic visits, and luxury shopping.",
-      price: "$130 / hr",
-      icon: "⏱️",
-      passengers: "Tailored",
-      luggage: "Tailored"
-    }
-  ];
-
-  const bentoItems = data.bentoFeatures && data.bentoFeatures.length > 0 ? data.bentoFeatures : defaultBento;
-  const fleetItems = data.items && data.items.length > 0 ? data.items : defaultFleet;
 
   return (
-    <div className="w-full min-h-screen bg-[#07080c] text-white font-sans selection:bg-[#ca8a04] selection:text-black overflow-x-hidden">
+    <div className="w-full min-h-screen bg-[#07080d] text-white font-sans selection:bg-[#1d4ed8] selection:text-white overflow-x-hidden">
       
-      {/* Luxury Ambient Glows */}
-      <div className="fixed top-0 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="fixed bottom-1/3 right-10 w-[500px] h-[500px] bg-[#ca8a04]/10 rounded-full blur-[160px] pointer-events-none" />
+      {/* ── 1. HERO SECTION WITH CINEMATIC PASSENGER BACKGROUND ── */}
+      <section 
+        className="relative min-h-[92vh] flex flex-col justify-between bg-cover bg-center px-4 sm:px-8 py-6"
+        style={{
+          backgroundImage: "url('/templates/blacklane/assets/_next/static/media/bg.e8e3285679399bbb.jpg')",
+          backgroundColor: "#0b0d14"
+        }}
+      >
+        {/* Subtle Dark Film Overlay for readable text */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 pointer-events-none" />
 
-      {/* VIP Header Bar */}
-      <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-[#07080c]/85 backdrop-blur-xl px-6 lg:px-12 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          {logoUrl ? (
-            <img src={logoUrl} alt="Logo" className="h-9 w-auto object-contain" />
-          ) : (
-            <div className="flex items-center gap-2.5">
-              <span className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#ca8a04] to-[#eab308] flex items-center justify-center text-black font-extrabold text-lg shadow-lg shadow-yellow-500/20">
-                B
+        {/* TOP NAVIGATION BAR */}
+        <header className="relative z-20 flex items-center justify-between max-w-7xl w-full mx-auto">
+          <div className="flex items-center gap-2">
+            {logoUrl ? (
+              <img src={logoUrl} alt="Logo" className="h-7 w-auto object-contain" />
+            ) : (
+              <span className="text-2xl font-serif tracking-tight font-normal text-white flex items-baseline gap-1">
+                <span className="font-bold">bookcabs</span>
+                <span className="italic font-serif text-amber-200/90 text-xl">aus</span>
               </span>
-              <span className="text-xl font-bold tracking-wider text-white uppercase font-mono">
-                BLACKLANE
-              </span>
+            )}
+          </div>
+
+          <nav className="flex items-center gap-6 text-xs sm:text-sm font-medium text-white/90">
+            <a href="#hero" className="hover:text-white transition-colors">Demo page 1</a>
+            <a href="/templates/blacklane/demo-2.html" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors flex items-center gap-1">
+              Demo page 2 ↗
+            </a>
+            <div className="hidden sm:flex items-center gap-1.5 cursor-pointer text-white/80 hover:text-white">
+              <Globe size={14} />
+              <span>English (US)</span>
+              <ChevronDown size={14} />
             </div>
-          )}
-          <span className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-[11px] font-medium text-white/60">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Global 500+ Cities Active
-          </span>
-        </div>
+          </nav>
+        </header>
 
-        <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-white/70">
-          <a href="#booking" className="hover:text-white transition-colors">Book Chauffeur</a>
-          <a href="#3d-showroom" className="hover:text-white transition-colors flex items-center gap-1.5 text-blue-400 font-semibold">
-            <Sparkles size={14} /> 3D Showroom
-          </a>
-          <a href="#fleet" className="hover:text-white transition-colors">Fleet Tiers</a>
-          <a href="#telemetry" className="hover:text-white transition-colors">Flight Telemetry</a>
-          <a href="#testimonials" className="hover:text-white transition-colors">Client Reviews</a>
-        </nav>
-
-        <div className="flex items-center gap-3">
-          <a 
-            href="https://wa.me/447400000000" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hidden sm:flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white font-medium text-xs tracking-wider transition-all"
+        {/* CENTER HERO HEADING */}
+        <div className="relative z-20 flex flex-col items-center text-center my-auto pt-16 pb-8">
+          <h1 
+            className="text-4xl sm:text-6xl lg:text-7xl font-normal text-white max-w-4xl tracking-tight mb-8"
+            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
           >
-            <Phone size={14} className="text-[#ca8a04]" />
-            <span>VIP Dispatch</span>
-          </a>
-          <a 
-            href="#booking"
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#ca8a04] to-[#eab308] hover:brightness-110 text-black font-bold text-xs uppercase tracking-wider shadow-lg shadow-yellow-500/20 transition-all cursor-pointer"
-          >
-            Reserve Ride
-          </a>
-        </div>
-      </header>
+            <EditableField
+              value={data.hero?.title || "Your chauffeur awaits."}
+              onChange={(val) => updateData(['hero', 'title'], val)}
+            />
+          </h1>
 
-      {/* HERO SECTION */}
-      <section className="relative pt-12 pb-20 px-6 lg:px-12 max-w-7xl mx-auto flex flex-col items-center text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-semibold text-[#ca8a04] mb-6 backdrop-blur-md"
-        >
-          <Crown size={14} />
-          <span>FIRST-CLASS EXECUTIVE CHAUFFEUR MOBILITY</span>
-        </motion.div>
-
-        <motion.h1 
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-5xl leading-[1.08] mb-6"
-        >
-          <EditableField
-            value={data.hero?.title || "Your Chauffeur Awaits."}
-            onChange={(val) => updateData(['hero', 'title'], val)}
-            className="text-white"
-          />
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-base sm:text-xl text-white/60 max-w-3xl mb-12 leading-relaxed"
-        >
-          <EditableField
-            value={data.hero?.subtitle || "First-class global mobility engineered for C-suite leaders. Guaranteed fixed rates, flight radar telemetry, and pristine European luxury fleet in 500+ cities."}
-            onChange={(val) => updateData(['hero', 'subtitle'], val)}
-            multiline
-          />
-        </motion.p>
-
-        {/* INTERACTIVE BOOKING WIDGET */}
-        <motion.div 
-          id="booking"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="w-full max-w-4xl bg-[#0e1018]/90 border border-white/[0.12] rounded-3xl p-6 sm:p-8 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] relative z-20 mb-20 text-left"
-        >
-          {/* Tab Selector */}
-          <div className="flex items-center gap-3 mb-6 border-b border-white/[0.08] pb-4">
-            <button 
-              onClick={() => setActiveTab('oneway')}
-              className={`px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
-                activeTab === 'oneway' 
-                  ? 'bg-gradient-to-r from-[#ca8a04] to-[#eab308] text-black shadow-lg shadow-yellow-500/20' 
-                  : 'bg-white/[0.04] text-white/60 hover:text-white hover:bg-white/[0.08]'
+          {/* CAPSULE TRIP-TYPE TOGGLE (ONE WAY | BY THE HOUR) */}
+          <div className="inline-flex items-center bg-black/60 backdrop-blur-xl border border-white/20 p-1 rounded-full mb-8 shadow-2xl">
+            <button
+              onClick={() => setTripType('oneway')}
+              className={`px-6 py-2 rounded-full text-xs font-semibold tracking-wide transition-all cursor-pointer ${
+                tripType === 'oneway'
+                  ? 'bg-[#1d6ee8] text-white shadow-lg'
+                  : 'text-white/70 hover:text-white'
               }`}
             >
-              One-Way Transfer
+              One way
             </button>
-            <button 
-              onClick={() => setActiveTab('hourly')}
-              className={`px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
-                activeTab === 'hourly' 
-                  ? 'bg-gradient-to-r from-[#ca8a04] to-[#eab308] text-black shadow-lg shadow-yellow-500/20' 
-                  : 'bg-white/[0.04] text-white/60 hover:text-white hover:bg-white/[0.08]'
+            <button
+              onClick={() => setTripType('hourly')}
+              className={`px-6 py-2 rounded-full text-xs font-semibold tracking-wide transition-all cursor-pointer ${
+                tripType === 'hourly'
+                  ? 'bg-[#1d6ee8] text-white shadow-lg'
+                  : 'text-white/70 hover:text-white'
               }`}
             >
-              By The Hour
+              By the hour
             </button>
           </div>
 
-          {/* Form Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-black/50 border border-white/[0.08] rounded-2xl p-3.5 focus-within:border-[#ca8a04] transition-all">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-white/40 flex items-center gap-1.5 mb-1">
-                <MapPin size={12} className="text-[#ca8a04]" /> Pickup Location / Airport Code
-              </label>
-              <input 
-                type="text" 
-                defaultValue="Frankfurt Airport (FRA) Terminal 1" 
-                className="w-full bg-transparent border-none text-white text-sm font-medium outline-none"
-              />
-            </div>
-
-            <div className="bg-black/50 border border-white/[0.08] rounded-2xl p-3.5 focus-within:border-[#ca8a04] transition-all">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-white/40 flex items-center gap-1.5 mb-1">
-                <Compass size={12} className="text-[#ca8a04]" /> Destination / Hotel
-              </label>
-              <input 
-                type="text" 
-                defaultValue="Steigenberger Frankfurter Hof" 
-                className="w-full bg-transparent border-none text-white text-sm font-medium outline-none"
-              />
-            </div>
-
-            <div className="bg-black/50 border border-white/[0.08] rounded-2xl p-3.5 focus-within:border-[#ca8a04] transition-all">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-white/40 flex items-center gap-1.5 mb-1">
-                <Calendar size={12} className="text-[#ca8a04]" /> Date & Wheels-Down Time
-              </label>
-              <input 
-                type="text" 
-                defaultValue="Today, 18:30 CET" 
-                className="w-full bg-transparent border-none text-white text-sm font-medium outline-none"
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3 text-xs text-white/60">
-              <span className="flex items-center gap-1 text-emerald-400 font-semibold">
-                <CheckCircle2 size={14} /> Fixed Price Guarantee
-              </span>
-              <span>•</span>
-              <span>Tolls & Meet & Greet Included</span>
-            </div>
-            <button 
-              onClick={() => alert("Chauffeur Search Initiated! Connected to Global Flight Telemetry.")}
-              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#ca8a04] to-[#eab308] hover:brightness-110 text-black font-extrabold text-sm uppercase tracking-wider shadow-xl shadow-yellow-500/25 transition-all cursor-pointer flex items-center justify-center gap-2"
-            >
-              <span>Search Chauffeurs</span>
-              <ChevronRight size={18} />
-            </button>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* 3D INTERACTIVE CAR SHOWROOM STAGE */}
-      <section id="3d-showroom" className="relative py-16 px-6 lg:px-12 max-w-7xl mx-auto">
-        <div className="bg-[#0b0d14] border border-white/[0.1] rounded-[36px] p-8 lg:p-12 relative overflow-hidden shadow-[0_20px_80px_rgba(0,0,0,0.9)]">
-          
-          <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-8 relative z-10">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-bold text-blue-400 uppercase tracking-widest mb-3">
-                <Sparkles size={12} /> Interactive 3D WebGL Showroom
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-                Inspect The Fleet in 360° Real-Time 3D
-              </h2>
-              <p className="text-white/60 text-sm mt-2 max-w-xl">
-                Drag to rotate the 3D model in full 360 degrees. Zoom in to inspect luxury obsidian finishes and aerodynamic European contours.
-              </p>
-            </div>
-
-            {/* Car Switcher Pills */}
-            <div className="flex items-center gap-2 bg-black/60 border border-white/10 p-1.5 rounded-2xl backdrop-blur-lg">
-              <button 
-                onClick={() => setActiveCarModel('audi')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeCarModel === 'audi' 
-                    ? 'bg-[#ca8a04] text-black shadow-lg' 
-                    : 'text-white/60 hover:text-white'
-                }`}
-              >
-                Audi A7 Luxury
-              </button>
-              <button 
-                onClick={() => setActiveCarModel('tesla')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeCarModel === 'tesla' 
-                    ? 'bg-[#ca8a04] text-black shadow-lg' 
-                    : 'text-white/60 hover:text-white'
-                }`}
-              >
-                Tesla Model S Plaid
-              </button>
-            </div>
-          </div>
-
-          {/* 3D Canvas Viewport */}
-          <div className="relative w-full h-[380px] sm:h-[480px] rounded-2xl bg-gradient-to-b from-[#121524] to-[#08090e] border border-white/[0.06] overflow-hidden flex items-center justify-center">
+          {/* FLOATING TRANSLUCENT BOOKING SEARCH BAR */}
+          <div className="w-full max-w-5xl bg-[#0b0e18]/85 border border-white/15 rounded-2xl sm:rounded-3xl p-3 sm:p-4 backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] text-left grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
             
-            {carLoading && (
-              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#07080c]/80 backdrop-blur-sm gap-3">
-                <RotateCw className="w-8 h-8 text-[#ca8a04] animate-spin" />
-                <span className="text-xs font-mono text-white/60 uppercase tracking-widest">
-                  Loading 3D WebGL Vehicle Model...
-                </span>
+            {/* Pickup Location */}
+            <div className="lg:col-span-3 px-4 py-2 bg-white/[0.04] rounded-xl border border-white/[0.06] hover:border-white/20 transition-all">
+              <label className="block text-[11px] font-medium text-white/50 mb-0.5">Pickup location</label>
+              <input 
+                type="text" 
+                placeholder="Address, airport, hotel, ..." 
+                defaultValue="Melbourne Airport (MEL)"
+                className="w-full bg-transparent text-white text-xs sm:text-sm font-medium outline-none placeholder:text-white/30"
+              />
+            </div>
+
+            {/* Drop-off Location */}
+            {tripType === 'oneway' && (
+              <div className="lg:col-span-3 px-4 py-2 bg-white/[0.04] rounded-xl border border-white/[0.06] hover:border-white/20 transition-all">
+                <label className="block text-[11px] font-medium text-white/50 mb-0.5">Drop-off location</label>
+                <input 
+                  type="text" 
+                  placeholder="Address, airport, hotel, ..." 
+                  defaultValue="Crown Towers Melbourne"
+                  className="w-full bg-transparent text-white text-xs sm:text-sm font-medium outline-none placeholder:text-white/30"
+                />
               </div>
             )}
 
-            <div ref={canvasContainerRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
+            {/* Date Picker */}
+            <div className={`${tripType === 'oneway' ? 'lg:col-span-2' : 'lg:col-span-4'} px-4 py-2 bg-white/[0.04] rounded-xl border border-white/[0.06] flex items-center justify-between cursor-pointer`}>
+              <div>
+                <label className="block text-[11px] font-medium text-white/50 mb-0.5">Date</label>
+                <span className="text-white text-xs sm:text-sm font-medium">Today</span>
+              </div>
+              <ChevronDown size={16} className="text-white/40" />
+            </div>
 
-            <div className="absolute bottom-4 left-4 z-10 flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-white/50">
-              <Eye size={12} className="text-blue-400" />
-              <span>360° Orbit Active • Touch & Drag</span>
+            {/* Time Picker */}
+            <div className="lg:col-span-2 px-4 py-2 bg-white/[0.04] rounded-xl border border-white/[0.06] flex items-center justify-between cursor-pointer">
+              <div>
+                <label className="block text-[11px] font-medium text-white/50 mb-0.5">Pickup time</label>
+                <span className="text-white text-xs sm:text-sm font-medium">1:15 PM</span>
+              </div>
+              <ChevronDown size={16} className="text-white/40" />
+            </div>
+
+            {/* CTA Button */}
+            <div className="lg:col-span-2">
+              <button 
+                onClick={() => alert("Connecting to Melbourne & Global Chauffeur Dispatch...")}
+                className="w-full h-full py-3.5 px-5 rounded-xl bg-[#1d6ee8] hover:bg-[#1a5ec4] text-white font-semibold text-xs sm:text-sm tracking-wide shadow-lg shadow-blue-600/30 transition-all cursor-pointer flex items-center justify-center gap-1.5 text-center"
+              >
+                <span>View options</span>
+              </button>
             </div>
           </div>
         </div>
+
+        {/* Bottom space filler */}
+        <div className="relative z-20" />
       </section>
 
-      {/* BENTO FLIGHT TELEMETRY & FEATURES */}
-      <section id="telemetry" className="py-20 px-6 lg:px-12 max-w-7xl mx-auto">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-xs font-bold text-[#ca8a04] uppercase tracking-widest mb-4">
-            <Plane size={14} /> FLIGHT TELEMETRY & VIP ASSURANCE
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            <EditableField
-              value={data.about?.heading || "Unrivalled Global Precision & Discretion"}
-              onChange={(val) => updateData(['about', 'heading'], val)}
-            />
+      {/* ── 2. ARRIVE AT YOUR BEST (SWIPABLE LUXURY CAROUSEL) ── */}
+      <section className="py-24 px-6 lg:px-12 max-w-7xl mx-auto">
+        <div className="mb-12">
+          <h2 
+            className="text-3xl sm:text-5xl font-normal text-white tracking-tight mb-3"
+            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+          >
+            Arrive at your best.
           </h2>
-          <p className="text-white/60 text-base sm:text-lg mt-4 leading-relaxed">
-            <EditableField
-              value={data.about?.description || "Blacklane delivers a seamless global standard of executive transit. From Frankfurt to New York, London, and Tokyo, our licensed chauffeurs ensure absolute punctuality, quiet mobile workspace acoustics, and personalized terminal meet & greet."}
-              onChange={(val) => updateData(['about', 'description'], val)}
-              multiline
-            />
+          <p className="text-white/60 text-base sm:text-lg">
+            Effortless journeys, tailored to you.
           </p>
         </div>
 
-        {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {bentoItems.map((item, idx) => (
+          {carouselCards.map((card, idx) => (
             <motion.div
               key={idx}
               whileHover={{ y: -6 }}
-              className="p-8 rounded-3xl bg-[#0c0e18] border border-white/[0.08] hover:border-[#ca8a04]/40 transition-all flex flex-col justify-between shadow-xl"
+              className="group relative rounded-3xl overflow-hidden bg-[#111420] border border-white/10 flex flex-col justify-between shadow-xl cursor-pointer"
             >
-              <div>
-                <div className="w-12 h-12 rounded-2xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-2xl mb-6">
-                  {item.icon || "⚡"}
-                </div>
-                <span className="text-[10px] font-mono text-[#ca8a04] uppercase tracking-widest font-bold">
-                  {item.tag || "Protocol"}
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#181c2c]">
+                <img 
+                  src={card.image} 
+                  alt={card.title} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <span className="absolute top-4 left-4 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-black/70 backdrop-blur-md text-white/90">
+                  {card.tag}
                 </span>
-                <h3 className="text-xl font-bold text-white mt-1 mb-3">
-                  {item.title}
-                </h3>
-                <p className="text-white/60 text-sm leading-relaxed">
-                  {item.description}
-                </p>
               </div>
-              <div className="mt-8 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs">
-                <span className="text-white/40 font-mono">Standard</span>
-                <span className="text-white font-bold text-sm text-[#ca8a04]">{item.metric || "Verified"}</span>
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">
+                  {card.title}
+                </h3>
+                <p className="text-xs text-white/60 leading-relaxed mb-4">
+                  {card.description}
+                </p>
+                <div className="flex items-center gap-1 text-xs font-semibold text-blue-400">
+                  <span>Learn more</span>
+                  <ChevronRight size={14} />
+                </div>
               </div>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* FLEET TIERS & PRICING */}
-      <section id="fleet" className="py-20 px-6 lg:px-12 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-12">
+      {/* ── 3. STEP IN. BREATHE OUT. (LUXURY INTERIOR HERO) ── */}
+      <section className="py-20 px-6 lg:px-12 bg-[#0c0e18] border-y border-white/[0.08]">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-xs font-bold text-[#ca8a04] uppercase tracking-widest mb-3">
-              <Car size={14} /> EUROPEAN EXECUTIVE FLEET
-            </div>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
-              Pristine Fleet Tiers
-            </h2>
-          </div>
-          <p className="text-white/60 text-sm max-w-md">
-            Every vehicle is thoroughly detailed, climate controlled, and stocked with chilled mineral water and high-speed mobile Wi-Fi.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {fleetItems.map((fleet, idx) => (
-            <div 
-              key={idx}
-              className={`rounded-3xl border p-7 flex flex-col justify-between transition-all ${
-                selectedFleet === idx 
-                  ? 'bg-gradient-to-b from-[#181a28] to-[#0d0f18] border-[#ca8a04] shadow-[0_10px_40px_rgba(202,138,4,0.15)]' 
-                  : 'bg-[#0c0e18] border-white/[0.08] hover:border-white/20'
-              }`}
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.06] text-xs font-semibold text-white/80 mb-4">
+              <Sparkles size={12} className="text-amber-400" />
+              PEACE OF MIND TRAVEL
+            </span>
+            <h2 
+              className="text-3xl sm:text-5xl font-normal text-white mb-6 leading-tight"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-3xl">{fleet.icon || "🚗"}</span>
-                  <span className="px-3 py-1 rounded-full bg-white/[0.06] text-xs font-bold text-[#ca8a04]">
-                    <EditableField
-                      value={fleet.price || "$195 Fixed"}
-                      onChange={(val) => updateData(['items', idx.toString(), 'price'], val)}
-                    />
-                  </span>
-                </div>
-
-                <h3 className="text-xl font-bold text-white mb-2">
-                  <EditableField
-                    value={fleet.title}
-                    onChange={(val) => updateData(['items', idx.toString(), 'title'], val)}
-                  />
-                </h3>
-
-                <p className="text-white/60 text-xs leading-relaxed mb-6">
-                  <EditableField
-                    value={fleet.description}
-                    onChange={(val) => updateData(['items', idx.toString(), 'description'], val)}
-                    multiline
-                  />
-                </p>
+              Step in. Breathe out.
+            </h2>
+            <p className="text-white/70 text-base sm:text-lg leading-relaxed mb-8">
+              Whether you are heading to an international flight or a high-stakes board meeting, enjoy absolute silence, privacy, and impeccable European chauffeur hospitality.
+            </p>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+                <ShieldCheck className="text-blue-400 mb-2" size={24} />
+                <h4 className="font-semibold text-sm text-white">Vetted Chauffeurs</h4>
+                <p className="text-xs text-white/50 mt-1">Licensed, insured, and thoroughly background checked.</p>
               </div>
-
-              <div>
-                <div className="grid grid-cols-2 gap-2 text-[11px] text-white/50 border-t border-white/[0.08] pt-4 mb-6">
-                  <div>👥 {(fleet as any).passengers || "3 Guests"}</div>
-                  <div>🧳 {(fleet as any).luggage || "2 Bags"}</div>
-                </div>
-
-                <button 
-                  onClick={() => setSelectedFleet(idx)}
-                  className={`w-full py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
-                    selectedFleet === idx 
-                      ? 'bg-[#ca8a04] text-black shadow-md' 
-                      : 'bg-white/[0.06] hover:bg-white/[0.12] text-white'
-                  }`}
-                >
-                  {selectedFleet === idx ? 'Selected Tier ✓' : 'Select Fleet'}
-                </button>
+              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+                <Clock className="text-amber-400 mb-2" size={24} />
+                <h4 className="font-semibold text-sm text-white">Flight Tracking</h4>
+                <p className="text-xs text-white/50 mt-1">Automatic dispatch adjustment for delay compensation.</p>
               </div>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* CLIENT TESTIMONIALS */}
-      <section id="testimonials" className="py-20 px-6 lg:px-12 max-w-7xl mx-auto">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-xs font-bold text-[#ca8a04] uppercase tracking-widest mb-3">
-            <Star size={14} className="fill-[#ca8a04]" /> EXECUTIVE ENDORSEMENTS
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-            Trusted by Global C-Suite Executives
-          </h2>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {(data.testimonials || []).map((t, idx) => (
-            <div key={idx} className="p-8 rounded-3xl bg-[#0c0e18] border border-white/[0.08] flex flex-col justify-between">
-              <div className="flex gap-1 text-[#ca8a04] mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={16} className="fill-[#ca8a04]" />
-                ))}
-              </div>
-              <p className="text-white/80 text-sm italic leading-relaxed mb-6">
-                "{t.quote}"
-              </p>
-              <div className="border-t border-white/[0.06] pt-4">
-                <div className="font-bold text-white text-sm">{t.author}</div>
-                <div className="text-white/40 text-xs">{t.role}</div>
-              </div>
-            </div>
-          ))}
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/15">
+            <img 
+              src="/templates/blacklane/assets/_next/static/media/ride-2.1ffe259f4c10fd5e.webp" 
+              alt="Luxury Chauffeur Interior"
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
       </section>
 
-      {/* FAQ SECTION */}
-      <section className="py-20 px-6 lg:px-12 max-w-4xl mx-auto">
-        <h2 className="text-3xl font-extrabold text-white text-center mb-12">
+      {/* ── 4. WE MOVE WITH YOU (APP DOWNLOAD SECTION) ── */}
+      <section className="py-24 px-6 lg:px-12 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 
+              className="text-3xl sm:text-5xl font-normal text-white mb-4"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+            >
+              We move with you.
+            </h2>
+            <p className="text-white/70 text-base sm:text-lg mb-8 leading-relaxed">
+              Have all your journeys in the palm of your hand with the bookcabs aus mobile application.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <img 
+                src="/templates/blacklane/assets/_next/static/media/app-store-logo-light.5f768b87b08b58e5.svg" 
+                alt="App Store" 
+                className="h-11 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              />
+              <img 
+                src="/templates/blacklane/assets/_next/static/media/playstore-logo-light.2938f2b1a073fbc4.svg" 
+                alt="Google Play" 
+                className="h-11 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              />
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <img 
+              src="/templates/blacklane/assets/_next/static/media/img.59bf95b01983baf4.png" 
+              alt="Mobile App Demo"
+              className="max-h-[460px] w-auto object-contain drop-shadow-2xl"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ── 5. FAQ SECTION ── */}
+      <section className="py-20 px-6 lg:px-12 max-w-4xl mx-auto border-t border-white/[0.08]">
+        <h2 
+          className="text-3xl sm:text-4xl font-normal text-white text-center mb-12"
+          style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+        >
           Frequently Asked Questions
         </h2>
         <div className="space-y-4">
-          {(data.faqs || []).map((faq, idx) => (
-            <div key={idx} className="p-6 rounded-2xl bg-[#0c0e18] border border-white/[0.08]">
-              <h3 className="font-bold text-white text-base mb-2">{faq.question}</h3>
-              <p className="text-white/60 text-sm leading-relaxed">{faq.answer}</p>
+          {(data.faqs || [
+            {
+              question: "How does the airport pickup and meet & greet service work?",
+              answer: "Your chauffeur tracks your flight in real time and waits inside the terminal arrivals hall holding a personalized digital nameboard, assisting with all luggage directly to your luxury vehicle."
+            },
+            {
+              question: "What is included in the fixed-rate quote?",
+              answer: "All rates are 100% all-inclusive. Airport parking, road tolls, and chauffeur gratuities are already covered with zero hidden surcharges."
+            },
+            {
+              question: "Can I book a chauffeur by the hour?",
+              answer: "Yes, select 'By the hour' on the booking bar to reserve a dedicated vehicle and driver for flexible multi-stop transit."
+            }
+          ]).map((faq, idx) => (
+            <div 
+              key={idx} 
+              className="rounded-2xl bg-[#0e111c] border border-white/[0.08] overflow-hidden"
+            >
+              <button
+                onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
+                className="w-full p-6 text-left flex items-center justify-between font-medium text-white text-base hover:text-blue-400 transition-colors"
+              >
+                <span>{faq.question}</span>
+                <ChevronDown 
+                  size={18} 
+                  className={`text-white/50 transition-transform duration-200 ${activeFaq === idx ? 'rotate-180 text-blue-400' : ''}`}
+                />
+              </button>
+              <AnimatePresence>
+                {activeFaq === idx && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="px-6 pb-6 text-sm text-white/60 leading-relaxed border-t border-white/[0.04] pt-4"
+                  >
+                    {faq.answer}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           ))}
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-white/[0.08] bg-black/40 py-12 px-6 lg:px-12 max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-white/50">
-        <div>© 2026 Blacklane Executive Mobility. All rights reserved.</div>
-        <div className="flex items-center gap-6">
-          <a href="#" className="hover:text-white">Privacy Policy</a>
-          <a href="#" className="hover:text-white">Terms of Chauffeur Transit</a>
-          <a href="#" className="hover:text-white">Global Dispatch Radar</a>
+      {/* ── 6. FOOTER ── */}
+      <footer className="border-t border-white/[0.08] bg-[#07080c] py-12 px-6 lg:px-12 text-xs text-white/40">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div>© 2026 bookcabs aus / Blacklane Executive Transport. All rights reserved.</div>
+          <div className="flex items-center gap-6">
+            <a href="#" className="hover:text-white">Privacy Notice</a>
+            <a href="#" className="hover:text-white">Chauffeur Terms</a>
+            <a href="#" className="hover:text-white">Corporate Accounts</a>
+          </div>
         </div>
       </footer>
     </div>

@@ -6,14 +6,13 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     templateStyle: "blacklaneLuxury",
     category: "3d",
     previewUrl: "/templates/blacklane/index.html",
-    shortDescription: "Global Executive Chauffeur & Airport Transit 3D App with Audi A7 & Tesla WebGL 3D Models, Flight Telemetry & VIP Booking.",
-    thumbnailUrl: "/templates/blacklane-cover.jpg",
-    previewVideoUrl: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260324_151826_c7218672-6e92-402c-9e45-f1e0f454bdc4.mp4",
+    shortDescription: "First-class global executive chauffeur mobility with one-way and hourly booking, European fleet, and flight telemetry.",
+    thumbnailUrl: "/templates/blacklane-hero-cover.jpg",
     hero: {
-      title: "Blacklane Global Executive Chauffeur",
-      subtitle: "First-class global mobility engineered for C-suite leaders. Guaranteed fixed rates, flight radar telemetry, and pristine European luxury fleet in 500+ cities.",
-      ctaText: "Reserve First-Class Chauffeur",
-      imagePrompt: "Luxury black Mercedes-Benz S-Class sedan parked outside VIP airport terminal under golden hour architectural canopy, suited chauffeur holding luggage, cinematic 8k"
+      title: "Your chauffeur awaits.",
+      subtitle: "First-class global mobility engineered for C-suite leaders. Guaranteed fixed rates, flight radar telemetry, and pristine European luxury fleet.",
+      ctaText: "View options",
+      imagePrompt: "Passenger inside luxury executive car looking at chauffeur"
     },
     about: {
       heading: "Unrivalled Global Precision & Discretion",

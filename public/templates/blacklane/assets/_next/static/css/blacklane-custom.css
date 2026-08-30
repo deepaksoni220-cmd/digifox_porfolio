@@ -1,0 +1,2072 @@
+/* ==========================================================================
+   BLACKLANE MASTER STYLESHEET (PIXEL-PERFECT RECONSTRUCTION)
+   Desktop & Mobile Complete Precision Design + Swipable Carousel
+   ========================================================================== */
+
+:root {
+  --bl-bg-dark: #0f1319;
+  --bl-primary: #0f63bd;
+  --bl-primary-hover: #0d4a8c;
+  --bl-text-light: #ffffff;
+  --bl-text-muted: rgba(255, 255, 255, 0.7);
+  --bl-text-dim: rgba(255, 255, 255, 0.45);
+}
+
+/* Global Reset & Base */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #0b0e14 !important;
+  color: #ffffff !important;
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: clip !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box !important;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   HEADER / NAVBAR
+   ========================================================================== */
+.Header_header__DfAB0 {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 100 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 24px 48px !important;
+  background: transparent !important;
+}
+
+.Header_logoWrapper__jGiqc {
+  display: flex !important;
+  align-items: center !important;
+  text-decoration: none !important;
+  z-index: 101 !important;
+}
+
+.Header_logoWrapper__jGiqc svg path {
+  fill: #ffffff !important;
+}
+
+.Header_logoWrapper__jGiqc svg:first-child {
+  display: none !important;
+}
+
+.Header_logoWrapper__jGiqc svg:last-child {
+  display: block !important;
+}
+
+.NavigationMenu_navList__DpxWT {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.NavigationMenuDropdown_dropdown__nfmEJ,
+.NavigationMenu_navList__DpxWT li {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.GhostButton_ghost-button__SfQDT,
+.BaseButton_baseLink__6FHbz.GhostButton_ghost-button__SfQDT,
+.NavigationMenuDropdown_dropdownTrigger__Vq_nM {
+  background: transparent !important;
+  color: #ffffff !important;
+  font-size: 14.5px !important;
+  font-weight: 500 !important;
+  padding: 8px 12px !important;
+  border-radius: 999px !important;
+  border: 1px solid transparent !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.GhostButton_ghost-button__SfQDT:hover,
+.NavigationMenuDropdown_dropdownTrigger__Vq_nM:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.NavigationMenuDropdown_icon__vTaYm {
+  width: 14px !important;
+  height: 14px !important;
+  opacity: 0.85 !important;
+}
+
+/* Sign In Glass Button */
+.SignInButton_button__EcwBe,
+.GlassButton_glass-background__SIpfn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+  padding: 8px 20px !important;
+  border-radius: 999px !important;
+  font-size: 14.5px !important;
+  font-weight: 500 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.SignInButton_button__EcwBe:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Top Nav Demo Buttons */
+.TopNav_demoBtn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 999px !important;
+  padding: 6px 14px !important;
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+}
+
+.TopNav_demoBtn:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+}
+
+.TopNav_demoBtn.TopNav_active {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+}
+
+.NavigationMenu_navList__DpxWT > .StandardButton_standard-button__uILct:last-child {
+  display: none !important;
+}
+
+/* Mobile Hamburger Button */
+.MobileMenu_toggleButton {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  z-index: 102;
+  padding: 0;
+}
+
+.MobileMenu_toggleButton span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+/* Mobile Drawer Overlay */
+.MobileMenu_drawer {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 14, 20, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  z-index: 99;
+  padding: 100px 32px 48px;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.MobileMenu_drawer.is-open {
+  display: flex;
+}
+
+.MobileMenu_links {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.MobileMenu_links a {
+  font-size: 22px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+.Hero_hero__L3_jO {
+  position: relative !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  background-image: linear-gradient(180deg, rgba(15, 19, 25, 0.15) 0%, rgba(15, 19, 25, 0.05) 30%, rgba(15, 19, 25, 0.4) 70%, rgba(15, 19, 25, 0.95) 100%), url('/assets/_next/static/media/bg.e8e3285679399bbb.jpg') !important;
+  background-size: cover !important;
+  background-position: center 25% !important;
+  background-repeat: no-repeat !important;
+  padding: 120px 24px 60px !important;
+  overflow: hidden !important;
+}
+
+.Hero_content__69IIW {
+  width: 100% !important;
+  max-width: 1140px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  margin: 0 auto !important;
+  z-index: 10 !important;
+}
+
+.Hero_title__I_fKT,
+.Typography_display__MFaXd.Hero_title__I_fKT {
+  font-family: 'PP Fragment', Georgia, serif !important;
+  font-size: 64px !important;
+  font-weight: 400 !important;
+  line-height: 1.15 !important;
+  color: #dbe9ff !important;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6) !important;
+  margin: 0 0 28px 0 !important;
+  letter-spacing: -0.5px !important;
+}
+
+.BookingWidget_bookingWidgetWrapper__uVukG {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 24px !important;
+}
+
+.BookingWidget_categoryToggleButton__Kl37V,
+.SegmentedControl_group__eYWdG {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: rgba(10, 14, 20, 0.5) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 999px !important;
+  padding: 4px !important;
+  gap: 4px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+.SegmentedControlItem_option__qIJgI {
+  cursor: pointer !important;
+  position: relative !important;
+  padding: 8px 24px !important;
+  border-radius: 999px !important;
+  font-size: 14.5px !important;
+  font-weight: 500 !important;
+  color: #ffffff !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+  user-select: none !important;
+  border: 1px solid transparent !important;
+}
+
+.SegmentedControlItem_option__qIJgI input[type="radio"] {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.SegmentedControlItem_option__qIJgI.is-active,
+.SegmentedControlItem_option__qIJgI:has(input:checked) {
+  background: #0f63bd !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 12px rgba(15, 99, 189, 0.4) !important;
+}
+
+/* ==========================================================================
+   FLOATING GLASS BOOKING BAR (DESKTOP)
+   ========================================================================== */
+.BookingWidget_bookingWindow__yxntP {
+  width: 100% !important;
+  max-width: 1080px !important;
+  background: rgba(22, 28, 38, 0.65) !important;
+  backdrop-filter: blur(30px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(190%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 18px !important;
+  padding: 14px 20px !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  overflow: visible !important;
+}
+
+.BookingWidget_searchBar__yrr_r {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex: 1 1 auto !important;
+  gap: 0 !important;
+  min-width: 0 !important;
+}
+
+.BookingWidget_locationSection__ows_i {
+  display: flex !important;
+  flex-direction: row !important;
+  flex: 2 1 0% !important;
+  gap: 20px !important;
+  align-items: center !important;
+  min-width: 0 !important;
+}
+
+.BookingWidget_scheduleSection__LA4W0 {
+  display: flex !important;
+  flex-direction: row !important;
+  flex: 1.5 1 0% !important;
+  gap: 20px !important;
+  align-items: center !important;
+  min-width: 0 !important;
+}
+
+.BookingWidget_fieldWrapper__vaH_6 {
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  text-align: left !important;
+}
+
+.Dropdown_triggerContainer__QkmxC,
+.Dropdown_triggerInner__LLi0L,
+.FieldWrapper_wrapper__FqkMf {
+  width: 100% !important;
+  display: block !important;
+}
+
+.FieldWrapper_label__HOD_S {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  margin-bottom: 4px !important;
+  display: block !important;
+  white-space: nowrap !important;
+}
+
+.FieldWrapper_inputContainer__qXY8R {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35) !important;
+  padding-bottom: 4px !important;
+  transition: border-color 0.2s !important;
+}
+
+.FieldWrapper_inputContainer__qXY8R:focus-within,
+.FieldWrapper_inputContainer__qXY8R:hover {
+  border-bottom-color: #0f63bd !important;
+}
+
+.Input_input__IHYPL {
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-family: inherit !important;
+  padding: 2px 0 !important;
+  width: 100% !important;
+  outline: none !important;
+  text-overflow: ellipsis !important;
+}
+
+.Input_input__IHYPL::placeholder {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.FieldWrapper_endAdornment__Dcnms {
+  position: absolute !important;
+  right: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  pointer-events: none !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.FieldWrapper_endAdornment__Dcnms svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+hr.Divider_divider__NDhMz,
+.BookingWidget_divider__cecmo {
+  flex: 0 0 1px !important;
+  width: 1px !important;
+  height: 38px !important;
+  min-width: 1px !important;
+  max-width: 1px !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: none !important;
+  margin: 0 16px !important;
+  padding: 0 !important;
+  display: block !important;
+}
+
+.BookingWidget_actionSection__r7HOH {
+  display: flex !important;
+  align-items: center !important;
+  flex: 0 0 auto !important;
+  padding-left: 8px !important;
+}
+
+.BookingWidget_searchButton__0z5yQ {
+  background: #0f63bd !important;
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  padding: 13px 30px !important;
+  border-radius: 999px !important;
+  border: none !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  box-shadow: 0 4px 14px rgba(15, 99, 189, 0.4) !important;
+  transition: all 0.2s ease !important;
+}
+
+.BookingWidget_searchButton__0z5yQ:hover {
+  background: #0d4a8c !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 20px rgba(15, 99, 189, 0.5) !important;
+}
+
+.BookingWidget_heroContent__icMuX {
+  display: none !important;
+}
+
+/* ==========================================================================
+   CAROUSEL SECTION (Arrive at your best - SWIPABLE)
+   ========================================================================== */
+.BookSection_bookSection__icco5 {
+  background-color: #0f1319 !important;
+  padding: 96px 48px !important;
+}
+
+.BookSection_firstScreenContainer__tWKIL {
+  max-width: 1140px !important;
+  margin: 0 auto 48px !important;
+}
+
+@keyframes gradientTextAnim {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.BookSection_subtitle__C22At {
+  font-family: 'PP Fragment', Georgia, serif !important;
+  font-size: 48px !important;
+  font-weight: 400 !important;
+  margin-bottom: 12px !important;
+  background-image: linear-gradient(to right, #40ffaa, #4079ff, #40ffaa, #4079ff, #40ffaa) !important;
+  background-size: 300% 100% !important;
+  background-repeat: repeat !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  animation: gradientTextAnim 4s ease-in-out infinite !important;
+  display: inline-block !important;
+  transition: transform 0.3s ease !important;
+  cursor: pointer !important;
+}
+
+.BookSection_subtitle__C22At:hover {
+  animation-play-state: paused !important;
+}
+
+.Typography_subheadline__OTYvI {
+  font-size: 18px !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.BookSection_cardsSectionContainer__H6Qd5 {
+  max-width: 1140px !important;
+  margin: 0 auto !important;
+}
+
+.Carousel_trackViewport__O_bZ8 {
+  width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  scroll-snap-type: x mandatory !important;
+  scrollbar-width: none !important;
+  padding-bottom: 8px !important;
+}
+
+.Carousel_trackViewport__O_bZ8::-webkit-scrollbar {
+  display: none !important;
+}
+
+.Carousel_track__RC3x9 {
+  display: flex !important;
+  gap: 24px !important;
+  width: max-content !important;
+}
+
+.Carousel_slide__GNfI8 {
+  list-style: none !important;
+  flex: 0 0 270px !important;
+  width: 270px !important;
+  scroll-snap-align: start !important;
+}
+
+.ImageCard_card__e9GJD {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  min-height: 480px !important;
+  transition: transform 0.2s, border-color 0.2s !important;
+}
+
+.ImageCard_card__e9GJD:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.ImageCard_media-container__Wcbgq {
+  width: 100% !important;
+  height: 200px !important;
+  overflow: hidden !important;
+}
+
+.ImageCard_media-container__Wcbgq img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.ImageCard_content___89zk {
+  padding: 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  justify-content: space-between !important;
+}
+
+.ImageCard_subheadline__gbPUb {
+  font-size: 12px !important;
+  text-transform: uppercase !important;
+  color: #0f63bd !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  margin-bottom: 8px !important;
+  display: block !important;
+}
+
+.ImageCard_title__sl7j5 {
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  margin-bottom: 12px !important;
+  color: #ffffff !important;
+}
+
+.ImageCard_body__8FPmj {
+  font-size: 14px !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  line-height: 1.6 !important;
+  margin-bottom: 24px !important;
+}
+
+.ImageCard_button__t_eyd {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+  background: transparent !important;
+  padding: 10px 20px !important;
+  border-radius: 999px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s !important;
+}
+
+.ImageCard_button__t_eyd:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: #ffffff !important;
+}
+
+.Carousel_navigation__MCVtp {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  margin-top: 24px !important;
+}
+
+.Carousel_button__D4Wug {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.Carousel_button__D4Wug:hover:not([disabled]) {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ==========================================================================
+   APP DOWNLOAD SECTION ("We move with you.")
+   ========================================================================== */
+.BookAnyWhereSection_section__0f_l9 {
+  background-color: #a9c8f6 !important;
+  color: #0f1319 !important;
+  padding: 100px 48px !important;
+  position: relative !important;
+}
+
+.BookAnyWhereSection_container__mel9a {
+  max-width: 1140px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 48px !important;
+}
+
+.BookAnyWhereSection_textContainer__eyaUE {
+  flex: 1 1 45% !important;
+  max-width: 480px !important;
+}
+
+.BookAnyWhereSection_title__mV_FA {
+  font-family: 'PP Fragment', Georgia, serif !important;
+  font-size: 56px !important;
+  font-weight: 400 !important;
+  color: #0f1319 !important;
+  line-height: 1.15 !important;
+  margin-bottom: 24px !important;
+  letter-spacing: -0.5px !important;
+}
+
+.BookAnyWhereSection_subtitle__Mjufm {
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  color: #0f1319 !important;
+  line-height: 1.45 !important;
+  margin-bottom: 36px !important;
+  max-width: 420px !important;
+}
+
+.BookAnyWhereSection_buttons__o6_Wt {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+.BookAnyWhereSection_buttons__o6_Wt a {
+  display: inline-flex !important;
+  align-items: center !important;
+  transition: transform 0.2s ease !important;
+}
+
+.BookAnyWhereSection_buttons__o6_Wt a:hover {
+  transform: translateY(-2px) !important;
+}
+
+.BookAnyWhereSection_buttons__o6_Wt img {
+  height: 40px !important;
+  width: auto !important;
+}
+
+.BookAnyWhereSection_imageContainer__5LDyw {
+  flex: 1 1 55% !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.BookAnyWhereSection_imageContainer__5LDyw img {
+  max-width: 580px !important;
+  width: 100% !important;
+  height: auto !important;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.12)) !important;
+}
+
+/* ==========================================================================
+   RIDE SECTION - FULL WIDTH STICKY STACKING CARDS ("Step in. Breathe out.")
+   ========================================================================== */
+.RideSection_ride__n9N1U {
+  background-color: #0b0e14 !important;
+  padding: 140px 24px 320px !important;
+  position: relative !important;
+  overflow: visible !important;
+}
+
+.RideSection_container__HaOe4 {
+  max-width: 1140px !important;
+  margin: 0 auto 60px !important;
+  text-align: center !important;
+  position: sticky !important;
+  top: 90px !important;
+  z-index: 5 !important;
+  pointer-events: none !important;
+}
+
+.RideSection_title__deEWa {
+  font-family: 'PP Fragment', Georgia, serif !important;
+  font-size: 52px !important;
+  font-weight: 400 !important;
+  color: #ffffff !important;
+  margin-bottom: 16px !important;
+  letter-spacing: -0.5px !important;
+}
+
+.RideSection_subtitle__WvoSR {
+  font-size: 20px !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  max-width: 680px !important;
+  margin: 0 auto !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+
+.RideSection_imageContainer__40TAg {
+  max-width: 1140px !important;
+  margin: 0 auto !important;
+  position: relative !important;
+  overflow: visible !important;
+}
+
+.RideSection_slidesList__6W6w3 {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.RideSection_slideWrapper__qJBLG {
+  position: sticky !important;
+  width: 100% !important;
+  height: 560px !important;
+  margin-bottom: 260px !important;
+  border-radius: 28px !important;
+  overflow: hidden !important;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.15) !important;
+  background-color: #121720 !important;
+  transform-origin: top center !important;
+  will-change: transform, filter !important;
+  transition: transform 0.1s ease-out, filter 0.1s ease-out !important;
+}
+
+.RideSection_slideWrapper__qJBLG:nth-child(1) {
+  z-index: 10 !important;
+  top: 180px !important;
+}
+
+.RideSection_slideWrapper__qJBLG:nth-child(2) {
+  z-index: 11 !important;
+  top: 210px !important;
+}
+
+.RideSection_slideWrapper__qJBLG:nth-child(3) {
+  z-index: 12 !important;
+  top: 240px !important;
+  margin-bottom: 40px !important;
+}
+
+.RideSection_slide__eLTbC {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  border: none !important;
+  border-radius: 28px !important;
+  overflow: hidden !important;
+  background: none !important;
+  padding: 0 !important;
+}
+
+.RideSection_slideMedia__6L44e {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1 !important;
+}
+
+.RideSection_slideMedia__6L44e img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+}
+
+.RideSection_slide__eLTbC .ImageCard_content___89zk {
+  position: relative !important;
+  z-index: 3 !important;
+  background: linear-gradient(0deg, rgba(8, 11, 16, 0.95) 0%, rgba(8, 11, 16, 0.65) 45%, rgba(8, 11, 16, 0) 100%) !important;
+  padding: 60px 48px 48px !important;
+  width: 100% !important;
+  border: none !important;
+}
+
+.RideSection_slide__eLTbC .ImageCard_title__sl7j5 {
+  font-family: 'PP Fragment', Georgia, serif !important;
+  font-size: 36px !important;
+  font-weight: 400 !important;
+  color: #ffffff !important;
+  margin-bottom: 12px !important;
+  letter-spacing: -0.3px !important;
+}
+
+.RideSection_slide__eLTbC .ImageCard_body__8FPmj {
+  font-size: 17px !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  max-width: 620px !important;
+  line-height: 1.6 !important;
+  margin-bottom: 0 !important;
+}
+
+/* ==========================================================================
+   ARRIVE SECTION
+   ========================================================================== */
+.Arrive_arrive__7XKKN {
+  background-color: #f2f7fd !important;
+  background: linear-gradient(180deg, #ebf3fd 0%, #f6f9fe 100%) !important;
+  padding: 96px 48px !important;
+  border-top: 1px solid rgba(15, 19, 25, 0.06) !important;
+}
+
+.Arrive_contentWrapper__76K97 {
+  max-width: 1140px !important;
+  margin: 0 auto !important;
+}
+
+.Arrive_title__IBYp4 {
+  font-family: 'PP Fragment', Georgia, serif !important;
+  font-size: 44px !important;
+  font-weight: 400 !important;
+  color: #0f1319 !important;
+  margin-bottom: 12px !important;
+  letter-spacing: -0.5px !important;
+}
+
+.Arrive_subtitle__s6PQF {
+  font-size: 19px !important;
+  color: #475569 !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  margin-bottom: 0 !important;
+}
+
+.Arrive_featuresGrid__fuMxZ {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+  gap: 32px !important;
+  margin-top: 48px !important;
+}
+
+.Arrive_featureCard__OUKF7 {
+  background: #bad7fd !important;
+  background: linear-gradient(145deg, #d3e6ff 0%, #b8d7fd 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: 24px !important;
+  padding: 40px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 16px 40px -10px rgba(15, 40, 90, 0.12) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.Arrive_featureCard__OUKF7:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 24px 50px -10px rgba(15, 40, 90, 0.18) !important;
+}
+
+.Arrive_cardTitle__HdqIT {
+  font-family: 'PP Fragment', Georgia, serif !important;
+  font-size: 28px !important;
+  font-weight: 500 !important;
+  color: #0f1319 !important;
+  margin-bottom: 10px !important;
+  letter-spacing: -0.3px !important;
+}
+
+.Arrive_cardSubtitle__Fjf1v {
+  font-size: 16.5px !important;
+  color: #243042 !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+
+.Arrive_iconWrapper___hnXS {
+  margin-top: 32px !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+/* ==========================================================================
+   SUSTAINABILITY PARTNERS BANNER
+   ========================================================================== */
+.SustainabilityBanner_banner__Lz_Jb,
+section:has(.SustainabilityBanner_iconWrapper__SrQLs),
+[class*="SustainabilityBanner"] {
+  background-color: #0b0e14 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding: 50px 48px !important;
+  display: flex !important;
+  justify-content: center !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.SustainabilityBanner_container__D1T8v,
+[class*="SustainabilityBanner_container"] {
+  max-width: 1140px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 40px !important;
+}
+
+.SustainabilityBanner_title__L9p7t,
+[class*="SustainabilityBanner_title"] {
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  letter-spacing: -0.2px !important;
+}
+
+.SustainabilityBanner_iconsContainer__jY6a0,
+[class*="SustainabilityBanner_iconsContainer"] {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 48px !important;
+  flex-wrap: wrap !important;
+}
+
+.SustainabilityBanner_iconWrapper__SrQLs,
+[class*="SustainabilityBanner_iconWrapper"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 0.8 !important;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+
+.SustainabilityBanner_iconWrapper__SrQLs:hover {
+  opacity: 1 !important;
+  transform: translateY(-2px) !important;
+}
+
+.SustainabilityBanner_iconWrapper__SrQLs svg {
+  height: 38px !important;
+  width: auto !important;
+  max-height: 42px !important;
+}
+
+/* Fix dark black SVG paths on dark background */
+.SustainabilityBanner_iconWrapper__SrQLs svg path[fill="#000"],
+.SustainabilityBanner_iconWrapper__SrQLs svg path[fill="#000000"],
+.SustainabilityBanner_iconWrapper__SrQLs svg [fill="#000"] {
+  fill: #ffffff !important;
+}
+
+/* ==========================================================================
+   FOOTER SECTION
+   ========================================================================== */
+dialog.Modal_modal__ZSysS,
+dialog {
+  display: none !important;
+}
+
+.Footer_footer__ekQgR {
+  background-color: #080a0e !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding: 80px 48px 48px !important;
+  color: #ffffff !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.Footer_contentWrapper__I_jfU {
+  max-width: 1140px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 56px !important;
+}
+
+.AppDownloadLinks_appLinks__FmgJm {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding-bottom: 40px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.AppDownloadLinks_leftContent__2qBO3 img {
+  height: 28px !important;
+  width: auto !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+.AppDownloadLinks_rightContent__MIslY {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+.AppDownloadLinks_rightContent__MIslY img {
+  height: 38px !important;
+  width: auto !important;
+}
+
+.Footer_linksWrapper__2R2GA {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: 36px !important;
+}
+
+.LinkGroup_linkContainer__a9vJ3 {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.LinkGroup_linksHeadline__f1dK3 p {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  margin-bottom: 18px !important;
+}
+
+.LinkGroup_linkList__J__cb {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+
+.LinkGroup_linkListItem__jERnI p {
+  margin: 0 !important;
+}
+
+.LinkGroup_linkListItem__jERnI a,
+.TextLink_base__WCYD0 {
+  font-size: 14px !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  transition: color 0.2s ease !important;
+  line-height: 1.4 !important;
+}
+
+.LinkGroup_linkListItem__jERnI a:hover,
+.TextLink_base__WCYD0:hover {
+  color: #ffffff !important;
+  text-decoration: underline !important;
+}
+
+.LegalSection_legalSection__JaA7O {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding-top: 36px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  gap: 24px !important;
+}
+
+.LegalSection_legalLeft__jSo7w {
+  display: flex !important;
+  align-items: center !important;
+  gap: 32px !important;
+  font-size: 13.5px !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.LegalSection_legalLeft__jSo7w p {
+  margin: 0 !important;
+}
+
+.LegalSection_legalLinks__U5zGS {
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+}
+
+.LegalSection_socialLinks__hmyUk {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+.LegalSection_socialIcon___kDTA {
+  color: rgba(255, 255, 255, 0.65) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.2s ease !important;
+}
+
+.LegalSection_socialIcon___kDTA:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVE SYSTEM (< 768px) - MATCHING UPLOADED MOBILE SCREENSHOT
+   ========================================================================== */
+@media (max-width: 768px) {
+  .Header_header__DfAB0 {
+    padding: 16px 20px !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  .NavigationMenu_navList__DpxWT {
+    display: none !important;
+  }
+
+  .MobileMenu_toggleButton {
+    display: flex !important;
+  }
+
+  .Hero_hero__L3_jO {
+    background-image: linear-gradient(180deg, rgba(15, 19, 25, 0.15) 0%, rgba(15, 19, 25, 0.05) 25%, rgba(15, 19, 25, 0.5) 60%, rgba(15, 19, 25, 0.95) 100%), url('/assets/_next/static/media/bg-mobile.df1a913778bc3029.jpg'), url('/assets/_next/static/media/bg.e8e3285679399bbb.jpg') !important;
+    background-size: cover !important;
+    background-position: center top !important;
+    padding: 100px 16px 40px !important;
+    min-height: 100vh !important;
+    justify-content: flex-end !important;
+  }
+
+  .Hero_content__69IIW {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .Hero_title__I_fKT,
+  .Typography_display__MFaXd.Hero_title__I_fKT {
+    font-size: 34px !important;
+    line-height: 1.2 !important;
+    margin-bottom: 20px !important;
+    text-shadow: 0 3px 20px rgba(0, 0, 0, 0.7) !important;
+  }
+
+  .BookingWidget_bookingWidgetWrapper__uVukG {
+    width: 100% !important;
+    gap: 16px !important;
+  }
+
+  .BookingWidget_categoryToggleButton__Kl37V,
+  .SegmentedControl_group__eYWdG {
+    margin-bottom: 12px !important;
+    padding: 3px !important;
+  }
+
+  .SegmentedControlItem_option__qIJgI {
+    padding: 7px 20px !important;
+    font-size: 13.5px !important;
+  }
+
+  /* Exact Mobile Glassmorphic Card */
+  .BookingWidget_bookingWindow__yxntP {
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 400px !important;
+    background: rgba(28, 34, 44, 0.65) !important;
+    backdrop-filter: blur(30px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(190%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 20px !important;
+    padding: 24px 20px 20px !important;
+    gap: 0 !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+    margin: 0 auto !important;
+  }
+
+  .BookingWidget_searchBar__yrr_r {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 16px !important;
+  }
+
+  .BookingWidget_locationSection__ows_i {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 16px !important;
+  }
+
+  .BookingWidget_scheduleSection__LA4W0 {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 16px !important;
+  }
+
+  .BookingWidget_fieldWrapper__vaH_6 {
+    width: 100% !important;
+    margin-bottom: 0 !important;
+  }
+
+  .FieldWrapper_label__HOD_S {
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    margin-bottom: 6px !important;
+  }
+
+  .FieldWrapper_inputContainer__qXY8R {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35) !important;
+    padding-bottom: 6px !important;
+    width: 100% !important;
+  }
+
+  .Input_input__IHYPL {
+    font-size: 14.5px !important;
+    color: #ffffff !important;
+    padding: 2px 0 !important;
+  }
+
+  .Input_input__IHYPL::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+  }
+
+  .FieldWrapper_endAdornment__Dcnms {
+    right: 4px !important;
+  }
+
+  hr.Divider_divider__NDhMz,
+  .BookingWidget_divider__cecmo {
+    display: none !important;
+  }
+
+  .BookingWidget_actionSection__r7HOH {
+    width: 100% !important;
+    padding: 0 !important;
+    margin-top: 20px !important;
+  }
+
+  .BookingWidget_searchButton__0z5yQ {
+    width: 100% !important;
+    height: 50px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    border-radius: 999px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  /* Mobile Swipable Carousel for "Arrive at your best." */
+  .BookSection_bookSection__icco5 {
+    padding: 60px 0 60px 16px !important;
+    overflow: hidden !important;
+  }
+
+  .BookSection_firstScreenContainer__tWKIL {
+    padding-right: 16px !important;
+    margin-bottom: 32px !important;
+  }
+
+  .BookSection_cardsSectionContainer__H6Qd5 {
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .Carousel_trackViewport__O_bZ8 {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x mandatory !important;
+    padding-right: 24px !important;
+  }
+
+  .Carousel_track__RC3x9 {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 16px !important;
+    width: max-content !important;
+  }
+
+  .Carousel_slide__GNfI8 {
+    flex: 0 0 280px !important;
+    width: 280px !important;
+    scroll-snap-align: start !important;
+  }
+
+  .Carousel_navigation__MCVtp {
+    padding-right: 20px !important;
+  }
+
+  /* Mobile Swipable Carousel for "Step in. Breathe out." */
+  .RideSection_ride__n9N1U {
+    padding: 60px 0 60px 16px !important;
+    overflow: hidden !important;
+  }
+
+  .RideSection_container__HaOe4 {
+    position: static !important;
+    padding-right: 16px !important;
+    margin-bottom: 28px !important;
+    text-align: left !important;
+  }
+
+  .RideSection_imageContainer__40TAg {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x mandatory !important;
+    scrollbar-width: none !important;
+    padding-right: 24px !important;
+  }
+
+  .RideSection_imageContainer__40TAg::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .RideSection_slidesList__6W6w3 {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 16px !important;
+    width: max-content !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .RideSection_slideWrapper__qJBLG {
+    position: static !important;
+    flex: 0 0 280px !important;
+    width: 280px !important;
+    max-width: 82vw !important;
+    height: 420px !important;
+    scroll-snap-align: start !important;
+    scroll-snap-stop: always !important;
+    margin-bottom: 0 !important;
+    border-radius: 20px !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.12) !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .RideSection_slide__eLTbC {
+    border-radius: 20px !important;
+  }
+
+  .RideSection_slide__eLTbC .ImageCard_content___89zk {
+    padding: 28px 20px 20px !important;
+  }
+
+  .RideSection_slide__eLTbC .ImageCard_title__sl7j5 {
+    font-size: 24px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .RideSection_slide__eLTbC .ImageCard_body__8FPmj {
+    font-size: 14.5px !important;
+  }
+
+  /* Mobile "We move with you." section */
+  .BookAnyWhereSection_section__0f_l9 {
+    background-color: #a9c8f6 !important;
+    padding: 60px 20px !important;
+    text-align: center !important;
+  }
+
+  .BookAnyWhereSection_container__mel9a {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 36px !important;
+  }
+
+  .BookAnyWhereSection_textContainer__eyaUE {
+    max-width: 100% !important;
+    margin: 0 auto !important;
+  }
+
+  .BookAnyWhereSection_title__mV_FA {
+    font-size: 36px !important;
+    margin-bottom: 16px !important;
+    text-align: center !important;
+    color: #0f1319 !important;
+  }
+
+  .BookAnyWhereSection_subtitle__Mjufm {
+    font-size: 18px !important;
+    color: #0f1319 !important;
+    margin-bottom: 28px !important;
+    text-align: center !important;
+    max-width: 320px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .BookAnyWhereSection_buttons__o6_Wt {
+    justify-content: center !important;
+    margin-bottom: 24px !important;
+  }
+
+  .BookAnyWhereSection_imageContainer__5LDyw img {
+    max-width: 100% !important;
+    margin: 0 auto !important;
+  }
+
+  /* Other Content Sections */
+  .Arrive_arrive__7XKKN {
+    padding: 60px 16px !important;
+  }
+
+  .BookSection_subtitle__C22At,
+  .Arrive_title__IBYp4 {
+    font-size: 32px !important;
+  }
+
+  /* Mobile Sustainability Banner */
+  .SustainabilityBanner_banner__Lz_Jb,
+  [class*="SustainabilityBanner"] {
+    padding: 40px 20px !important;
+  }
+
+  .SustainabilityBanner_container__D1T8v,
+  [class*="SustainabilityBanner_container"] {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 24px !important;
+  }
+
+  .SustainabilityBanner_iconsContainer__jY6a0,
+  [class*="SustainabilityBanner_iconsContainer"] {
+    justify-content: center !important;
+    gap: 28px !important;
+  }
+
+  /* Mobile Footer */
+  .Footer_footer__ekQgR {
+    padding: 48px 20px 32px !important;
+  }
+
+  .AppDownloadLinks_appLinks__FmgJm {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 24px !important;
+  }
+
+  .Footer_linksWrapper__2R2GA {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  .LegalSection_legalSection__JaA7O {
+    flex-direction: column-reverse !important;
+    align-items: flex-start !important;
+    gap: 24px !important;
+  }
+
+  .LegalSection_legalLeft__jSo7w {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+
+  .LegalSection_legalLinks__U5zGS {
+    flex-wrap: wrap !important;
+    gap: 14px !important;
+  }
+}
+
+/* ==========================================================================
+   DEMO PAGE 2 - 3D CAR SHOWCASE HERO BANNER
+   ========================================================================== */
+.Demo2_HeroSection {
+  position: relative !important;
+  min-height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  background-color: #07090e !important;
+  padding: 100px 32px 32px !important;
+  overflow: hidden !important;
+}
+
+.Demo2_HeroBg {
+  position: absolute !important;
+  inset: 0 !important;
+  background-size: cover !important;
+  background-position: center bottom !important;
+  background-repeat: no-repeat !important;
+  z-index: 1 !important;
+  opacity: 0.9 !important;
+  transform: scale(1.02) !important;
+  transition: transform 0.8s ease-out !important;
+}
+
+.Demo2_HeroOverlay {
+  position: absolute !important;
+  inset: 0 !important;
+  background: radial-gradient(circle at 65% 50%, rgba(7, 9, 14, 0.1) 0%, rgba(7, 9, 14, 0.75) 70%, rgba(7, 9, 14, 0.95) 100%),
+              linear-gradient(180deg, rgba(7, 9, 14, 0.6) 0%, transparent 40%, rgba(7, 9, 14, 0.95) 100%) !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+}
+
+.Demo2_Container {
+  position: relative !important;
+  z-index: 5 !important;
+  max-width: 1320px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  gap: 32px !important;
+  flex: 1 1 auto !important;
+}
+
+.Demo2_TopGrid {
+  display: grid !important;
+  grid-template-columns: 400px 1fr !important;
+  align-items: center !important;
+  gap: 40px !important;
+  min-height: 520px !important;
+}
+
+.Demo2_LeftCol {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  z-index: 10 !important;
+}
+
+.Demo2_Eyebrow {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 2.5px !important;
+  color: #cda869 !important;
+  text-transform: uppercase !important;
+  margin-bottom: 16px !important;
+  display: block !important;
+}
+
+.Demo2_Title {
+  font-family: 'PP Fragment', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 64px !important;
+  font-weight: 400 !important;
+  line-height: 1.05 !important;
+  color: #ffffff !important;
+  margin-bottom: 20px !important;
+  letter-spacing: -1px !important;
+}
+
+.Demo2_Title span {
+  font-weight: 600 !important;
+}
+
+.Demo2_Subtitle {
+  font-size: 16.5px !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  line-height: 1.55 !important;
+  max-width: 340px !important;
+  margin-bottom: 32px !important;
+}
+
+.Demo2_ActionRow {
+  display: flex !important;
+  gap: 16px !important;
+}
+
+.Demo2_BookBtn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  background: linear-gradient(135deg, #cda869 0%, #b8914b 100%) !important;
+  color: #0c0e14 !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+  padding: 14px 28px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 10px 25px rgba(205, 168, 105, 0.35) !important;
+  transition: all 0.25s ease !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+}
+
+.Demo2_BookBtn:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 14px 30px rgba(205, 168, 105, 0.5) !important;
+  background: linear-gradient(135deg, #dfbc7e 0%, #c49d56 100%) !important;
+}
+
+/* 3D Turntable Area */
+.Demo2_TurntableArea {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  perspective: 1200px !important;
+  height: 100% !important;
+  min-height: 480px !important;
+  cursor: grab !important;
+  user-select: none !important;
+}
+
+.Demo2_TurntableArea:active {
+  cursor: grabbing !important;
+}
+
+.Demo2_NavBtn {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: rgba(20, 25, 35, 0.6) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  padding: 10px 18px !important;
+  border-radius: 999px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 1px !important;
+  cursor: pointer !important;
+  z-index: 20 !important;
+  transition: all 0.25s ease !important;
+}
+
+.Demo2_NavPrev {
+  left: 0 !important;
+}
+
+.Demo2_NavNext {
+  right: 0 !important;
+}
+
+.Demo2_NavBtn:hover {
+  background: rgba(205, 168, 105, 0.2) !important;
+  border-color: #cda869 !important;
+  color: #cda869 !important;
+  transform: translateY(-50%) scale(1.05) !important;
+}
+
+.Demo2_Stage {
+  position: relative !important;
+  width: 100% !important;
+  height: 440px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transform-style: preserve-3d !important;
+  transition: transform 0.1s ease-out !important;
+}
+
+.Demo2_TurntableRing {
+  position: absolute !important;
+  bottom: 40px !important;
+  width: 580px !important;
+  height: 240px !important;
+  border-radius: 50% !important;
+  border: 2px solid rgba(205, 168, 105, 0.6) !important;
+  box-shadow: 0 0 40px rgba(205, 168, 105, 0.35), inset 0 0 40px rgba(205, 168, 105, 0.2) !important;
+  transform: rotateX(72deg) !important;
+  pointer-events: none !important;
+}
+
+.Demo2_CarModelWrapper {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transform-style: preserve-3d !important;
+}
+
+.Demo2_CarCard {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 0 !important;
+  transform: scale(0.88) translateZ(-60px) !important;
+  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  pointer-events: none !important;
+}
+
+.Demo2_CarCard.active {
+  opacity: 1 !important;
+  transform: scale(1) translateZ(0) !important;
+  pointer-events: auto !important;
+}
+
+.Demo2_CarImg {
+  max-width: 540px !important;
+  width: 88% !important;
+  height: auto !important;
+  object-fit: contain !important;
+  border-radius: 16px !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(205, 168, 105, 0.2) !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  transition: transform 0.3s ease !important;
+}
+
+.Demo2_ThreeCanvasContainer {
+  position: relative !important;
+  width: 100% !important;
+  height: 460px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 10 !important;
+  cursor: grab !important;
+}
+
+.Demo2_ThreeCanvasContainer:active {
+  cursor: grabbing !important;
+}
+
+.Demo2_ThreeCanvasContainer canvas {
+  width: 100% !important;
+  height: 100% !important;
+  outline: none !important;
+  display: block !important;
+}
+
+.Demo2_CanvasLoader {
+  position: absolute !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 14px !important;
+  color: #cda869 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 1px !important;
+  pointer-events: none !important;
+  z-index: 20 !important;
+  transition: opacity 0.4s ease !important;
+}
+
+.Demo2_Spinner {
+  width: 40px !important;
+  height: 40px !important;
+  border: 3px solid rgba(205, 168, 105, 0.2) !important;
+  border-top-color: #cda869 !important;
+  border-radius: 50% !important;
+  animation: spinLoader 0.8s linear infinite !important;
+}
+
+@keyframes spinLoader {
+  to { transform: rotate(360deg); }
+}
+
+.Demo2_ColorSwatches {
+  position: absolute !important;
+  bottom: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  background: rgba(12, 16, 24, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(205, 168, 105, 0.4) !important;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  z-index: 25 !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
+}
+
+.Demo2_ColorLabel {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  text-transform: uppercase !important;
+  margin-right: 4px !important;
+}
+
+.Demo2_SwatchBtn {
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 50% !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  outline: none !important;
+  padding: 0 !important;
+}
+
+.Demo2_SwatchBtn:hover {
+  transform: scale(1.2) !important;
+  border-color: #ffffff !important;
+}
+
+.Demo2_SwatchBtn.active {
+  transform: scale(1.25) !important;
+  border-color: #cda869 !important;
+  box-shadow: 0 0 10px rgba(205, 168, 105, 0.8) !important;
+}
+
+.Demo2_PlateBadge {
+  position: absolute !important;
+  bottom: 74px !important;
+  background: rgba(12, 14, 20, 0.9) !important;
+  border: 1px solid rgba(205, 168, 105, 0.6) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8) !important;
+  color: #ffffff !important;
+  font-family: monospace !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  padding: 5px 16px !important;
+  border-radius: 6px !important;
+  text-transform: uppercase !important;
+  z-index: 25 !important;
+  transition: all 0.25s ease !important;
+}
+
+.Demo2_RotateHint {
+  position: absolute !important;
+  bottom: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 1.5px !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  text-transform: uppercase !important;
+  background: rgba(10, 14, 20, 0.6) !important;
+  padding: 6px 16px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  z-index: 25 !important;
+}
+
+.Demo2_MouseIcon {
+  width: 14px !important;
+  height: 20px !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.7) !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  justify-content: center !important;
+  padding-top: 3px !important;
+}
+
+.Demo2_MouseWheel {
+  width: 2px !important;
+  height: 5px !important;
+  background-color: #cda869 !important;
+  border-radius: 2px !important;
+  animation: mouseWheelMove 1.5s infinite ease-in-out !important;
+}
+
+@keyframes mouseWheelMove {
+  0% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(4px); opacity: 0.3; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Bottom Features Glass Bar */
+.Demo2_FeaturesBar {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 20px !important;
+  background: rgba(15, 18, 26, 0.6) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 20px !important;
+  padding: 20px 32px !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+}
+
+.Demo2_FeatureItem {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+.Demo2_FeatureIcon {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 50% !important;
+  background: rgba(205, 168, 105, 0.1) !important;
+  border: 1px solid rgba(205, 168, 105, 0.3) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.Demo2_FeatureText h4 {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  margin: 0 0 4px !important;
+}
+
+.Demo2_FeatureText p {
+  font-size: 13px !important;
+  color: rgba(255, 255, 255, 0.65) !important;
+  margin: 0 !important;
+}
+
+/* Bottom Contact Strip */
+.Demo2_ContactBar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: rgba(10, 12, 18, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 14px !important;
+  padding: 12px 24px !important;
+  font-size: 13.5px !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  flex-wrap: wrap !important;
+  gap: 16px !important;
+}
+
+.Demo2_ContactLeft {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.Demo2_ContactLeft span {
+  color: rgba(255, 255, 255, 0.5) !important;
+  margin-right: 4px !important;
+}
+
+.Demo2_ContactLeft strong {
+  color: #cda869 !important;
+  font-weight: 500 !important;
+}
+
+.Demo2_ContactRight {
+  display: flex !important;
+  align-items: center !important;
+  gap: 24px !important;
+}
+
+.Demo2_ContactLink {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: none !important;
+  transition: color 0.2s !important;
+}
+
+.Demo2_ContactLink:hover {
+  color: #cda869 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .Demo2_TopGrid {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+  }
+  .Demo2_LeftCol {
+    align-items: center !important;
+  }
+  .Demo2_Subtitle {
+    max-width: 100% !important;
+  }
+  .Demo2_FeaturesBar {
+    grid-template-columns: 1fr !important;
+  }
+  .Demo2_SkylineGraphic {
+    display: none !important;
+  }
+}

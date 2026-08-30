@@ -143,7 +143,7 @@ export const StepsProgressBarSection: React.FC = () => {
   ];
 
   return (
-    <div ref={containerRef} className="mb-24 pt-10 pb-16 border-t border-[var(--border-strong)] relative">
+    <div ref={containerRef} className="mb-8 pt-8 pb-4 border-t border-[var(--border-strong)] relative">
       
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto mb-10">
@@ -211,7 +211,7 @@ export const StepsProgressBarSection: React.FC = () => {
       </div>
 
       {/* 5 Step Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5 pb-6 [perspective:1200px] pr-11 sm:pr-0">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5 pb-2 [perspective:1200px] pr-11 sm:pr-0">
         {stepsData.map((item, idx) => {
           const Icon = item.icon;
 
@@ -228,7 +228,7 @@ export const StepsProgressBarSection: React.FC = () => {
               className="relative flex flex-col group cursor-default will-change-transform"
             >
               <div
-                className={`relative bg-[var(--bg-surface)] border ${item.borderActive} rounded-3xl p-5 sm:p-6 flex flex-col justify-between min-h-[290px] sm:min-h-[320px] transition-all duration-300 shadow-md hover:shadow-xl z-10`}
+                className={`relative bg-[var(--bg-surface)] border ${item.borderActive} rounded-3xl p-5 sm:p-5 flex flex-col justify-between min-h-[260px] sm:min-h-[280px] transition-all duration-300 shadow-md hover:shadow-xl z-10`}
               >
                 {/* Scroll-Driven Glow Aura */}
                 <motion.div 

@@ -2308,7 +2308,7 @@ export const AiBuilderPage: React.FC = () => {
       </div>
       
       {/* Global Client Reviews Section */}
-      <section className="mt-20 pt-16 pb-8 border-t border-[var(--border-strong)] relative overflow-hidden">
+      <section className="mt-8 pt-10 pb-8 border-t border-[var(--border-strong)] relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 via-purple-500/5 to-transparent pointer-events-none -z-10" />
         
         <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">

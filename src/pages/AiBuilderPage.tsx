@@ -1018,7 +1018,7 @@ export const AiBuilderPage: React.FC = () => {
       // Normalize template URL for production publishing
       let finalTemplateUrl = previewData?.previewUrl;
       if (previewData?.templateStyle === 'blacklaneLuxury' || finalTemplateUrl?.includes('blacklane')) {
-        finalTemplateUrl = '/templates/blacklane web/www.blacklane.com/www.blacklane.com/en/index.html';
+        finalTemplateUrl = '/templates/blacklane/index.html';
       } else if (finalTemplateUrl?.startsWith('http://localhost:') || finalTemplateUrl?.startsWith('http://127.0.0.1:')) {
         try {
           const parsed = new URL(finalTemplateUrl);

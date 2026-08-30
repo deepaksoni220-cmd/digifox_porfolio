@@ -281,7 +281,7 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
     
     // Normalize Blacklane to the clean static production build
     if (!effectiveUrl || effectiveUrl.includes('blacklane') || effectiveUrl.includes('localhost:3009') || effectiveUrl.includes('localhost:5009')) {
-      effectiveUrl = '/templates/blacklane web/www.blacklane.com/www.blacklane.com/en/index.html';
+      effectiveUrl = '/templates/blacklane/index.html';
     } else if (effectiveUrl.startsWith('http://localhost:') || effectiveUrl.startsWith('http://127.0.0.1:')) {
       try {
         const parsed = new URL(effectiveUrl);

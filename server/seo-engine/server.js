@@ -675,8 +675,8 @@ const TEMPLATE_REGISTRY = [
     name: "Blacklane Global Chauffeur 3D",
     industries: ["chauffeur", "luxury", "cars", "transport", "travel", "executive", "aviation"],
     styles: ["luxury", "dark", "3d", "obsidian", "glassmorphism", "gold"],
-    previewUrl: "http://localhost:3009",
-    thumbnailUrl: "/templates/blacklane web/www.blacklane.com/static.blacklane.com/assets/_next/static/media/car-maybach.jpg"
+    previewUrl: "/templates/blacklane/index.html",
+    thumbnailUrl: "/templates/blacklane-cover.jpg"
   },
   {
     template_id: "bookcabsAus",

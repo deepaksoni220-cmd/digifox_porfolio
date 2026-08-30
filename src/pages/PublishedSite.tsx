@@ -275,13 +275,24 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
     }
   };
 
-  // Handle HTML Templates (Aero, Voya, etc.)
-  if (siteData.type === 'html_template' && siteData.templateUrl) {
+  // Handle Static HTML Templates (Aero, Voya, Intik, etc.) if templateUrl is provided and not blacklane
+  if (siteData.type === 'html_template' && siteData.templateUrl && !siteData.data?.templateStyle?.includes('blacklane') && !siteData.templateUrl.includes('localhost:3009')) {
+    let effectiveUrl = siteData.templateUrl;
+    if (effectiveUrl.startsWith('http://localhost:') || effectiveUrl.startsWith('http://127.0.0.1:')) {
+      try {
+        const parsed = new URL(effectiveUrl);
+        effectiveUrl = parsed.pathname;
+      } catch {
+        // keep as is
+      }
+    }
+
     return (
       <div className="w-full h-screen overflow-hidden bg-black">
         <iframe 
-          src={siteData.templateUrl} 
+          src={effectiveUrl} 
           onLoad={handleIframeLoad}
+          allow="autoplay; fullscreen; xr-spatial-tracking"
           className="w-full h-full border-none"
           title={`${subdomain} Template`}
         />
@@ -289,7 +300,7 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
     );
   }
 
-  // Handle AI Generated Sites
+  // Handle Full Production Responsive React Sites (Blacklane, AI Generated Sites, Customized Templates)
   return (
     <>
       <SEOMeta 

@@ -17,8 +17,8 @@ export const TEMPLATE_REGISTRY: TemplateMetadata[] = [
     styles: ["luxury", "dark", "3d", "obsidian", "glassmorphism", "gold"],
     features: ["hero", "bento-features", "flight-radar-telemetry", "fleet-showcase", "process-timeline", "testimonials", "faqs", "whatsapp-booking"],
     sections: ["hero", "about", "items", "contact"],
-    previewUrl: "http://localhost:3009",
-    thumbnailUrl: "/templates/blacklane web/www.blacklane.com/static.blacklane.com/assets/_next/static/media/car-maybach.jpg"
+    previewUrl: "/templates/blacklane/index.html",
+    thumbnailUrl: "/templates/blacklane-cover.jpg"
   },
   {
     template_id: "bookcabsAus",

@@ -28,3 +28,8 @@ dist-ssr
 .env*
 .next
 blacklane-nextjs/.next
+blacklane-nextjs/node_modules
+blacklane-nextjs/out
+public/templates/blacklane-nextjs/.next
+public/templates/blacklane-nextjs/node_modules
+public/templates/blacklane-nextjs/out

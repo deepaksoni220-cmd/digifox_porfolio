@@ -1015,12 +1015,21 @@ export const AiBuilderPage: React.FC = () => {
 
     setIsPublishing(true);
     try {
-      // Pass previewData.previewUrl so PublishedSite knows it's an iframe template, alongside category, websiteType and businessCategory
+      // For rich React templates (like Blacklane) or localhost preview URLs, publish as native responsive React site
+      let finalTemplateUrl = previewData?.previewUrl;
+      if (
+        previewData?.templateStyle === 'blacklaneLuxury' ||
+        finalTemplateUrl?.includes('localhost:3009') ||
+        finalTemplateUrl?.includes('localhost:5009')
+      ) {
+        finalTemplateUrl = undefined;
+      }
+
       await publishWebsite(
         cleanSubdomain, 
         previewData, 
         logoUrl, 
-        previewData?.previewUrl,
+        finalTemplateUrl,
         templateCategory,
         websiteType,
         previewData?.businessCategory

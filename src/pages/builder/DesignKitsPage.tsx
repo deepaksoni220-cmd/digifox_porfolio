@@ -175,6 +175,24 @@ export const DesignKitsPage: React.FC = () => {
                   <h3 className="font-bold text-sm text-white">{activePreview.title}</h3>
                 </div>
                 <div className="flex items-center gap-2 sm:gap-3">
+                  {activePreview.id === 'blacklaneLuxury' && (
+                    <>
+                      <button
+                        onClick={() => window.open('http://localhost:3009', '_blank')}
+                        className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/30 hover:bg-amber-500/30 text-amber-300 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                        title="Open live Next.js development server on port 3009"
+                      >
+                        <span>Next.js App (3009) ⚡</span>
+                      </button>
+                      <button
+                        onClick={() => window.open('/templates/blacklane/demo-2.html', '_blank')}
+                        className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-500/30 hover:bg-blue-500/30 text-blue-300 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                        title="Open interactive 3D WebGL Showroom Stage"
+                      >
+                        <span>3D Showroom 🏎️</span>
+                      </button>
+                    </>
+                  )}
                   <button
                     onClick={() => window.open(activePreview.url, '_blank')}
                     className="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"

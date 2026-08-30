@@ -38,6 +38,25 @@ export interface GeneratedWebsiteData {
     price?: string; // For e-commerce
     imagePrompt?: string; // For portfolio/ecommerce
   }[];
+  stats?: { value: string; label: string }[];
+  bentoFeatures?: {
+    tag: string;
+    title: string;
+    description: string;
+    metric?: string;
+    icon?: string;
+  }[];
+  processSteps?: {
+    step: string;
+    title: string;
+    description: string;
+  }[];
+  testimonials?: { quote: string; author: string; role: string; rating: number }[];
+  faqs?: { question: string; answer: string }[];
+  designSystem?: {
+    style?: string;
+    typography?: string;
+  };
   contact: {
     heading: string;
     buttonText: string;
@@ -140,3 +159,31 @@ export const patchWebsite = async (userEditRequest: string, currentData: Generat
 
   return await response.json();
 };
+
+export const designWebsite = async (
+  chatHistory: ChatMessage[],
+  websiteType: string,
+  templateCategory: string = 'auto',
+  customPrompt?: string
+): Promise<GeneratedWebsiteData> => {
+  const response = await fetch('/api/generate', {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify({
+      action: 'design_website',
+      chatHistory,
+      websiteType,
+      templateCategory,
+      userPrompt: customPrompt
+    })
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.error || `Design Website Error: ${response.statusText}`);
+  }
+
+  const data = await response.json() as GeneratedWebsiteData;
+  return data;
+};
+

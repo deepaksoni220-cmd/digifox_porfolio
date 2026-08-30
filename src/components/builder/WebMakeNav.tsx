@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "../ThemeToggle";
+import { useAuth } from "../../context/AuthContext";
+import { User, LogOut, ShieldCheck, Crown } from "lucide-react";
 
 interface WebMakeNavProps {
   activePage?: "studio" | "features" | "auto-seo" | "design-kits" | "pricing" | "blogs" | "contact";
@@ -9,8 +11,10 @@ interface WebMakeNavProps {
 
 export const WebMakeNav: React.FC<WebMakeNavProps> = ({ activePage }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname;
+  const { user, isAuthenticated, isAdmin, hasActivePlan, logout, openAuthModal, openPlanModal } = useAuth();
 
   const navLinks = [
     { label: "Web Studio", path: "/ai-builder", key: "studio", badge: "AI" },
@@ -101,6 +105,76 @@ export const WebMakeNav: React.FC<WebMakeNavProps> = ({ activePage }) => {
             <span>Auto SEO & GEO</span>
             <span className="text-xs">⚡</span>
           </Link>
+
+          {/* User Auth Profile / Sign In */}
+          {isAuthenticated && user ? (
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 text-xs font-semibold transition-all cursor-pointer"
+              >
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black ${
+                  isAdmin ? "bg-amber-500 text-black" : "bg-blue-600 text-white"
+                }`}>
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <span className="max-w-[100px] truncate hidden md:inline">{user.name}</span>
+                {isAdmin ? (
+                  <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[9px] font-bold">ADMIN</span>
+                ) : (
+                  <span className="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[9px] font-bold uppercase">
+                    {user.plan || "Free"}
+                  </span>
+                )}
+              </button>
+
+              {userDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-56 bg-[#0b0d18] border border-white/15 rounded-2xl p-2 shadow-2xl z-50 animate-in fade-in zoom-in-95">
+                  <div className="px-3 py-2 border-b border-white/10 mb-1">
+                    <p className="text-xs font-bold text-white truncate">{user.name}</p>
+                    <p className="text-[11px] text-white/50 truncate">{user.email}</p>
+                  </div>
+                  
+                  {!isAdmin && !hasActivePlan && (
+                    <button
+                      onClick={() => { setUserDropdownOpen(false); openPlanModal(); }}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-yellow-300 bg-yellow-500/10 hover:bg-yellow-500/20 transition-all cursor-pointer mb-1"
+                    >
+                      <Crown className="w-3.5 h-3.5" />
+                      <span>Upgrade to Pro</span>
+                    </button>
+                  )}
+
+                  <Link
+                    to="/ai-builder/seo-dashboard"
+                    onClick={() => setUserDropdownOpen(false)}
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-white/80 hover:text-white hover:bg-white/[0.06] transition-all"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+                    <span>SEO Dashboard</span>
+                  </Link>
+
+                  <button
+                    onClick={() => { setUserDropdownOpen(false); logout(); }}
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-red-400 hover:bg-red-500/10 transition-all cursor-pointer mt-1"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => openAuthModal("login")}
+              className="px-4 py-2 rounded-full bg-white/[0.08] hover:bg-white/[0.15] border border-white/15 text-xs font-bold text-white transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+            >
+              <User className="w-3.5 h-3.5 text-blue-400" />
+              <span>Sign In</span>
+            </button>
+          )}
 
           {/* Mobile Hamburger Toggle */}
           <button

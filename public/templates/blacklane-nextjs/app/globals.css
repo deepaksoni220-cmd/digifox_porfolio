@@ -1,0 +1,435 @@
+@import "tailwindcss";
+
+:root {
+  --gold: #cda869;
+  --gold-light: #e5c27a;
+  --gold-dark: #a07c3a;
+  --bg-dark: #080c14;
+  --bg-card: #0d1220;
+  --text-primary: #ffffff;
+  --text-muted: rgba(255,255,255,0.65);
+  --border: rgba(205,168,105,0.25);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: #0b0e14;
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* Gradient text animation */
+@keyframes gradientShift {
+  0%   { background-position: 0% center; }
+  100% { background-position: 300% center; }
+}
+
+@keyframes pulseWave {
+  0% { transform: scale(0.95); opacity: 0.9; }
+  50% { transform: scale(1.08); opacity: 0.4; }
+  100% { transform: scale(0.95); opacity: 0.9; }
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes floatSmooth {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes beamShimmer {
+  0% { opacity: 0.4; transform: scaleX(0.9); }
+  50% { opacity: 1; transform: scaleX(1.1); }
+  100% { opacity: 0.4; transform: scaleX(0.9); }
+}
+
+.gradient-text {
+  background: linear-gradient(
+    90deg,
+    #0F63BD 0%,
+    #38BDF8 25%,
+    #2DD4BF 50%,
+    #38BDF8 75%,
+    #0F63BD 100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 5s linear infinite;
+}
+
+/* Desktop vs Mobile display utilities */
+.mobile-only-btn {
+  display: none !important;
+}
+.desktop-only-controls {
+  display: block;
+}
+.desktop-nav {
+  display: flex !important;
+}
+.mobile-toggle {
+  display: none !important;
+}
+
+/* Step in. Breathe out. — 100% Solid Cards (Zero Transparency) */
+.StepIn_Card,
+.StickyCard_card,
+[class*="StickyCard"],
+[class*="RideSection"] {
+  background-color: #0e131f !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ==========================================================================
+   DEMO 2 DISPLAY TYPOGRAPHY & HERO (DESKTOP)
+   ========================================================================== */
+
+.Demo2_Eyebrow {
+  color: #d4a359;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.Demo2_Title {
+  font-size: clamp(48px, 6vw, 84px);
+  line-height: 1.08;
+  margin-bottom: 22px;
+}
+
+.Demo2_Subtitle {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.6;
+  margin-bottom: 34px;
+  max-width: 460px;
+}
+
+.Demo2_BookBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #d4a359;
+  color: #0b0e14;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  padding: 16px 36px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 24px rgba(212, 163, 89, 0.35);
+}
+
+.Demo2_BookBtn:hover {
+  transform: translateY(-2px);
+  background: #e5c27a;
+  box-shadow: 0 8px 32px rgba(212, 163, 89, 0.5);
+}
+
+.Demo2_ThreeCanvasContainer {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  border-radius: 24px;
+  overflow: visible !important;
+}
+
+.Demo2_SideArrow:hover {
+  background: rgba(212, 163, 89, 0.25) !important;
+  border-color: #d4a359 !important;
+  color: #ffffff !important;
+  transform: translateY(-50%) scale(1.08) !important;
+}
+
+/* ==========================================================================
+   LUXURY DUAL SEGMENTED SWITCHER PILL
+   ========================================================================== */
+
+.Demo2_CategoryToggleRow {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 35;
+  display: flex;
+  justify-content: center;
+}
+
+.Demo2_SegmentedPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(15, 19, 25, 0.94);
+  border: 1px solid rgba(212, 163, 89, 0.5);
+  padding: 4px;
+  border-radius: 999px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 163, 89, 0.2);
+}
+
+.Demo2_SegmentTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  white-space: nowrap;
+}
+
+.Demo2_SegmentTab:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.Demo2_SegmentTab.active {
+  background: linear-gradient(135deg, #d4a359 0%, #b8860b 100%);
+  color: #0b0e14;
+  font-weight: 800;
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 2px 14px rgba(212, 163, 89, 0.55);
+}
+
+.Demo2_TabDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transition: all 0.25s ease;
+}
+
+.Demo2_SegmentTab.active .Demo2_TabDot {
+  background: #0b0e14;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVE RULES (SUPERIOR MOBILE UX)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .mobile-only-btn {
+    display: flex !important;
+  }
+  .desktop-only-controls {
+    display: none !important;
+  }
+  .desktop-nav {
+    display: none !important;
+  }
+  .mobile-toggle {
+    display: flex !important;
+  }
+
+  /* Header adjustments */
+  .Header_header__DfAB0 {
+    padding: 12px 18px !important;
+    position: fixed !important;
+    background: rgba(11, 14, 20, 0.96) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    height: 56px !important;
+  }
+
+  .Header_logo__tcCHI {
+    width: 115px !important;
+    height: 23px !important;
+  }
+
+  /* Demo 2 Mobile Hero — Big Prominent Text + Dual Segmented Switcher */
+  .Demo2_HeroSection {
+    padding: 66px 16px 14px !important;
+    min-height: auto !important;
+  }
+
+  .Demo2_TopGrid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0px !important;
+    margin-bottom: 0px !important;
+    text-align: center !important;
+  }
+
+  .Demo2_LeftCol {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .Demo2_Eyebrow {
+    font-size: 12px !important;
+    letter-spacing: 2.8px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .Demo2_Title {
+    font-size: clamp(36px, 9vw, 46px) !important;
+    line-height: 1.08 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .Demo2_Subtitle {
+    font-size: 15px !important;
+    margin: 0 auto 10px !important;
+    max-width: 330px !important;
+    line-height: 1.4 !important;
+  }
+
+  .Demo2_ActionRow {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin-bottom: 0px !important;
+  }
+
+  .Demo2_BookBtn {
+    padding: 13px 30px !important;
+    font-size: 13px !important;
+    letter-spacing: 1.2px !important;
+  }
+
+  .Demo2_Stage {
+    width: 100% !important;
+    position: relative !important;
+    overflow: visible !important;
+  }
+
+  .Demo2_TurntableArea {
+    width: 100% !important;
+    margin-top: -6px !important;
+    overflow: visible !important;
+  }
+
+  .Demo2_ThreeCanvasContainer {
+    height: 340px !important;
+    border-radius: 16px !important;
+    overflow: visible !important;
+  }
+
+  .Demo2_ThreeCanvasContainer canvas {
+    overflow: visible !important;
+  }
+
+  .Demo2_SideArrow {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .Demo2_SideArrowLeft {
+    left: 4px !important;
+  }
+
+  .Demo2_SideArrowRight {
+    right: 4px !important;
+  }
+
+  .Demo2_CategoryToggleRow {
+    position: absolute !important;
+    bottom: 6px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 35 !important;
+    display: flex !important;
+    justify-content: center !important;
+    width: auto !important;
+  }
+
+  .Demo2_SegmentedPill {
+    padding: 3px !important;
+    gap: 3px !important;
+  }
+
+  .Demo2_SegmentTab {
+    padding: 7px 14px !important;
+    font-size: 11px !important;
+    letter-spacing: 1px !important;
+  }
+
+  .Demo2_RotateHint {
+    display: none !important;
+  }
+
+  /* Booking Widget Mobile */
+  .BookingWidget_bookingWidgetWrapper__uVukG {
+    width: 100% !important;
+    padding: 0 4px !important;
+  }
+
+  .BookingWidget_bookingWindow__yxntP {
+    padding: 16px !important;
+    border-radius: 16px !important;
+    width: 100% !important;
+  }
+
+  .BookingWidget_searchBar__yrr_r {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .BookingWidget_sectionGroup__3Oh2H {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .BookingWidget_divider__cecmo {
+    display: none !important;
+  }
+
+  .BookingWidget_actionSection__r7HOH {
+    width: 100% !important;
+  }
+
+  .BookingWidget_searchButton__0z5yQ {
+    width: 100% !important;
+    height: 48px !important;
+    justify-content: center !important;
+  }
+
+  /* Section Spacings Mobile */
+  .BookSection_bookSection__icco5 {
+    padding: 50px 16px !important;
+  }
+
+  .RideSection_ride__n9N1U {
+    padding: 50px 16px 60px !important;
+    min-height: auto !important;
+  }
+
+  .BookAnyWhereSection_section__0f_l9 {
+    padding: 50px 16px !important;
+  }
+
+  .Arrive_arrive__7XKKN {
+    padding: 50px 16px !important;
+  }
+
+  .Footer_footer__6mFqH {
+    padding: 40px 16px 28px !important;
+  }
+}

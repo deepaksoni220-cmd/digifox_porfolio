@@ -7,8 +7,8 @@ export const ThemeToggle: React.FC = () => {
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
     
-    // Default to light mode if no preference is saved
-    if (savedTheme === 'light' || !savedTheme) {
+    // Default to dark mode unless explicitly set to light
+    if (savedTheme === 'light') {
       setIsLight(true);
       document.documentElement.classList.add('light');
     } else {

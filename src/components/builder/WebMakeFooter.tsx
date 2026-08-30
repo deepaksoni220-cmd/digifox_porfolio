@@ -68,7 +68,10 @@ export const WebMakeFooter: React.FC = () => {
               <span>WhatsApp Chat</span>
               <span>💬</span>
             </a>
-            <a href="mailto:digifox5d@icloud.com" className="text-xs text-white/60 hover:text-white transition-colors">
+            <a href="mailto:sales@webmake.in" className="text-xs text-[#60a5fa] hover:text-[#93c5fd] transition-colors font-medium">
+              sales@webmake.in
+            </a>
+            <a href="mailto:digifox5d@icloud.com" className="text-xs text-white/70 hover:text-white transition-colors">
               digifox5d@icloud.com
             </a>
           </div>

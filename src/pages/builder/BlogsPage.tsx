@@ -25,24 +25,6 @@ export const BlogsPage: React.FC = () => {
       readTime: "4 min read",
       date: "Aug 18, 2026",
       image: "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=800&auto=format&fit=crop"
-    },
-    {
-      id: "core-web-vitals-for-3d-sites",
-      title: "How WebMake Delivers 60 FPS WebGL With 100/100 Core Web Vitals",
-      excerpt: "The engineering behind lightweight 3D chunking, asset streaming, and edge caching for sub-second page loads on mobile.",
-      category: "Engineering",
-      readTime: "6 min read",
-      date: "Aug 15, 2026",
-      image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop"
-    },
-    {
-      id: "custom-domain-setup-guide",
-      title: "Step-by-Step Guide: Connecting Your Custom Domain with Automated SSL",
-      excerpt: "Point your GoDaddy, Namecheap, or Cloudflare domain to your Digifox website in less than 2 minutes.",
-      category: "Tutorials",
-      readTime: "3 min read",
-      date: "Aug 12, 2026",
-      image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=800&auto=format&fit=crop"
     }
   ];
 

@@ -11,6 +11,26 @@ export interface TemplateMetadata {
 
 export const TEMPLATE_REGISTRY: TemplateMetadata[] = [
   {
+    template_id: "blacklaneLuxury",
+    name: "Blacklane Global Chauffeur 3D",
+    industries: ["chauffeur", "luxury", "cars", "transport", "travel", "executive", "aviation"],
+    styles: ["luxury", "dark", "3d", "obsidian", "glassmorphism", "gold"],
+    features: ["hero", "bento-features", "flight-radar-telemetry", "fleet-showcase", "process-timeline", "testimonials", "faqs", "whatsapp-booking"],
+    sections: ["hero", "about", "items", "contact"],
+    previewUrl: "http://localhost:3009",
+    thumbnailUrl: "/templates/blacklane web/www.blacklane.com/static.blacklane.com/assets/_next/static/media/car-maybach.jpg"
+  },
+  {
+    template_id: "bookcabsAus",
+    name: "Bookcabs Australia Chauffeur 3D",
+    industries: ["chauffeur", "melbourne", "australia", "airport", "transfers", "corporate", "luxury"],
+    styles: ["executive", "3d", "sleek", "modern", "interactive"],
+    features: ["hero", "tullamarine-radar-sync", "bento-matrix", "fleet-selection", "fixed-rate-calculator", "testimonials", "faqs", "contact"],
+    sections: ["hero", "about", "items", "contact"],
+    previewUrl: "/templates/demo cars vanta/index.html",
+    thumbnailUrl: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=800&auto=format&fit=crop"
+  },
+  {
     template_id: "aero",
     name: "Aero 3D Business",
     industries: ["tech", "business", "agency", "creative"],

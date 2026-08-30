@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "novamira-lotusgold-in": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@automattic/mcp-wordpress-remote@latest"
+      ],
+      "env": {
+        "WP_API_URL": "https://lotusgold.in/wp-json/mcp/novamira",
+        "WP_API_USERNAME": "deepak.soni220",
+        "WP_API_PASSWORD": "r4GSvZKfhyFsmRwkPprlvDze"
+      }
+    }
+  }
+}

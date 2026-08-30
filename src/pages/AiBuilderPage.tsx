@@ -1,19 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { generateWebsite, planWebsite, patchWebsite, type GeneratedWebsiteData, type ChatMessage } from '../services/aiBuilderService';
+import { generateWebsite, planWebsite, patchWebsite, designWebsite, type GeneratedWebsiteData, type ChatMessage } from '../services/aiBuilderService';
 import { publishWebsite, getPublishedWebsite } from '../services/firebase';
 import { PreviewRenderer } from '../components/builder/PreviewRenderer';
 import { TemplateGallery } from '../components/builder/TemplateGallery';
 import { SEOMeta } from '../components/SEOMeta';
-import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown, Layers, Wand2, Coins, Orbit } from 'lucide-react';
+import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown } from 'lucide-react';
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
 import CursorGrid from '../components/ui/CursorGrid';
 import { StepsProgressBarSection } from '../components/builder/StepsProgressBarSection';
 import { WebMakeNav } from '../components/builder/WebMakeNav';
 import { WebMakeFooter } from '../components/builder/WebMakeFooter';
+import { useAuth } from '../context/AuthContext';
 
 export const AiBuilderPage: React.FC = () => {
+  const { requireAuth, requirePlan, isAuthenticated } = useAuth();
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [currentInput, setCurrentInput] = useState("");
   
@@ -26,6 +28,7 @@ export const AiBuilderPage: React.FC = () => {
 
   const [isPlanning, setIsPlanning] = useState(false);
   const [isBuilding, setIsBuilding] = useState(false);
+  const [isDesigning, setIsDesigning] = useState(false);
   const [error, setError] = useState("");
   const [previewData, setPreviewData] = useState<GeneratedWebsiteData | null>(null);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -868,7 +871,48 @@ export const AiBuilderPage: React.FC = () => {
     }
   };
 
+  const handleDesignWebsite = async () => {
+    if (!isAuthenticated) {
+      requireAuth(() => {});
+      return;
+    }
+    if (chatHistory.length === 0 && !currentInput.trim()) {
+      setError("Please describe your business idea or website vision before designing.");
+      return;
+    }
+
+    setError("");
+    setIsDesigning(true);
+    setPreviewData(null);
+
+    try {
+      let finalHistory = [...chatHistory];
+      if (currentInput.trim()) {
+        finalHistory.push({ role: 'user', text: currentInput });
+        setChatHistory(finalHistory);
+        setCurrentInput("");
+      }
+
+      const result = await designWebsite(finalHistory, websiteType, templateCategory, currentInput);
+      setPreviewData(result);
+      
+      // Auto scroll to preview area smoothly
+      setTimeout(() => {
+        previewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 500);
+
+    } catch (err: any) {
+      setError(err.message || "Failed to design website with Gemini 3.1.");
+    } finally {
+      setIsDesigning(false);
+    }
+  };
+
   const handleBuild = async () => {
+    if (!isAuthenticated) {
+      requireAuth(() => {});
+      return;
+    }
     if (chatHistory.length === 0 && !currentInput.trim()) {
       setError("Please discuss your website with the AI before building.");
       return;
@@ -951,8 +995,10 @@ export const AiBuilderPage: React.FC = () => {
 
   const handlePublishClick = () => {
     if (!previewData) return;
-    setSubdomainInput("");
-    setShowPublishModal(true);
+    requirePlan(() => {
+      setSubdomainInput("");
+      setShowPublishModal(true);
+    });
   };
 
   const confirmPublish = async () => {
@@ -1809,19 +1855,28 @@ export const AiBuilderPage: React.FC = () => {
                           Press <kbd className="px-1.5 py-0.5 rounded bg-black/20 border border-white/10 font-mono text-[10px]">Enter ↵</kbd> to plan
                         </span>
 
-                        <div className="flex gap-2.5 ml-auto">
+                        <div className="flex flex-wrap gap-2.5 ml-auto items-center">
                           <button 
                             onClick={handlePlan}
-                            disabled={isPlanning || isBuilding || !currentInput.trim()}
-                            className="text-[var(--text-strong)] border border-[var(--border-strong)] hover:border-[#3b82f6] hover:text-[#3b82f6] px-5 py-1.5 rounded-full font-bold uppercase tracking-wider text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                            disabled={isPlanning || isBuilding || isDesigning || !currentInput.trim()}
+                            className="text-[var(--text-strong)] border border-[var(--border-strong)] hover:border-[#3b82f6] hover:text-[#3b82f6] px-4 py-1.5 rounded-full font-bold uppercase tracking-wider text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                           >
                             {isPlanning ? "Planning..." : "Plan with AI"}
+                          </button>
+
+                          <button 
+                            onClick={handleDesignWebsite}
+                            disabled={isDesigning || isBuilding || isPlanning || (chatHistory.length === 0 && !currentInput.trim())}
+                            className="flex items-center gap-1.5 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-5 py-1.5 rounded-full font-bold uppercase tracking-wider text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(59,130,246,0.4)] hover:scale-105 active:scale-95 cursor-pointer"
+                          >
+                            <Sparkles size={14} className={isDesigning ? "animate-spin" : ""} />
+                            <span>{isDesigning ? "Designing..." : "Design Website"}</span>
                           </button>
                           
                           <button 
                             onClick={handleBuild}
-                            disabled={isBuilding || (chatHistory.length === 0 && !currentInput.trim())}
-                            className="bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white px-6 py-1.5 rounded-full font-bold uppercase tracking-wider text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_12px_rgba(59,130,246,0.25)] cursor-pointer"
+                            disabled={isBuilding || isDesigning || isPlanning || (chatHistory.length === 0 && !currentInput.trim())}
+                            className="bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 text-white px-5 py-1.5 rounded-full font-bold uppercase tracking-wider text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_12px_rgba(59,130,246,0.25)] cursor-pointer"
                           >
                             {isBuilding ? "Building..." : "Build Website"}
                           </button>
@@ -1870,11 +1925,12 @@ export const AiBuilderPage: React.FC = () => {
               </div>
 
               <TemplateGallery 
-                maxLimit={6}
                 onSelect={(_, data) => {
-                  setPreviewData(data);
-                  // Scroll down to preview area smoothly
-                  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                  requireAuth(() => {
+                    setPreviewData(data);
+                    // Scroll down to preview area smoothly
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                  });
                 }} 
               />
             </div>
@@ -2411,8 +2467,51 @@ export const AiBuilderPage: React.FC = () => {
               className="group relative lg:col-span-2 bg-[radial-gradient(ellipse_at_top_left,_rgba(59,130,246,0.14),_#0d0f12_70%)] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)] cursor-default"
             >
               <div className="relative z-10 [transform:translateZ(25px)]">
-                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
-                  <Layers className="w-5 h-5 text-blue-400" />
+                <div className="relative w-14 h-14 flex items-center justify-center mb-8 sm:mb-12">
+                  <div className="absolute inset-0 bg-blue-500/20 rounded-2xl blur-md group-hover:blur-lg transition-all" />
+                  <motion.svg viewBox="0 0 40 40" className="w-10 h-10 relative z-10" fill="none">
+                    <defs>
+                      <linearGradient id="bentoMotionGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#60A5FA" />
+                        <stop offset="100%" stopColor="#2563EB" />
+                      </linearGradient>
+                    </defs>
+                    <motion.path
+                      d="M6 26L20 33L34 26"
+                      stroke="#3B82F6"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      animate={{ y: [0, 1.5, 0] }}
+                      transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    <motion.path
+                      d="M6 20L20 27L34 20"
+                      stroke="#60A5FA"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      animate={{ y: [0, -1.5, 0] }}
+                      transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    <motion.path
+                      d="M20 7L34 14L20 21L6 14Z"
+                      fill="rgba(59, 130, 246, 0.25)"
+                      stroke="url(#bentoMotionGrad)"
+                      strokeWidth="2"
+                      strokeLinejoin="round"
+                      animate={{ y: [-2, 1.5, -2] }}
+                      transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    <motion.circle
+                      cx="20"
+                      cy="14"
+                      r="2"
+                      fill="#FFFFFF"
+                      animate={{ scale: [0.8, 1.3, 0.8], opacity: [0.8, 1, 0.8] }}
+                      transition={{ duration: 1.6, repeat: Infinity }}
+                    />
+                  </motion.svg>
                 </div>
                 <div className="text-[11px] font-bold uppercase tracking-widest text-blue-400/90 mb-1">
                   01 — 2D MOTION
@@ -2437,8 +2536,50 @@ export const AiBuilderPage: React.FC = () => {
               className="group relative bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(99,102,241,0.15)] cursor-default"
             >
               <div className="relative z-10 [transform:translateZ(25px)]">
-                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
-                  <Orbit className="w-5 h-5 text-indigo-400" />
+                <div className="relative w-14 h-14 flex items-center justify-center mb-8 sm:mb-12">
+                  <div className="absolute inset-0 bg-indigo-500/20 rounded-2xl blur-md group-hover:blur-lg transition-all" />
+                  <motion.svg viewBox="0 0 40 40" className="w-10 h-10 relative z-10" fill="none">
+                    <defs>
+                      <linearGradient id="bento3dGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#818CF8" />
+                        <stop offset="100%" stopColor="#4F46E5" />
+                      </linearGradient>
+                    </defs>
+                    <motion.ellipse
+                      cx="20"
+                      cy="20"
+                      rx="14"
+                      ry="5.5"
+                      stroke="url(#bento3dGrad)"
+                      strokeWidth="1.6"
+                      strokeDasharray="3 3"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                      style={{ transformOrigin: "20px 20px" }}
+                    />
+                    <motion.ellipse
+                      cx="20"
+                      cy="20"
+                      rx="14"
+                      ry="5.5"
+                      stroke="#C7D2FE"
+                      strokeWidth="1.2"
+                      strokeOpacity="0.6"
+                      animate={{ rotate: -360 }}
+                      transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                      style={{ transformOrigin: "20px 20px" }}
+                    />
+                    <motion.circle
+                      cx="20"
+                      cy="20"
+                      r="4.5"
+                      fill="url(#bento3dGrad)"
+                      stroke="#FFFFFF"
+                      strokeWidth="1"
+                      animate={{ scale: [0.9, 1.15, 0.9] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                  </motion.svg>
                 </div>
                 <div className="text-[11px] font-bold uppercase tracking-widest text-indigo-400/90 mb-1">
                   02 — 3D INTERACTIVE
@@ -2463,8 +2604,42 @@ export const AiBuilderPage: React.FC = () => {
               className="group relative bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)] cursor-default"
             >
               <div className="relative z-10 [transform:translateZ(25px)]">
-                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
-                  <Wand2 className="w-5 h-5 text-purple-400" />
+                <div className="relative w-14 h-14 flex items-center justify-center mb-8 sm:mb-12">
+                  <div className="absolute inset-0 bg-purple-500/20 rounded-2xl blur-md group-hover:blur-lg transition-all" />
+                  <motion.svg viewBox="0 0 40 40" className="w-10 h-10 relative z-10" fill="none">
+                    <defs>
+                      <linearGradient id="bentoWandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#C084FC" />
+                        <stop offset="100%" stopColor="#9333EA" />
+                      </linearGradient>
+                    </defs>
+                    <motion.path
+                      d="M10 30L25 15"
+                      stroke="url(#bentoWandGrad)"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      animate={{ rotate: [0, 8, -5, 0] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                      style={{ transformOrigin: "10px 30px" }}
+                    />
+                    <motion.path
+                      d="M28 8L30 12L34 14L30 16L28 20L26 16L22 14L26 12Z"
+                      fill="#F3E8FF"
+                      stroke="#A855F7"
+                      strokeWidth="0.8"
+                      animate={{ scale: [0.7, 1.25, 0.7], rotate: [0, 45, 90, 180] }}
+                      transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                      style={{ transformOrigin: "28px 14px" }}
+                    />
+                    <motion.circle
+                      cx="16"
+                      cy="9"
+                      r="1.5"
+                      fill="#E9D5FF"
+                      animate={{ scale: [0.5, 1.4, 0.5], opacity: [0.3, 1, 0.3] }}
+                      transition={{ duration: 1.5, repeat: Infinity, delay: 0.3 }}
+                    />
+                  </motion.svg>
                 </div>
                 <div className="text-[11px] font-bold uppercase tracking-widest text-purple-400/90 mb-1">
                   03 — FULL CUSTOMIZE - AI EDITING
@@ -2489,8 +2664,28 @@ export const AiBuilderPage: React.FC = () => {
               className="group relative lg:col-span-2 bg-[#0d0f12] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300 hover:border-white/25 hover:shadow-[0_20px_50px_rgba(6,182,212,0.15)] cursor-default"
             >
               <div className="relative z-10 [transform:translateZ(25px)]">
-                <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-10 sm:mb-16 group-hover:scale-110 transition-transform duration-300">
-                  <Globe className="w-5 h-5 text-cyan-400" />
+                <div className="relative w-14 h-14 flex items-center justify-center mb-8 sm:mb-12">
+                  <div className="absolute inset-0 bg-cyan-500/20 rounded-2xl blur-md group-hover:blur-lg transition-all" />
+                  <motion.svg viewBox="0 0 40 40" className="w-10 h-10 relative z-10" fill="none">
+                    <defs>
+                      <linearGradient id="bentoHostGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#22D3EE" />
+                        <stop offset="100%" stopColor="#0891B2" />
+                      </linearGradient>
+                    </defs>
+                    <circle cx="20" cy="20" r="14" stroke="url(#bentoHostGrad)" strokeWidth="1.8" fill="rgba(6, 182, 212, 0.08)" />
+                    <ellipse cx="20" cy="20" rx="7" ry="14" stroke="url(#bentoHostGrad)" strokeWidth="1.2" strokeOpacity="0.7" />
+                    <line x1="6" y1="20" x2="34" y2="20" stroke="url(#bentoHostGrad)" strokeWidth="1.2" strokeOpacity="0.7" />
+                    <motion.circle
+                      cx="20"
+                      cy="6"
+                      r="2.2"
+                      fill="#A5F3FC"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+                      style={{ transformOrigin: "20px 20px" }}
+                    />
+                  </motion.svg>
                 </div>
                 <div className="text-[11px] font-bold uppercase tracking-widest text-cyan-400/90 mb-1">
                   04 — EVERYTHING INCLUDED
@@ -2515,8 +2710,35 @@ export const AiBuilderPage: React.FC = () => {
               className="group relative lg:col-span-3 bg-[radial-gradient(ellipse_at_top_left,_rgba(59,130,246,0.14),_#0d0f12_60%)] border border-white/[0.08] rounded-[28px] p-7 sm:p-9 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex flex-col sm:flex-row sm:items-center justify-between gap-6 transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_20px_50px_rgba(59,130,246,0.18)] cursor-default"
             >
               <div className="relative z-10 max-w-2xl [transform:translateZ(25px)]">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Coins className="w-5 h-5 text-blue-400" />
+                <div className="relative w-14 h-14 flex items-center justify-center mb-6">
+                  <div className="absolute inset-0 bg-blue-500/20 rounded-2xl blur-md group-hover:blur-lg transition-all" />
+                  <motion.svg viewBox="0 0 40 40" className="w-10 h-10 relative z-10" fill="none">
+                    <defs>
+                      <linearGradient id="bentoCoinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#60A5FA" />
+                        <stop offset="100%" stopColor="#1D4ED8" />
+                      </linearGradient>
+                    </defs>
+                    <motion.ellipse
+                      cx="23"
+                      cy="17"
+                      rx="10"
+                      ry="6"
+                      fill="rgba(59, 130, 246, 0.2)"
+                      stroke="#93C5FD"
+                      strokeWidth="1.4"
+                      animate={{ y: [0, -1.5, 0] }}
+                      transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    <motion.g
+                      animate={{ y: [-1, 1.5, -1] }}
+                      transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      <ellipse cx="17" cy="22" rx="10" ry="6" fill="url(#bentoCoinGrad)" stroke="#DBEAFE" strokeWidth="1.5" />
+                      <path d="M7 22V27C7 30.3 11.5 33 17 33C22.5 33 27 30.3 27 27V22" fill="url(#bentoCoinGrad)" stroke="#DBEAFE" strokeWidth="1.5" />
+                      <text x="17" y="24" fontSize="6" fontWeight="bold" fill="#FFFFFF" textAnchor="middle" fontFamily="sans-serif">$</text>
+                    </motion.g>
+                  </motion.svg>
                 </div>
                 <div className="text-[11px] font-bold uppercase tracking-widest text-blue-400 font-mono mb-1">
                   05 — SAVE THOUSANDS OF DOLLARS

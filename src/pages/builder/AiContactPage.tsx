@@ -63,22 +63,34 @@ export const AiContactPage: React.FC = () => {
               <div>
                 <h3 className="text-xl font-bold text-white">Email Us</h3>
                 <p className="text-xs text-white/60 font-light mt-1">
-                  Send us your design ideas, custom domain requests, or billing questions.
+                  Send us your design ideas, sales inquiries, custom domain requests, or billing questions.
                 </p>
               </div>
 
-              <a
-                href="mailto:digifox5d@icloud.com"
-                className="text-base font-black text-[#60a5fa] hover:underline break-all"
-              >
-                digifox5d@icloud.com
-              </a>
+              <div className="flex flex-col gap-1.5">
+                <a
+                  href="mailto:sales@webmake.in"
+                  className="text-base font-black text-[#60a5fa] hover:underline break-all"
+                >
+                  sales@webmake.in
+                </a>
+                <a
+                  href="mailto:digifox5d@icloud.com"
+                  className="text-sm font-semibold text-white/70 hover:text-white hover:underline break-all"
+                >
+                  digifox5d@icloud.com
+                </a>
+              </div>
 
               <button
-                onClick={handleCopyEmail}
+                onClick={() => {
+                  navigator.clipboard.writeText("sales@webmake.in");
+                  setCopiedEmail(true);
+                  setTimeout(() => setCopiedEmail(false), 2500);
+                }}
                 className="inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
               >
-                <span>{copiedEmail ? "✓ Copied to Clipboard!" : "Copy email address"}</span>
+                <span>{copiedEmail ? "✓ Copied sales@webmake.in!" : "Copy primary sales email"}</span>
                 {!copiedEmail && <span>📋</span>}
               </button>
             </div>

@@ -5,21 +5,28 @@ import { WebMakeNav } from "../../components/builder/WebMakeNav";
 import { WebMakeFooter } from "../../components/builder/WebMakeFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 import { predefinedTemplates } from "../../data/templates";
+import { useAuth } from "../../context/AuthContext";
 
 export const DesignKitsPage: React.FC = () => {
   const [filter, setFilter] = useState<"all" | "3d" | "2d">("all");
   const [activePreview, setActivePreview] = useState<{ id: string; url: string; title: string } | null>(null);
   const navigate = useNavigate();
+  const { requireAuth } = useAuth();
 
-  const allTemplates = Object.entries(predefinedTemplates);
+  const allTemplates = Object.entries(predefinedTemplates || {});
   const filtered = allTemplates.filter(([_, t]) => {
+    if (!t) return false;
     if (filter === "3d") return t.category === "3d";
     if (filter === "2d") return t.category === "2d" || !t.category;
     return true;
   });
 
   const handleOpenStudio = (templateData: any) => {
-    sessionStorage.setItem("selectedTemplateData", JSON.stringify(templateData));
+    try {
+      sessionStorage.setItem("selectedTemplateData", JSON.stringify(templateData));
+    } catch (e) {
+      console.warn("Could not save to sessionStorage", e);
+    }
     navigate("/ai-builder");
   };
 
@@ -75,86 +82,83 @@ export const DesignKitsPage: React.FC = () => {
 
       {/* Grid of Design Kits */}
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pb-32">
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <AnimatePresence mode="popLayout">
-            {filtered.map(([id, template], i) => (
-              <motion.div
-                key={id}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.35, delay: i * 0.04 }}
-                className="group flex flex-col bg-[#0c0d1a] border border-white/[0.08] hover:border-[#3b82f6]/50 rounded-3xl overflow-hidden shadow-2xl hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)] transition-all duration-300"
-              >
-                {/* Visual Thumbnail */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-[#151728]">
-                  {template.previewVideoUrl ? (
-                    <video
-                      src={template.previewVideoUrl}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                    />
-                  ) : template.thumbnailUrl ? (
-                    <img
-                      src={template.thumbnailUrl}
-                      alt={template.hero?.title || id}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-blue-900/40 to-purple-900/40" />
-                  )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filtered.map(([id, template], i) => (
+            <motion.div
+              key={id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: Math.min(i * 0.05, 0.3) }}
+              className="group flex flex-col bg-[#0c0d1a] border border-white/[0.08] hover:border-[#3b82f6]/50 rounded-3xl overflow-hidden shadow-2xl hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)] transition-all duration-300"
+            >
+              {/* Visual Thumbnail */}
+              <div className="relative aspect-[16/10] overflow-hidden bg-[#151728]">
+                {template.previewVideoUrl ? (
+                  <video
+                    src={template.previewVideoUrl}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                  />
+                ) : template.thumbnailUrl ? (
+                  <img
+                    src={template.thumbnailUrl}
+                    alt={template.hero?.title || id}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-blue-900/40 to-purple-900/40" />
+                )}
 
-                  {/* Badge */}
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    <span className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest bg-black/80 backdrop-blur-md border border-white/15 text-[#60a5fa]">
-                      {template.category === "3d" ? "3D Experience" : "2D Interactive"}
-                    </span>
-                  </div>
-
-                  <div className="absolute top-4 right-4">
-                    <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-black/80 backdrop-blur-md border border-white/15 text-white/80">
-                      {template.websiteType}
-                    </span>
-                  </div>
+                {/* Badge */}
+                <div className="absolute top-4 left-4 flex gap-2">
+                  <span className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest bg-black/80 backdrop-blur-md border border-white/15 text-[#60a5fa]">
+                    {template.category === "3d" ? "3D Experience" : "2D Interactive"}
+                  </span>
                 </div>
 
-                {/* Details */}
-                <div className="p-6 flex flex-col flex-1 justify-between bg-gradient-to-b from-[#0c0d1a] to-[#080912]">
-                  <div>
-                    <h3 className="text-xl font-black text-white tracking-tight mb-2">
-                      {template.hero?.title || id}
-                    </h3>
-                    <p className="text-xs text-white/60 leading-relaxed line-clamp-2 mb-6">
-                      {template.shortDescription || template.hero?.subtitle || "High-converting animated design kit ready for instant customization."}
-                    </p>
-                  </div>
+                <div className="absolute top-4 right-4">
+                  <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-black/80 backdrop-blur-md border border-white/15 text-white/80">
+                    {template.websiteType || "Website"}
+                  </span>
+                </div>
+              </div>
 
-                  <div className="flex items-center gap-3 pt-4 border-t border-white/[0.08]">
+              {/* Details */}
+              <div className="p-6 flex flex-col flex-1 justify-between bg-gradient-to-b from-[#0c0d1a] to-[#080912]">
+                <div>
+                  <h3 className="text-xl font-black text-white tracking-tight mb-2">
+                    {template.hero?.title || id}
+                  </h3>
+                  <p className="text-xs text-white/60 leading-relaxed line-clamp-2 mb-6">
+                    {template.shortDescription || template.hero?.subtitle || "High-converting animated design kit ready for instant customization."}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3 pt-4 border-t border-white/[0.08]">
+                  <button
+                    onClick={() => handleOpenStudio(template)}
+                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#3b82f6] to-[#6366f1] hover:opacity-90 text-white font-black text-xs uppercase tracking-wider shadow-md hover:scale-[1.02] transition-all cursor-pointer"
+                  >
+                    Open in Studio ⚡
+                  </button>
+                  {template.previewUrl && (
                     <button
-                      onClick={() => handleOpenStudio(template)}
-                      className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#3b82f6] to-[#6366f1] hover:opacity-90 text-white font-black text-xs uppercase tracking-wider shadow-md hover:scale-[1.02] transition-all cursor-pointer"
+                      onClick={() => setActivePreview({ id, url: template.previewUrl!, title: template.hero?.title || id })}
+                      className="px-4 py-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                      title="Live Preview"
                     >
-                      Open in Studio ⚡
+                      Preview ↗
                     </button>
-                    {template.previewUrl && (
-                      <button
-                        onClick={() => setActivePreview({ id, url: template.previewUrl!, title: template.hero?.title || id })}
-                        className="px-4 py-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
-                        title="Live Preview"
-                      >
-                        Preview ↗
-                      </button>
-                    )}
-                  </div>
+                  )}
                 </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
       {/* Live Preview Modal */}
@@ -172,19 +176,25 @@ export const DesignKitsPage: React.FC = () => {
                   <span className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
                   <h3 className="font-bold text-sm text-white">{activePreview.title}</h3>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <button
+                    onClick={() => window.open(activePreview.url, '_blank')}
+                    className="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                  >
+                    Open New Tab ↗
+                  </button>
                   <button
                     onClick={() => {
                       const found = allTemplates.find(([id]) => id === activePreview.id)?.[1];
                       if (found) handleOpenStudio(found);
                     }}
-                    className="px-4 py-1.5 rounded-full bg-[#3b82f6] text-white text-xs font-bold uppercase tracking-wider hover:bg-blue-600 transition-colors"
+                    className="px-4 py-1.5 rounded-full bg-[#3b82f6] text-white text-xs font-bold uppercase tracking-wider hover:bg-blue-600 transition-colors cursor-pointer"
                   >
                     Customize in Studio 🚀
                   </button>
                   <button
                     onClick={() => setActivePreview(null)}
-                    className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 hover:text-white"
+                    className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 hover:text-white cursor-pointer"
                   >
                     ✕
                   </button>
@@ -194,6 +204,7 @@ export const DesignKitsPage: React.FC = () => {
                 <iframe
                   src={activePreview.url}
                   title="Template Live Preview"
+                  allow="autoplay; fullscreen; xr-spatial-tracking"
                   className="w-full h-full border-none"
                 />
               </div>
@@ -202,6 +213,6 @@ export const DesignKitsPage: React.FC = () => {
         )}
       </AnimatePresence>
       <WebMakeFooter />
-</div>
+    </div>
   );
 };

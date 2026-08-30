@@ -57,8 +57,6 @@ export const WebMakeFooter: React.FC = () => {
             <h4 className="text-xs font-black uppercase tracking-widest text-white/90 mb-1">Resources</h4>
             <Link to="/ai-builder/blogs" className="text-xs text-white/60 hover:text-white transition-colors">Blogs & Journal</Link>
             <Link to="/ai-builder/contact" className="text-xs text-white/60 hover:text-white transition-colors">Contact Support</Link>
-            <Link to="/ai-builder/terms" className="text-xs text-white/60 hover:text-white transition-colors">Terms of Service</Link>
-            <Link to="/ai-builder/privacy" className="text-xs text-white/60 hover:text-white transition-colors">Privacy Policy</Link>
           </div>
 
           {/* Col 5: Support & Ecosystem */}

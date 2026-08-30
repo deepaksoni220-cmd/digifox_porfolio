@@ -341,7 +341,7 @@ html, body {
   }
 
   .Demo2_HeroBg {
-    background-image: url('/assets/bg-mobile-podium.jpg') !important;
+    background-image: url('/templates/blacklane/assets/bg-mobile-podium.jpg') !important;
     background-position: center bottom !important;
     background-size: cover !important;
   }

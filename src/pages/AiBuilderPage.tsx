@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { generateWebsite, planWebsite, patchWebsite, designWebsite, type GeneratedWebsiteData, type ChatMessage } from '../services/aiBuilderService';
 import { publishWebsite, getPublishedWebsite } from '../services/firebase';
 import { PreviewRenderer } from '../components/builder/PreviewRenderer';
@@ -13,6 +13,100 @@ import { StepsProgressBarSection } from '../components/builder/StepsProgressBarS
 import { WebMakeNav } from '../components/builder/WebMakeNav';
 import { WebMakeFooter } from '../components/builder/WebMakeFooter';
 import { useAuth } from '../context/AuthContext';
+
+interface DominateStickyCardProps {
+  index: number;
+  total: number;
+  scrollYProgress: any;
+  tag: string;
+  tagColor: string;
+  title: string;
+  desc: string;
+  iconBg: string;
+  iconSvg: React.ReactNode;
+  bgGradient: string;
+  borderColor: string;
+  extraContent?: React.ReactNode;
+}
+
+const DominateStickyCard: React.FC<DominateStickyCardProps> = ({
+  index,
+  total,
+  scrollYProgress,
+  tag,
+  tagColor,
+  title,
+  desc,
+  iconBg,
+  iconSvg,
+  bgGradient,
+  borderColor,
+  extraContent
+}) => {
+  const start = index / total;
+  const end = (index + 1) / total;
+
+  // 3D progressive stack scaling & rotation as user scrolls past
+  const scale = useTransform(
+    scrollYProgress,
+    [start, end],
+    [1, 1 - (total - index) * 0.04]
+  );
+
+  const rotateX = useTransform(
+    scrollYProgress,
+    [Math.max(0, start - 0.12), start],
+    [12, 0]
+  );
+
+  const topOffset = 76 + index * 22;
+
+  return (
+    <div
+      style={{
+        position: 'sticky',
+        top: `${topOffset}px`,
+        marginBottom: index === total - 1 ? '40px' : '28px',
+        perspective: '1200px',
+        zIndex: 10 + index,
+      }}
+      className="w-full"
+    >
+      <motion.div
+        style={{
+          scale: index === total - 1 ? 1 : scale,
+          rotateX: rotateX,
+          transformStyle: 'preserve-3d',
+        }}
+        className={`w-full ${bgGradient} border ${borderColor} rounded-[26px] p-6 sm:p-7 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.85),_0_0_1px_rgba(255,255,255,0.2)_inset] flex flex-col justify-between transition-all duration-300`}
+      >
+        <div className="relative z-10 [transform:translateZ(20px)]">
+          {/* Card Icon Header */}
+          <div className="relative w-12 h-12 flex items-center justify-center mb-5">
+            <div className={`absolute inset-0 ${iconBg} rounded-2xl blur-md`} />
+            {iconSvg}
+          </div>
+
+          <div className={`text-[10px] font-bold uppercase tracking-widest ${tagColor} mb-1 font-mono`}>
+            {tag}
+          </div>
+          <h3 className="text-xl font-bold text-white tracking-tight mb-2">
+            {title}
+          </h3>
+          <p className="text-xs text-gray-300 font-normal leading-relaxed">
+            {desc}
+          </p>
+
+          {extraContent && (
+            <div className="mt-4 pt-4 border-t border-white/[0.08]">
+              {extraContent}
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </div>
+  );
+};
 
 export const AiBuilderPage: React.FC = () => {
   const { requireAuth, requirePlan, isAuthenticated } = useAuth();
@@ -32,6 +126,11 @@ export const AiBuilderPage: React.FC = () => {
   const [error, setError] = useState("");
   const [previewData, setPreviewData] = useState<GeneratedWebsiteData | null>(null);
   const previewRef = useRef<HTMLDivElement>(null);
+  const dominateMobileRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: dominateScrollYProgress } = useScroll({
+    target: dominateMobileRef,
+    offset: ['start 85%', 'end 20%']
+  });
   
   // Sync previewData to sessionStorage so Full Screen Preview always works
   useEffect(() => {
@@ -2469,8 +2568,148 @@ export const AiBuilderPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Bento Grid Container with 3D Perspective */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 [perspective:1200px]">
+          {/* ── MOBILE VIEW (< md): 3D STICKY SCROLLING STACK OF CARDS ──────── */}
+          <div ref={dominateMobileRef} className="block md:hidden relative pb-8">
+            <DominateStickyCard
+              index={0}
+              total={5}
+              scrollYProgress={dominateScrollYProgress}
+              tag="01 — 2D MOTION"
+              tagColor="text-blue-400"
+              title="Animated Websites"
+              desc="Smooth scroll effects, transitions and interactions built into every experience. First frame of each picks up perfectly from the last."
+              iconBg="bg-blue-500/20"
+              bgGradient="bg-[#0e121a]"
+              borderColor="border-blue-500/30"
+              iconSvg={
+                <motion.svg viewBox="0 0 40 40" className="w-9 h-9 relative z-10" fill="none">
+                  <defs>
+                    <linearGradient id="mBentoMotionGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#60A5FA" />
+                      <stop offset="100%" stopColor="#2563EB" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M6 26L20 33L34 26" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M6 20L20 27L34 20" stroke="#60A5FA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M20 7L34 14L20 21L6 14Z" fill="rgba(59, 130, 246, 0.25)" stroke="url(#mBentoMotionGrad)" strokeWidth="2" strokeLinejoin="round" />
+                  <circle cx="20" cy="14" r="2" fill="#FFFFFF" />
+                </motion.svg>
+              }
+            />
+
+            <DominateStickyCard
+              index={1}
+              total={5}
+              scrollYProgress={dominateScrollYProgress}
+              tag="02 — 3D INTERACTIVE"
+              tagColor="text-indigo-400"
+              title="3D Immersive Websites"
+              desc="Bring your brand to life with interactive 3D scenes, objects and visual experiences."
+              iconBg="bg-indigo-500/20"
+              bgGradient="bg-[#0e121a]"
+              borderColor="border-indigo-500/30"
+              iconSvg={
+                <motion.svg viewBox="0 0 40 40" className="w-9 h-9 relative z-10" fill="none">
+                  <defs>
+                    <linearGradient id="mBento3dGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#818CF8" />
+                      <stop offset="100%" stopColor="#4F46E5" />
+                    </linearGradient>
+                  </defs>
+                  <ellipse cx="20" cy="20" rx="14" ry="5.5" stroke="url(#mBento3dGrad)" strokeWidth="1.6" strokeDasharray="3 3" />
+                  <circle cx="20" cy="20" r="4.5" fill="url(#mBento3dGrad)" stroke="#FFFFFF" strokeWidth="1" />
+                </motion.svg>
+              }
+            />
+
+            <DominateStickyCard
+              index={2}
+              total={5}
+              scrollYProgress={dominateScrollYProgress}
+              tag="03 — FULL CUSTOMIZE - AI EDITING"
+              tagColor="text-purple-400"
+              title="Update - Change Anything"
+              desc="Tell us what you want changed. Update content, colors, images and sections instantly."
+              iconBg="bg-purple-500/20"
+              bgGradient="bg-[#0e121a]"
+              borderColor="border-purple-500/30"
+              iconSvg={
+                <motion.svg viewBox="0 0 40 40" className="w-9 h-9 relative z-10" fill="none">
+                  <defs>
+                    <linearGradient id="mBentoWandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#C084FC" />
+                      <stop offset="100%" stopColor="#9333EA" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M10 30L25 15" stroke="url(#mBentoWandGrad)" strokeWidth="2.5" strokeLinecap="round" />
+                  <path d="M28 8L30 12L34 14L30 16L28 20L26 16L22 14L26 12Z" fill="#F3E8FF" stroke="#A855F7" strokeWidth="0.8" />
+                  <circle cx="16" cy="9" r="1.5" fill="#E9D5FF" />
+                </motion.svg>
+              }
+            />
+
+            <DominateStickyCard
+              index={3}
+              total={5}
+              scrollYProgress={dominateScrollYProgress}
+              tag="04 — EVERYTHING INCLUDED"
+              tagColor="text-cyan-400"
+              title="Free Domain, Hosting + SSL"
+              desc="Get the infrastructure you need to launch, host and secure your website in one place with global CDN and automated SSL certificates."
+              iconBg="bg-cyan-500/20"
+              bgGradient="bg-[#0e121a]"
+              borderColor="border-cyan-500/30"
+              iconSvg={
+                <motion.svg viewBox="0 0 40 40" className="w-9 h-9 relative z-10" fill="none">
+                  <defs>
+                    <linearGradient id="mBentoHostGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#22D3EE" />
+                      <stop offset="100%" stopColor="#0891B2" />
+                    </linearGradient>
+                  </defs>
+                  <circle cx="20" cy="20" r="14" stroke="url(#mBentoHostGrad)" strokeWidth="1.8" fill="rgba(6, 182, 212, 0.08)" />
+                  <ellipse cx="20" cy="20" rx="7" ry="14" stroke="url(#mBentoHostGrad)" strokeWidth="1.2" strokeOpacity="0.7" />
+                  <line x1="6" y1="20" x2="34" y2="20" stroke="url(#mBentoHostGrad)" strokeWidth="1.2" strokeOpacity="0.7" />
+                </motion.svg>
+              }
+            />
+
+            <DominateStickyCard
+              index={4}
+              total={5}
+              scrollYProgress={dominateScrollYProgress}
+              tag="05 — SAVE THOUSANDS OF DOLLARS"
+              tagColor="text-blue-400"
+              title="Save $5,000–$10,000+ On Agency Builds"
+              desc="Create a high-converting, animated professional website without traditional agency costs. Full ownership with zero lock-in."
+              iconBg="bg-blue-500/20"
+              bgGradient="bg-[#0e121a]"
+              borderColor="border-blue-500/40"
+              extraContent={
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-gray-300">Generate & Preview</span>
+                  <span className="text-2xl font-black text-blue-400">$0 Free</span>
+                </div>
+              }
+              iconSvg={
+                <motion.svg viewBox="0 0 40 40" className="w-9 h-9 relative z-10" fill="none">
+                  <defs>
+                    <linearGradient id="mBentoCoinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#60A5FA" />
+                      <stop offset="100%" stopColor="#1D4ED8" />
+                    </linearGradient>
+                  </defs>
+                  <ellipse cx="23" cy="17" rx="10" ry="6" fill="rgba(59, 130, 246, 0.2)" stroke="#93C5FD" strokeWidth="1.4" />
+                  <ellipse cx="17" cy="22" rx="10" ry="6" fill="url(#mBentoCoinGrad)" stroke="#DBEAFE" strokeWidth="1.5" />
+                  <path d="M7 22V27C7 30.3 11.5 33 17 33C22.5 33 27 30.3 27 27V22" fill="url(#mBentoCoinGrad)" stroke="#DBEAFE" strokeWidth="1.5" />
+                  <text x="17" y="24" fontSize="6" fontWeight="bold" fill="#FFFFFF" textAnchor="middle" fontFamily="sans-serif">$</text>
+                </motion.svg>
+              }
+            />
+          </div>
+
+          {/* ── DESKTOP & TABLET VIEW (>= md): BENTO GRID WITH 3D HOVER TILT ── */}
+          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 [perspective:1200px]">
             
             {/* Card 1: 01 — 2D MOTION (Span 2 on lg with Blue Mist) */}
             <motion.div 

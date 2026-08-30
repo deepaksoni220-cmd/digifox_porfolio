@@ -28,7 +28,7 @@ export function Footer() {
           <h4 style={{ fontSize: '14px', fontWeight: 600, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Company</h4>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', color: 'rgba(255,255,255,0.8)' }}>
             <li>About us</li>
-            <li>Connect</li>
+            <li>Connect Us</li>
           </ul>
         </div>
 

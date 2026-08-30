@@ -5,13 +5,11 @@ import { WebMakeNav } from "../../components/builder/WebMakeNav";
 import { WebMakeFooter } from "../../components/builder/WebMakeFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 import { predefinedTemplates } from "../../data/templates";
-import { useAuth } from "../../context/AuthContext";
 
 export const DesignKitsPage: React.FC = () => {
   const [filter, setFilter] = useState<"all" | "3d" | "2d">("all");
   const [activePreview, setActivePreview] = useState<{ id: string; url: string; title: string } | null>(null);
   const navigate = useNavigate();
-  const { requireAuth } = useAuth();
 
   const allTemplates = Object.entries(predefinedTemplates || {});
   const filtered = allTemplates.filter(([_, t]) => {

@@ -5,6 +5,7 @@ export const predefinedTemplates: Record<string, GeneratedWebsiteData> = {
     websiteType: "Automotive & Luxury Transport",
     templateStyle: "blacklaneLuxury",
     category: "3d",
+    previewUrl: "/templates/blacklane/index.html",
     shortDescription: "Global Executive Chauffeur & Airport Transit 3D App with Audi A7 & Tesla WebGL 3D Models, Flight Telemetry & VIP Booking.",
     thumbnailUrl: "/templates/blacklane-cover.jpg",
     previewVideoUrl: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260324_151826_c7218672-6e92-402c-9e45-f1e0f454bdc4.mp4",

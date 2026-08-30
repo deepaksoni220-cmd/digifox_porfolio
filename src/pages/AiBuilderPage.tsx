@@ -1640,12 +1640,12 @@ export const AiBuilderPage: React.FC = () => {
             <div
               className="relative shrink-0 bg-white shadow-2xl shadow-black/60 rounded-b-2xl overflow-hidden border border-white/[0.07] border-t-0"
               style={{ width: viewportWidth[viewport], maxWidth: '100%', height: 'calc(100vh - 180px)', transition: 'width 0.3s ease' }}>
-              {previewData.previewUrl && previewData.templateStyle !== 'blacklaneLuxury' ? (
+              {previewData.previewUrl ? (
                 <iframe
                   ref={iframeRef}
                   src={previewData.previewUrl}
                   onLoad={handleIframeLoad}
-                  className="w-full h-full"
+                  className="w-full h-full border-none"
                   title="Live Preview"
                 />
               ) : (

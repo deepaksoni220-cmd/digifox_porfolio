@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import type { GeneratedWebsiteData } from '../../services/aiBuilderService';
 import { FadeIn } from '../FadeIn';
 import { ShoppingCart, LayoutGrid, Home, Settings, User } from 'lucide-react';
-import { BlacklaneLuxuryTemplate } from './BlacklaneLuxuryTemplate';
 
 const EditableField: React.FC<{
   value: string;
@@ -92,19 +91,6 @@ export const PreviewRenderer: React.FC<PreviewRendererProps> = ({ data, fullScre
     current[path[path.length - 1]] = value;
     onDataChange(newData);
   };
-
-  // Render Blacklane dedicated 3D luxury chauffeur template if selected
-  if (data?.templateStyle === 'blacklaneLuxury') {
-    return (
-      <BlacklaneLuxuryTemplate
-        data={data}
-        fullScreen={fullScreen}
-        logoUrl={logoUrl}
-        updateData={updateData}
-        EditableField={EditableField}
-      />
-    );
-  }
 
   const isMobileApp = data.websiteType === "Mobile Web App";
   const isEcommerce = data.websiteType === "E-Commerce Store";

@@ -240,7 +240,7 @@ a {
   flex-direction: column !important;
   justify-content: flex-end !important;
   align-items: center !important;
-  background-image: linear-gradient(180deg, rgba(15, 19, 25, 0.15) 0%, rgba(15, 19, 25, 0.05) 30%, rgba(15, 19, 25, 0.4) 70%, rgba(15, 19, 25, 0.95) 100%), url('/assets/_next/static/media/bg.e8e3285679399bbb.jpg') !important;
+  background-image: linear-gradient(180deg, rgba(15, 19, 25, 0.15) 0%, rgba(15, 19, 25, 0.05) 30%, rgba(15, 19, 25, 0.4) 70%, rgba(15, 19, 25, 0.95) 100%), url('/templates/blacklane/templates/blacklane/assets/_next/static/media/bg.e8e3285679399bbb.jpg') !important;
   background-size: cover !important;
   background-position: center 25% !important;
   background-repeat: no-repeat !important;
@@ -1214,7 +1214,7 @@ dialog {
   }
 
   .Hero_hero__L3_jO {
-    background-image: linear-gradient(180deg, rgba(15, 19, 25, 0.15) 0%, rgba(15, 19, 25, 0.05) 25%, rgba(15, 19, 25, 0.5) 60%, rgba(15, 19, 25, 0.95) 100%), url('/assets/_next/static/media/bg-mobile.df1a913778bc3029.jpg'), url('/assets/_next/static/media/bg.e8e3285679399bbb.jpg') !important;
+    background-image: linear-gradient(180deg, rgba(15, 19, 25, 0.15) 0%, rgba(15, 19, 25, 0.05) 25%, rgba(15, 19, 25, 0.5) 60%, rgba(15, 19, 25, 0.95) 100%), url('/templates/blacklane/templates/blacklane/assets/_next/static/media/bg-mobile.df1a913778bc3029.jpg'), url('/templates/blacklane/templates/blacklane/assets/_next/static/media/bg.e8e3285679399bbb.jpg') !important;
     background-size: cover !important;
     background-position: center top !important;
     padding: 100px 16px 40px !important;

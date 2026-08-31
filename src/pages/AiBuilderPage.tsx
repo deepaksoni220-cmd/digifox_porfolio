@@ -2419,10 +2419,12 @@ export const AiBuilderPage: React.FC = () => {
               <span>Global Client Reviews</span>
             </div>
             <ScrollReveal
-              baseOpacity={0.15}
+              baseOpacity={0.1}
               enableBlur={true}
               baseRotation={2}
-              blurStrength={6}
+              blurStrength={8}
+              scrollTriggerStart="top 88%"
+              scrollTriggerEnd="bottom 35%"
               containerClassName="my-2"
               textClassName="text-2xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-[var(--text-strong)] leading-tight text-center"
             >

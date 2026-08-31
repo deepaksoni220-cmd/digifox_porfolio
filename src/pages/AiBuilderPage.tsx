@@ -2421,7 +2421,7 @@ export const AiBuilderPage: React.FC = () => {
             <ScrollReveal
               baseOpacity={0.1}
               enableBlur={true}
-              baseRotation={2}
+              baseRotation={0}
               blurStrength={8}
               scrollTriggerStart="top 88%"
               scrollTriggerEnd="bottom 35%"

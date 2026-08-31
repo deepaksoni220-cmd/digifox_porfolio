@@ -24,7 +24,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   scrollContainerRef,
   enableBlur = true,
   baseOpacity = 0.12,
-  baseRotation = 3,
+  baseRotation = 0,
   blurStrength = 6,
   containerClassName = '',
   textClassName = '',
@@ -67,7 +67,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
         }
       });
 
-      if (baseRotation) {
+      if (baseRotation !== 0) {
         tl.fromTo(
           el,
           { transformOrigin: '0% 50%', rotate: baseRotation },

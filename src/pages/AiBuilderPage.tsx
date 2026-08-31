@@ -9,6 +9,7 @@ import { SEOMeta } from '../components/SEOMeta';
 import { Globe, Monitor, Tablet, Smartphone, Sparkles, Settings2, Paintbrush, X, CheckCircle, ExternalLink, ChevronDown } from 'lucide-react';
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
 import CursorGrid from '../components/ui/CursorGrid';
+import { ScrollReveal } from '../components/ui/ScrollReveal';
 import { StepsProgressBarSection } from '../components/builder/StepsProgressBarSection';
 import { WebMakeNav } from '../components/builder/WebMakeNav';
 import { WebMakeFooter } from '../components/builder/WebMakeFooter';
@@ -2417,9 +2418,16 @@ export const AiBuilderPage: React.FC = () => {
               <span className="text-yellow-400">★★★★★</span>
               <span>Global Client Reviews</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-[var(--text-strong)]">
-              Well Trusted by Creators in <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">USA, Australia, India and All Over the World</span>
-            </h2>
+            <ScrollReveal
+              baseOpacity={0.15}
+              enableBlur={true}
+              baseRotation={2}
+              blurStrength={6}
+              containerClassName="my-2"
+              textClassName="text-2xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-[var(--text-strong)] leading-tight text-center"
+            >
+              Well Trusted by Creators in USA, Australia, India and All Over the World
+            </ScrollReveal>
             <p className="text-sm sm:text-base text-[var(--text-secondary)] mt-4 leading-relaxed">
               Real feedback from entrepreneurs, agency founders, and developers across the world building high-impact digital experiences with WebMake AI.
             </p>

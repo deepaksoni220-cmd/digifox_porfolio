@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/((?!api|assets|src|node_modules|@vite|@react-refresh|.*\\.).*)", "destination": "/index.html" }
+    { "source": "/templates/(.*)", "destination": "/templates/$1" },
+    { "source": "/((?!api|assets|templates|src|node_modules|@vite|@react-refresh|.*\\.).*)", "destination": "/index.html" }
   ]
 }

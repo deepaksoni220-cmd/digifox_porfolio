@@ -42,14 +42,14 @@
         "indexedPages": 24
       },
       "created_at": "2026-08-29T09:43:55.677Z",
-      "updated_at": "2026-08-29T16:32:05.197Z",
+      "updated_at": "2026-08-31T14:08:12.413Z",
       "platformDetails": {
         "apiUrl": "https://www.bookcabs.com.au/wp-json/wp/v2",
         "username": "wordoressseo",
         "appPassword": "zob9 0Ig2 BGFL 5AeC aeDg qQ5d",
         "authKey": "zob9 0Ig2 BGFL 5AeC aeDg qQ5d",
         "storeDomain": "bookcabs.myshopify.com",
-        "shopifyToken": "",
+        "shopifyToken": "zob9 0Ig2 BGFL 5AeC aeDg qQ5d",
         "shopifyBlogId": "news",
         "webhookUrl": "",
         "webhookSecret": "",
@@ -21865,9 +21865,9 @@
       "target_page": "/",
       "anchor_text": "Melbourne chauffeur service solutions",
       "reason": "Contextual link passing topical authority from informational blog guides to commercial service landing page.",
-      "id": "link_gk7x5jw",
+      "id": "link_d4idbaj",
       "client_id": "client_1787996635677_joj4b",
-      "created_at": "2026-08-29T11:45:50.084Z"
+      "created_at": "2026-08-31T07:30:44.591Z"
     },
     {
       "source_page": "/about",
@@ -21875,9 +21875,9 @@
       "target_page": "/",
       "anchor_text": "schedule a consultation with Bookcabs",
       "reason": "Conversion bridge directing high-trust 'About' visitors straight to booking and inquiries.",
-      "id": "link_kl76ame",
+      "id": "link_gv9c52v",
       "client_id": "client_1787996635677_joj4b",
-      "created_at": "2026-08-29T11:45:50.084Z"
+      "created_at": "2026-08-31T07:30:44.592Z"
     },
     {
       "source_page": "/services",
@@ -21885,9 +21885,9 @@
       "target_page": "/",
       "anchor_text": "transparent Melbourne airport chauffeur service investment breakdown",
       "reason": "Connects high-intent commercial service browsers with pricing tiers and ROI details.",
-      "id": "link_jf7pch9",
+      "id": "link_3v4clg6",
       "client_id": "client_1787996635677_joj4b",
-      "created_at": "2026-08-29T11:45:50.084Z"
+      "created_at": "2026-08-31T07:30:44.592Z"
     }
   ],
   "pipeline_runs": [

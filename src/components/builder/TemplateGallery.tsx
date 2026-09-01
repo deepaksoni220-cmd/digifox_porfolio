@@ -119,22 +119,33 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-3 mt-6 pt-4 border-t border-[#1b1d30]">
+        <div className="flex items-center gap-2 mt-6 pt-4 border-t border-[#1b1d30]">
           <button
             onClick={() => onSelect(id, template)}
-            className="flex-1 bg-gradient-to-r from-[#3b82f6] to-[#6366f1] hover:opacity-90 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(59,130,246,0.2)] hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] cursor-pointer"
+            className="flex-1 bg-gradient-to-r from-[#3b82f6] to-[#6366f1] hover:opacity-90 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(59,130,246,0.2)] hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] cursor-pointer"
           >
             Customize
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
           </button>
           {template.previewUrl && (
-            <button
-              onClick={() => onPreviewClick(id, template)}
-              className="flex-1 bg-[#121424] border border-[#262942] hover:bg-[#1b1d30] hover:border-[#3b82f6]/40 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
-            >
-              Live Preview
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
-            </button>
+            <>
+              <button
+                onClick={() => onPreviewClick(id, template)}
+                className="flex-1 bg-[#121424] border border-[#262942] hover:bg-[#1b1d30] hover:border-[#3b82f6]/40 text-white py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                Preview
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+              <a
+                href={template.previewUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Open site directly in new tab"
+                className="p-2.5 bg-[#121424] border border-[#262942] hover:bg-[#1b1d30] hover:border-[#3b82f6]/40 text-gray-300 hover:text-white rounded-xl transition-all flex items-center justify-center cursor-pointer shrink-0"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+              </a>
+            </>
           )}
         </div>
       </div>
@@ -258,25 +269,42 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({ onSelect, maxL
               className="w-full h-full bg-[#0b0c16] overflow-hidden shadow-2xl flex flex-col relative z-10"
             >
               {/* Modal Header */}
-              <div className="flex justify-between items-center px-6 py-4 border-b border-[#1b1d30] bg-[#0e101f]">
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-red-500" />
-                  <span className="w-3 h-3 rounded-full bg-yellow-500" />
-                  <span className="w-3 h-3 rounded-full bg-green-500" />
-                  <span className="text-xs text-[#8e95a5] font-medium ml-2 font-mono truncate max-w-xs sm:max-w-md">
-                    {activePreview.data.previewUrl?.startsWith('/') ? `${window.location.origin}${activePreview.data.previewUrl}` : activePreview.data.previewUrl}
-                  </span>
+              <div className="flex justify-between items-center px-4 sm:px-6 py-3.5 border-b border-[#1b1d30] bg-[#0e101f]">
+                <div className="flex items-center gap-2 flex-1 min-w-0 mr-3">
+                  <span className="w-3 h-3 rounded-full bg-red-500 shrink-0" />
+                  <span className="w-3 h-3 rounded-full bg-yellow-500 shrink-0" />
+                  <span className="w-3 h-3 rounded-full bg-green-500 shrink-0" />
+                  <a
+                    href={activePreview.data.previewUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-[#8e95a5] hover:text-white transition-colors font-medium ml-2 font-mono truncate max-w-xs sm:max-w-md flex items-center gap-1.5 underline underline-offset-4 decoration-blue-500/40 hover:decoration-blue-400 cursor-pointer"
+                    title="Click to open full website in new tab"
+                  >
+                    <span>{activePreview.data.previewUrl?.startsWith('/') ? `${window.location.origin}${activePreview.data.previewUrl}` : activePreview.data.previewUrl}</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-blue-400"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                  </a>
                 </div>
                 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                  <a
+                    href={activePreview.data.previewUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#1a1d2e] border border-[#2d3250] hover:bg-[#252a42] hover:border-blue-500/50 text-xs font-bold text-gray-200 hover:text-white transition-all cursor-pointer"
+                  >
+                    <span>Open in New Tab</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                  </a>
                   <button
                     onClick={() => {
                       onSelect(activePreview.id, activePreview.data);
                       setActivePreview(null);
                     }}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 hover:scale-[1.02] text-xs font-bold text-white transition-all shadow-[0_0_15px_rgba(59,130,246,0.3)] cursor-pointer"
+                    className="flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] hover:opacity-90 hover:scale-[1.02] text-xs font-bold text-white transition-all shadow-[0_0_15px_rgba(59,130,246,0.3)] cursor-pointer"
                   >
-                    Design this template for your business / brand
+                    <span className="hidden sm:inline">Design this template</span>
+                    <span className="sm:hidden">Use</span>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   </button>
                   <button 

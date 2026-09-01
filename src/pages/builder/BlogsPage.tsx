@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, HelpCircle, Sparkles } from "lucide-react";
 import { WebMakeNav } from "../../components/builder/WebMakeNav";
 import { WebMakeFooter } from "../../components/builder/WebMakeFooter";
 import { SEOMeta } from "../../components/SEOMeta";
 import CursorGrid from "../../components/ui/CursorGrid";
 
 export const BlogsPage: React.FC = () => {
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
   const blogs = [
     {
       id: "why-3d-websites-convert-better",
@@ -152,6 +154,96 @@ export const BlogsPage: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Animated FAQ Section on Blogs Page */}
+      <section className="mt-8 py-20 border-t border-white/[0.08] relative overflow-hidden bg-[#060709]/80">
+        <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
+              <HelpCircle className="w-3.5 h-3.5" />
+              <span>Articles & Insights FAQ</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white">
+              Frequently Asked <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Questions</span>
+            </h2>
+            <p className="text-sm sm:text-base text-gray-400 mt-3 max-w-xl mx-auto font-normal">
+              Everything you need to know about our web engineering guides, 3D WebGL workflows, and AI building techniques.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: "How often are new engineering insights and design articles published?",
+                a: "We publish new in-depth guides and case studies weekly, focusing on modern 3D WebGL performance, AI website generation, conversion rate optimization, and search engine visibility."
+              },
+              {
+                q: "Can I use these 3D and 2D motion techniques on my own website?",
+                a: "Yes! Every technique discussed in our journal is natively built into the WebMake AI Builder. You can generate or customize 3D interactive scenes, smooth scroll physics, and animated bento grids directly inside the studio."
+              },
+              {
+                q: "How does WebMake AI generate 3D interactive layouts from natural language?",
+                a: "Our multi-agent neural pipeline analyzes your business description, automatically selects optimized 3D WebGL geometries or 2D vector motions, writes clean responsive HTML/CSS code, and packages it with high-converting copywriting."
+              },
+              {
+                q: "Are the animation techniques mobile-friendly and fast loading?",
+                a: "Absolutely. All 3D WebGL scenes and Framer Motion effects feature adaptive GPU throttling, asset compression, and mobile fallbacks to ensure instantaneous loads and 90+ Core Web Vitals performance scores."
+              },
+              {
+                q: "Can I request a specific topic or architectural breakdown?",
+                a: "We love exploring new topics suggested by our community! Reach out to us via our Contact Support or WhatsApp chat button, and our engineering team will review it for upcoming journal editions."
+              }
+            ].map((faq, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <div 
+                  key={idx}
+                  className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                    isOpen 
+                      ? 'bg-[#0d0f17] border-blue-500/50 shadow-[0_8px_25px_rgba(59,130,246,0.15)]' 
+                      : 'bg-[#0d0f17]/60 border-white/[0.08] hover:border-white/20'
+                  }`}
+                >
+                  <button
+                    onClick={() => setOpenFaq(isOpen ? null : idx)}
+                    className="w-full px-6 py-5 flex items-center justify-between gap-4 text-left transition-colors cursor-pointer"
+                  >
+                    <span className="text-base sm:text-lg font-bold text-white flex items-center gap-3">
+                      <span className="text-xs font-black text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-md font-mono">
+                        0{idx + 1}
+                      </span>
+                      {faq.q}
+                    </span>
+                    <motion.div
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="shrink-0 text-blue-400"
+                    >
+                      <ChevronDown className="w-5 h-5" />
+                    </motion.div>
+                  </button>
+
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: 'easeInOut' }}
+                      >
+                        <div className="px-6 pb-6 pt-1 text-sm sm:text-base text-gray-300 leading-relaxed border-t border-white/[0.04]">
+                          {faq.a}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       <WebMakeFooter />
     </div>
   );

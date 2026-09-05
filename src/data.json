@@ -62,6 +62,12 @@
   ],
   "portfolioLinks": [
     {
+      "title": "Luxury Jewelry 3D Interactive Store",
+      "category": "3D Animated Website",
+      "url": "https://digifox-jewelrystore.vercel.app/",
+      "image": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1000&auto=format&fit=crop"
+    },
+    {
       "title": "Agency / Coaches  Porfolio website",
       "category": "3D Animated Website",
       "url": "https://digifox-demo-u.vercel.app/",

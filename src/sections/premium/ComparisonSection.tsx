@@ -54,7 +54,7 @@ export const ComparisonSection: React.FC = () => {
           
           <div className="mt-16 text-center">
             <a
-              href="/#portfolio"
+              href="/portfolio"
               className="inline-block px-8 py-4 bg-[#3b82f6] hover:bg-[#2563eb] text-[var(--text-strong)] font-semibold rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(59,130,246,0.3)]"
             >
               Explore Our Interactive Demo

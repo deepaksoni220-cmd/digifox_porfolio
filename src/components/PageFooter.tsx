@@ -21,8 +21,8 @@ export const PageFooter: React.FC = () => {
           <a href="/" className="text-[var(--text-secondary)] hover:text-[#3b82f6] transition-colors text-xs font-bold uppercase tracking-wider">
             Home
           </a>
-          <a href="/ai-builder" className="text-[var(--text-secondary)] hover:text-[#3b82f6] transition-colors text-xs font-bold uppercase tracking-wider">
-            AI Builder
+          <a href="/portfolio" className="text-[var(--text-secondary)] hover:text-[#3b82f6] transition-colors text-xs font-bold uppercase tracking-wider">
+            Portfolio
           </a>
           <a href="/contact" className="text-[var(--text-secondary)] hover:text-[#3b82f6] transition-colors text-xs font-bold uppercase tracking-wider">
             Contact Us

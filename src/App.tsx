@@ -17,11 +17,12 @@ import { AdminPage } from './pages/AdminPage';
 import { PremiumLandingPage } from './pages/PremiumLandingPage';
 import { AiBuilderPage } from './pages/AiBuilderPage';
 import { GeneratedSitePage } from './pages/GeneratedSitePage';
-import { PublishedSite } from './pages/PublishedSite';
+import { PublishedSite, PublishedSitePage } from './pages/PublishedSite';
 import { ProtectedPage } from './components/ProtectedPage';
 import { TermsPage } from './pages/TermsPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { ContactUsPage } from './pages/ContactUsPage';
+import { PortfolioPage } from './pages/PortfolioPage';
 import { FeaturesPage } from './pages/builder/FeaturesPage';
 import { AutoSeoPage } from './pages/builder/AutoSeoPage';
 import { SeoDashboardPage } from './pages/builder/SeoDashboardPage';
@@ -93,6 +94,12 @@ function App() {
     }
 
     const hostname = window.location.hostname;
+    const querySub = params.get('site') || params.get('subdomain');
+    if (querySub) {
+      setSubdomain(querySub);
+      return;
+    }
+
     // Check if it's a subdomain (e.g., brandname.digifox.world or brandname.localhost)
     // Exclude www, localhost (root), and digifox.world (root)
     const isLocalSubdomain = hostname.endsWith('.localhost') && hostname !== 'localhost';
@@ -125,6 +132,14 @@ function App() {
           <PlanGateModal />
           <Routes>
             <Route path="/" element={<Portfolio />} />
+            <Route path="/site/:subdomain" element={<PublishedSitePage />} />
+            <Route path="/s/:subdomain" element={<PublishedSitePage />} />
+            <Route path="/published/:subdomain" element={<PublishedSitePage />} />
+            <Route path="/portfolio" element={<PortfolioPage />} />
+            <Route path="/portfolio-page" element={<PortfolioPage />} />
+            <Route path="/our-work" element={<PortfolioPage />} />
+            <Route path="/projects" element={<PortfolioPage />} />
+            <Route path="/works" element={<PortfolioPage />} />
             <Route path="/admin" element={
               <ProtectedPage>
                 <AdminPage />

@@ -17,10 +17,22 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
         if (result) {
           setSiteData(result);
         } else {
+          // Check session / local storage fallback
+          try {
+            const rawSession = sessionStorage.getItem("selectedTemplateData");
+            if (rawSession) {
+              const parsed = JSON.parse(rawSession);
+              setSiteData({ type: 'ai_generated', data: parsed });
+              setLoading(false);
+              return;
+            }
+          } catch (e) {
+            console.warn("Session fallback check error", e);
+          }
           setError("Website not found");
         }
       } catch (err) {
-        console.error(err);
+        console.error("fetchSite error:", err);
         setError("Failed to load website");
       } finally {
         setLoading(false);
@@ -58,7 +70,7 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-[#3b82f6] animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
               <p className="text-gray-400 font-['Kanit'] text-xs uppercase tracking-widest">
-                Building <span className="text-white font-medium">{subdomain}</span>...
+                Loading <span className="text-white font-medium">{subdomain}</span>...
               </p>
             </div>
           </div>
@@ -69,11 +81,36 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
 
   if (error || !siteData) {
     return (
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white font-['Kanit'] p-4 text-center">
-        <div className="text-6xl mb-6">🦊</div>
-        <h1 className="text-4xl font-black uppercase tracking-tight mb-4">Site Not Found</h1>
-        <p className="text-gray-400 max-w-md">{error || "This Digifox website doesn't exist yet."}</p>
-        <a href="https://digifox.world" className="mt-8 text-[#3b82f6] hover:underline">Build your own at digifox.world</a>
+      <div className="min-h-screen bg-[#07080e] flex flex-col items-center justify-center text-white p-6 text-center relative overflow-hidden">
+        <div className="w-20 h-20 rounded-3xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-4xl mb-6 shadow-2xl">
+          🦊
+        </div>
+        <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight mb-3">
+          Site Not Found
+        </h1>
+        <p className="text-gray-400 max-w-md text-sm sm:text-base mb-8">
+          Subdomain <span className="text-blue-400 font-mono font-bold">"{subdomain}"</span> has not been published yet or is still synchronizing with the cloud database.
+        </p>
+        <div className="flex flex-wrap gap-4 justify-center">
+          <a
+            href="/ai-builder"
+            className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-lg"
+          >
+            Open AI Studio & Publish ⚡
+          </a>
+          <a
+            href="/design-kits"
+            className="px-6 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-bold text-xs uppercase tracking-wider transition-all border border-white/10"
+          >
+            Browse Design Kits
+          </a>
+          <a
+            href="/"
+            className="px-6 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 font-bold text-xs uppercase tracking-wider transition-all"
+          >
+            Home
+          </a>
+        </div>
       </div>
     );
   }
@@ -318,4 +355,34 @@ export const PublishedSite: React.FC<{ subdomain: string }> = ({ subdomain }) =>
       </div>
     </>
   );
+};
+
+export const PublishedSitePage: React.FC = () => {
+  const [subdomainParam, setSubdomainParam] = useState<string>('');
+
+  useEffect(() => {
+    // Extract from path e.g. /site/biska or /s/biska
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
+    if ((pathParts[0] === 'site' || pathParts[0] === 's' || pathParts[0] === 'published') && pathParts[1]) {
+      setSubdomainParam(pathParts[1]);
+      return;
+    }
+
+    // Extract from query params ?site=biska or ?subdomain=biska
+    const searchParams = new URLSearchParams(window.location.search);
+    const siteQ = searchParams.get('site') || searchParams.get('subdomain');
+    if (siteQ) {
+      setSubdomainParam(siteQ);
+    }
+  }, []);
+
+  if (!subdomainParam) {
+    return (
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-4">
+        <p className="text-gray-400">Loading site...</p>
+      </div>
+    );
+  }
+
+  return <PublishedSite subdomain={subdomainParam} />;
 };

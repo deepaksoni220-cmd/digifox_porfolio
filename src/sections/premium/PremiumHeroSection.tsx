@@ -48,7 +48,7 @@ export const PremiumHeroSection: React.FC = () => {
           </a>
           
           <a
-            href="/#portfolio"
+            href="/portfolio"
             className="w-full sm:w-auto px-8 py-4 bg-transparent border border-white/20 hover:border-[var(--border-subtle)]0 text-[var(--text-strong)] font-semibold rounded-full transition-all duration-300 hover:bg-white/5"
           >
             View Interactive Demo

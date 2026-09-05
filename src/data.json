@@ -132,6 +132,48 @@
       "category": "Shopify Website",
       "url": "https://www.rukmi.in",
       "image": "/image-1783146278377-932607994.png"
+    },
+    {
+      "title": "Fashion Studio & Luxury Editorial",
+      "category": "3D Animated Website",
+      "url": "/templates/stylg%20demo%202/studio_fashion.aura.build/studio-fashion.aura.build/index.html",
+      "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "title": "Biska Luxury Clothing & Couture",
+      "category": "3D Animated Website",
+      "url": "/templates/style%20demo%201/biska_luxury.aura.build/riska-luxury.aura.build/index.html",
+      "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "title": "INTIK Burgers 3D Experience",
+      "category": "3D Animated Website",
+      "url": "/templates/intik-burgers/index.html",
+      "image": "/templates/intik-burgers/assets/hero-burger.webp"
+    },
+    {
+      "title": "SkyElite Flights & Aviation",
+      "category": "3D Animated Website",
+      "url": "/templates/2d%20porfolio%20designg/dist/index.html",
+      "image": "https://motionsites.ai/assets/hero-skyelite-preview-DHaZIgUv.gif"
+    },
+    {
+      "title": "Sneaker & Shoes GSAP Interactive",
+      "category": "3D Animated Website",
+      "url": "/templates/gsap%20one/index.html",
+      "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "title": "Vanta Luxury Cars & Fleet 3D",
+      "category": "3D Animated Website",
+      "url": "/templates/demo%20cars%20vanta/index.html",
+      "image": "/templates/demo-cars-vanta.png"
+    },
+    {
+      "title": "Dig Creative Digital Portfolio",
+      "category": "3D Animated Website",
+      "url": "/templates/2d%20digital%20portfolio/dist/index.html",
+      "image": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=800&auto=format&fit=crop"
     }
   ],
   "marquee": [

@@ -60,10 +60,10 @@ export const FooterSection: React.FC = () => {
 
   const navLinks = [
     { name: "About", href: "/#about" },
+    { name: "Portfolio", href: "/portfolio" },
     { name: "Our Studio", href: "/#services" },
     { name: "Projects", href: "/#projects" },
     { name: "Basic vs Exclusive", href: "/basic_vs_exclusive" },
-    { name: "AI Website Builder", href: "/ai-builder" },
     { name: "Contact Us", href: "/contact" },
     { name: "Terms & Conditions", href: "/terms" },
     { name: "Privacy Policy", href: "/privacy" }

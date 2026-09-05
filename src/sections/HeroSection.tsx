@@ -22,8 +22,7 @@ export const HeroSection: React.FC = () => {
           <div className="flex items-center gap-1.5 min-[375px]:gap-2.5 sm:gap-6 md:gap-10 overflow-x-auto no-scrollbar py-0.5">
             {[
               { name: "About", href: "/#about" },
-              { name: "Portfolio", href: "/#portfolio" },
-              { name: "AI Builder", href: "/ai-builder" },
+              { name: "Portfolio", href: "/portfolio" },
               { name: "Contact Us", href: "/contact" },
               { name: "Terms", href: "/terms" },
               { name: "Privacy", href: "/privacy" }

@@ -102,6 +102,19 @@ export const PortfolioLinksSection: React.FC = () => {
           </div>
         )}
 
+        {/* Explore Full Portfolio Page Button */}
+        <div className="mt-14 flex justify-center w-full">
+          <a
+            href="/portfolio"
+            className="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)] border border-[var(--border-strong)] hover:border-[#3b82f6] text-[var(--text-strong)] text-xs sm:text-sm font-extrabold uppercase tracking-widest shadow-xl transition-all duration-300 hover:scale-105"
+          >
+            <span>View Full Portfolio Gallery</span>
+            <span className="w-7 h-7 rounded-full bg-blue-500/10 text-blue-400 group-hover:bg-blue-600 group-hover:text-white flex items-center justify-center transition-all">
+              ↗
+            </span>
+          </a>
+        </div>
+
       </div>
     </section>
   );

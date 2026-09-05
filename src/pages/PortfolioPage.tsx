@@ -295,10 +295,15 @@ export const PortfolioPage: React.FC = () => {
         <div className="flex items-center gap-3">
           <a 
             href="/"
-            className="flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[var(--text-strong)] hover:text-[#3b82f6] transition-colors"
+            className="flex items-center gap-2.5 text-xs sm:text-sm font-black uppercase tracking-widest text-[var(--text-strong)] hover:text-[#3b82f6] transition-colors group"
           >
-            <ArrowLeft size={16} />
-            <span className="hidden min-[400px]:inline">Home</span>
+            <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
+            <img 
+              src="/favicon.svg" 
+              alt="Digifox Logo" 
+              className="w-5 h-5 object-contain"
+            />
+            <span className="font-extrabold tracking-tight">Digifox</span>
           </a>
           <span className="text-[var(--text-secondary)]/40 hidden sm:inline">/</span>
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] hidden sm:inline">
@@ -324,6 +329,36 @@ export const PortfolioPage: React.FC = () => {
       {/* Hero Header */}
       <section className="max-w-7xl mx-auto px-5 sm:px-10 md:px-16 pt-8 sm:pt-14 pb-12 relative z-10 text-center flex flex-col items-center">
         
+        {/* Digifox Logo Emblem Above Portfolio */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, y: 15 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-6 flex flex-col items-center group cursor-pointer"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
+          <div className="relative flex items-center justify-center">
+            {/* Ambient Glow */}
+            <div className="absolute inset-0 w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-tr from-purple-600/40 to-blue-500/40 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300 pointer-events-none" />
+            
+            {/* Logo Icon Wrapper */}
+            <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-b from-white/10 to-white/[0.02] border border-white/20 p-2.5 backdrop-blur-xl shadow-2xl flex items-center justify-center transform-gpu group-hover:scale-105 group-hover:border-blue-400/50 transition-all duration-300">
+              <img 
+                src="/favicon.svg" 
+                alt="Digifox Logo" 
+                className="w-full h-full object-contain filter drop-shadow-[0_2px_10px_rgba(134,59,255,0.6)]"
+              />
+            </div>
+          </div>
+
+          <div className="mt-3 flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-md">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+            <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[var(--text-strong)]">
+              DIGIFOX 5D
+            </span>
+          </div>
+        </motion.div>
+
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

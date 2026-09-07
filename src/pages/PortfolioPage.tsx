@@ -4,14 +4,11 @@ import {
   ArrowLeft, 
   ExternalLink, 
   Search, 
-  Sparkles, 
-  Globe, 
   Eye, 
   X, 
   ArrowUpRight,
   Filter,
   Rocket,
-  Zap,
   Star,
   MessageSquare,
   Send,
@@ -221,14 +218,6 @@ export const PortfolioPage: React.FC = () => {
       return matchesCategory && matchesSearch;
     });
   }, [portfolioItems, activeCategory, searchQuery]);
-
-  const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = { All: portfolioItems.length };
-    portfolioItems.forEach(item => {
-      counts[item.category] = (counts[item.category] || 0) + 1;
-    });
-    return counts;
-  }, [portfolioItems]);
 
   const getCategoryBadgeClass = (category: string) => {
     switch (category) {

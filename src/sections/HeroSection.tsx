@@ -21,11 +21,9 @@ export const HeroSection: React.FC = () => {
         <nav className="fixed top-3 sm:top-6 left-1/2 -translate-x-1/2 flex items-center justify-between sm:justify-center gap-2 sm:gap-6 md:gap-10 px-3 py-2 sm:px-10 sm:py-3.5 md:px-12 md:py-4 bg-[var(--bg-base)]/85 backdrop-blur-md border border-[var(--border-strong)] rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] z-50 w-[96%] sm:w-auto max-w-fit overflow-visible transform-gpu">
           <div className="flex items-center gap-1.5 min-[375px]:gap-2.5 sm:gap-6 md:gap-10 overflow-x-auto no-scrollbar py-0.5">
             {[
-              { name: "About", href: "/#about" },
+              { name: "About Us", href: "/#about" },
               { name: "Portfolio", href: "/portfolio" },
-              { name: "Contact Us", href: "/contact" },
-              { name: "Terms", href: "/terms" },
-              { name: "Privacy", href: "/privacy" }
+              { name: "Contact Us", href: "/contact" }
             ].map((item) => (
               <a 
                 key={item.name} 

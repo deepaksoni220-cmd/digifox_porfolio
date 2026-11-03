@@ -12,6 +12,7 @@ import { VideoComparisonSection } from './sections/VideoComparisonSection';
 import { ServicesSection } from './sections/ServicesSection';
 import { ResultsProofSection } from './sections/ResultsProofSection';
 import { FreshnessUpdatesSection } from './sections/FreshnessUpdatesSection';
+import { FaqSection } from './sections/FaqSection';
 import { ProjectsSection } from './sections/ProjectsSection';
 import { FooterSection } from './sections/FooterSection';
 import { ContactButton } from './components/ContactButton';
@@ -75,6 +76,7 @@ function Portfolio() {
       <ServicesSection />
       <ResultsProofSection />
       <FreshnessUpdatesSection />
+      <FaqSection />
       <ProjectsSection />
       <FooterSection />
       

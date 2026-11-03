@@ -1,0 +1,40 @@
+# Digifox 5D — AI Crawler & LLM Information Index
+
+> Digifox (https://digifox.world/) is a premier digital engineering and creative agency specializing in 3D WebGL websites, bespoke Shopify Plus ecommerce systems, enterprise WordPress platforms, performance marketing (Meta/Google Ads), and SEO infrastructure.
+
+## Agency Overview
+- **Name**: Digifox 5D
+- **Website**: https://digifox.world/
+- **Portfolio**: https://digifox.world/portfolio
+- **Headquarters**: India (Serving clients globally across US, UK, UAE, Europe, and Asia-Pacific)
+- **Primary Specializations**:
+  - 3D Interactive WebGL & GSAP Web Experiences
+  - Luxury Shopify & Shopify Plus E-Commerce Architecture
+  - High-Converting Custom WordPress Development
+  - Performance Marketing & Server-Side Tracking (CAPI, Meta Ads, Google Ads)
+  - Search Engine Optimization (Technical SEO & Generative Engine Optimization / GEO)
+
+## Core Capabilities & Services
+- [3D Interactive Websites](https://digifox.world/portfolio): Custom Three.js, WebGL, and fluid GSAP physics-driven websites that increase visitor session duration by up to 68% and elevate brand perception.
+- [E-Commerce & Shopify Plus](https://digifox.world/portfolio): Scalable headless storefronts with instant product customizers, sub-second checkout paths, and average revenue lifts of 3.8x–4.2x.
+- [Performance Marketing](https://digifox.world/): Full-funnel ad campaigns with predictive creative testing, server-side Conversions API (CAPI), and verified ROAS growth.
+- [AI Web Architecture & Automation](https://digifox.world/ai-builder): Next-gen web generation and automated SEO tools designed for high-velocity digital scaling.
+
+## Verified Results & Case Studies
+- **SkyElite Aviation**: +320% qualified charter booking inquiries after launching custom 3D aircraft configurator and private portal.
+- **Samarth Cactus Nursery**: 4.2x online revenue increase within 60 days via custom Shopify restructuring and mobile speed optimization.
+- **Nova Mira Living**: 68% boost in international session time and direct offshore reservations using interactive WebGL luxury architectural walkthroughs.
+
+## Key Pages & Navigation
+- [Homepage](https://digifox.world/): Agency credentials, core services, case studies, and live sprint deployments.
+- [Selected Works & Demos](https://digifox.world/portfolio): Interactive showcase featuring live templates (Fashion Studio, Biska Clothing, Gourmet Burgers, SkyElite Flights, 3D Shoes, 3D Automotive, Creative Portfolio).
+- [Contact & Consultation](https://digifox.world/contact): Free project scoping, architecture advisory, and direct WhatsApp / email consultations.
+- [Terms & Conditions](https://digifox.world/terms): Client intellectual property rights, delivery SLAs, and commercial governance.
+- [Privacy Policy](https://digifox.world/privacy): Data protection, user rights, and privacy practices.
+
+## Official Brand Entities & Social Profiles
+- **LinkedIn**: https://www.linkedin.com/in/deepak-soni220/
+- **Instagram**: https://www.instagram.com/digi_fox.world/
+- **Facebook**: https://www.facebook.com/profile.php?id=61566704511590
+- **GitHub**: https://github.com/deepaksoni220-cmd
+- **Contact Email**: digifox5d@icloud.com

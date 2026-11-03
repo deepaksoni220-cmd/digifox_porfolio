@@ -2,3 +2,7 @@ User-agent: *
 Allow: /
 
 Sitemap: https://digifox.world/sitemap.xml
+# AI Model & LLM Documentation Index
+# Specification: https://llmstxt.org/
+LLM-Index: https://digifox.world/llms.txt
+LLM-Full: https://digifox.world/llms-full.txt

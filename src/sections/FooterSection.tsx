@@ -233,8 +233,13 @@ export const FooterSection: React.FC = () => {
               <a href="/privacy" className="hover:text-[var(--text-strong)] transition-colors">Privacy Policy</a>
               <span>•</span>
               <a href="/contact" className="hover:text-[var(--text-strong)] transition-colors">Contact Us</a>
+              <span>•</span>
+              <span className="text-[11px] text-emerald-400 font-mono flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
+                Updated Nov 2026
+              </span>
             </div>
-            <p className="mt-1">© {currentYear} Digifox 5D. All rights reserved.</p>
+            <p className="mt-1">© {currentYear} Digifox 5D. All rights reserved. • Engine v2.4.0</p>
             <p className="flex items-center justify-center sm:justify-start gap-1 text-[10px] text-[var(--text-primary)]/30">
               <Globe size={10} /> Crafted with React, Tailwind & Framer Motion
             </p>

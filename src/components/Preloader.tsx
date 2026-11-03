@@ -5,9 +5,9 @@ export const Preloader: React.FC = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Animate progress from 0 to 100 over 2 seconds
-    const duration = 2000;
-    const intervalTime = 20;
+    // Fast animated progress from 0 to 100 over 500ms so LCP is not delayed
+    const duration = 500;
+    const intervalTime = 16;
     const steps = duration / intervalTime;
     let currentStep = 0;
 

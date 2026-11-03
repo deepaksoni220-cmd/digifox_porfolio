@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { HelmetProvider } from 'react-helmet-async';
@@ -13,26 +13,29 @@ import { ServicesSection } from './sections/ServicesSection';
 import { ProjectsSection } from './sections/ProjectsSection';
 import { FooterSection } from './sections/FooterSection';
 import { ContactButton } from './components/ContactButton';
-import { AdminPage } from './pages/AdminPage';
-import { PremiumLandingPage } from './pages/PremiumLandingPage';
-import { AiBuilderPage } from './pages/AiBuilderPage';
-import { GeneratedSitePage } from './pages/GeneratedSitePage';
-import { PublishedSite, PublishedSitePage } from './pages/PublishedSite';
 import { ProtectedPage } from './components/ProtectedPage';
-import { TermsPage } from './pages/TermsPage';
-import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
-import { ContactUsPage } from './pages/ContactUsPage';
-import { PortfolioPage } from './pages/PortfolioPage';
-import { FeaturesPage } from './pages/builder/FeaturesPage';
-import { AutoSeoPage } from './pages/builder/AutoSeoPage';
-import { SeoDashboardPage } from './pages/builder/SeoDashboardPage';
-import { DesignKitsPage } from './pages/builder/DesignKitsPage';
-import { PricingPage } from './pages/builder/PricingPage';
-import { BlogsPage } from './pages/builder/BlogsPage';
-import { AiContactPage } from './pages/builder/AiContactPage';
 import { AuthProvider } from './context/AuthContext';
 import { AuthModal } from './components/auth/AuthModal';
 import { PlanGateModal } from './components/auth/PlanGateModal';
+
+// Code-split secondary pages and builder modules to keep root bundle ultra-lean
+const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })));
+const PremiumLandingPage = lazy(() => import('./pages/PremiumLandingPage').then(m => ({ default: m.PremiumLandingPage })));
+const AiBuilderPage = lazy(() => import('./pages/AiBuilderPage').then(m => ({ default: m.AiBuilderPage })));
+const GeneratedSitePage = lazy(() => import('./pages/GeneratedSitePage').then(m => ({ default: m.GeneratedSitePage })));
+const PublishedSite = lazy(() => import('./pages/PublishedSite').then(m => ({ default: m.PublishedSite })));
+const PublishedSitePage = lazy(() => import('./pages/PublishedSite').then(m => ({ default: m.PublishedSitePage })));
+const TermsPage = lazy(() => import('./pages/TermsPage').then(m => ({ default: m.TermsPage })));
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage').then(m => ({ default: m.PrivacyPolicyPage })));
+const ContactUsPage = lazy(() => import('./pages/ContactUsPage').then(m => ({ default: m.ContactUsPage })));
+const PortfolioPage = lazy(() => import('./pages/PortfolioPage').then(m => ({ default: m.PortfolioPage })));
+const FeaturesPage = lazy(() => import('./pages/builder/FeaturesPage').then(m => ({ default: m.FeaturesPage })));
+const AutoSeoPage = lazy(() => import('./pages/builder/AutoSeoPage').then(m => ({ default: m.AutoSeoPage })));
+const SeoDashboardPage = lazy(() => import('./pages/builder/SeoDashboardPage').then(m => ({ default: m.SeoDashboardPage })));
+const DesignKitsPage = lazy(() => import('./pages/builder/DesignKitsPage').then(m => ({ default: m.DesignKitsPage })));
+const PricingPage = lazy(() => import('./pages/builder/PricingPage').then(m => ({ default: m.PricingPage })));
+const BlogsPage = lazy(() => import('./pages/builder/BlogsPage').then(m => ({ default: m.BlogsPage })));
+const AiContactPage = lazy(() => import('./pages/builder/AiContactPage').then(m => ({ default: m.AiContactPage })));
 
 function Portfolio() {
   const [isLoading, setIsLoading] = useState(true);
@@ -40,10 +43,11 @@ function Portfolio() {
   useEffect(() => {
     document.body.style.overflow = 'hidden';
 
+    // Quick brand preloader (600ms) to unblock LCP rendering almost immediately
     const timer = setTimeout(() => {
       setIsLoading(false);
       document.body.style.overflow = '';
-    }, 2000);
+    }, 600);
 
     return () => {
       clearTimeout(timer);
@@ -119,7 +123,9 @@ function App() {
   if (subdomain && subdomain !== 'www') {
     return (
       <HelmetProvider>
-        <PublishedSite subdomain={subdomain} />
+        <Suspense fallback={<div className="min-h-screen bg-[var(--bg-base)]" />}>
+          <PublishedSite subdomain={subdomain} />
+        </Suspense>
       </HelmetProvider>
     );
   }
@@ -130,71 +136,73 @@ function App() {
         <Router>
           <AuthModal />
           <PlanGateModal />
-          <Routes>
-            <Route path="/" element={<Portfolio />} />
-            <Route path="/site/:subdomain" element={<PublishedSitePage />} />
-            <Route path="/s/:subdomain" element={<PublishedSitePage />} />
-            <Route path="/published/:subdomain" element={<PublishedSitePage />} />
-            <Route path="/portfolio" element={<PortfolioPage />} />
-            <Route path="/portfolio-page" element={<PortfolioPage />} />
-            <Route path="/our-work" element={<PortfolioPage />} />
-            <Route path="/projects" element={<PortfolioPage />} />
-            <Route path="/works" element={<PortfolioPage />} />
-            <Route path="/admin" element={
-              <ProtectedPage>
-                <AdminPage />
-              </ProtectedPage>
-            } />
-            <Route path="/basic_vs_exclusive" element={<PremiumLandingPage />} />
-            <Route path="/ai-builder" element={<AiBuilderPage />} />
-            <Route path="/ai-builder/features" element={<FeaturesPage />} />
-            <Route path="/features" element={<FeaturesPage />} />
-            <Route path="/aibuilder/features" element={<FeaturesPage />} />
-            <Route path="/ai-builder/auto-seo" element={<AutoSeoPage />} />
-            <Route path="/ai-builder/seo" element={<AutoSeoPage />} />
-            <Route path="/auto-seo" element={<AutoSeoPage />} />
-            <Route path="/seo" element={<AutoSeoPage />} />
-            <Route path="/aibuilder/auto-seo" element={<AutoSeoPage />} />
-            <Route path="/admin/seo-dashboard" element={<SeoDashboardPage />} />
-            <Route path="/admin/seo" element={<SeoDashboardPage />} />
-            <Route path="/admin/dashboard" element={<SeoDashboardPage />} />
-            <Route path="/ai-builder/seo-dashboard" element={<SeoDashboardPage />} />
-            <Route path="/seo-dashboard" element={<SeoDashboardPage />} />
-            <Route path="/dashboard/seo" element={<SeoDashboardPage />} />
-            <Route path="/ai-builder/dashboard" element={<SeoDashboardPage />} />
-            <Route path="/ai-builder/design-kits" element={<DesignKitsPage />} />
-            <Route path="/ai-builder/templates" element={<DesignKitsPage />} />
-            <Route path="/design-kits" element={<DesignKitsPage />} />
-            <Route path="/templates" element={<DesignKitsPage />} />
-            <Route path="/ai-builder/pricing" element={<PricingPage />} />
-            <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/ai-builder/blogs" element={<BlogsPage />} />
-            <Route path="/ai-builder/blog" element={<BlogsPage />} />
-            <Route path="/blogs" element={<BlogsPage />} />
-            <Route path="/blog" element={<BlogsPage />} />
-            <Route path="/ai-builder/contact" element={<AiContactPage />} />
-            <Route path="/ai-builder/contact-us" element={<AiContactPage />} />
+          <Suspense fallback={<div className="min-h-screen bg-[var(--bg-base)]" />}>
+            <Routes>
+              <Route path="/" element={<Portfolio />} />
+              <Route path="/site/:subdomain" element={<PublishedSitePage />} />
+              <Route path="/s/:subdomain" element={<PublishedSitePage />} />
+              <Route path="/published/:subdomain" element={<PublishedSitePage />} />
+              <Route path="/portfolio" element={<PortfolioPage />} />
+              <Route path="/portfolio-page" element={<PortfolioPage />} />
+              <Route path="/our-work" element={<PortfolioPage />} />
+              <Route path="/projects" element={<PortfolioPage />} />
+              <Route path="/works" element={<PortfolioPage />} />
+              <Route path="/admin" element={
+                <ProtectedPage>
+                  <AdminPage />
+                </ProtectedPage>
+              } />
+              <Route path="/basic_vs_exclusive" element={<PremiumLandingPage />} />
+              <Route path="/ai-builder" element={<AiBuilderPage />} />
+              <Route path="/ai-builder/features" element={<FeaturesPage />} />
+              <Route path="/features" element={<FeaturesPage />} />
+              <Route path="/aibuilder/features" element={<FeaturesPage />} />
+              <Route path="/ai-builder/auto-seo" element={<AutoSeoPage />} />
+              <Route path="/ai-builder/seo" element={<AutoSeoPage />} />
+              <Route path="/auto-seo" element={<AutoSeoPage />} />
+              <Route path="/seo" element={<AutoSeoPage />} />
+              <Route path="/aibuilder/auto-seo" element={<AutoSeoPage />} />
+              <Route path="/admin/seo-dashboard" element={<SeoDashboardPage />} />
+              <Route path="/admin/seo" element={<SeoDashboardPage />} />
+              <Route path="/admin/dashboard" element={<SeoDashboardPage />} />
+              <Route path="/ai-builder/seo-dashboard" element={<SeoDashboardPage />} />
+              <Route path="/seo-dashboard" element={<SeoDashboardPage />} />
+              <Route path="/dashboard/seo" element={<SeoDashboardPage />} />
+              <Route path="/ai-builder/dashboard" element={<SeoDashboardPage />} />
+              <Route path="/ai-builder/design-kits" element={<DesignKitsPage />} />
+              <Route path="/ai-builder/templates" element={<DesignKitsPage />} />
+              <Route path="/design-kits" element={<DesignKitsPage />} />
+              <Route path="/templates" element={<DesignKitsPage />} />
+              <Route path="/ai-builder/pricing" element={<PricingPage />} />
+              <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/ai-builder/blogs" element={<BlogsPage />} />
+              <Route path="/ai-builder/blog" element={<BlogsPage />} />
+              <Route path="/blogs" element={<BlogsPage />} />
+              <Route path="/blog" element={<BlogsPage />} />
+              <Route path="/ai-builder/contact" element={<AiContactPage />} />
+              <Route path="/ai-builder/contact-us" element={<AiContactPage />} />
 
-            <Route path="/terms" element={<TermsPage />} />
-            <Route path="/terms-and-conditions" element={<TermsPage />} />
-            <Route path="/privacy" element={<PrivacyPolicyPage />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-            <Route path="/contact" element={<ContactUsPage />} />
-            <Route path="/contact-us" element={<ContactUsPage />} />
+              <Route path="/terms" element={<TermsPage />} />
+              <Route path="/terms-and-conditions" element={<TermsPage />} />
+              <Route path="/privacy" element={<PrivacyPolicyPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/contact" element={<ContactUsPage />} />
+              <Route path="/contact-us" element={<ContactUsPage />} />
 
-            {/* AI Builder sub-routes */}
-            <Route path="/ai-builder/terms" element={<TermsPage />} />
-            <Route path="/ai-builder/terms-and-conditions" element={<TermsPage />} />
-            <Route path="/ai-builder/privacy" element={<PrivacyPolicyPage />} />
-            <Route path="/ai-builder/privacy-policy" element={<PrivacyPolicyPage />} />
-            <Route path="/aibuilder/terms" element={<TermsPage />} />
-            <Route path="/aibuilder/privacy" element={<PrivacyPolicyPage />} />
-            <Route path="/aibuilder/contact" element={<AiContactPage />} />
-            <Route path="/aibuilder/contact-us" element={<AiContactPage />} />
+              {/* AI Builder sub-routes */}
+              <Route path="/ai-builder/terms" element={<TermsPage />} />
+              <Route path="/ai-builder/terms-and-conditions" element={<TermsPage />} />
+              <Route path="/ai-builder/privacy" element={<PrivacyPolicyPage />} />
+              <Route path="/ai-builder/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/aibuilder/terms" element={<TermsPage />} />
+              <Route path="/aibuilder/privacy" element={<PrivacyPolicyPage />} />
+              <Route path="/aibuilder/contact" element={<AiContactPage />} />
+              <Route path="/aibuilder/contact-us" element={<AiContactPage />} />
 
-            <Route path="/generated-site" element={<GeneratedSitePage />} />
-            <Route path="*" element={<Portfolio />} />
-          </Routes>
+              <Route path="/generated-site" element={<GeneratedSitePage />} />
+              <Route path="*" element={<Portfolio />} />
+            </Routes>
+          </Suspense>
         </Router>
       </AuthProvider>
     </HelmetProvider>

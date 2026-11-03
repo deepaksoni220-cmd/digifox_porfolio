@@ -79,6 +79,8 @@ export const HeroSection: React.FC = () => {
             alt="Digifox 5D 3D Portrait" 
             className="w-full h-auto object-contain pointer-events-none"
             style={{ aspectRatio: '1450/1570' }}
+            loading="eager"
+            fetchPriority="high"
           />
         </Magnet>
       </div>

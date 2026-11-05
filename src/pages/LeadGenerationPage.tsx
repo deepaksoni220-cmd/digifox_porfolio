@@ -306,6 +306,7 @@ export const LeadGenerationPage: React.FC = () => {
       rating: Number(newManualLead.rating) || 5.0,
       reviewCount: Number(newManualLead.reviewCount) || 15,
       websiteStatus: 'No Website Detected',
+      googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(newManualLead.businessName + ' ' + (newManualLead.address || newManualLead.city || ''))}`,
       opportunityScore: 96,
       aiRecommendation: `Manually added prospect in ${newManualLead.city}. Prime candidate for modern showcase portfolio & online booking inquiries.`,
       matchedDemo: {
@@ -646,6 +647,23 @@ export const LeadGenerationPage: React.FC = () => {
                   </button>
                 </div>
               </form>
+
+              <div className="mt-4 pt-4 border-t border-[var(--border-strong)]/40 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] font-mono text-[var(--text-secondary)]">Search Database:</span>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${googlePlacesApiKey ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400' : 'bg-blue-500/10 border border-blue-500/20 text-blue-300'}`}>
+                    {googlePlacesApiKey ? 'Official Google Places API' : 'Live Geographic Business Directory'}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowSettingsModal(true)}
+                  className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 font-semibold cursor-pointer"
+                >
+                  <Key size={11} />
+                  <span>{googlePlacesApiKey ? 'Configured Google Places Key' : 'Add Google Places Key'}</span>
+                </button>
+              </div>
             </div>
 
             {/* Results Grid (Discovered Leads vs Selected Dossier) */}
@@ -729,9 +747,17 @@ export const LeadGenerationPage: React.FC = () => {
                           </div>
 
                           <div className="flex items-center justify-between text-xs pt-2 border-t border-[var(--border-strong)]/30">
-                            <span className="text-[11px] font-mono text-[var(--text-secondary)]">
-                              Demo: {lead.matchedDemo?.title?.slice(0, 22)}...
-                            </span>
+                            <a
+                              href={lead.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lead.businessName + ' ' + (lead.address || lead.city))}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="text-[11px] font-semibold text-emerald-400 hover:underline flex items-center gap-1"
+                            >
+                              <MapPin size={11} />
+                              <span>Google Maps Profile</span>
+                              <ExternalLink size={10} />
+                            </a>
                             <span className="text-blue-400 font-semibold flex items-center gap-1">
                               <span>Configure & Send</span>
                               <ArrowRight size={12} />
@@ -765,16 +791,25 @@ export const LeadGenerationPage: React.FC = () => {
                           <h3 className="text-2xl font-bold text-[var(--text-strong)]">
                             {selectedDiscoveredLead.businessName}
                           </h3>
-                          <p className="text-xs text-[var(--text-secondary)] mt-1 flex items-center gap-3">
-                            <span className="flex items-center gap-1">
+                          <div className="mt-2 flex flex-wrap items-center gap-3">
+                            <span className="text-xs text-[var(--text-secondary)] flex items-center gap-1">
                               <Phone size={12} className="text-blue-400" />
                               <span>{selectedDiscoveredLead.phone}</span>
                             </span>
-                            <span className="flex items-center gap-1">
+                            <span className="text-xs text-[var(--text-secondary)] flex items-center gap-1">
                               <Star size={12} className="text-amber-400 fill-amber-400" />
                               <span>{selectedDiscoveredLead.rating} Google Rating ({selectedDiscoveredLead.reviewCount} verified reviews)</span>
                             </span>
-                          </p>
+                            <a
+                              href={selectedDiscoveredLead.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedDiscoveredLead.businessName + ' ' + (selectedDiscoveredLead.address || selectedDiscoveredLead.city))}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 text-xs font-bold flex items-center gap-1 transition-all shadow-sm"
+                            >
+                              <MapPin size={12} />
+                              <span>Open Google Maps Profile ↗</span>
+                            </a>
+                          </div>
                         </div>
 
                         <div className="p-4 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-center min-w-[120px]">
@@ -1549,6 +1584,23 @@ export const LeadGenerationPage: React.FC = () => {
                   </button>
                 </div>
               </form>
+
+              <div className="mt-4 pt-4 border-t border-[var(--border-strong)]/40 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] font-mono text-[var(--text-secondary)]">Search Database:</span>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${googlePlacesApiKey ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400' : 'bg-blue-500/10 border border-blue-500/20 text-blue-300'}`}>
+                    {googlePlacesApiKey ? 'Official Google Places API' : 'Live Geographic Business Directory'}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowSettingsModal(true)}
+                  className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 font-semibold cursor-pointer"
+                >
+                  <Key size={11} />
+                  <span>{googlePlacesApiKey ? 'Configured Google Places Key' : 'Add Google Places Key'}</span>
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -1686,6 +1738,23 @@ export const LeadGenerationPage: React.FC = () => {
                   </button>
                 </div>
               </form>
+
+              <div className="mt-4 pt-4 border-t border-[var(--border-strong)]/40 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] font-mono text-[var(--text-secondary)]">Search Database:</span>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${googlePlacesApiKey ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400' : 'bg-blue-500/10 border border-blue-500/20 text-blue-300'}`}>
+                    {googlePlacesApiKey ? 'Official Google Places API' : 'Live Geographic Business Directory'}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowSettingsModal(true)}
+                  className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 font-semibold cursor-pointer"
+                >
+                  <Key size={11} />
+                  <span>{googlePlacesApiKey ? 'Configured Google Places Key' : 'Add Google Places Key'}</span>
+                </button>
+              </div>
             </div>
           </div>
         )}

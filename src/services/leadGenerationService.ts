@@ -424,19 +424,39 @@ export async function scanGoogleBusinessProfiles(
   ) || AVAILABLE_DEMOS[0];
 
   try {
-    const placesRes = await fetch('/api/scan-places', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        city: params.city,
-        country: params.country,
-        industry: params.industry,
-        targetNoWebsiteOnly: params.targetNoWebsiteOnly,
-        apiKey: placesApiKey
-      })
+    let placesRes: Response | null = null;
+    const reqPayload = JSON.stringify({
+      city: params.city,
+      country: params.country,
+      industry: params.industry,
+      targetNoWebsiteOnly: params.targetNoWebsiteOnly,
+      apiKey: placesApiKey
     });
 
-    if (placesRes.ok) {
+    try {
+      placesRes = await fetch('/api/scan-places', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: reqPayload
+      });
+    } catch {
+      // Local dev or proxy issue
+    }
+
+    // If local endpoint not available or 404, fall back to production live endpoint
+    if (!placesRes || !placesRes.ok) {
+      try {
+        placesRes = await fetch('https://digifox.world/api/scan-places', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: reqPayload
+        });
+      } catch {
+        // Direct public fallback below
+      }
+    }
+
+    if (placesRes && placesRes.ok) {
       const pData = await placesRes.json();
       if (Array.isArray(pData.places) && pData.places.length > 0) {
         return pData.places.map((place: any, idx: number) => {

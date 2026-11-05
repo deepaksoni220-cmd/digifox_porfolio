@@ -116,7 +116,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const placesList = await geoRes.json();
       if (Array.isArray(placesList) && placesList.length > 0) {
         const regional = getRegionalContext(country, city);
-        const mapped = placesList.map((item: any, i: number) => {
+        // Filter out non-commercial entities like bus stops or residential zones
+        const businessesOnly = placesList.filter((item: any) => {
+          const c = item.class;
+          const t = item.type;
+          return c !== 'highway' && t !== 'bus_stop' && t !== 'residential';
+        });
+        const listToMap = businessesOnly.length > 0 ? businessesOnly : placesList;
+
+        const mapped = listToMap.map((item: any, i: number) => {
           // Clean business name from OpenStreetMap display name
           const parts = (item.display_name || '').split(',');
           const businessName = parts[0]?.trim() || `${city} ${industry}`;

@@ -254,6 +254,31 @@ export interface GoogleBusinessScanParams {
   industry: string;
   targetNoWebsiteOnly: boolean;
   limit?: number;
+  googlePlacesApiKey?: string;
+}
+
+export interface SendEmailParams {
+  to: string;
+  subject: string;
+  body: string;
+  senderEmail?: string;
+  appPassword?: string;
+  senderName?: string;
+}
+
+export async function sendWorkspaceEmail(params: SendEmailParams): Promise<{ success: boolean; messageId?: string; sentFrom?: string }> {
+  const response = await fetch('/api/send-workspace-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params)
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || `Failed to send email (${response.status})`);
+  }
+
+  return await response.json();
 }
 
 export interface DiscoveredBusinessLead {
@@ -400,12 +425,43 @@ export async function scanGoogleBusinessProfiles(
     return generateFallbackLeads();
   }
 
+  const placesApiKey = params.googlePlacesApiKey ||
+    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GOOGLE_PLACES_API_KEY) ||
+    (typeof localStorage !== 'undefined' ? localStorage.getItem('digifox_google_places_api_key') : null) ||
+    '';
+
+  let realPlacesInfo = '';
+  if (placesApiKey) {
+    try {
+      const placesRes = await fetch('/api/scan-places', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          city: params.city,
+          country: params.country,
+          industry: params.industry,
+          targetNoWebsiteOnly: params.targetNoWebsiteOnly,
+          apiKey: placesApiKey
+        })
+      });
+      if (placesRes.ok) {
+        const pData = await placesRes.json();
+        if (pData.places && pData.places.length > 0) {
+          realPlacesInfo = `\n\nREAL GOOGLE PLACES API RESULTS FROM OFFICIAL DATABASE:\n${JSON.stringify(pData.places.slice(0, 5))}\nExtract and use these exact verified business names, addresses, ratings, and phone numbers!`;
+        }
+      }
+    } catch (e) {
+      console.warn("Places API proxy call failed, using Gemini synthesis:", e);
+    }
+  }
+
   const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
 
   const prompt = `You are the Digifox Google Business Profile Scanner & Lead Acquisition Agent.
 Location: ${params.city}, ${params.country}
 Industry / Niche: ${params.industry}
 Target Filter: ${params.targetNoWebsiteOnly ? "EXCLUSIVELY businesses WITHOUT a modern website or with no website detected on Google Maps" : "All businesses in this niche"}
+${realPlacesInfo}
 
 Available Digifox Showcase Demos to match:
 ${JSON.stringify(AVAILABLE_DEMOS.map(d => ({ title: d.title, category: d.category, demoUrl: d.demoUrl, fitFor: d.fitFor })))}

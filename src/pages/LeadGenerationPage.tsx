@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   processLeadWithGemini, 
   scanGoogleBusinessProfiles,
+  sendWorkspaceEmail,
   AVAILABLE_DEMOS,
   type LeadInput, 
   type QualifiedLead,
@@ -31,7 +32,10 @@ import {
   Send,
   Plus,
   RotateCcw,
-  X
+  X,
+  Settings,
+  Key,
+  ShieldCheck
 } from 'lucide-react';
 import { SEOMeta } from '../components/SEOMeta';
 
@@ -94,6 +98,21 @@ export const LeadGenerationPage: React.FC = () => {
   const [manualFollowUpBody, setManualFollowUpBody] = useState('');
   const [isCustomUrlMode, setIsCustomUrlMode] = useState(false);
   const [showAddLeadModal, setShowAddLeadModal] = useState(false);
+
+  // Google Places API & Google Workspace Credentials
+  const [googlePlacesApiKey, setGooglePlacesApiKey] = useState(() => 
+    typeof localStorage !== 'undefined' ? localStorage.getItem('digifox_google_places_api_key') || '' : ''
+  );
+  const [workspaceEmail, setWorkspaceEmail] = useState(() => 
+    typeof localStorage !== 'undefined' ? localStorage.getItem('digifox_workspace_sender_email') || '' : ''
+  );
+  const [workspaceAppPassword, setWorkspaceAppPassword] = useState(() => 
+    typeof localStorage !== 'undefined' ? localStorage.getItem('digifox_workspace_app_password') || '' : ''
+  );
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [sendSuccessMessage, setSendSuccessMessage] = useState<string | null>(null);
+  const [sendErrorMessage, setSendErrorMessage] = useState<string | null>(null);
 
   // New manual lead form state
   const [newManualLead, setNewManualLead] = useState({
@@ -166,7 +185,10 @@ export const LeadGenerationPage: React.FC = () => {
     setIsScanning(true);
     setErrorMessage(null);
     try {
-      const results = await scanGoogleBusinessProfiles(params, selectedWorkload);
+      const results = await scanGoogleBusinessProfiles({
+        ...params,
+        googlePlacesApiKey: googlePlacesApiKey || undefined
+      }, selectedWorkload);
       setDiscoveredLeads(results);
       if (results.length > 0) {
         setSelectedDiscoveredLead(results[0]);
@@ -196,7 +218,6 @@ export const LeadGenerationPage: React.FC = () => {
     const oldUrl = manualDemoUrl;
     setManualDemoUrl(newUrl);
 
-    // Update demo link in email body if old link exists
     if (oldUrl && manualBody.includes(oldUrl)) {
       setManualBody(manualBody.replaceAll(oldUrl, newUrl));
     }
@@ -224,6 +245,46 @@ export const LeadGenerationPage: React.FC = () => {
     setManualBody(p.body.replace('[DEMO_LINK]', demoLink));
     setManualFollowUpSubject(p.followUpSubject);
     setManualFollowUpBody(p.followUpBody.replace('[DEMO_LINK]', demoLink));
+  };
+
+  const handleSaveSettings = (e: React.FormEvent) => {
+    e.preventDefault();
+    localStorage.setItem('digifox_google_places_api_key', googlePlacesApiKey);
+    localStorage.setItem('digifox_workspace_sender_email', workspaceEmail);
+    localStorage.setItem('digifox_workspace_app_password', workspaceAppPassword);
+    setShowSettingsModal(false);
+  };
+
+  const handleSendViaWorkspaceSmtp = async () => {
+    if (!manualEmail) {
+      setSendErrorMessage("Please provide a recipient email address.");
+      return;
+    }
+
+    const subject = emailTab === 'initial' ? manualSubject : manualFollowUpSubject;
+    const body = emailTab === 'initial' ? manualBody : manualFollowUpBody;
+
+    setIsSendingEmail(true);
+    setSendErrorMessage(null);
+    setSendSuccessMessage(null);
+
+    try {
+      const res = await sendWorkspaceEmail({
+        to: manualEmail,
+        subject,
+        body,
+        senderEmail: workspaceEmail || undefined,
+        appPassword: workspaceAppPassword || undefined,
+        senderName: 'Digifox'
+      });
+      setSendSuccessMessage(`Email sent successfully via Google Workspace (${res.sentFrom || 'Workspace SMTP'})! Message ID: ${res.messageId || 'OK'}`);
+      setTimeout(() => setSendSuccessMessage(null), 7000);
+    } catch (err: any) {
+      console.error(err);
+      setSendErrorMessage(err.message || 'Failed to dispatch email. Please check your Google Workspace app password.');
+    } finally {
+      setIsSendingEmail(false);
+    }
   };
 
   const handleAddManualLead = (e: React.FormEvent) => {
@@ -332,7 +393,7 @@ export const LeadGenerationPage: React.FC = () => {
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-strong)] pb-24 pt-12 px-4 sm:px-8">
       <SEOMeta 
         title="Digifox AI Lead Generation Engine | Google Business Scanner"
-        description="Scan Google Business Profiles in any city, detect businesses without websites, manually customize demo prototypes and emails, and prepare high-converting sales sequences."
+        description="Scan Google Business Profiles in any city, detect businesses without websites, manually customize demo prototypes and emails, and dispatch via Google Workspace."
       />
 
       <div className="max-w-7xl mx-auto">
@@ -343,21 +404,29 @@ export const LeadGenerationPage: React.FC = () => {
             <div className="flex items-center gap-2 mb-2">
               <span className="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center gap-1.5">
                 <Cpu size={13} />
-                <span>Gemini-Only Multi-Agent Architecture</span>
+                <span>Google Business API & Workspace Enabled</span>
               </span>
               <span className="text-xs text-[var(--text-secondary)] font-mono">
-                Manual Demo & Email Editor Enabled
+                Gemini Multi-Agent Engine
               </span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-[var(--text-strong)]">
               Digifox AI <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Lead Generation Engine</span>
             </h1>
             <p className="mt-2 text-sm sm:text-base text-[var(--text-secondary)] font-light max-w-3xl">
-              Discover high-ticket businesses without websites, select or manually customize demo prototypes, refine emails in real-time, and launch direct outreach to close $1,400–$2,000 website packages.
+              Discover high-ticket businesses without websites using Google Business Profiles, attach personalized demo prototypes, and dispatch direct sales outreach via your Google Workspace account.
             </p>
           </div>
 
-          <div className="flex items-center gap-3 self-start md:self-auto">
+          <div className="flex flex-wrap items-center gap-3 self-start md:self-auto">
+            <button
+              type="button"
+              onClick={() => setShowSettingsModal(true)}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border border-emerald-500/30 text-emerald-300 hover:text-white hover:border-emerald-400 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+            >
+              <Settings size={13} />
+              <span>API & Workspace Settings</span>
+            </button>
             <a 
               href="/portfolio"
               className="px-4 py-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-xs font-semibold hover:border-blue-400 transition-colors flex items-center gap-1.5"
@@ -845,7 +914,7 @@ export const LeadGenerationPage: React.FC = () => {
                         <div>
                           <h4 className="text-base font-bold uppercase tracking-tight text-[var(--text-strong)] flex items-center gap-2">
                             <Mail size={16} className="text-indigo-400" />
-                            <span>3. Edit Outreach Copy Before Sending</span>
+                            <span>3. Edit Outreach Copy & Dispatch via Google Workspace</span>
                           </h4>
                           <span className="text-xs text-[var(--text-secondary)] font-light">
                             Directly edit the subject line or email body below. All changes are preserved.
@@ -889,7 +958,7 @@ export const LeadGenerationPage: React.FC = () => {
                             className="px-3 py-2 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-bold text-[var(--text-strong)] hover:border-emerald-400 hover:text-emerald-400 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
                           >
                             {copiedPitch ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
-                            <span>{copiedPitch ? 'Copied' : 'Copy Email'}</span>
+                            <span>{copiedPitch ? 'Copied' : 'Copy'}</span>
                           </button>
                         </div>
                       </div>
@@ -932,32 +1001,77 @@ export const LeadGenerationPage: React.FC = () => {
                           />
                         </div>
 
+                        {/* Status Feedback Messages */}
+                        {sendSuccessMessage && (
+                          <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs flex items-center gap-2 shadow-lg">
+                            <CheckCircle2 size={16} className="shrink-0" />
+                            <span>{sendSuccessMessage}</span>
+                          </div>
+                        )}
+
+                        {sendErrorMessage && (
+                          <div className="p-3.5 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center justify-between gap-2 shadow-lg">
+                            <span>{sendErrorMessage}</span>
+                            <button
+                              type="button"
+                              onClick={() => setShowSettingsModal(true)}
+                              className="underline font-bold hover:text-white shrink-0 cursor-pointer"
+                            >
+                              Check Settings
+                            </button>
+                          </div>
+                        )}
+
                         {/* Bottom Action Bar */}
-                        <div className="pt-4 border-t border-[var(--border-strong)]/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div className="pt-4 border-t border-[var(--border-strong)]/40 flex flex-col lg:flex-row items-center justify-between gap-4">
                           <div className="text-xs text-[var(--text-secondary)] flex items-center gap-2">
                             <span className="w-2 h-2 rounded-full bg-emerald-400" />
                             <span>
-                              Sending to: <strong className="text-[var(--text-strong)]">{manualEmail || 'No email specified'}</strong>
+                              Target: <strong className="text-[var(--text-strong)]">{manualEmail || 'No email specified'}</strong>
                             </span>
                           </div>
 
-                          <div className="flex items-center gap-3 w-full sm:w-auto">
+                          <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
+                            {/* Copy Full Email */}
                             <button
                               type="button"
                               onClick={copyDiscoveredPitch}
-                              className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-bold hover:border-emerald-400 text-[var(--text-strong)] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                              className="flex-1 lg:flex-none px-3.5 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-bold hover:border-emerald-400 text-[var(--text-strong)] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                             >
                               <Copy size={13} />
-                              <span>Copy Full Email</span>
+                              <span>Copy Email</span>
                             </button>
 
+                            {/* 1-Click Launch In Google Workspace (Gmail Web) */}
                             <a
-                              href={`mailto:${manualEmail}?subject=${encodeURIComponent(currentSubject)}&body=${encodeURIComponent(currentBody)}`}
-                              className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all"
+                              href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(manualEmail)}&su=${encodeURIComponent(currentSubject)}&body=${encodeURIComponent(currentBody)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex-1 lg:flex-none px-4 py-2.5 rounded-xl bg-blue-600/20 border border-blue-500/40 hover:bg-blue-600/30 text-blue-300 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md transition-all whitespace-nowrap"
                             >
-                              <Send size={13} />
-                              <span>Launch Email Client</span>
+                              <Mail size={13} />
+                              <span>Open in Workspace</span>
                             </a>
+
+                            {/* Automated Background SMTP Dispatch */}
+                            <button
+                              type="button"
+                              onClick={handleSendViaWorkspaceSmtp}
+                              disabled={isSendingEmail}
+                              className="flex-1 lg:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap"
+                            >
+                              {isSendingEmail ? (
+                                <>
+                                  <Bot size={13} className="animate-spin" />
+                                  <span>Sending via Workspace...</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Send size={13} />
+                                  <span>Send via Workspace API</span>
+                                </>
+                              )}
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -1347,6 +1461,98 @@ export const LeadGenerationPage: React.FC = () => {
           </div>
         )}
 
+        {/* MODAL: GOOGLE PLACES API & GOOGLE WORKSPACE CREDENTIALS */}
+        {showSettingsModal && (
+          <div className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="w-full max-w-lg bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+              <button
+                type="button"
+                onClick={() => setShowSettingsModal(false)}
+                className="absolute top-6 right-6 p-2 rounded-xl bg-[var(--bg-base)] text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
+              >
+                <X size={16} />
+              </button>
+
+              <h3 className="text-xl font-bold uppercase tracking-tight text-[var(--text-strong)] mb-1 flex items-center gap-2">
+                <Settings size={18} className="text-emerald-400" />
+                <span>Google API & Workspace Settings</span>
+              </h3>
+              <p className="text-xs text-[var(--text-secondary)] mb-6 font-light">
+                Configure your Google Business / Places API key for live Google Maps scans, and your Google Workspace email credentials for automated sending.
+              </p>
+
+              <form onSubmit={handleSaveSettings} className="space-y-4">
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 flex items-center gap-1.5">
+                    <Key size={13} className="text-blue-400" />
+                    <span>Google Business / Places API Key</span>
+                  </label>
+                  <input
+                    type="password"
+                    value={googlePlacesApiKey}
+                    onChange={(e) => setGooglePlacesApiKey(e.target.value)}
+                    placeholder="AIzaSy..."
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm font-mono focus:border-blue-500 focus:outline-none"
+                  />
+                  <span className="text-[10px] text-[var(--text-secondary)] mt-1 block">
+                    Enables live queries against Google's Places & Business API database. If left blank, Gemini intelligence handles the discovery.
+                  </span>
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 flex items-center gap-1.5">
+                    <Mail size={13} className="text-emerald-400" />
+                    <span>Google Workspace Sender Email</span>
+                  </label>
+                  <input
+                    type="email"
+                    value={workspaceEmail}
+                    onChange={(e) => setWorkspaceEmail(e.target.value)}
+                    placeholder="you@digifox.world"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-emerald-500 focus:outline-none"
+                  />
+                  <span className="text-[10px] text-[var(--text-secondary)] mt-1 block">
+                    Your authenticated Google Workspace domain email address.
+                  </span>
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 flex items-center gap-1.5">
+                    <ShieldCheck size={13} className="text-indigo-400" />
+                    <span>Google Workspace App Password</span>
+                  </label>
+                  <input
+                    type="password"
+                    value={workspaceAppPassword}
+                    onChange={(e) => setWorkspaceAppPassword(e.target.value)}
+                    placeholder="xxxx xxxx xxxx xxxx"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm font-mono focus:border-indigo-500 focus:outline-none"
+                  />
+                  <span className="text-[10px] text-[var(--text-secondary)] mt-1 block">
+                    Generate this at <strong>myaccount.google.com/apppasswords</strong> (Select 'Mail' and 'Other'). Allows sending emails via Google Workspace SMTP securely without exposing your main password.
+                  </span>
+                </div>
+
+                <div className="pt-2 flex items-center justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowSettingsModal(false)}
+                    className="px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-semibold text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-blue-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider shadow-lg cursor-pointer"
+                  >
+                    Save Credentials
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
         {/* MODAL: ADD CUSTOM LEAD MANUALLY */}
         {showAddLeadModal && (
           <div className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
@@ -1354,7 +1560,7 @@ export const LeadGenerationPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowAddLeadModal(false)}
-                className="absolute top-6 right-6 p-2 rounded-xl bg-[var(--bg-base)] text-[var(--text-secondary)] hover:text-white transition-colors"
+                className="absolute top-6 right-6 p-2 rounded-xl bg-[var(--bg-base)] text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
               >
                 <X size={16} />
               </button>
@@ -1468,13 +1674,13 @@ export const LeadGenerationPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setShowAddLeadModal(false)}
-                    className="px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-semibold text-[var(--text-secondary)] hover:text-white transition-colors"
+                    className="px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-semibold text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider shadow-lg"
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider shadow-lg cursor-pointer"
                   >
                     Add to Pipeline
                   </button>

@@ -13,8 +13,15 @@
       }
     },
     "apify-google-places": {
-      "serverUrl": "https://mcp.apify.com/?tools=actors,docs,compass/crawler-google-places",
-      "url": "https://mcp.apify.com/?tools=actors,docs,compass/crawler-google-places"
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.apify.com/?tools=actors,docs,compass/crawler-google-places"
+      ],
+      "env": {
+        "APIFY_TOKEN": ""
+      }
     }
   }
 }

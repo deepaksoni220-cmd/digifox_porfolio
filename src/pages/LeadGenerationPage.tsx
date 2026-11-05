@@ -118,7 +118,9 @@ export const LeadGenerationPage: React.FC = () => {
     typeof localStorage !== 'undefined' ? localStorage.getItem('digifox_workspace_app_password') || '' : ''
   );
   const [apifyToken, setApifyToken] = useState(() => 
-    typeof localStorage !== 'undefined' ? localStorage.getItem('digifox_apify_token') || '' : ''
+    typeof localStorage !== 'undefined' 
+      ? localStorage.getItem('digifox_apify_token') || (import.meta as any).env?.VITE_APIFY_TOKEN || '' 
+      : (import.meta as any).env?.VITE_APIFY_TOKEN || ''
   );
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);

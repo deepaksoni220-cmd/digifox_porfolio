@@ -348,6 +348,15 @@ function getRegionalFallback(country: string, city: string, industry: string): D
   if (isNy) {
     realSeeds = [
       {
+        name: 'State Marble NYC',
+        addr: '85 Meadow St, Brooklyn, NY 11206',
+        phone: '+1 347-528-5355',
+        rating: 5.0,
+        reviews: 28,
+        score: 99,
+        website: null
+      },
+      {
         name: 'GDI Marble & Custom Granite of NYC',
         addr: '224 48th St, Brooklyn, NY 11220',
         phone: '+1 (718) 439-0820',

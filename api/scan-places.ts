@@ -17,6 +17,18 @@ interface VerifiedPlace {
 const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
   // New York - Marble & Stone
   {
+    name: 'State Marble NYC',
+    city: 'New York',
+    country: 'USA',
+    industryKeywords: ['marble', 'granite', 'stone', 'countertop', 'contractor', 'dealers'],
+    address: '85 Meadow St, Brooklyn, NY 11206',
+    phone: '+1 347-528-5355',
+    rating: 5.0,
+    reviewCount: 28,
+    website: null, // 100% Verified No Website on Google Business
+    email: null
+  },
+  {
     name: 'JP Stonemart',
     city: 'New York',
     country: 'USA',

@@ -36,7 +36,8 @@ import {
   Settings,
   Key,
   ShieldCheck,
-  Search
+  Search,
+  Upload
 } from 'lucide-react';
 import { SEOMeta } from '../components/SEOMeta';
 
@@ -128,6 +129,11 @@ export const LeadGenerationPage: React.FC = () => {
     rating: 4.9,
     reviewCount: 24
   });
+
+  // JSON Import State
+  const [showJsonImportModal, setShowJsonImportModal] = useState(false);
+  const [rawJsonInput, setRawJsonInput] = useState('');
+  const [jsonImportError, setJsonImportError] = useState<string | null>(null);
 
   // Single Audit State
   const [formData, setFormData] = useState<LeadInput>({
@@ -345,6 +351,105 @@ export const LeadGenerationPage: React.FC = () => {
       rating: 4.9,
       reviewCount: 24
     });
+  };
+
+  const handleImportJson = (e: React.FormEvent) => {
+    e.preventDefault();
+    setJsonImportError(null);
+    if (!rawJsonInput.trim()) return;
+
+    try {
+      const parsed = JSON.parse(rawJsonInput);
+      let items: any[] = [];
+
+      if (Array.isArray(parsed)) {
+        items = parsed.flat(2);
+      } else if (Array.isArray(parsed.data)) {
+        items = parsed.data.flat(2);
+      } else if (Array.isArray(parsed.places)) {
+        items = parsed.places;
+      } else if (parsed.name) {
+        items = [parsed];
+      }
+
+      if (items.length === 0) {
+        setJsonImportError('Could not find any business items in the JSON. Please check the structure.');
+        return;
+      }
+
+      const matchedDemoTemplate = AVAILABLE_DEMOS[0];
+
+      const mapped: DiscoveredBusinessLead[] = items.map((item, idx) => {
+        const businessName = item.name || item.title || item.name_for_emails || `Imported Lead ${idx + 1}`;
+        const city = item.city || scanParams.city || 'Local';
+        const country = item.country || scanParams.country || 'USA';
+        const industry = item.type || item.industry || scanParams.industry || 'Marble & Granite';
+        const address = item.address || item.formatted_address || item.street || `${city}, ${country}`;
+        const phone = item.phone || item.phone_number || '';
+        const rating = Number(item.rating) || 5.0;
+        const reviewCount = Number(item.reviews || item.user_ratings_total || item.reviewCount) || 15;
+        const website = item.website || item.websiteUri || null;
+        const hasWebsite = Boolean(website);
+        const websiteStatus = hasWebsite ? 'Active Website' : 'No Website Detected';
+        const oppScore = hasWebsite ? 76 : Math.min(99, 92 + (idx === 0 ? 5 : 2));
+        const googleMapsUrl = item.location_link || item.google_maps_url || item.url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(businessName + ' ' + address)}`;
+        const personalizedDemoUrl = `/portfolio?client=${encodeURIComponent(businessName)}`;
+        const contactEmail = item.email || '';
+
+        return {
+          id: item.place_id || item.google_id || `imported_${Date.now()}_${idx}`,
+          businessName,
+          city,
+          country,
+          industry,
+          address,
+          phone,
+          rating,
+          reviewCount,
+          websiteStatus,
+          websiteUrl: website || '',
+          googleMapsUrl,
+          opportunityScore: oppScore,
+          aiRecommendation: hasWebsite
+            ? `${businessName} currently has an existing website at ${website}, but it lacks 3D material showcase capabilities, interactive project portfolios, and mobile quotation calculators. High-converting redesign opportunity.`
+            : `${businessName} has an outstanding ${rating}★ reputation with ${reviewCount} Google reviews in ${city}, but zero dedicated website. Prime candidate for a modern showcase portfolio and quotation engine.`,
+          matchedDemo: {
+            ...matchedDemoTemplate,
+            whyItFits: `Custom interactive showcase configured for ${industry} in ${city}.`
+          },
+          personalizedDemoUrl,
+          contactEmailStatus: contactEmail ? 'Public Email Found' : 'Needs Verification',
+          contactEmail,
+          outreachAngle: hasWebsite ? 'Website Redesign & Conversion Optimization' : 'Turn Google Maps Searchers Into Paid Clients',
+          personalizedPitch: {
+            subject: hasWebsite
+              ? `Interactive 3D showcase & conversion redesign for ${businessName}`
+              : `Interactive prototype concept for ${businessName} in ${city}`,
+            hook: `I came across your Google Business profile in ${city} and saw your outstanding ${rating}-star reputation.`,
+            body: hasWebsite
+              ? `Hi team,\n\nI was looking into top ${industry} providers in ${city} and saw ${businessName}'s ${rating}-star Google rating.\n\nI took a look at your current website (${website})—while your craftsmanship is top-tier, your current site is missing an interactive 3D slab gallery and mobile quotation tool.\n\nOur team at Digifox put together a live interactive prototype specifically tailored for ${businessName}:\n[DEMO_LINK]\n\nWould you be open to a 5-minute walkthrough this week?`
+              : `Hi team,\n\nI was looking into top ${industry} providers in ${city} and saw ${businessName}'s ${rating}-star Google rating.\n\nHowever, I noticed that potential clients searching for ${industry} in ${city} have no website to view your portfolio, slab finishes, or request an instant quote online.\n\nOur team at Digifox put together a live interactive prototype specifically tailored for your team:\n[DEMO_LINK]\n\nWould you be open to a 5-minute walkthrough this week?`,
+            demoCta: `View ${businessName} Prototype`,
+            followUpSubject: hasWebsite
+              ? `Re: Interactive 3D showcase & conversion redesign for ${businessName}`
+              : `Re: Interactive prototype concept for ${businessName} in ${city}`,
+            followUpBody: `Hi there,\n\nFollowing up on the prototype link we prepared for ${businessName} in ${city}.\n\nOver 65% of high-ticket clients research on mobile before calling—having this live showcase turns Google Maps searchers into confirmed clients:\n[DEMO_LINK]\n\nLet me know if you would like us to customize the photos and branding for you at zero risk.`
+          }
+        };
+      });
+
+      const finalLeads = scanParams.targetNoWebsiteOnly
+        ? mapped.filter(m => m.websiteStatus === 'No Website Detected')
+        : mapped;
+
+      const leadsToSet = finalLeads.length > 0 ? finalLeads : mapped;
+      setDiscoveredLeads(leadsToSet);
+      setSelectedDiscoveredLead(leadsToSet[0]);
+      setShowJsonImportModal(false);
+      setRawJsonInput('');
+    } catch (err: any) {
+      setJsonImportError(`Invalid JSON format: ${err.message}`);
+    }
   };
 
   const handleRunAudit = async (leadToProcess?: LeadInput) => {
@@ -678,15 +783,26 @@ export const LeadGenerationPage: React.FC = () => {
                     <span>Discovered Prospects ({discoveredLeads.length})</span>
                   </h3>
                   
-                  {/* Manual Lead Addition Trigger */}
-                  <button
-                    type="button"
-                    onClick={() => setShowAddLeadModal(true)}
-                    className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold uppercase tracking-wider flex items-center gap-1 transition-all cursor-pointer shadow-md"
-                  >
-                    <Plus size={12} />
-                    <span>Add Lead</span>
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowJsonImportModal(true)}
+                      className="px-2.5 py-1 rounded-lg bg-[var(--bg-base)] border border-[var(--border-strong)] hover:border-purple-400 text-[11px] font-bold uppercase tracking-wider flex items-center gap-1 text-[var(--text-strong)] transition-all cursor-pointer shadow-sm"
+                      title="Paste JSON from Google Maps Scraper or Outscraper"
+                    >
+                      <Upload size={12} className="text-purple-400" />
+                      <span>Import JSON</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setShowAddLeadModal(true)}
+                      className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold uppercase tracking-wider flex items-center gap-1 transition-all cursor-pointer shadow-md"
+                    >
+                      <Plus size={12} />
+                      <span>Add Lead</span>
+                    </button>
+                  </div>
                 </div>
 
                 {isScanning ? (
@@ -1800,6 +1916,72 @@ export const LeadGenerationPage: React.FC = () => {
                   <span>{googlePlacesApiKey ? 'Configured Google Places Key' : 'Add Google Places Key'}</span>
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* MODAL: IMPORT SCRAPER JSON */}
+        {showJsonImportModal && (
+          <div className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="w-full max-w-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+              <button
+                type="button"
+                onClick={() => setShowJsonImportModal(false)}
+                className="absolute top-6 right-6 p-2 rounded-xl bg-[var(--bg-base)] text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
+              >
+                <X size={16} />
+              </button>
+
+              <h3 className="text-xl font-bold uppercase tracking-tight text-[var(--text-strong)] mb-1 flex items-center gap-2">
+                <Upload size={18} className="text-purple-400" />
+                <span>Import Google Maps / Scraper JSON</span>
+              </h3>
+              <p className="text-xs text-[var(--text-secondary)] mb-6 font-light">
+                Paste any raw JSON from Google Maps Scraper, Outscraper, Apify, or Google Places API. The engine will instantly filter no-website businesses, map demo prototypes, and craft cold emails.
+              </p>
+
+              <form onSubmit={handleImportJson} className="space-y-4">
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                    Raw JSON Data
+                  </label>
+                  <textarea
+                    rows={12}
+                    value={rawJsonInput}
+                    onChange={(e) => setRawJsonInput(e.target.value)}
+                    placeholder='Paste JSON here (e.g. { "data": [[ { "name": "State Marble NYC", "website": null, ... } ]] })'
+                    className="w-full px-4 py-3 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-mono text-[var(--text-strong)] focus:border-purple-500 focus:outline-none resize-y"
+                    required
+                  />
+                </div>
+
+                {jsonImportError && (
+                  <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs">
+                    {jsonImportError}
+                  </div>
+                )}
+
+                <div className="pt-2 flex items-center justify-between gap-4">
+                  <span className="text-[11px] text-[var(--text-secondary)]">
+                    Tip: Businesses with <code>"website": null</code> are automatically prioritized for new website builds.
+                  </span>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setShowJsonImportModal(false)}
+                      className="px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-bold hover:text-white transition-colors cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-95 text-white font-bold text-xs uppercase tracking-wider shadow-lg transition-all cursor-pointer"
+                    >
+                      Import & Process Leads
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         )}

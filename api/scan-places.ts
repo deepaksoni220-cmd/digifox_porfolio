@@ -12,6 +12,7 @@ interface VerifiedPlace {
   reviewCount: number;
   website: string | null;
   email: string | null;
+  googleMapsUrl?: string;
 }
 
 const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
@@ -26,7 +27,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     rating: 5.0,
     reviewCount: 28,
     website: null, // 100% Verified No Website on Google Business
-    email: null
+    email: null,
+    googleMapsUrl: 'https://www.google.com/maps/place/?q=place_id:ChIJ992h9qVfwokRB11bm6-dzpI'
   },
   {
     name: 'JP Stonemart',
@@ -405,7 +407,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         reviewCount: p.reviewCount,
         website: p.website,
         email: p.email || null,
-        googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name} ${p.address}`)}`
+        googleMapsUrl: p.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name}, ${p.city}`)}`
       })),
       source: 'verified_real_directory'
     });

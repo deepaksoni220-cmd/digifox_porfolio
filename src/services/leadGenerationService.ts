@@ -341,6 +341,7 @@ function getRegionalFallback(country: string, city: string, industry: string): D
     score: number;
     email?: string;
     website?: string | null;
+    googleMapsUrl?: string;
   }
 
   let realSeeds: RealLeadSeed[] = [];
@@ -354,7 +355,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         rating: 5.0,
         reviews: 28,
         score: 99,
-        website: null
+        website: null,
+        googleMapsUrl: 'https://www.google.com/maps/place/?q=place_id:ChIJ992h9qVfwokRB11bm6-dzpI'
       },
       {
         name: 'GDI Marble & Custom Granite of NYC',
@@ -535,7 +537,7 @@ function getRegionalFallback(country: string, city: string, industry: string): D
     realSeeds = [];
   }
 
-  const makeLead = (id: string, name: string, addr: string, phone: string, rating: number, reviews: number, score: number, email?: string, website?: string | null): DiscoveredBusinessLead => {
+  const makeLead = (id: string, name: string, addr: string, phone: string, rating: number, reviews: number, score: number, email?: string, website?: string | null, customMapsUrl?: string): DiscoveredBusinessLead => {
     const hasWebsite = Boolean(website);
     return {
       id,
@@ -549,7 +551,7 @@ function getRegionalFallback(country: string, city: string, industry: string): D
       reviewCount: reviews,
       websiteStatus: hasWebsite ? 'Active Website' : 'No Website Detected',
       websiteUrl: website || '',
-      googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' ' + addr)}`,
+      googleMapsUrl: customMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name}, ${city}`)}`,
       opportunityScore: hasWebsite ? 76 : score,
       aiRecommendation: hasWebsite
         ? `${name} currently operates an active website at ${website}. However, it lacks interactive 3D slab visualization, real-time material calculators, and modern conversion flow. High-value redesign opportunity.`
@@ -577,7 +579,7 @@ function getRegionalFallback(country: string, city: string, industry: string): D
   };
 
   return realSeeds.map((seed, idx) =>
-    makeLead(`lead_reg_${idx + 1}`, seed.name, seed.addr, seed.phone, seed.rating, seed.reviews, seed.score, seed.email, seed.website)
+    makeLead(`lead_reg_${idx + 1}`, seed.name, seed.addr, seed.phone, seed.rating, seed.reviews, seed.score, seed.email, seed.website, seed.googleMapsUrl)
   );
 }
 

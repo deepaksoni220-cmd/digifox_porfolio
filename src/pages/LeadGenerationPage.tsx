@@ -887,7 +887,7 @@ export const LeadGenerationPage: React.FC = () => {
 
                           <div className="flex items-center justify-between text-xs pt-2 border-t border-[var(--border-strong)]/30">
                             <a
-                              href={lead.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lead.businessName + ' ' + (lead.address || lead.city))}`}
+                              href={lead.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${lead.businessName}, ${lead.city}`)}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={(e) => e.stopPropagation()}
@@ -940,7 +940,7 @@ export const LeadGenerationPage: React.FC = () => {
                               <span>{selectedDiscoveredLead.rating} Google Rating ({selectedDiscoveredLead.reviewCount} verified reviews)</span>
                             </span>
                             <a
-                              href={selectedDiscoveredLead.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedDiscoveredLead.businessName + ' ' + (selectedDiscoveredLead.address || selectedDiscoveredLead.city))}`}
+                              href={selectedDiscoveredLead.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${selectedDiscoveredLead.businessName}, ${selectedDiscoveredLead.city}`)}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 text-xs font-bold flex items-center gap-1 transition-all shadow-sm"

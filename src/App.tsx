@@ -14,6 +14,7 @@ import { ResultsProofSection } from './sections/ResultsProofSection';
 import { FreshnessUpdatesSection } from './sections/FreshnessUpdatesSection';
 import { FaqSection } from './sections/FaqSection';
 import { ProjectsSection } from './sections/ProjectsSection';
+import { WorldwideGlobeSection } from './sections/WorldwideGlobeSection';
 import { FooterSection } from './sections/FooterSection';
 import { ContactButton } from './components/ContactButton';
 import { ProtectedPage } from './components/ProtectedPage';
@@ -78,6 +79,7 @@ function Portfolio() {
       <FreshnessUpdatesSection />
       <FaqSection />
       <ProjectsSection />
+      <WorldwideGlobeSection />
       <FooterSection />
       
       {/* Floating Let's Connect Button */}

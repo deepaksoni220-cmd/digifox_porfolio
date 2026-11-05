@@ -697,3 +697,310 @@ export async function scanGoogleBusinessProfiles(
   // Geographically authentic fallback
   return getRegionalFallback(params.country, params.city, params.industry);
 }
+
+/**
+ * Checks if a given website value represents "No Website"
+ */
+export function isNoWebsite(websiteVal: any): boolean {
+  if (!websiteVal) return true;
+  if (typeof websiteVal !== 'string') return true;
+  const trimmed = websiteVal.trim().toLowerCase();
+  if (
+    trimmed === '' ||
+    trimmed === 'null' ||
+    trimmed === 'undefined' ||
+    trimmed === 'none' ||
+    trimmed === 'n/a' ||
+    trimmed === 'false' ||
+    trimmed === '-' ||
+    trimmed.includes('google.com/maps') ||
+    trimmed.includes('goo.gl/maps') ||
+    trimmed.includes('business.google.com')
+  ) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Extracts a valid email address from any arbitrary string
+ */
+export function extractValidEmail(val: any): string {
+  if (!val || typeof val !== 'string') return '';
+  const match = val.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+  return match ? match[0].trim() : '';
+}
+
+/**
+ * Generates smart pattern-inferred email suggestions for local businesses
+ */
+export function generateEmailSuggestions(businessName: string, city: string, _industry?: string, websiteUrl?: string): string[] {
+  const suggestions: string[] = [];
+  const cleanName = businessName.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const cleanCity = city.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+  if (websiteUrl && !isNoWebsite(websiteUrl)) {
+    try {
+      const url = new URL(websiteUrl.startsWith('http') ? websiteUrl : `https://${websiteUrl}`);
+      const domain = url.hostname.replace(/^www\./, '');
+      suggestions.push(`info@${domain}`);
+      suggestions.push(`contact@${domain}`);
+      suggestions.push(`sales@${domain}`);
+      suggestions.push(`office@${domain}`);
+    } catch {
+      // ignore
+    }
+  }
+
+  // Common patterns for local business owners without domains
+  if (cleanName) {
+    suggestions.push(`${cleanName}@gmail.com`);
+    if (cleanCity) {
+      suggestions.push(`${cleanName}${cleanCity}@gmail.com`);
+    }
+    suggestions.push(`info@${cleanName}.com`);
+    suggestions.push(`contact@${cleanName}.com`);
+    suggestions.push(`office@${cleanName}.com`);
+  }
+
+  return Array.from(new Set(suggestions));
+}
+
+/**
+ * Parses raw Google Maps Scraper output (CSV or JSON) and normalizes into DiscoveredBusinessLead format
+ */
+export function parseScraperData(
+  rawText: string,
+  options?: {
+    onlyNoWebsite?: boolean;
+    defaultCity?: string;
+    defaultCountry?: string;
+    defaultIndustry?: string;
+  }
+): {
+  leads: DiscoveredBusinessLead[];
+  stats: { total: number; noWebsite: number; withWebsite: number; hasEmail: number };
+} {
+  const text = rawText.trim();
+  if (!text) {
+    return { leads: [], stats: { total: 0, noWebsite: 0, withWebsite: 0, hasEmail: 0 } };
+  }
+
+  let rawItems: any[] = [];
+
+  // Try JSON parsing first
+  if (text.startsWith('{') || text.startsWith('[')) {
+    try {
+      const parsed = JSON.parse(text);
+      if (Array.isArray(parsed)) {
+        rawItems = parsed.flat(3);
+      } else if (Array.isArray(parsed.data)) {
+        rawItems = parsed.data.flat(3);
+      } else if (Array.isArray(parsed.places)) {
+        rawItems = parsed.places;
+      } else if (Array.isArray(parsed.results)) {
+        rawItems = parsed.results;
+      } else if (Array.isArray(parsed.items)) {
+        rawItems = parsed.items;
+      } else if (parsed.name || parsed.business_name || parsed.title) {
+        rawItems = [parsed];
+      }
+    } catch (jsonErr) {
+      // Not JSON, continue to CSV
+    }
+  }
+
+  // If not JSON, parse as CSV / TSV
+  if (rawItems.length === 0) {
+    const isTab = text.includes('\t') && !text.includes(',');
+    const delimiter = isTab ? '\t' : ',';
+
+    const lines: string[] = [];
+    let currentLine = '';
+    let insideQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const nextChar = text[i + 1];
+
+      if (char === '"') {
+        if (insideQuotes && nextChar === '"') {
+          currentLine += '"';
+          i++;
+        } else {
+          insideQuotes = !insideQuotes;
+        }
+      } else if ((char === '\r' || char === '\n') && !insideQuotes) {
+        if (char === '\r' && nextChar === '\n') i++;
+        if (currentLine.trim()) lines.push(currentLine);
+        currentLine = '';
+      } else {
+        currentLine += char;
+      }
+    }
+    if (currentLine.trim()) lines.push(currentLine);
+
+    if (lines.length >= 2) {
+      const parseRow = (rowStr: string): string[] => {
+        const cells: string[] = [];
+        let cell = '';
+        let inQuote = false;
+        for (let j = 0; j < rowStr.length; j++) {
+          const c = rowStr[j];
+          const nc = rowStr[j + 1];
+          if (c === '"') {
+            if (inQuote && nc === '"') {
+              cell += '"';
+              j++;
+            } else {
+              inQuote = !inQuote;
+            }
+          } else if (c === delimiter && !inQuote) {
+            cells.push(cell.trim());
+            cell = '';
+          } else {
+            cell += c;
+          }
+        }
+        cells.push(cell.trim());
+        return cells;
+      };
+
+      const headers = parseRow(lines[0]).map(h => h.toLowerCase().trim().replace(/[^a-z0-9_]/g, ''));
+
+      for (let i = 1; i < lines.length; i++) {
+        const cells = parseRow(lines[i]);
+        if (cells.length === 0 || (cells.length === 1 && !cells[0])) continue;
+        const record: Record<string, string> = {};
+        headers.forEach((h, idx) => {
+          record[h] = cells[idx] || '';
+        });
+        rawItems.push(record);
+      }
+    }
+  }
+
+  let totalCount = 0;
+  let noWebsiteCount = 0;
+  let withWebsiteCount = 0;
+  let hasEmailCount = 0;
+
+  const mappedLeads: DiscoveredBusinessLead[] = [];
+  const demoTemplate = AVAILABLE_DEMOS[0];
+
+  rawItems.forEach((item, idx) => {
+    if (!item) return;
+
+    // Detect Business Name
+    const businessName = (
+      item.name ||
+      item.title ||
+      item.name_for_emails ||
+      item.business_name ||
+      item.company_name ||
+      item.company ||
+      item.store_name ||
+      ''
+    ).trim();
+
+    if (!businessName) return;
+
+    totalCount++;
+
+    // Detect Website
+    const rawWebsite = item.website || item.websiteUri || item.url || item.site || item.web || item.link || null;
+    const noWebsiteDetected = isNoWebsite(rawWebsite);
+
+    if (noWebsiteDetected) {
+      noWebsiteCount++;
+    } else {
+      withWebsiteCount++;
+    }
+
+    // Detect Email
+    const rawEmail = item.email || item.emails || item.contact_email || item.mail || item.email_1 || '';
+    const extractedEmail = extractValidEmail(rawEmail);
+    if (extractedEmail) {
+      hasEmailCount++;
+    }
+
+    // City & Country
+    const city = item.city || item.locality || options?.defaultCity || 'Local';
+    const country = item.country || item.country_code || options?.defaultCountry || 'USA';
+    const industry = item.type || item.industry || item.subtypes || item.category || options?.defaultIndustry || 'Marble & Granite';
+    const address = item.address || item.formatted_address || item.street || `${city}, ${country}`;
+    const phone = item.phone || item.phone_number || item.telephone || '';
+    const rating = Math.min(5, Math.max(1, Number(item.rating || item.stars || item.score) || 4.9));
+    const reviewCount = Number(item.reviews || item.review_count || item.reviews_count || item.user_ratings_total || item.photos_count) || 20;
+
+    // Direct Google Maps Link
+    let googleMapsUrl = item.location_link || item.google_maps_url || item.maps_url || '';
+    if (!googleMapsUrl && item.place_id) {
+      googleMapsUrl = `https://www.google.com/maps/place/?q=place_id:${encodeURIComponent(item.place_id)}`;
+    } else if (!googleMapsUrl) {
+      googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${businessName} ${address}`)}`;
+    }
+
+    const websiteStatus = noWebsiteDetected ? 'No Website Detected' : 'Active Website';
+    const oppScore = noWebsiteDetected ? Math.min(99, 93 + (idx % 6)) : Math.min(84, 75 + (idx % 7));
+
+    const personalizedDemoUrl = `/portfolio?client=${encodeURIComponent(businessName)}`;
+
+    const lead: DiscoveredBusinessLead = {
+      id: item.place_id || item.google_id || `scraper_${Date.now()}_${idx}`,
+      businessName,
+      city,
+      country,
+      industry,
+      address,
+      phone,
+      rating,
+      reviewCount,
+      websiteStatus,
+      websiteUrl: noWebsiteDetected ? '' : String(rawWebsite),
+      googleMapsUrl,
+      opportunityScore: oppScore,
+      aiRecommendation: noWebsiteDetected
+        ? `${businessName} has an outstanding ${rating}★ reputation with ${reviewCount} Google reviews in ${city}, but zero dedicated website. Prime candidate for a modern showcase portfolio and online quotation engine.`
+        : `${businessName} currently has an existing website at ${rawWebsite}, but lacks 3D interactive slab inspection, modern project galleries, and mobile quotation workflows. High-converting redesign opportunity.`,
+      matchedDemo: {
+        ...demoTemplate,
+        whyItFits: `Custom interactive showcase configured for ${industry} in ${city}.`
+      },
+      personalizedDemoUrl,
+      contactEmailStatus: extractedEmail ? 'Public Email Found' : 'Needs Verification',
+      contactEmail: extractedEmail || '',
+      outreachAngle: noWebsiteDetected ? 'Turn Google Maps Searchers Into Paid Clients' : 'Website Redesign & Conversion Optimization',
+      personalizedPitch: {
+        subject: noWebsiteDetected
+          ? `Interactive prototype concept for ${businessName} in ${city}`
+          : `Interactive 3D showcase & conversion redesign for ${businessName}`,
+        hook: `I came across your Google Business profile in ${city} and saw your outstanding ${rating}-star reputation.`,
+        body: noWebsiteDetected
+          ? `Hi team,\n\nI was looking into top ${industry} providers in ${city} and saw ${businessName}'s ${rating}-star Google rating.\n\nHowever, I noticed that potential clients searching for ${industry} in ${city} currently have no website to view your completed portfolio, slab finishes, or request an instant quote online.\n\nOur team at Digifox put together a live interactive prototype specifically tailored for your team:\n[DEMO_LINK]\n\nWould you be open to a 5-minute walkthrough this week?`
+          : `Hi team,\n\nI was looking into top ${industry} providers in ${city} and saw ${businessName}'s ${rating}-star Google rating.\n\nI took a look at your current website (${rawWebsite})—while your craftsmanship is top-tier, your current site is missing an interactive 3D slab gallery and mobile quotation tool.\n\nOur team at Digifox put together a live interactive prototype specifically tailored for ${businessName}:\n[DEMO_LINK]\n\nWould you be open to a 5-minute walkthrough this week?`,
+        demoCta: `View ${businessName} Prototype`,
+        followUpSubject: noWebsiteDetected
+          ? `Re: Interactive prototype concept for ${businessName} in ${city}`
+          : `Re: Interactive 3D showcase & conversion redesign for ${businessName}`,
+        followUpBody: `Hi there,\n\nFollowing up on the prototype link we prepared for ${businessName} in ${city}.\n\nOver 65% of high-ticket clients research on mobile before calling—having this live showcase turns Google Maps searchers into confirmed clients:\n[DEMO_LINK]\n\nLet me know if you would like us to customize the photos and branding for you at zero risk.`
+      }
+    };
+
+    mappedLeads.push(lead);
+  });
+
+  const finalLeads = options?.onlyNoWebsite
+    ? mappedLeads.filter(l => l.websiteStatus === 'No Website Detected')
+    : mappedLeads;
+
+  return {
+    leads: finalLeads,
+    stats: {
+      total: totalCount,
+      noWebsite: noWebsiteCount,
+      withWebsite: withWebsiteCount,
+      hasEmail: hasEmailCount
+    }
+  };
+}

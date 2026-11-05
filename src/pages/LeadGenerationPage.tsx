@@ -3,6 +3,8 @@ import {
   processLeadWithGemini, 
   scanGoogleBusinessProfiles,
   sendWorkspaceEmail,
+  parseScraperData,
+  generateEmailSuggestions,
   AVAILABLE_DEMOS,
   type LeadInput, 
   type QualifiedLead,
@@ -37,7 +39,10 @@ import {
   Key,
   ShieldCheck,
   Search,
-  Upload
+  Upload,
+  FileSpreadsheet,
+  FileText,
+  AlertCircle
 } from 'lucide-react';
 import { SEOMeta } from '../components/SEOMeta';
 
@@ -130,10 +135,17 @@ export const LeadGenerationPage: React.FC = () => {
     reviewCount: 24
   });
 
-  // JSON Import State
+  // Scraper File & Data Import State
   const [showJsonImportModal, setShowJsonImportModal] = useState(false);
-  const [rawJsonInput, setRawJsonInput] = useState('');
+  const [importTab, setImportTab] = useState<'upload' | 'paste'>('upload');
+  const [rawScraperInput, setRawScraperInput] = useState('');
+  const [importedFileName, setImportedFileName] = useState<string | null>(null);
+  const [onlyNoWebsiteImport, setOnlyNoWebsiteImport] = useState(true);
   const [jsonImportError, setJsonImportError] = useState<string | null>(null);
+  const [parsedPreviewStats, setParsedPreviewStats] = useState<{ total: number; noWebsite: number; withWebsite: number; hasEmail: number } | null>(null);
+  const [parsedPreviewLeads, setParsedPreviewLeads] = useState<DiscoveredBusinessLead[]>([]);
+  const [isAiEnrichingEmail, setIsAiEnrichingEmail] = useState(false);
+  const [emailSuggestions, setEmailSuggestions] = useState<string[]>([]);
 
   // Single Audit State
   const [formData, setFormData] = useState<LeadInput>({
@@ -353,102 +365,117 @@ export const LeadGenerationPage: React.FC = () => {
     });
   };
 
-  const handleImportJson = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleProcessScraperText = (text: string, filename?: string) => {
     setJsonImportError(null);
-    if (!rawJsonInput.trim()) return;
+    if (!text.trim()) {
+      setParsedPreviewStats(null);
+      setParsedPreviewLeads([]);
+      return;
+    }
 
     try {
-      const parsed = JSON.parse(rawJsonInput);
-      let items: any[] = [];
+      const result = parseScraperData(text, {
+        onlyNoWebsite: onlyNoWebsiteImport,
+        defaultCity: scanParams.city,
+        defaultCountry: scanParams.country,
+        defaultIndustry: scanParams.industry
+      });
 
-      if (Array.isArray(parsed)) {
-        items = parsed.flat(2);
-      } else if (Array.isArray(parsed.data)) {
-        items = parsed.data.flat(2);
-      } else if (Array.isArray(parsed.places)) {
-        items = parsed.places;
-      } else if (parsed.name) {
-        items = [parsed];
-      }
-
-      if (items.length === 0) {
-        setJsonImportError('Could not find any business items in the JSON. Please check the structure.');
+      if (result.stats.total === 0) {
+        setJsonImportError('Could not detect any valid business records in file. Make sure headers (name, website, etc.) or valid JSON is present.');
+        setParsedPreviewStats(null);
+        setParsedPreviewLeads([]);
         return;
       }
 
-      const matchedDemoTemplate = AVAILABLE_DEMOS[0];
+      setParsedPreviewStats(result.stats);
+      setParsedPreviewLeads(result.leads);
+      if (filename) setImportedFileName(filename);
+    } catch (err: any) {
+      setJsonImportError(`Error processing scraper data: ${err.message}`);
+    }
+  };
 
-      const mapped: DiscoveredBusinessLead[] = items.map((item, idx) => {
-        const businessName = item.name || item.title || item.name_for_emails || `Imported Lead ${idx + 1}`;
-        const city = item.city || scanParams.city || 'Local';
-        const country = item.country || scanParams.country || 'USA';
-        const industry = item.type || item.industry || scanParams.industry || 'Marble & Granite';
-        const address = item.address || item.formatted_address || item.street || `${city}, ${country}`;
-        const phone = item.phone || item.phone_number || '';
-        const rating = Number(item.rating) || 5.0;
-        const reviewCount = Number(item.reviews || item.user_ratings_total || item.reviewCount) || 15;
-        const website = item.website || item.websiteUri || null;
-        const hasWebsite = Boolean(website);
-        const websiteStatus = hasWebsite ? 'Active Website' : 'No Website Detected';
-        const oppScore = hasWebsite ? 76 : Math.min(99, 92 + (idx === 0 ? 5 : 2));
-        const googleMapsUrl = item.location_link || item.google_maps_url || item.url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(businessName + ' ' + address)}`;
-        const personalizedDemoUrl = `/portfolio?client=${encodeURIComponent(businessName)}`;
-        const contactEmail = item.email || '';
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-        return {
-          id: item.place_id || item.google_id || `imported_${Date.now()}_${idx}`,
-          businessName,
-          city,
-          country,
-          industry,
-          address,
-          phone,
-          rating,
-          reviewCount,
-          websiteStatus,
-          websiteUrl: website || '',
-          googleMapsUrl,
-          opportunityScore: oppScore,
-          aiRecommendation: hasWebsite
-            ? `${businessName} currently has an existing website at ${website}, but it lacks 3D material showcase capabilities, interactive project portfolios, and mobile quotation calculators. High-converting redesign opportunity.`
-            : `${businessName} has an outstanding ${rating}★ reputation with ${reviewCount} Google reviews in ${city}, but zero dedicated website. Prime candidate for a modern showcase portfolio and quotation engine.`,
-          matchedDemo: {
-            ...matchedDemoTemplate,
-            whyItFits: `Custom interactive showcase configured for ${industry} in ${city}.`
-          },
-          personalizedDemoUrl,
-          contactEmailStatus: contactEmail ? 'Public Email Found' : 'Needs Verification',
-          contactEmail,
-          outreachAngle: hasWebsite ? 'Website Redesign & Conversion Optimization' : 'Turn Google Maps Searchers Into Paid Clients',
-          personalizedPitch: {
-            subject: hasWebsite
-              ? `Interactive 3D showcase & conversion redesign for ${businessName}`
-              : `Interactive prototype concept for ${businessName} in ${city}`,
-            hook: `I came across your Google Business profile in ${city} and saw your outstanding ${rating}-star reputation.`,
-            body: hasWebsite
-              ? `Hi team,\n\nI was looking into top ${industry} providers in ${city} and saw ${businessName}'s ${rating}-star Google rating.\n\nI took a look at your current website (${website})—while your craftsmanship is top-tier, your current site is missing an interactive 3D slab gallery and mobile quotation tool.\n\nOur team at Digifox put together a live interactive prototype specifically tailored for ${businessName}:\n[DEMO_LINK]\n\nWould you be open to a 5-minute walkthrough this week?`
-              : `Hi team,\n\nI was looking into top ${industry} providers in ${city} and saw ${businessName}'s ${rating}-star Google rating.\n\nHowever, I noticed that potential clients searching for ${industry} in ${city} have no website to view your portfolio, slab finishes, or request an instant quote online.\n\nOur team at Digifox put together a live interactive prototype specifically tailored for your team:\n[DEMO_LINK]\n\nWould you be open to a 5-minute walkthrough this week?`,
-            demoCta: `View ${businessName} Prototype`,
-            followUpSubject: hasWebsite
-              ? `Re: Interactive 3D showcase & conversion redesign for ${businessName}`
-              : `Re: Interactive prototype concept for ${businessName} in ${city}`,
-            followUpBody: `Hi there,\n\nFollowing up on the prototype link we prepared for ${businessName} in ${city}.\n\nOver 65% of high-ticket clients research on mobile before calling—having this live showcase turns Google Maps searchers into confirmed clients:\n[DEMO_LINK]\n\nLet me know if you would like us to customize the photos and branding for you at zero risk.`
-          }
-        };
+    setImportedFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const content = (event.target?.result as string) || '';
+      setRawScraperInput(content);
+      handleProcessScraperText(content, file.name);
+    };
+    reader.readAsText(file);
+  };
+
+  const handleFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return;
+
+    setImportedFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const content = (event.target?.result as string) || '';
+      setRawScraperInput(content,);
+      handleProcessScraperText(content, file.name);
+    };
+    reader.readAsText(file);
+  };
+
+  const handleCommitScraperImport = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setJsonImportError(null);
+
+    const textToProcess = rawScraperInput.trim();
+    if (!textToProcess) {
+      setJsonImportError('Please upload a scraper CSV/JSON file or paste raw text first.');
+      return;
+    }
+
+    try {
+      const result = parseScraperData(textToProcess, {
+        onlyNoWebsite: onlyNoWebsiteImport,
+        defaultCity: scanParams.city,
+        defaultCountry: scanParams.country,
+        defaultIndustry: scanParams.industry
       });
 
-      const finalLeads = scanParams.targetNoWebsiteOnly
-        ? mapped.filter(m => m.websiteStatus === 'No Website Detected')
-        : mapped;
+      if (result.leads.length === 0) {
+        setJsonImportError(
+          onlyNoWebsiteImport
+            ? 'All detected businesses in this file already have websites. Uncheck "Only import businesses without a website" to import all.'
+            : 'No valid businesses found in the input data.'
+        );
+        return;
+      }
 
-      const leadsToSet = finalLeads.length > 0 ? finalLeads : mapped;
-      setDiscoveredLeads(leadsToSet);
-      setSelectedDiscoveredLead(leadsToSet[0]);
+      setDiscoveredLeads(result.leads);
+      setSelectedDiscoveredLead(result.leads[0]);
       setShowJsonImportModal(false);
-      setRawJsonInput('');
     } catch (err: any) {
-      setJsonImportError(`Invalid JSON format: ${err.message}`);
+      setJsonImportError(`Failed to import leads: ${err.message}`);
+    }
+  };
+
+  const handleTriggerAiEmailEnrich = () => {
+    if (!selectedDiscoveredLead) return;
+    setIsAiEnrichingEmail(true);
+    try {
+      const suggestions = generateEmailSuggestions(
+        selectedDiscoveredLead.businessName,
+        selectedDiscoveredLead.city,
+        selectedDiscoveredLead.industry,
+        selectedDiscoveredLead.websiteUrl
+      );
+      setEmailSuggestions(suggestions);
+      if (!manualEmail && suggestions.length > 0) {
+        setManualEmail(suggestions[0]);
+      }
+    } finally {
+      setTimeout(() => setIsAiEnrichingEmail(false), 400);
     }
   };
 
@@ -787,11 +814,11 @@ export const LeadGenerationPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setShowJsonImportModal(true)}
-                      className="px-2.5 py-1 rounded-lg bg-[var(--bg-base)] border border-[var(--border-strong)] hover:border-purple-400 text-[11px] font-bold uppercase tracking-wider flex items-center gap-1 text-[var(--text-strong)] transition-all cursor-pointer shadow-sm"
-                      title="Paste JSON from Google Maps Scraper or Outscraper"
+                      className="px-2.5 py-1 rounded-lg bg-purple-600/20 border border-purple-500/40 hover:bg-purple-600/30 text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5 text-purple-300 transition-all cursor-pointer shadow-sm"
+                      title="Upload or paste CSV/JSON from Google Maps Scraper, Outscraper, or Apify"
                     >
                       <Upload size={12} className="text-purple-400" />
-                      <span>Import JSON</span>
+                      <span>Upload Scraper (CSV/JSON)</span>
                     </button>
 
                     <button
@@ -827,6 +854,14 @@ export const LeadGenerationPage: React.FC = () => {
                       We never generate fake or simulated businesses. To scan live Google Maps listings for any city worldwide, add your <strong>Google Places API Key</strong> in settings or click <strong>+ Add Lead</strong> to enter a prospect manually.
                     </p>
                     <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowJsonImportModal(true)}
+                        className="px-3.5 py-1.5 rounded-xl bg-purple-600/30 border border-purple-500/50 text-purple-200 text-xs font-semibold hover:bg-purple-600/40 transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm"
+                      >
+                        <Upload size={12} className="text-purple-400" />
+                        <span>Upload Scraper CSV / JSON</span>
+                      </button>
                       <button
                         type="button"
                         onClick={() => setShowSettingsModal(true)}
@@ -1078,7 +1113,7 @@ export const LeadGenerationPage: React.FC = () => {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                           <input
                             type="email"
                             value={manualEmail}
@@ -1086,19 +1121,58 @@ export const LeadGenerationPage: React.FC = () => {
                             placeholder="Enter recipient email (e.g. owner@gmail.com, info@...)"
                             className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm font-semibold text-[var(--text-strong)] focus:border-emerald-500 focus:outline-none"
                           />
-                          <a
-                            href={`https://www.google.com/search?q=${encodeURIComponent(`${selectedDiscoveredLead.businessName} ${selectedDiscoveredLead.city} email OR contact OR gmail`)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-3.5 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] hover:border-emerald-400 text-xs font-bold text-[var(--text-strong)] flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer shadow-sm whitespace-nowrap"
-                            title="Search web & social directories for this business's email"
-                          >
-                            <ExternalLink size={12} />
-                            <span>Find on Google</span>
-                          </a>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <button
+                              type="button"
+                              onClick={handleTriggerAiEmailEnrich}
+                              disabled={isAiEnrichingEmail}
+                              className="px-3.5 py-2.5 rounded-xl bg-purple-600/20 border border-purple-500/40 hover:bg-purple-600/30 text-xs font-bold text-purple-300 flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm whitespace-nowrap"
+                              title="Generate high-probability email variations based on business name & contractor patterns"
+                            >
+                              <Sparkles size={12} className={isAiEnrichingEmail ? "animate-spin text-purple-300" : "text-purple-400"} />
+                              <span>{isAiEnrichingEmail ? 'Enriching...' : 'AI Enrich'}</span>
+                            </button>
+                            <a
+                              href={`https://www.google.com/search?q=${encodeURIComponent(`"${selectedDiscoveredLead.businessName}" "${selectedDiscoveredLead.city}" email OR contact OR gmail`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-3.5 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] hover:border-emerald-400 text-xs font-bold text-[var(--text-strong)] flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm whitespace-nowrap"
+                              title="Search web & social directories for this business's email"
+                            >
+                              <Search size={12} />
+                              <span>Find on Google</span>
+                            </a>
+                          </div>
                         </div>
+
+                        {/* AI Inferred Email Pills */}
+                        {emailSuggestions.length > 0 && (
+                          <div className="mt-2.5 p-3 rounded-xl bg-purple-500/10 border border-purple-500/20">
+                            <div className="text-[11px] font-bold uppercase tracking-wider text-purple-300 mb-1.5 flex items-center gap-1.5">
+                              <Bot size={12} />
+                              <span>AI Inferred Email Patterns (Click to apply):</span>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              {emailSuggestions.map((sug) => (
+                                <button
+                                  key={sug}
+                                  type="button"
+                                  onClick={() => setManualEmail(sug)}
+                                  className={`px-2.5 py-1 rounded-lg text-xs font-mono border transition-all cursor-pointer ${
+                                    manualEmail === sug
+                                      ? 'bg-purple-600 text-white border-purple-400 font-bold shadow-sm'
+                                      : 'bg-[var(--bg-base)] border-[var(--border-strong)] text-[var(--text-strong)] hover:border-purple-400'
+                                  }`}
+                                >
+                                  {sug}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
                         <p className="text-[11px] text-[var(--text-secondary)] mt-1.5 font-light">
-                          💡 Businesses without websites rarely have custom @domain emails; they typically use Gmail or trade listings. Use <strong>Find on Google</strong> or paste their verified address.
+                          💡 Businesses without websites typically use Gmail or trade listings. Click <strong>AI Enrich</strong> to generate likely inboxes or <strong>Find on Google</strong> to verify their directory email.
                         </p>
                       </div>
 
@@ -1920,10 +1994,10 @@ export const LeadGenerationPage: React.FC = () => {
           </div>
         )}
 
-        {/* MODAL: IMPORT SCRAPER JSON */}
+        {/* MODAL: GOOGLE MAPS SCRAPER INGESTION STUDIO */}
         {showJsonImportModal && (
-          <div className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="w-full max-w-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+          <div className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+            <div className="w-full max-w-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-3xl p-6 sm:p-8 shadow-2xl relative my-8">
               <button
                 type="button"
                 onClick={() => setShowJsonImportModal(false)}
@@ -1932,56 +2006,239 @@ export const LeadGenerationPage: React.FC = () => {
                 <X size={16} />
               </button>
 
-              <h3 className="text-xl font-bold uppercase tracking-tight text-[var(--text-strong)] mb-1 flex items-center gap-2">
-                <Upload size={18} className="text-purple-400" />
-                <span>Import Google Maps / Scraper JSON</span>
-              </h3>
-              <p className="text-xs text-[var(--text-secondary)] mb-6 font-light">
-                Paste any raw JSON from Google Maps Scraper, Outscraper, Apify, or Google Places API. The engine will instantly filter no-website businesses, map demo prototypes, and craft cold emails.
-              </p>
+              <div className="mb-6">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-500/10 border border-purple-500/30 text-purple-300 inline-flex items-center gap-1 mb-2">
+                  <Sparkles size={10} />
+                  <span>Google Maps Data Scraper Engine</span>
+                </span>
+                <h3 className="text-xl font-bold uppercase tracking-tight text-[var(--text-strong)] flex items-center gap-2">
+                  <FileSpreadsheet size={20} className="text-purple-400" />
+                  <span>Import Scraper Leads & Filter No-Website Prospects</span>
+                </h3>
+                <p className="text-xs text-[var(--text-secondary)] font-light mt-1">
+                  Upload or paste data exported from <strong>Instant Data Scraper</strong>, <strong>Outscraper</strong>, <strong>Apify</strong>, or <strong>Octoparse</strong>. The engine automatically isolates businesses without websites, extracts verified emails, and generates tailored cold outreach sequences.
+                </p>
+              </div>
 
-              <form onSubmit={handleImportJson} className="space-y-4">
-                <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
-                    Raw JSON Data
-                  </label>
-                  <textarea
-                    rows={12}
-                    value={rawJsonInput}
-                    onChange={(e) => setRawJsonInput(e.target.value)}
-                    placeholder='Paste JSON here (e.g. { "data": [[ { "name": "State Marble NYC", "website": null, ... } ]] })'
-                    className="w-full px-4 py-3 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-mono text-[var(--text-strong)] focus:border-purple-500 focus:outline-none resize-y"
-                    required
-                  />
-                </div>
+              {/* Mode Selector Tabs */}
+              <div className="flex items-center gap-2 p-1 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] mb-6">
+                <button
+                  type="button"
+                  onClick={() => setImportTab('upload')}
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                    importTab === 'upload'
+                      ? 'bg-purple-600 text-white shadow-md'
+                      : 'text-[var(--text-secondary)] hover:text-white'
+                  }`}
+                >
+                  <Upload size={13} />
+                  <span>Upload File (CSV / JSON)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setImportTab('paste')}
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                    importTab === 'paste'
+                      ? 'bg-purple-600 text-white shadow-md'
+                      : 'text-[var(--text-secondary)] hover:text-white'
+                  }`}
+                >
+                  <FileText size={13} />
+                  <span>Paste Raw Text / JSON</span>
+                </button>
+              </div>
 
-                {jsonImportError && (
-                  <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs">
-                    {jsonImportError}
-                  </div>
-                )}
-
-                <div className="pt-2 flex items-center justify-between gap-4">
-                  <span className="text-[11px] text-[var(--text-secondary)]">
-                    Tip: Businesses with <code>"website": null</code> are automatically prioritized for new website builds.
-                  </span>
-                  <div className="flex items-center gap-2 shrink-0">
+              {/* TAB 1: FILE UPLOAD DROPZONE */}
+              {importTab === 'upload' && (
+                <div className="space-y-4">
+                  <div
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={handleFileDrop}
+                    className="border-2 border-dashed border-[var(--border-strong)] hover:border-purple-500 rounded-3xl p-8 text-center bg-[var(--bg-base)]/50 transition-all cursor-pointer group"
+                    onClick={() => document.getElementById('scraper-file-picker')?.click()}
+                  >
+                    <input
+                      id="scraper-file-picker"
+                      type="file"
+                      accept=".csv,.json,.tsv,.txt"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                    <div className="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                      <Upload size={24} />
+                    </div>
+                    <p className="text-sm font-bold text-[var(--text-strong)]">
+                      {importedFileName ? `Selected: ${importedFileName}` : 'Drag & drop your Scraper CSV or JSON file here'}
+                    </p>
+                    <p className="text-xs text-[var(--text-secondary)] font-light mt-1">
+                      Supports Outscraper, Apify, Instant Data Scraper, Google Places JSON exports (.csv, .json, .tsv)
+                    </p>
                     <button
                       type="button"
-                      onClick={() => setShowJsonImportModal(false)}
-                      className="px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-bold hover:text-white transition-colors cursor-pointer"
+                      className="mt-4 px-4 py-2 rounded-xl bg-purple-600/20 border border-purple-500/40 text-purple-300 text-xs font-bold uppercase tracking-wider hover:bg-purple-600/30 transition-colors pointer-events-none"
                     >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-95 text-white font-bold text-xs uppercase tracking-wider shadow-lg transition-all cursor-pointer"
-                    >
-                      Import & Process Leads
+                      Browse Device Files
                     </button>
                   </div>
                 </div>
-              </form>
+              )}
+
+              {/* TAB 2: RAW TEXT / JSON PASTE */}
+              {importTab === 'paste' && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <label className="font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                      Paste Scraper Content (CSV or JSON)
+                    </label>
+                    <span className="text-[11px] text-[var(--text-secondary)] font-mono">
+                      Auto-detects format
+                    </span>
+                  </div>
+                  <textarea
+                    rows={8}
+                    value={rawScraperInput}
+                    onChange={(e) => {
+                      setRawScraperInput(e.target.value);
+                      handleProcessScraperText(e.target.value);
+                    }}
+                    placeholder={`Paste CSV headers & rows:\nname,website,phone,address,city,rating,reviews,email\n"State Marble NYC",,"+1 347-528-5355","85 Meadow St","Brooklyn",5,28,"info@..."\n\nOR paste JSON:\n{\n  "status": "Success",\n  "data": [[ { "name": "State Marble NYC", "website": null, ... } ]]\n}`}
+                    className="w-full px-4 py-3 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-mono text-[var(--text-strong)] focus:border-purple-500 focus:outline-none resize-y"
+                  />
+                </div>
+              )}
+
+              {/* ERROR ALERT */}
+              {jsonImportError && (
+                <div className="mt-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
+                  <AlertCircle size={14} className="shrink-0" />
+                  <span>{jsonImportError}</span>
+                </div>
+              )}
+
+              {/* LIVE STATS & CONFIGURATION BAR */}
+              {parsedPreviewStats && (
+                <div className="mt-5 p-4 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--border-strong)]/60">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-emerald-400" />
+                      <span>Data Ingestion Diagnostics</span>
+                    </span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-mono bg-blue-500/10 border border-blue-500/30 text-blue-300">
+                        Total: <strong>{parsedPreviewStats.total}</strong>
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-mono bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold">
+                        🚫 No Website: <strong>{parsedPreviewStats.noWebsite}</strong>
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-mono bg-purple-500/10 border border-purple-500/30 text-purple-300">
+                        🌐 Active Sites: <strong>{parsedPreviewStats.withWebsite}</strong>
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-mono bg-indigo-500/10 border border-indigo-500/30 text-indigo-300">
+                        ✉️ Emails Found: <strong>{parsedPreviewStats.hasEmail}</strong>
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Filter Toggle */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
+                    <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={onlyNoWebsiteImport}
+                        onChange={(e) => {
+                          const nextVal = e.target.checked;
+                          setOnlyNoWebsiteImport(nextVal);
+                          if (rawScraperInput.trim()) {
+                            const res = parseScraperData(rawScraperInput, {
+                              onlyNoWebsite: nextVal,
+                              defaultCity: scanParams.city,
+                              defaultCountry: scanParams.country,
+                              defaultIndustry: scanParams.industry
+                            });
+                            setParsedPreviewLeads(res.leads);
+                          }
+                        }}
+                        className="w-4 h-4 rounded text-purple-600 bg-[var(--bg-surface)] border-[var(--border-strong)] focus:ring-0 cursor-pointer"
+                      />
+                      <span className="text-xs font-semibold text-[var(--text-strong)]">
+                        Only import businesses <strong>WITHOUT a website</strong> (Recommended: High-ticket website pitch candidates)
+                      </span>
+                    </label>
+                    <span className="text-[11px] text-purple-400 font-mono">
+                      {onlyNoWebsiteImport ? `${parsedPreviewStats.noWebsite} will be imported` : `${parsedPreviewStats.total} will be imported`}
+                    </span>
+                  </div>
+
+                  {/* Sample Records Table */}
+                  {parsedPreviewLeads.length > 0 && (
+                    <div className="pt-2">
+                      <div className="text-[11px] uppercase tracking-wider font-bold text-[var(--text-secondary)] mb-1.5">
+                        Previewing Top {Math.min(3, parsedPreviewLeads.length)} of {parsedPreviewLeads.length} leads:
+                      </div>
+                      <div className="space-y-1.5 overflow-x-auto">
+                        {parsedPreviewLeads.slice(0, 3).map((lead) => (
+                          <div
+                            key={lead.id}
+                            className="p-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] flex items-center justify-between gap-3 text-xs"
+                          >
+                            <div className="min-w-0">
+                              <p className="font-bold text-[var(--text-strong)] truncate">{lead.businessName}</p>
+                              <p className="text-[11px] text-[var(--text-secondary)] truncate">
+                                {lead.city} • {lead.rating}★ ({lead.reviewCount} reviews) • {lead.phone || 'No phone'}
+                              </p>
+                            </div>
+                            <div className="flex items-center gap-2 shrink-0">
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                lead.websiteStatus === 'No Website Detected'
+                                  ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400'
+                                  : 'bg-blue-500/10 border border-blue-500/30 text-blue-300'
+                              }`}>
+                                {lead.websiteStatus}
+                              </span>
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-mono ${
+                                lead.contactEmail
+                                  ? 'bg-purple-500/10 border border-purple-500/30 text-purple-300'
+                                  : 'bg-amber-500/10 border border-amber-500/30 text-amber-300'
+                              }`}>
+                                {lead.contactEmail ? lead.contactEmail : 'Email: Needs Verification'}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* FOOTER ACTIONS */}
+              <div className="mt-6 pt-4 border-t border-[var(--border-strong)] flex items-center justify-between gap-4">
+                <span className="text-[11px] text-[var(--text-secondary)] font-light hidden sm:inline">
+                  ⚡ Once imported, the AI engine links each business to a live interactive demo and prepares cold email outreach.
+                </span>
+                <div className="flex items-center gap-2.5 ml-auto">
+                  <button
+                    type="button"
+                    onClick={() => setShowJsonImportModal(false)}
+                    className="px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-bold text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleCommitScraperImport()}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-95 text-white font-bold text-xs uppercase tracking-wider shadow-lg transition-all cursor-pointer flex items-center gap-1.5"
+                  >
+                    <Upload size={13} />
+                    <span>
+                      {parsedPreviewStats
+                        ? `Import ${onlyNoWebsiteImport ? parsedPreviewStats.noWebsite : parsedPreviewStats.total} Leads`
+                        : 'Import Scraper Leads'}
+                    </span>
+                  </button>
+                </div>
+              </div>
+
             </div>
           </div>
         )}

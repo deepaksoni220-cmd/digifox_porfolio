@@ -522,26 +522,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
       }
     ];
   } else {
-    realSeeds = [
-      {
-        name: `${city} Architectural ${industry}`,
-        addr: `Main Commercial Avenue, ${city}, ${country}`,
-        phone: `+1 (212) 555-0198`,
-        rating: 4.8,
-        reviews: 45,
-        score: 95,
-        website: null
-      },
-      {
-        name: `${city} Heritage ${industry}`,
-        addr: `Design District, ${city}, ${country}`,
-        phone: `+1 (212) 555-0142`,
-        rating: 4.7,
-        reviews: 32,
-        score: 92,
-        website: null
-      }
-    ];
+    // Zero fake leads: If no verified real business is known and no API key is active, return empty
+    realSeeds = [];
   }
 
   const makeLead = (id: string, name: string, addr: string, phone: string, rating: number, reviews: number, score: number, email?: string, website?: string | null): DiscoveredBusinessLead => {

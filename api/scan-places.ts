@@ -449,43 +449,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.warn('Geo directory search fallback error:', geoErr);
   }
 
-  // Strategy 3: Geographically authentic business synthesis strictly adhering to the country/city
-  const regional = getRegionalContext(country, city);
-  const synthesized = [
-    {
-      id: `syn_${city}_1`,
-      name: `${city} ${industry} Emporium`,
-      address: `${regional.areas[0]}, ${city}, ${country}`,
-      phone: `${regional.phoneExample}${Math.floor(1000 + Math.random() * 9000)}`,
-      rating: 4.8,
-      reviewCount: 42,
-      website: null,
-      googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${city} ${industry} Emporium, ${regional.areas[0]}, ${city}`)}`
-    },
-    {
-      id: `syn_${city}_2`,
-      name: `Royal ${industry} & Fabrication Studio`,
-      address: `${regional.areas[1] || regional.areas[0]}, ${city}, ${country}`,
-      phone: `${regional.phoneExample}${Math.floor(1000 + Math.random() * 9000)}`,
-      rating: 4.6,
-      reviewCount: 29,
-      website: null,
-      googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Royal ${industry} Studio, ${city}`)}`
-    },
-    {
-      id: `syn_${city}_3`,
-      name: `Shree ${industry} Traders`,
-      address: `${regional.areas[2] || regional.areas[0]}, ${city}, ${country}`,
-      phone: `${regional.phoneExample}${Math.floor(1000 + Math.random() * 9000)}`,
-      rating: 4.9,
-      reviewCount: 58,
-      website: null,
-      googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Shree ${industry} Traders, ${city}`)}`
-    }
-  ];
-
+  // Zero fake leads: If no real verified business is found, return empty array
   return res.status(200).json({
-    places: synthesized,
-    source: 'regional_synthesized'
+    places: [],
+    source: 'none_found'
   });
 }

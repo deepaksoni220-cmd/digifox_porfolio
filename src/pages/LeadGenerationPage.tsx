@@ -35,7 +35,8 @@ import {
   X,
   Settings,
   Key,
-  ShieldCheck
+  ShieldCheck,
+  Search
 } from 'lucide-react';
 import { SEOMeta } from '../components/SEOMeta';
 
@@ -701,8 +702,30 @@ export const LeadGenerationPage: React.FC = () => {
                     </p>
                   </div>
                 ) : discoveredLeads.length === 0 ? (
-                  <div className="p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-center text-xs text-[var(--text-secondary)]">
-                    No leads found. Try a different city or click <strong>Add Lead</strong> to enter one manually.
+                  <div className="p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-center space-y-3">
+                    <div className="w-10 h-10 mx-auto rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                      <Search size={18} />
+                    </div>
+                    <h4 className="text-sm font-bold text-[var(--text-strong)]">No Verified Leads Found for "{scanParams.city}"</h4>
+                    <p className="text-xs text-[var(--text-secondary)] font-light max-w-sm mx-auto">
+                      We never generate fake or simulated businesses. To scan live Google Maps listings for any city worldwide, add your <strong>Google Places API Key</strong> in settings or click <strong>+ Add Lead</strong> to enter a prospect manually.
+                    </p>
+                    <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowSettingsModal(true)}
+                        className="px-3 py-1.5 rounded-xl bg-blue-600/20 border border-blue-500/40 text-blue-300 text-xs font-semibold hover:bg-blue-600/30 transition-colors cursor-pointer"
+                      >
+                        Add Google Places Key
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowAddLeadModal(true)}
+                        className="px-3 py-1.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-semibold hover:border-emerald-400 text-[var(--text-strong)] transition-colors cursor-pointer"
+                      >
+                        + Add Lead Manually
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <div className="space-y-3">

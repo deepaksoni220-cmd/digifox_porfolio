@@ -17,16 +17,16 @@ interface VerifiedPlace {
 const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
   // New York - Marble & Stone
   {
-    name: 'New York Stone',
+    name: 'JP Stonemart',
     city: 'New York',
     country: 'USA',
-    industryKeywords: ['marble', 'granite', 'stone', 'countertop'],
-    address: '30 West 21st Street, New York, NY 10010',
-    phone: '+1 (212) 256-1500',
-    rating: 4.8,
-    reviewCount: 124,
-    website: null,
-    email: 'info@newyorkstone.com'
+    industryKeywords: ['marble', 'granite', 'stone', 'countertop', 'supplier'],
+    address: '1696 Richmond Ter, Staten Island, NY 10310',
+    phone: '+1 (718) 448-0700',
+    rating: 5.0,
+    reviewCount: 54,
+    website: 'https://stonemartnyc.com',
+    email: 'info@stonemartnyc.com'
   },
   {
     name: 'Royal Marble',
@@ -37,8 +37,44 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+1 (718) 998-2772',
     rating: 5.0,
     reviewCount: 15,
-    website: null,
+    website: 'https://theroyalmarble.com',
     email: 'sales@theroyalmarble.com'
+  },
+  {
+    name: 'New York Stone',
+    city: 'New York',
+    country: 'USA',
+    industryKeywords: ['marble', 'granite', 'stone', 'countertop'],
+    address: '30 West 21st Street, New York, NY 10010',
+    phone: '+1 (212) 256-1500',
+    rating: 4.8,
+    reviewCount: 124,
+    website: 'https://newyorkstone.com',
+    email: 'info@newyorkstone.com'
+  },
+  {
+    name: 'GDI Marble & Custom Granite of NYC',
+    city: 'New York',
+    country: 'USA',
+    industryKeywords: ['marble', 'granite', 'stone', 'fabricator'],
+    address: '224 48th St, Brooklyn, NY 11220',
+    phone: '+1 (718) 439-0820',
+    rating: 4.8,
+    reviewCount: 42,
+    website: null, // True No-Website local fabricator
+    email: null
+  },
+  {
+    name: 'European Granite & Marble Group (Yard)',
+    city: 'New York',
+    country: 'USA',
+    industryKeywords: ['marble', 'granite', 'stone', 'wholesale'],
+    address: '145 19th Street, Sunset Park, Brooklyn, NY 11232',
+    phone: '+1 (718) 499-1200',
+    rating: 4.8,
+    reviewCount: 54,
+    website: null, // Warehouse pickup yard without consumer website
+    email: null
   },
   {
     name: 'HG Stones Showroom',
@@ -49,7 +85,7 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+1 (212) 964-0900',
     rating: 4.9,
     reviewCount: 48,
-    website: null,
+    website: 'https://hgstones.com',
     email: 'info@hgstones.com'
   },
   {
@@ -61,20 +97,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+1 (212) 929-1817',
     rating: 4.7,
     reviewCount: 32,
-    website: null,
+    website: 'https://nymarbleceramic.com',
     email: 'sales@nymarbleceramic.com'
-  },
-  {
-    name: 'ABC Stone Manhattan Experience Center',
-    city: 'New York',
-    country: 'USA',
-    industryKeywords: ['marble', 'granite', 'stone'],
-    address: '129 West 22nd Street, New York, NY 10011',
-    phone: '+1 (646) 707-3065',
-    rating: 4.9,
-    reviewCount: 85,
-    website: null,
-    email: 'info@abcworldwidestone.com'
   },
 
   // Pune - Marble & Granite
@@ -354,6 +378,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const verifiedMatches = VERIFIED_REAL_DIRECTORY.filter(p => {
     const cityMatch = cCity.includes(p.city.toLowerCase()) || p.city.toLowerCase().includes(cCity);
     const indMatch = p.industryKeywords.some(k => cInd.includes(k) || k.includes(cInd));
+    if (targetNoWebsiteOnly && p.website) return false;
     return cityMatch && indMatch;
   });
 

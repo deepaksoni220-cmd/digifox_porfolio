@@ -340,6 +340,7 @@ function getRegionalFallback(country: string, city: string, industry: string): D
     reviews: number;
     score: number;
     email?: string;
+    website?: string | null;
   }
 
   let realSeeds: RealLeadSeed[] = [];
@@ -347,13 +348,32 @@ function getRegionalFallback(country: string, city: string, industry: string): D
   if (isNy) {
     realSeeds = [
       {
-        name: 'New York Stone',
-        addr: '30 West 21st Street, New York, NY 10010',
-        phone: '+1 (212) 256-1500',
+        name: 'GDI Marble & Custom Granite of NYC',
+        addr: '224 48th St, Brooklyn, NY 11220',
+        phone: '+1 (718) 439-0820',
         rating: 4.8,
-        reviews: 124,
-        score: 97,
-        email: 'info@newyorkstone.com'
+        reviews: 42,
+        score: 98,
+        website: null
+      },
+      {
+        name: 'European Granite & Marble Group (Yard)',
+        addr: '145 19th Street, Sunset Park, Brooklyn, NY 11232',
+        phone: '+1 (718) 499-1200',
+        rating: 4.8,
+        reviews: 54,
+        score: 96,
+        website: null
+      },
+      {
+        name: 'JP Stonemart',
+        addr: '1696 Richmond Ter, Staten Island, NY 10310',
+        phone: '+1 (718) 448-0700',
+        rating: 5.0,
+        reviews: 54,
+        score: 82,
+        email: 'info@stonemartnyc.com',
+        website: 'https://stonemartnyc.com'
       },
       {
         name: 'Royal Marble',
@@ -361,56 +381,22 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+1 (718) 998-2772',
         rating: 5.0,
         reviews: 15,
-        score: 95,
-        email: 'sales@theroyalmarble.com'
-      },
-      {
-        name: 'HG Stones Showroom',
-        addr: '28 West 25th St, New York, NY 10010',
-        phone: '+1 (212) 964-0900',
-        rating: 4.9,
-        reviews: 48,
-        score: 93,
-        email: 'info@hgstones.com'
-      },
-      {
-        name: 'New York Marble & Ceramic, Inc.',
-        addr: '101 West End Ave, New York, NY 10023',
-        phone: '+1 (212) 929-1817',
-        rating: 4.7,
-        reviews: 32,
-        score: 91,
-        email: 'sales@nymarbleceramic.com'
+        score: 79,
+        email: 'sales@theroyalmarble.com',
+        website: 'https://theroyalmarble.com'
       }
     ];
   } else if (isIndia) {
     realSeeds = [
-      {
-        name: 'Hindustan Marble & Granite',
-        addr: 'Katraj Marble Market, Opp D-Mart, Ambegaon, Pune, Maharashtra 411046',
-        phone: '+91 80427 54832',
-        rating: 4.8,
-        reviews: 142,
-        score: 98,
-        email: 'sales@hindustanmarbleandgranite.co.in'
-      },
       {
         name: 'Om Sai Marble & Granite',
         addr: 'Paud Road, Bhugaon, Mulshi, Pune, Maharashtra 412115',
         phone: '+91 98220 48192',
         rating: 4.8,
         reviews: 66,
-        score: 95,
-        email: 'omsaimarble.pune@gmail.com'
-      },
-      {
-        name: 'Chandan Marbles',
-        addr: 'Nagar Road, Somnath Nagar, Wadgaon Sheri, Pune, Maharashtra 411014',
-        phone: '+91 98901 32840',
-        rating: 4.9,
-        reviews: 89,
-        score: 94,
-        email: 'sales@chandanmarbles.com'
+        score: 98,
+        email: 'omsaimarble.pune@gmail.com',
+        website: null
       },
       {
         name: 'Shriraj Marble & Granite',
@@ -418,8 +404,29 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+91 97634 11094',
         rating: 4.7,
         reviews: 54,
-        score: 92,
-        email: 'shrirajmarble@gmail.com'
+        score: 96,
+        email: 'shrirajmarble@gmail.com',
+        website: null
+      },
+      {
+        name: 'Swastik Marble & Granite',
+        addr: 'Vithalwadi, Sinhagad Road, Vadgaon Budruk, Pune, Maharashtra 411051',
+        phone: '+91 98502 34110',
+        rating: 4.7,
+        reviews: 43,
+        score: 94,
+        email: 'swastikgranite.pune@gmail.com',
+        website: null
+      },
+      {
+        name: 'Hindustan Marble & Granite',
+        addr: 'Katraj Marble Market, Opp D-Mart, Ambegaon, Pune, Maharashtra 411046',
+        phone: '+91 80427 54832',
+        rating: 4.8,
+        reviews: 142,
+        score: 80,
+        email: 'sales@hindustanmarbleandgranite.co.in',
+        website: 'https://hindustanmarbleandgranite.co.in'
       }
     ];
   } else if (isUk) {
@@ -431,7 +438,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         rating: 4.9,
         reviews: 38,
         score: 96,
-        email: 'studio@clerkenwelldesign.co.uk'
+        email: 'studio@clerkenwelldesign.co.uk',
+        website: null
       },
       {
         name: 'Kensington Architectural Interiors',
@@ -440,7 +448,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         rating: 4.8,
         reviews: 42,
         score: 93,
-        email: 'design@kensingtoninteriors.co.uk'
+        email: 'design@kensingtoninteriors.co.uk',
+        website: null
       }
     ];
   } else if (isMiami) {
@@ -452,7 +461,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         rating: 4.9,
         reviews: 64,
         score: 96,
-        email: 'service@prestigemarinedetailing.com'
+        email: 'service@prestigemarinedetailing.com',
+        website: null
       },
       {
         name: 'Biscayne Luxury Yacht & Auto Spa',
@@ -461,7 +471,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         rating: 4.8,
         reviews: 51,
         score: 94,
-        email: 'info@biscayneyachtspa.com'
+        email: 'info@biscayneyachtspa.com',
+        website: null
       }
     ];
   } else if (isDallas) {
@@ -473,7 +484,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         rating: 4.9,
         reviews: 92,
         score: 97,
-        email: 'service@lonestarcommercialroofing.com'
+        email: 'service@lonestarcommercialroofing.com',
+        website: null
       },
       {
         name: 'Trinity River Industrial Roofing',
@@ -482,7 +494,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         rating: 4.8,
         reviews: 68,
         score: 93,
-        email: 'info@trinityriverroofing.com'
+        email: 'info@trinityriverroofing.com',
+        website: null
       }
     ];
   } else if (isUae) {
@@ -494,7 +507,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         rating: 4.8,
         reviews: 76,
         score: 96,
-        email: 'info@albarakahjoinery.ae'
+        email: 'info@albarakahjoinery.ae',
+        website: null
       },
       {
         name: 'Emirates Custom Millwork & Kitchens',
@@ -503,11 +517,11 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         rating: 4.9,
         reviews: 58,
         score: 94,
-        email: 'projects@emiratesmillwork.ae'
+        email: 'projects@emiratesmillwork.ae',
+        website: null
       }
     ];
   } else {
-    // For other cities, generate realistic local commercial entities
     realSeeds = [
       {
         name: `${city} Architectural ${industry}`,
@@ -515,7 +529,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: `+1 (212) 555-0198`,
         rating: 4.8,
         reviews: 45,
-        score: 95
+        score: 95,
+        website: null
       },
       {
         name: `${city} Heritage ${industry}`,
@@ -523,42 +538,55 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: `+1 (212) 555-0142`,
         rating: 4.7,
         reviews: 32,
-        score: 92
+        score: 92,
+        website: null
       }
     ];
   }
 
-  const makeLead = (id: string, name: string, addr: string, phone: string, rating: number, reviews: number, score: number, email?: string): DiscoveredBusinessLead => ({
-    id,
-    businessName: name,
-    city,
-    country,
-    industry,
-    address: addr,
-    phone,
-    rating,
-    reviewCount: reviews,
-    websiteStatus: 'No Website Detected',
-    googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' ' + addr)}`,
-    opportunityScore: score,
-    aiRecommendation: `Top-rated ${industry} supplier in ${city} with ${rating}★ and ${reviews} verified Google reviews, but zero dedicated website. Prime candidate for a modern showcase portfolio and quotation engine.`,
-    matchedDemo,
-    personalizedDemoUrl: `/portfolio?client=${encodeURIComponent(name)}`,
-    contactEmailStatus: email ? 'Public Email Found' : 'Needs Verification',
-    contactEmail: email || '',
-    outreachAngle: 'Turn Google Maps Searchers Into Paid Clients',
-    personalizedPitch: {
-      subject: `Interactive prototype concept for ${name} in ${city}`,
-      hook: `I came across your Google Business profile in ${city} and saw your strong ${rating}-star reputation.`,
-      body: `Hi team,\n\nI was looking into top ${industry} providers in ${city} and saw your outstanding ${rating}-star Google profile.\n\nHowever, I noticed that potential clients searching for ${industry} in ${city} have no website to view your portfolio, slab finishes, or request an instant quote online.\n\nOur team at Digifox put together a live interactive prototype specifically tailored for your team:\n[DEMO_LINK]\n\nWould you be open to a 5-minute walkthrough this week?`,
-      demoCta: `View ${name} Showcase Prototype`,
-      followUpSubject: `Re: Interactive prototype concept for ${name} in ${city}`,
-      followUpBody: `Hi there,\n\nFollowing up on the prototype link we prepared for your ${industry} work in ${city}.\n\nOver 65% of high-ticket clients research on mobile before calling—having this live showcase turns Google Maps searchers into confirmed clients:\n[DEMO_LINK]\n\nLet me know if you would like us to customize the photos and branding for you at zero risk.`
-    }
-  });
+  const makeLead = (id: string, name: string, addr: string, phone: string, rating: number, reviews: number, score: number, email?: string, website?: string | null): DiscoveredBusinessLead => {
+    const hasWebsite = Boolean(website);
+    return {
+      id,
+      businessName: name,
+      city,
+      country,
+      industry,
+      address: addr,
+      phone,
+      rating,
+      reviewCount: reviews,
+      websiteStatus: hasWebsite ? 'Active Website' : 'No Website Detected',
+      websiteUrl: website || '',
+      googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' ' + addr)}`,
+      opportunityScore: hasWebsite ? 76 : score,
+      aiRecommendation: hasWebsite
+        ? `${name} currently operates an active website at ${website}. However, it lacks interactive 3D slab visualization, real-time material calculators, and modern conversion flow. High-value redesign opportunity.`
+        : `Top-rated ${industry} supplier in ${city} with ${rating}★ and ${reviews} verified Google reviews, but zero dedicated website. Prime candidate for a modern showcase portfolio and quotation engine.`,
+      matchedDemo,
+      personalizedDemoUrl: `/portfolio?client=${encodeURIComponent(name)}`,
+      contactEmailStatus: email ? 'Public Email Found' : 'Needs Verification',
+      contactEmail: email || '',
+      outreachAngle: hasWebsite ? 'Modern 3D Showcase & High-Conversion Overhaul' : 'Turn Google Maps Searchers Into Paid Clients',
+      personalizedPitch: {
+        subject: hasWebsite
+          ? `3D showcase & conversion redesign concept for ${name}`
+          : `Interactive prototype concept for ${name} in ${city}`,
+        hook: `I came across your Google Business profile in ${city} and saw your strong ${rating}-star reputation.`,
+        body: hasWebsite
+          ? `Hi team,\n\nI was looking into top ${industry} providers in ${city} and saw ${name}'s ${rating}-star Google rating.\n\nI took a look at your current website (${website})—while your craftsmanship is top-tier, your current site is missing an interactive 3D slab gallery and mobile quotation tool.\n\nOur team at Digifox put together a live interactive prototype specifically tailored for ${name}:\n[DEMO_LINK]\n\nWould you be open to a 5-minute walkthrough this week?`
+          : `Hi team,\n\nI was looking into top ${industry} providers in ${city} and saw your outstanding ${rating}-star Google profile.\n\nHowever, I noticed that potential clients searching for ${industry} in ${city} have no website to view your portfolio, slab finishes, or request an instant quote online.\n\nOur team at Digifox put together a live interactive prototype specifically tailored for your team:\n[DEMO_LINK]\n\nWould you be open to a 5-minute walkthrough this week?`,
+        demoCta: `View ${name} Showcase Prototype`,
+        followUpSubject: hasWebsite
+          ? `Re: 3D showcase & conversion redesign concept for ${name}`
+          : `Re: Interactive prototype concept for ${name} in ${city}`,
+        followUpBody: `Hi there,\n\nFollowing up on the prototype link we prepared for your ${industry} work in ${city}.\n\nOver 65% of high-ticket clients research on mobile before calling—having this live showcase turns Google Maps searchers into confirmed clients:\n[DEMO_LINK]\n\nLet me know if you would like us to customize the photos and branding for you at zero risk.`
+      }
+    };
+  };
 
   return realSeeds.map((seed, idx) =>
-    makeLead(`lead_reg_${idx + 1}`, seed.name, seed.addr, seed.phone, seed.rating, seed.reviews, seed.score, seed.email)
+    makeLead(`lead_reg_${idx + 1}`, seed.name, seed.addr, seed.phone, seed.rating, seed.reviews, seed.score, seed.email, seed.website)
   );
 }
 
@@ -618,8 +646,9 @@ export async function scanGoogleBusinessProfiles(
           const phone = place.phone || '';
           const rating = place.rating || 4.8;
           const reviewCount = place.reviewCount || 35;
-          const websiteStatus = place.website ? 'Active Website' : 'No Website Detected';
-          const oppScore = place.website ? 68 : Math.min(98, 91 + (idx === 0 ? 5 : idx === 1 ? 3 : 1));
+          const hasActiveWebsite = Boolean(place.website);
+          const websiteStatus = hasActiveWebsite ? 'Active Website' : 'No Website Detected';
+          const oppScore = hasActiveWebsite ? 76 : Math.min(98, 91 + (idx === 0 ? 5 : idx === 1 ? 3 : 1));
           const googleMapsUrl = place.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(businessName + ' ' + address)}`;
           const personalizedDemoUrl = `/portfolio?client=${encodeURIComponent(businessName)}`;
           const contactEmail = place.email || '';
@@ -639,7 +668,9 @@ export async function scanGoogleBusinessProfiles(
             websiteUrl: place.website || '',
             googleMapsUrl,
             opportunityScore: oppScore,
-            aiRecommendation: `${businessName} has a strong ${rating}★ reputation with ${reviewCount} reviews in ${params.city}, but currently has no dedicated website. They are missing high-ticket inquiries from clients searching on Google Maps.`,
+            aiRecommendation: hasActiveWebsite
+              ? `${businessName} currently has an existing website at ${place.website}, but it lacks 3D material showcase capabilities, interactive project portfolios, and mobile quotation calculators. High-converting redesign opportunity.`
+              : `${businessName} has a strong ${rating}★ reputation with ${reviewCount} reviews in ${params.city}, but currently has zero dedicated website. They are missing high-ticket inquiries from clients searching on Google Maps.`,
             matchedDemo: {
               ...matchedDemoTemplate,
               whyItFits: `Custom matched showcase demo for ${params.industry} in ${params.city}.`
@@ -647,13 +678,19 @@ export async function scanGoogleBusinessProfiles(
             personalizedDemoUrl,
             contactEmailStatus,
             contactEmail,
-            outreachAngle: 'Google Maps Search Inquiries & Prototype Showcase',
+            outreachAngle: hasActiveWebsite ? 'Website Redesign & Conversion Optimization' : 'Turn Google Maps Searchers Into Paid Clients',
             personalizedPitch: {
-              subject: `Quick concept prototype for ${businessName} in ${params.city}`,
+              subject: hasActiveWebsite
+                ? `Interactive 3D showcase & conversion redesign for ${businessName}`
+                : `Quick concept prototype for ${businessName} in ${params.city}`,
               hook: `I came across your Google Business profile in ${params.city} and saw your outstanding ${rating}-star reputation.`,
-              body: `Hi there,\n\nI was looking into top ${params.industry} providers in ${params.city} and saw ${businessName}'s ${rating}-star Google rating.\n\nHowever, I noticed that potential clients searching for ${params.industry} in ${params.city} have no website to view your portfolio or request quotes online.\n\nOur team at Digifox put together a live interactive prototype specifically tailored for your brand:\n[DEMO_LINK]\n\nWould you be open to a 5-minute walkthrough this week?`,
+              body: hasActiveWebsite
+                ? `Hi there,\n\nI came across ${businessName}'s ${rating}-star Google Business profile and reviewed your current site (${place.website}).\n\nWhile your craftsmanship and local reputation are top-tier, your current site lacks interactive 3D showcase capabilities, instant quotation workflows, and modern mobile conversion design.\n\nOur team at Digifox put together a live interactive prototype specifically tailored for your brand:\n[DEMO_LINK]\n\nWould you be open to a 5-minute walkthrough this week?`
+                : `Hi there,\n\nI was looking into top ${params.industry} providers in ${params.city} and saw ${businessName}'s ${rating}-star Google rating.\n\nHowever, I noticed that potential clients searching for ${params.industry} in ${params.city} have no website to view your portfolio or request quotes online.\n\nOur team at Digifox put together a live interactive prototype specifically tailored for your brand:\n[DEMO_LINK]\n\nWould you be open to a 5-minute walkthrough this week?`,
               demoCta: `View ${businessName} Prototype`,
-              followUpSubject: `Re: Quick concept prototype for ${businessName} in ${params.city}`,
+              followUpSubject: hasActiveWebsite
+                ? `Re: Interactive 3D showcase & conversion redesign for ${businessName}`
+                : `Re: Quick concept prototype for ${businessName} in ${params.city}`,
               followUpBody: `Hi there,\n\nFollowing up on the prototype link we prepared for ${businessName} in ${params.city}.\n\nOver 65% of high-ticket clients research on mobile before calling—having this live showcase turns Google Maps searchers into confirmed clients:\n[DEMO_LINK]\n\nLet me know if you would like us to customize the photos and branding for you at zero risk.`
             }
           };

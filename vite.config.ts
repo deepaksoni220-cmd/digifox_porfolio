@@ -35,9 +35,9 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:3002',
+        target: 'https://digifox.world',
         changeOrigin: true,
-        secure: false,
+        secure: true,
       },
     },
   },

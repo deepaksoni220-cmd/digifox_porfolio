@@ -255,6 +255,56 @@ export interface GoogleBusinessScanParams {
   targetNoWebsiteOnly: boolean;
   limit?: number;
   googlePlacesApiKey?: string;
+  apifyToken?: string;
+}
+
+export interface ApifyCrawlerParams {
+  country: string;
+  city: string;
+  industry: string;
+  apifyToken: string;
+  maxResults?: number;
+  targetNoWebsiteOnly?: boolean;
+}
+
+export async function runApifyGooglePlacesScan(params: ApifyCrawlerParams): Promise<DiscoveredBusinessLead[]> {
+  if (!params.apifyToken) {
+    throw new Error("Missing Apify API Token. Please provide your Apify API Token in Settings or the Apify tab.");
+  }
+
+  const queryClean = `${params.industry} ${params.city} ${params.country}`;
+  const actorUrl = `https://api.apify.com/v2/acts/compass~crawler-google-places/run-sync-get-dataset-items?token=${encodeURIComponent(params.apifyToken.trim())}&timeout=120`;
+
+  const payload = {
+    searchStringsArray: [queryClean],
+    locationQuery: `${params.city}, ${params.country}`,
+    maxCrawledPlacesPerSearch: params.maxResults || 20,
+    language: "en"
+  };
+
+  const res = await fetch(actorUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text().catch(() => "");
+    throw new Error(`Apify Crawler Error (${res.status}): ${errorText || res.statusText}`);
+  }
+
+  const items = await res.json();
+  const rawString = JSON.stringify(items);
+  const result = parseScraperData(rawString, {
+    onlyNoWebsite: params.targetNoWebsiteOnly,
+    defaultCity: params.city,
+    defaultCountry: params.country,
+    defaultIndustry: params.industry
+  });
+
+  return result.leads;
 }
 
 export interface SendEmailParams {

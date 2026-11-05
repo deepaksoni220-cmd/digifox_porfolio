@@ -5,6 +5,7 @@ import {
   sendWorkspaceEmail,
   parseScraperData,
   generateEmailSuggestions,
+  runApifyGooglePlacesScan,
   AVAILABLE_DEMOS,
   type LeadInput, 
   type QualifiedLead,
@@ -116,6 +117,9 @@ export const LeadGenerationPage: React.FC = () => {
   const [workspaceAppPassword, setWorkspaceAppPassword] = useState(() => 
     typeof localStorage !== 'undefined' ? localStorage.getItem('digifox_workspace_app_password') || '' : ''
   );
+  const [apifyToken, setApifyToken] = useState(() => 
+    typeof localStorage !== 'undefined' ? localStorage.getItem('digifox_apify_token') || '' : ''
+  );
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [sendSuccessMessage, setSendSuccessMessage] = useState<string | null>(null);
@@ -137,7 +141,7 @@ export const LeadGenerationPage: React.FC = () => {
 
   // Scraper File & Data Import State
   const [showJsonImportModal, setShowJsonImportModal] = useState(false);
-  const [importTab, setImportTab] = useState<'upload' | 'paste'>('upload');
+  const [importTab, setImportTab] = useState<'upload' | 'paste' | 'apify'>('upload');
   const [rawScraperInput, setRawScraperInput] = useState('');
   const [importedFileName, setImportedFileName] = useState<string | null>(null);
   const [onlyNoWebsiteImport, setOnlyNoWebsiteImport] = useState(true);
@@ -146,6 +150,8 @@ export const LeadGenerationPage: React.FC = () => {
   const [parsedPreviewLeads, setParsedPreviewLeads] = useState<DiscoveredBusinessLead[]>([]);
   const [isAiEnrichingEmail, setIsAiEnrichingEmail] = useState(false);
   const [emailSuggestions, setEmailSuggestions] = useState<string[]>([]);
+  const [isApifyRunning, setIsApifyRunning] = useState(false);
+  const [apifyError, setApifyError] = useState<string | null>(null);
 
   // Single Audit State
   const [formData, setFormData] = useState<LeadInput>({
@@ -206,7 +212,8 @@ export const LeadGenerationPage: React.FC = () => {
     try {
       const results = await scanGoogleBusinessProfiles({
         ...params,
-        googlePlacesApiKey: googlePlacesApiKey || undefined
+        googlePlacesApiKey: googlePlacesApiKey || undefined,
+        apifyToken: apifyToken || undefined
       }, selectedWorkload);
       setDiscoveredLeads(results);
       if (results.length > 0) {
@@ -269,9 +276,45 @@ export const LeadGenerationPage: React.FC = () => {
   const handleSaveSettings = (e: React.FormEvent) => {
     e.preventDefault();
     localStorage.setItem('digifox_google_places_api_key', googlePlacesApiKey);
+    localStorage.setItem('digifox_apify_token', apifyToken);
     localStorage.setItem('digifox_workspace_sender_email', workspaceEmail);
     localStorage.setItem('digifox_workspace_app_password', workspaceAppPassword);
     setShowSettingsModal(false);
+  };
+
+  const handleRunApifyCrawler = async () => {
+    if (!apifyToken.trim()) {
+      setApifyError("Please provide your Apify API Token.");
+      return;
+    }
+
+    setIsApifyRunning(true);
+    setApifyError(null);
+    try {
+      localStorage.setItem('digifox_apify_token', apifyToken.trim());
+      const results = await runApifyGooglePlacesScan({
+        country: scanParams.country,
+        city: scanParams.city,
+        industry: scanParams.industry,
+        apifyToken: apifyToken.trim(),
+        maxResults: 20,
+        targetNoWebsiteOnly: onlyNoWebsiteImport
+      });
+
+      if (results.length === 0) {
+        setApifyError("No leads found matching your criteria from Apify. Try unchecking 'Only No Website' or broadening search terms.");
+        return;
+      }
+
+      setDiscoveredLeads(results);
+      setSelectedDiscoveredLead(results[0]);
+      setShowJsonImportModal(false);
+    } catch (err: any) {
+      console.error(err);
+      setApifyError(err.message || "Failed to execute Apify compass/crawler-google-places Actor.");
+    } finally {
+      setIsApifyRunning(false);
+    }
   };
 
   const handleSendViaWorkspaceSmtp = async () => {
@@ -1770,6 +1813,33 @@ export const LeadGenerationPage: React.FC = () => {
                 </div>
 
                 <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <Sparkles size={13} className="text-purple-400" />
+                      <span>Apify API Token (compass/crawler-google-places)</span>
+                    </span>
+                    <a
+                      href="https://mcp.apify.com/?tools=actors,docs,compass/crawler-google-places"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] text-purple-400 hover:text-purple-300 underline lowercase"
+                    >
+                      apify mcp server
+                    </a>
+                  </label>
+                  <input
+                    type="password"
+                    value={apifyToken}
+                    onChange={(e) => setApifyToken(e.target.value)}
+                    placeholder="apify_api_..."
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm font-mono focus:border-purple-500 focus:outline-none"
+                  />
+                  <span className="text-[10px] text-[var(--text-secondary)] mt-1 block">
+                    Powers live scraping via the official <strong>compass/crawler-google-places</strong> Apify Actor and Apify MCP integration.
+                  </span>
+                </div>
+
+                <div>
                   <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 flex items-center gap-1.5">
                     <Mail size={13} className="text-emerald-400" />
                     <span>Google Workspace Sender Email</span>
@@ -2021,30 +2091,42 @@ export const LeadGenerationPage: React.FC = () => {
               </div>
 
               {/* Mode Selector Tabs */}
-              <div className="flex items-center gap-2 p-1 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] mb-6">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 p-1 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] mb-6">
                 <button
                   type="button"
                   onClick={() => setImportTab('upload')}
-                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                     importTab === 'upload'
                       ? 'bg-purple-600 text-white shadow-md'
                       : 'text-[var(--text-secondary)] hover:text-white'
                   }`}
                 >
                   <Upload size={13} />
-                  <span>Upload File (CSV / JSON)</span>
+                  <span>Upload File (CSV/JSON)</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setImportTab('paste')}
-                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                     importTab === 'paste'
                       ? 'bg-purple-600 text-white shadow-md'
                       : 'text-[var(--text-secondary)] hover:text-white'
                   }`}
                 >
                   <FileText size={13} />
-                  <span>Paste Raw Text / JSON</span>
+                  <span>Paste Scraper Text</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setImportTab('apify')}
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                    importTab === 'apify'
+                      ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md'
+                      : 'text-purple-300 hover:text-white'
+                  }`}
+                >
+                  <Sparkles size={13} className="text-purple-400" />
+                  <span>Apify Live Crawler</span>
                 </button>
               </div>
 
@@ -2104,6 +2186,124 @@ export const LeadGenerationPage: React.FC = () => {
                     placeholder={`Paste CSV headers & rows:\nname,website,phone,address,city,rating,reviews,email\n"State Marble NYC",,"+1 347-528-5355","85 Meadow St","Brooklyn",5,28,"info@..."\n\nOR paste JSON:\n{\n  "status": "Success",\n  "data": [[ { "name": "State Marble NYC", "website": null, ... } ]]\n}`}
                     className="w-full px-4 py-3 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-mono text-[var(--text-strong)] focus:border-purple-500 focus:outline-none resize-y"
                   />
+                </div>
+              )}
+
+              {/* TAB 3: APIFY LIVE CRAWLER */}
+              {importTab === 'apify' && (
+                <div className="space-y-4">
+                  <div className="p-4 rounded-2xl bg-purple-950/20 border border-purple-500/30">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span className="text-xs font-bold text-white uppercase tracking-wider">
+                          Apify Actor: compass/crawler-google-places
+                        </span>
+                      </div>
+                      <a
+                        href="https://mcp.apify.com/?tools=actors,docs,compass/crawler-google-places"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] font-mono text-purple-300 hover:text-white flex items-center gap-1 underline"
+                        title="View Apify MCP Server"
+                      >
+                        <span>Apify MCP Server</span>
+                        <ExternalLink size={10} />
+                      </a>
+                    </div>
+                    <p className="text-xs text-[var(--text-secondary)] font-light">
+                      Crawl Google Maps live via Apify's official <strong>compass/crawler-google-places</strong> Actor. We automatically isolate businesses without websites, assign high-ticket pipeline scores, and generate customized cold outreach.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 flex items-center justify-between">
+                      <span>Apify API Token</span>
+                      <a
+                        href="https://console.apify.com/account/integrations"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] text-purple-400 hover:text-purple-300 flex items-center gap-1"
+                      >
+                        <span>Get Apify Token</span>
+                        <ExternalLink size={10} />
+                      </a>
+                    </label>
+                    <input
+                      type="password"
+                      value={apifyToken}
+                      onChange={(e) => {
+                        setApifyToken(e.target.value);
+                        localStorage.setItem('digifox_apify_token', e.target.value);
+                      }}
+                      placeholder="apify_api_..."
+                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm font-mono text-[var(--text-strong)] focus:border-purple-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                      <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-secondary)] block mb-1">
+                        Industry / Niche
+                      </label>
+                      <input
+                        type="text"
+                        value={scanParams.industry}
+                        onChange={(e) => setScanParams(p => ({ ...p, industry: e.target.value }))}
+                        className="w-full px-3 py-2 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs text-[var(--text-strong)] font-semibold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-secondary)] block mb-1">
+                        City
+                      </label>
+                      <input
+                        type="text"
+                        value={scanParams.city}
+                        onChange={(e) => setScanParams(p => ({ ...p, city: e.target.value }))}
+                        className="w-full px-3 py-2 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs text-[var(--text-strong)] font-semibold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-secondary)] block mb-1">
+                        Country
+                      </label>
+                      <input
+                        type="text"
+                        value={scanParams.country}
+                        onChange={(e) => setScanParams(p => ({ ...p, country: e.target.value }))}
+                        className="w-full px-3 py-2 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs text-[var(--text-strong)] font-semibold"
+                      />
+                    </div>
+                  </div>
+
+                  {apifyError && (
+                    <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
+                      <AlertCircle size={14} className="shrink-0" />
+                      <span>{apifyError}</span>
+                    </div>
+                  )}
+
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      disabled={isApifyRunning}
+                      onClick={handleRunApifyCrawler}
+                      className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-95 disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    >
+                      {isApifyRunning ? (
+                        <>
+                          <Bot size={15} className="animate-spin text-purple-200" />
+                          <span>Crawling Google Maps with Apify compass/crawler-google-places...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles size={14} />
+                          <span>Run Live Apify Crawler & Ingest No-Website Leads</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
               )}
 

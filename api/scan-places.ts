@@ -333,11 +333,63 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { city, country, industry, targetNoWebsiteOnly, apiKey: clientApiKey } = req.body;
+  const { city, country, industry, targetNoWebsiteOnly, apiKey: clientApiKey, apifyToken: clientApifyToken } = req.body;
   const apiKey = process.env.GOOGLE_PLACES_API_KEY || process.env.VITE_GOOGLE_PLACES_API_KEY || clientApiKey;
+  const apifyToken = process.env.APIFY_TOKEN || process.env.VITE_APIFY_TOKEN || clientApifyToken;
 
   const queryText = `${industry} in ${city}, ${country}`;
   const queryClean = `${industry} ${city} ${country}`;
+
+  // Strategy 0: Apify Compass Google Places Crawler (compass/crawler-google-places)
+  if (apifyToken) {
+    try {
+      const actorUrl = `https://api.apify.com/v2/acts/compass~crawler-google-places/run-sync-get-dataset-items?token=${encodeURIComponent(apifyToken.trim())}&timeout=120`;
+      const apifyRes = await fetch(actorUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          searchStringsArray: [queryClean],
+          locationQuery: `${city}, ${country}`,
+          maxCrawledPlacesPerSearch: 20,
+          language: 'en'
+        })
+      });
+
+      if (apifyRes.ok) {
+        const apifyPlaces = await apifyRes.json();
+        if (Array.isArray(apifyPlaces) && apifyPlaces.length > 0) {
+          const mapped = apifyPlaces.map((item: any, idx: number) => {
+            const rawWeb = item.website || null;
+            const isNoWeb = !rawWeb || rawWeb === 'null' || rawWeb.includes('google.com/maps');
+            return {
+              id: item.placeId || item.id || `apify_${Date.now()}_${idx}`,
+              name: item.title || item.name || `${industry} Specialist`,
+              address: item.address || `${city}, ${country}`,
+              phone: item.phone || '',
+              rating: Number(item.totalScore || item.rating) || 4.9,
+              reviewCount: Number(item.reviewsCount || item.reviewCount) || 20,
+              website: isNoWeb ? null : rawWeb,
+              email: item.email || null,
+              googleMapsUrl: item.url || item.location_link || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((item.title || item.name) + ' ' + (item.address || city))}`
+            };
+          });
+
+          const filtered = targetNoWebsiteOnly
+            ? mapped.filter((p: any) => !p.website)
+            : mapped;
+
+          if (filtered.length > 0) {
+            return res.status(200).json({
+              places: filtered,
+              source: 'apify_crawler_google_places'
+            });
+          }
+        }
+      }
+    } catch (apifyErr) {
+      console.warn('Apify crawler error:', apifyErr);
+    }
+  }
 
   // Strategy 1: Official Google Places API if key is present
   if (apiKey) {

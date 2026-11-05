@@ -11,6 +11,10 @@
         "WP_API_USERNAME": "deepak.soni220",
         "WP_API_PASSWORD": "r4GSvZKfhyFsmRwkPprlvDze"
       }
+    },
+    "apify-google-places": {
+      "serverUrl": "https://mcp.apify.com/?tools=actors,docs,compass/crawler-google-places",
+      "url": "https://mcp.apify.com/?tools=actors,docs,compass/crawler-google-places"
     }
   }
 }

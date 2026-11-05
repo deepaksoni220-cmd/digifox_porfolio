@@ -28,7 +28,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 7002,
+    port: 5173,
     host: '0.0.0.0',
     watch: {
       ignored: ['**/data/**', '**/server/**', '**/dist/**', '**/blacklane-nextjs/**', '**/.next/**', '**/.git/**', '**/public/templates/**'],

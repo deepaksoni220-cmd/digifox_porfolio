@@ -75,7 +75,7 @@ export const WorldwideGlobeSection: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-base sm:text-lg font-bold uppercase text-[var(--text-strong)]">
-                      24/7 Timezone Alignment
+                      All Timezone Alignments
                     </h3>
                     <p className="text-xs text-[var(--text-secondary)] font-light">
                       Async updates + real-time overlapping syncs

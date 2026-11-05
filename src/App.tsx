@@ -21,6 +21,7 @@ import { ProtectedPage } from './components/ProtectedPage';
 import { AuthProvider } from './context/AuthContext';
 import { AuthModal } from './components/auth/AuthModal';
 import { PlanGateModal } from './components/auth/PlanGateModal';
+import { ScrollProgress } from './components/magicui/scroll-progress';
 
 // Code-split secondary pages and builder modules to keep root bundle ultra-lean
 const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })));
@@ -131,6 +132,7 @@ function App() {
   if (subdomain && subdomain !== 'www') {
     return (
       <HelmetProvider>
+        <ScrollProgress className="top-0 z-[9999]" />
         <Suspense fallback={<div className="min-h-screen bg-[var(--bg-base)]" />}>
           <PublishedSite subdomain={subdomain} />
         </Suspense>
@@ -142,6 +144,7 @@ function App() {
     <HelmetProvider>
       <AuthProvider>
         <Router>
+          <ScrollProgress className="top-0 z-[9999]" />
           <AuthModal />
           <PlanGateModal />
           <Suspense fallback={<div className="min-h-screen bg-[var(--bg-base)]" />}>

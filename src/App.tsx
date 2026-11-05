@@ -41,6 +41,7 @@ const DesignKitsPage = lazy(() => import('./pages/builder/DesignKitsPage').then(
 const PricingPage = lazy(() => import('./pages/builder/PricingPage').then(m => ({ default: m.PricingPage })));
 const BlogsPage = lazy(() => import('./pages/builder/BlogsPage').then(m => ({ default: m.BlogsPage })));
 const AiContactPage = lazy(() => import('./pages/builder/AiContactPage').then(m => ({ default: m.AiContactPage })));
+const LeadGenerationPage = lazy(() => import('./pages/LeadGenerationPage').then(m => ({ default: m.LeadGenerationPage })));
 
 function Portfolio() {
   const [isLoading, setIsLoading] = useState(true);
@@ -161,6 +162,14 @@ function App() {
               <Route path="/admin" element={
                 <ProtectedPage>
                   <AdminPage />
+                </ProtectedPage>
+              } />
+              <Route path="/lead-generation" element={<LeadGenerationPage />} />
+              <Route path="/ai-leads" element={<LeadGenerationPage />} />
+              <Route path="/leads" element={<LeadGenerationPage />} />
+              <Route path="/admin/leads" element={
+                <ProtectedPage>
+                  <LeadGenerationPage />
                 </ProtectedPage>
               } />
               <Route path="/basic_vs_exclusive" element={<PremiumLandingPage />} />

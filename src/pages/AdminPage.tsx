@@ -80,6 +80,13 @@ export const AdminPage: React.FC = () => {
           </div>
           <div className="flex items-center gap-3">
             <Link
+              to="/ai-leads"
+              className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:opacity-95 text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg flex items-center gap-2"
+            >
+              <span>AI Lead Engine</span>
+              <span>🎯</span>
+            </Link>
+            <Link
               to="/ai-builder/seo-dashboard"
               className="bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 hover:opacity-95 text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg flex items-center gap-2"
             >

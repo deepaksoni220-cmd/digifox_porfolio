@@ -54,7 +54,7 @@ export interface QualifiedLead {
   modelUsed: string;
 }
 
-const AVAILABLE_DEMOS = [
+export const AVAILABLE_DEMOS = [
   {
     title: "Apex Architectural Stone & Marble",
     category: "Luxury Portfolio & Slab Gallery Experience",

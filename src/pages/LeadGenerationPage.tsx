@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   processLeadWithGemini, 
   scanGoogleBusinessProfiles,
+  AVAILABLE_DEMOS,
   type LeadInput, 
   type QualifiedLead,
   type DiscoveredBusinessLead,
@@ -27,7 +28,10 @@ import {
   CheckCircle2,
   ArrowRight,
   Filter,
-  Send
+  Send,
+  Plus,
+  RotateCcw,
+  X
 } from 'lucide-react';
 import { SEOMeta } from '../components/SEOMeta';
 
@@ -80,6 +84,31 @@ export const LeadGenerationPage: React.FC = () => {
   const [emailTab, setEmailTab] = useState<'initial' | 'followup'>('initial');
   const [copiedPitch, setCopiedPitch] = useState(false);
 
+  // Manual Customization States (User can edit email, demo link, and email copy before sending)
+  const [manualEmail, setManualEmail] = useState('');
+  const [manualDemoUrl, setManualDemoUrl] = useState('');
+  const [selectedDemoIndex, setSelectedDemoIndex] = useState<number>(0);
+  const [manualSubject, setManualSubject] = useState('');
+  const [manualBody, setManualBody] = useState('');
+  const [manualFollowUpSubject, setManualFollowUpSubject] = useState('');
+  const [manualFollowUpBody, setManualFollowUpBody] = useState('');
+  const [isCustomUrlMode, setIsCustomUrlMode] = useState(false);
+  const [showAddLeadModal, setShowAddLeadModal] = useState(false);
+
+  // New manual lead form state
+  const [newManualLead, setNewManualLead] = useState({
+    businessName: '',
+    city: 'New York',
+    country: 'USA',
+    industry: 'Marble & Granite',
+    address: '',
+    phone: '',
+    contactEmail: '',
+    demoUrl: '/portfolio',
+    rating: 4.9,
+    reviewCount: 24
+  });
+
   // Single Audit State
   const [formData, setFormData] = useState<LeadInput>({
     businessName: '',
@@ -95,6 +124,32 @@ export const LeadGenerationPage: React.FC = () => {
   const [leadHistory, setLeadHistory] = useState<QualifiedLead[]>([]);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Synchronize manual fields whenever the selected prospect changes
+  useEffect(() => {
+    if (selectedDiscoveredLead) {
+      setManualEmail(selectedDiscoveredLead.contactEmail || '');
+      
+      const initialDemoLink = selectedDiscoveredLead.personalizedDemoUrl?.startsWith('http')
+        ? selectedDiscoveredLead.personalizedDemoUrl
+        : `${window.location.origin}${selectedDiscoveredLead.personalizedDemoUrl || '/portfolio'}`;
+      
+      setManualDemoUrl(initialDemoLink);
+      setIsCustomUrlMode(false);
+
+      // Match demo index if present
+      const matchedIdx = AVAILABLE_DEMOS.findIndex(
+        d => d.title === selectedDiscoveredLead.matchedDemo?.title
+      );
+      setSelectedDemoIndex(matchedIdx >= 0 ? matchedIdx : 0);
+
+      const p = selectedDiscoveredLead.personalizedPitch;
+      setManualSubject(p?.subject || '');
+      setManualBody(p?.body ? p.body.replace('[DEMO_LINK]', initialDemoLink) : '');
+      setManualFollowUpSubject(p?.followUpSubject || '');
+      setManualFollowUpBody(p?.followUpBody ? p.followUpBody.replace('[DEMO_LINK]', initialDemoLink) : '');
+    }
+  }, [selectedDiscoveredLead]);
 
   // Auto-run initial New York Marble & Granite scan so user sees results immediately
   useEffect(() => {
@@ -122,6 +177,111 @@ export const LeadGenerationPage: React.FC = () => {
     } finally {
       setIsScanning(false);
     }
+  };
+
+  const handleDemoSelectionChange = (idx: number) => {
+    setSelectedDemoIndex(idx);
+    if (idx === -1) {
+      setIsCustomUrlMode(true);
+      return;
+    }
+    setIsCustomUrlMode(false);
+    const selectedDemo = AVAILABLE_DEMOS[idx];
+    if (!selectedDemo) return;
+
+    const newUrl = selectedDemo.demoUrl.startsWith('http')
+      ? selectedDemo.demoUrl
+      : `${window.location.origin}${selectedDemo.demoUrl}`;
+
+    const oldUrl = manualDemoUrl;
+    setManualDemoUrl(newUrl);
+
+    // Update demo link in email body if old link exists
+    if (oldUrl && manualBody.includes(oldUrl)) {
+      setManualBody(manualBody.replaceAll(oldUrl, newUrl));
+    }
+    if (oldUrl && manualFollowUpBody.includes(oldUrl)) {
+      setManualFollowUpBody(manualFollowUpBody.replaceAll(oldUrl, newUrl));
+    }
+  };
+
+  const handleManualDemoUrlChange = (newUrl: string) => {
+    const oldUrl = manualDemoUrl;
+    setManualDemoUrl(newUrl);
+    if (oldUrl && manualBody.includes(oldUrl)) {
+      setManualBody(manualBody.replaceAll(oldUrl, newUrl));
+    }
+    if (oldUrl && manualFollowUpBody.includes(oldUrl)) {
+      setManualFollowUpBody(manualFollowUpBody.replaceAll(oldUrl, newUrl));
+    }
+  };
+
+  const handleResetEmailToAi = () => {
+    if (!selectedDiscoveredLead) return;
+    const p = selectedDiscoveredLead.personalizedPitch;
+    const demoLink = manualDemoUrl || `${window.location.origin}${selectedDiscoveredLead.personalizedDemoUrl}`;
+    setManualSubject(p.subject);
+    setManualBody(p.body.replace('[DEMO_LINK]', demoLink));
+    setManualFollowUpSubject(p.followUpSubject);
+    setManualFollowUpBody(p.followUpBody.replace('[DEMO_LINK]', demoLink));
+  };
+
+  const handleAddManualLead = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newManualLead.businessName) return;
+
+    const matchedDemo = AVAILABLE_DEMOS[selectedDemoIndex] || AVAILABLE_DEMOS[0];
+    const demoLink = newManualLead.demoUrl || `/portfolio?client=${encodeURIComponent(newManualLead.businessName)}`;
+    const fullDemoUrl = demoLink.startsWith('http') ? demoLink : `${window.location.origin}${demoLink}`;
+
+    const lead: DiscoveredBusinessLead = {
+      id: `manual_${Date.now()}`,
+      businessName: newManualLead.businessName,
+      city: newManualLead.city || 'Local',
+      country: newManualLead.country || 'Global',
+      industry: newManualLead.industry || 'General',
+      address: newManualLead.address || `${newManualLead.city}, ${newManualLead.country}`,
+      phone: newManualLead.phone || '+1 (555) 010-0000',
+      rating: Number(newManualLead.rating) || 5.0,
+      reviewCount: Number(newManualLead.reviewCount) || 15,
+      websiteStatus: 'No Website Detected',
+      opportunityScore: 96,
+      aiRecommendation: `Manually added prospect in ${newManualLead.city}. Prime candidate for modern showcase portfolio & online booking inquiries.`,
+      matchedDemo: {
+        ...matchedDemo,
+        whyItFits: `Custom matched showcase for ${newManualLead.businessName}.`
+      },
+      personalizedDemoUrl: demoLink,
+      contactEmailStatus: 'Public Email Found',
+      contactEmail: newManualLead.contactEmail || `contact@${newManualLead.businessName.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`,
+      outreachAngle: 'Direct Manual Pitch & Custom Prototype',
+      personalizedPitch: {
+        subject: `Interactive prototype concept for ${newManualLead.businessName}`,
+        hook: `I came across ${newManualLead.businessName} and noticed your strong reputation in ${newManualLead.city}.`,
+        body: `Hi team,\n\nI was looking into top ${newManualLead.industry} companies in ${newManualLead.city} and came across ${newManualLead.businessName}.\n\nI noticed that potential clients currently have no website to view your completed projects, services, or request an instant quote online.\n\nOur team at Digifox put together a live interactive prototype specifically tailored for your brand:\n${fullDemoUrl}\n\nWould you be open to a 5-minute walkthrough this week?`,
+        demoCta: `View ${newManualLead.businessName} Prototype`,
+        followUpSubject: `Re: Interactive prototype concept for ${newManualLead.businessName}`,
+        followUpBody: `Hi there,\n\nFollowing up on the prototype link we prepared for ${newManualLead.businessName}.\n\nOver 65% of high-ticket clients research on mobile before calling—having this live showcase turns searchers into confirmed quotes:\n${fullDemoUrl}\n\nLet me know if you would like us to customize the photos and branding for you at zero risk.`
+      }
+    };
+
+    setDiscoveredLeads(prev => [lead, ...prev]);
+    setSelectedDiscoveredLead(lead);
+    setShowAddLeadModal(false);
+
+    // Reset form
+    setNewManualLead({
+      businessName: '',
+      city: scanParams.city,
+      country: scanParams.country,
+      industry: scanParams.industry,
+      address: '',
+      phone: '',
+      contactEmail: '',
+      demoUrl: '/portfolio',
+      rating: 4.9,
+      reviewCount: 24
+    });
   };
 
   const handleRunAudit = async (leadToProcess?: LeadInput) => {
@@ -156,23 +316,23 @@ export const LeadGenerationPage: React.FC = () => {
   };
 
   const copyDiscoveredPitch = () => {
-    if (!selectedDiscoveredLead) return;
-    const p = selectedDiscoveredLead.personalizedPitch;
-    const isInitial = emailTab === 'initial';
-    const textToCopy = isInitial
-      ? `Subject: ${p.subject}\n\n${p.body.replace('[DEMO_LINK]', window.location.origin + selectedDiscoveredLead.personalizedDemoUrl)}`
-      : `Subject: ${p.followUpSubject}\n\n${p.followUpBody.replace('[DEMO_LINK]', window.location.origin + selectedDiscoveredLead.personalizedDemoUrl)}`;
+    const subject = emailTab === 'initial' ? manualSubject : manualFollowUpSubject;
+    const body = emailTab === 'initial' ? manualBody : manualFollowUpBody;
+    const textToCopy = `To: ${manualEmail}\nSubject: ${subject}\n\n${body}`;
     
     navigator.clipboard.writeText(textToCopy);
     setCopiedPitch(true);
     setTimeout(() => setCopiedPitch(false), 2000);
   };
 
+  const currentSubject = emailTab === 'initial' ? manualSubject : manualFollowUpSubject;
+  const currentBody = emailTab === 'initial' ? manualBody : manualFollowUpBody;
+
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-strong)] pb-24 pt-12 px-4 sm:px-8">
       <SEOMeta 
         title="Digifox AI Lead Generation Engine | Google Business Scanner"
-        description="Scan Google Business Profiles in any city, detect businesses without websites, generate personalized demo websites, and prepare high-converting sales emails powered by Google Gemini."
+        description="Scan Google Business Profiles in any city, detect businesses without websites, manually customize demo prototypes and emails, and prepare high-converting sales sequences."
       />
 
       <div className="max-w-7xl mx-auto">
@@ -186,14 +346,14 @@ export const LeadGenerationPage: React.FC = () => {
                 <span>Gemini-Only Multi-Agent Architecture</span>
               </span>
               <span className="text-xs text-[var(--text-secondary)] font-mono">
-                No OpenAI Required
+                Manual Demo & Email Editor Enabled
               </span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-[var(--text-strong)]">
               Digifox AI <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Lead Generation Engine</span>
             </h1>
             <p className="mt-2 text-sm sm:text-base text-[var(--text-secondary)] font-light max-w-3xl">
-              Scan Google Business Profiles in any city worldwide, identify profitable businesses without websites, auto-generate interactive demo prototypes, and deploy automated outreach sequences for $1,400–$2,000 package sales.
+              Discover high-ticket businesses without websites, select or manually customize demo prototypes, refine emails in real-time, and launch direct outreach to close $1,400–$2,000 website packages.
             </p>
           </div>
 
@@ -429,9 +589,16 @@ export const LeadGenerationPage: React.FC = () => {
                     <Globe2 size={16} className="text-blue-400" />
                     <span>Discovered Prospects ({discoveredLeads.length})</span>
                   </h3>
-                  <span className="text-[11px] font-mono text-emerald-400">
-                    High Website Potential
-                  </span>
+                  
+                  {/* Manual Lead Addition Trigger */}
+                  <button
+                    type="button"
+                    onClick={() => setShowAddLeadModal(true)}
+                    className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold uppercase tracking-wider flex items-center gap-1 transition-all cursor-pointer shadow-md"
+                  >
+                    <Plus size={12} />
+                    <span>Add Lead</span>
+                  </button>
                 </div>
 
                 {isScanning ? (
@@ -448,7 +615,7 @@ export const LeadGenerationPage: React.FC = () => {
                   </div>
                 ) : discoveredLeads.length === 0 ? (
                   <div className="p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-center text-xs text-[var(--text-secondary)]">
-                    No leads found. Try a different city or industry.
+                    No leads found. Try a different city or click <strong>Add Lead</strong> to enter one manually.
                   </div>
                 ) : (
                   <div className="space-y-3">
@@ -497,7 +664,7 @@ export const LeadGenerationPage: React.FC = () => {
                               Demo: {lead.matchedDemo?.title?.slice(0, 22)}...
                             </span>
                             <span className="text-blue-400 font-semibold flex items-center gap-1">
-                              <span>View Dossier</span>
+                              <span>Configure & Send</span>
                               <ArrowRight size={12} />
                             </span>
                           </div>
@@ -564,64 +731,124 @@ export const LeadGenerationPage: React.FC = () => {
                         </p>
                       </div>
 
-                      {/* Matched Demo Website Card */}
-                      <div className="pt-5">
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-[11px] font-bold uppercase text-[var(--text-secondary)] flex items-center gap-1.5">
-                            <Sparkles size={13} className="text-amber-400" />
-                            <span>Personalized Demo Website Prototype</span>
+                      {/* MANUAL DEMO WEBSITE CONFIGURATION */}
+                      <div className="pt-5 space-y-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                          <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-1.5">
+                            <Sparkles size={14} className="text-amber-400" />
+                            <span>1. Select or Manually Edit Website Demo Link</span>
                           </span>
-                          <a
-                            href={selectedDiscoveredLead.personalizedDemoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs font-semibold text-blue-400 hover:text-blue-300 flex items-center gap-1"
-                          >
-                            <span>Open Fullscreen Preview</span>
-                            <ExternalLink size={12} />
-                          </a>
+                          <span className="text-[11px] font-mono text-emerald-400">
+                            Updates in email automatically
+                          </span>
                         </div>
 
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                              Choose Digifox Demo Preset
+                            </label>
+                            <select
+                              value={isCustomUrlMode ? -1 : selectedDemoIndex}
+                              onChange={(e) => handleDemoSelectionChange(Number(e.target.value))}
+                              className="w-full px-3 py-2 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs text-[var(--text-strong)] focus:border-blue-500 focus:outline-none"
+                            >
+                              {AVAILABLE_DEMOS.map((demo, idx) => (
+                                <option key={idx} value={idx}>
+                                  {demo.title} ({demo.category})
+                                </option>
+                              ))}
+                              <option value={-1}>Custom URL (Figma / Staging / Subdomain)</option>
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                              Active Demo Preview URL
+                            </label>
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="text"
+                                value={manualDemoUrl}
+                                onChange={(e) => handleManualDemoUrlChange(e.target.value)}
+                                placeholder="https://example.com/demo"
+                                className="w-full px-3 py-2 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-mono text-[var(--text-strong)] focus:border-blue-500 focus:outline-none"
+                              />
+                              <a
+                                href={manualDemoUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white shrink-0 transition-colors shadow-md flex items-center gap-1 text-xs font-semibold"
+                                title="Test link in new tab"
+                              >
+                                <Eye size={13} />
+                                <span className="hidden sm:inline">Test</span>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Visual Demo Card */}
                         <div className="p-4 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] flex flex-col sm:flex-row items-center gap-4">
                           <img
-                            src={selectedDiscoveredLead.matchedDemo?.previewImage || '/image-1783080075680-896100451.png'}
+                            src={
+                              !isCustomUrlMode && AVAILABLE_DEMOS[selectedDemoIndex]?.previewImage
+                                ? AVAILABLE_DEMOS[selectedDemoIndex].previewImage
+                                : '/image-1783080075680-896100451.png'
+                            }
                             alt="Demo Preview"
                             className="w-full sm:w-28 h-20 object-cover rounded-xl border border-[var(--border-strong)]"
                           />
                           <div className="flex-1 text-center sm:text-left">
                             <h4 className="text-sm font-bold text-[var(--text-strong)]">
-                              {selectedDiscoveredLead.matchedDemo?.title}
+                              {!isCustomUrlMode && AVAILABLE_DEMOS[selectedDemoIndex]?.title 
+                                ? AVAILABLE_DEMOS[selectedDemoIndex].title 
+                                : 'Custom Prototype Link'}
                             </h4>
                             <span className="text-xs text-blue-400 block font-mono">
-                              {selectedDiscoveredLead.matchedDemo?.category}
+                              {!isCustomUrlMode && AVAILABLE_DEMOS[selectedDemoIndex]?.category 
+                                ? AVAILABLE_DEMOS[selectedDemoIndex].category 
+                                : 'External / Custom Staging URL'}
                             </span>
-                            <p className="text-xs text-[var(--text-secondary)] mt-1 font-light">
-                              Ready-to-deliver showcase to sell Digifox's $1,400–$2,000 package.
+                            <p className="text-xs text-[var(--text-secondary)] mt-1 font-light truncate max-w-md">
+                              Link delivered to client: {manualDemoUrl}
                             </p>
                           </div>
-                          <a
-                            href={selectedDiscoveredLead.personalizedDemoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-lg whitespace-nowrap"
-                          >
-                            <Eye size={13} />
-                            <span>Test Prototype</span>
-                          </a>
                         </div>
                       </div>
+
+                      {/* MANUAL TARGET RECIPIENT EMAIL */}
+                      <div className="pt-5 border-t border-[var(--border-strong)] mt-5">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                          <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-1.5">
+                            <Mail size={14} className="text-emerald-400" />
+                            <span>2. Target Recipient Email Address</span>
+                          </label>
+                          <span className="text-[11px] font-mono text-[var(--text-secondary)]">
+                            Status: <strong className="text-emerald-400">Ready to Send</strong>
+                          </span>
+                        </div>
+                        <input
+                          type="email"
+                          value={manualEmail}
+                          onChange={(e) => setManualEmail(e.target.value)}
+                          placeholder="e.g. owner@marblegranite.com"
+                          className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm font-semibold text-[var(--text-strong)] focus:border-emerald-500 focus:outline-none"
+                        />
+                      </div>
+
                     </div>
 
-                    {/* Cold Outreach Email Sequence */}
+                    {/* COLD OUTREACH EMAIL SEQUENCE & LIVE EDITOR */}
                     <div className="p-6 sm:p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-[var(--border-strong)]">
                         <div>
                           <h4 className="text-base font-bold uppercase tracking-tight text-[var(--text-strong)] flex items-center gap-2">
                             <Mail size={16} className="text-indigo-400" />
-                            <span>Automated Sales Outreach Sequence</span>
+                            <span>3. Edit Outreach Copy Before Sending</span>
                           </h4>
                           <span className="text-xs text-[var(--text-secondary)] font-light">
-                            Personalized with client city, Google rating, and interactive prototype link.
+                            Directly edit the subject line or email body below. All changes are preserved.
                           </span>
                         </div>
 
@@ -649,8 +876,17 @@ export const LeadGenerationPage: React.FC = () => {
 
                           <button
                             type="button"
+                            onClick={handleResetEmailToAi}
+                            title="Reset to AI copy"
+                            className="p-2 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
+                          >
+                            <RotateCcw size={14} />
+                          </button>
+
+                          <button
+                            type="button"
                             onClick={copyDiscoveredPitch}
-                            className="px-3 py-2 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-bold text-[var(--text-strong)] hover:border-emerald-400 hover:text-emerald-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                            className="px-3 py-2 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-bold text-[var(--text-strong)] hover:border-emerald-400 hover:text-emerald-400 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
                           >
                             {copiedPitch ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
                             <span>{copiedPitch ? 'Copied' : 'Copy Email'}</span>
@@ -658,47 +894,71 @@ export const LeadGenerationPage: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Rendered Email Content */}
-                      <div className="p-5 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs sm:text-sm font-sans space-y-3">
+                      {/* Rendered & Editable Email Form */}
+                      <div className="space-y-4">
                         <div>
-                          <strong className="text-[var(--text-strong)] uppercase font-mono text-xs">Subject: </strong>
-                          <span className="text-[var(--text-strong)] font-semibold">
-                            {emailTab === 'initial'
-                              ? selectedDiscoveredLead.personalizedPitch.subject
-                              : selectedDiscoveredLead.personalizedPitch.followUpSubject}
-                          </span>
+                          <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                            Email Subject Line (Editable)
+                          </label>
+                          <input
+                            type="text"
+                            value={currentSubject}
+                            onChange={(e) => {
+                              if (emailTab === 'initial') {
+                                setManualSubject(e.target.value);
+                              } else {
+                                setManualFollowUpSubject(e.target.value);
+                              }
+                            }}
+                            className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm font-semibold text-[var(--text-strong)] focus:border-blue-500 focus:outline-none"
+                          />
                         </div>
 
-                        <div className="border-t border-[var(--border-strong)]/30 pt-3 text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
-                          {emailTab === 'initial'
-                            ? selectedDiscoveredLead.personalizedPitch.body.replace(
-                                '[DEMO_LINK]',
-                                `${window.location.origin}${selectedDiscoveredLead.personalizedDemoUrl}`
-                              )
-                            : selectedDiscoveredLead.personalizedPitch.followUpBody.replace(
-                                '[DEMO_LINK]',
-                                `${window.location.origin}${selectedDiscoveredLead.personalizedDemoUrl}`
-                              )}
+                        <div>
+                          <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                            Email Body (Editable)
+                          </label>
+                          <textarea
+                            rows={10}
+                            value={currentBody}
+                            onChange={(e) => {
+                              if (emailTab === 'initial') {
+                                setManualBody(e.target.value);
+                              } else {
+                                setManualFollowUpBody(e.target.value);
+                              }
+                            }}
+                            className="w-full px-4 py-3 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm font-sans text-[var(--text-strong)] leading-relaxed focus:border-blue-500 focus:outline-none resize-y"
+                          />
                         </div>
 
-                        <div className="pt-3 border-t border-[var(--border-strong)]/30 flex flex-wrap items-center justify-between gap-3 text-xs text-[var(--text-secondary)]">
-                          <span className="font-mono">
-                            Target Email: <strong className="text-[var(--text-strong)]">{selectedDiscoveredLead.contactEmail}</strong> ({selectedDiscoveredLead.contactEmailStatus})
-                          </span>
-                          <a
-                            href={`mailto:${selectedDiscoveredLead.contactEmail}?subject=${encodeURIComponent(
-                              selectedDiscoveredLead.personalizedPitch.subject
-                            )}&body=${encodeURIComponent(
-                              selectedDiscoveredLead.personalizedPitch.body.replace(
-                                '[DEMO_LINK]',
-                                `${window.location.origin}${selectedDiscoveredLead.personalizedDemoUrl}`
-                              )
-                            )}`}
-                            className="text-xs text-blue-400 hover:underline flex items-center gap-1 font-semibold"
-                          >
-                            <Send size={12} />
-                            <span>Launch Email Client</span>
-                          </a>
+                        {/* Bottom Action Bar */}
+                        <div className="pt-4 border-t border-[var(--border-strong)]/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+                          <div className="text-xs text-[var(--text-secondary)] flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                            <span>
+                              Sending to: <strong className="text-[var(--text-strong)]">{manualEmail || 'No email specified'}</strong>
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-3 w-full sm:w-auto">
+                            <button
+                              type="button"
+                              onClick={copyDiscoveredPitch}
+                              className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-bold hover:border-emerald-400 text-[var(--text-strong)] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                            >
+                              <Copy size={13} />
+                              <span>Copy Full Email</span>
+                            </button>
+
+                            <a
+                              href={`mailto:${manualEmail}?subject=${encodeURIComponent(currentSubject)}&body=${encodeURIComponent(currentBody)}`}
+                              className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all"
+                            >
+                              <Send size={13} />
+                              <span>Launch Email Client</span>
+                            </a>
+                          </div>
                         </div>
                       </div>
 
@@ -707,7 +967,7 @@ export const LeadGenerationPage: React.FC = () => {
                   </div>
                 ) : (
                   <div className="p-12 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-center text-xs text-[var(--text-secondary)]">
-                    Select a prospect from the left list to review their dossier and sales outreach copy.
+                    Select a prospect from the left list to review and manually customize their demo link and email outreach.
                   </div>
                 )}
               </div>
@@ -1084,6 +1344,143 @@ export const LeadGenerationPage: React.FC = () => {
               )}
             </div>
 
+          </div>
+        )}
+
+        {/* MODAL: ADD CUSTOM LEAD MANUALLY */}
+        {showAddLeadModal && (
+          <div className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="w-full max-w-lg bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+              <button
+                type="button"
+                onClick={() => setShowAddLeadModal(false)}
+                className="absolute top-6 right-6 p-2 rounded-xl bg-[var(--bg-base)] text-[var(--text-secondary)] hover:text-white transition-colors"
+              >
+                <X size={16} />
+              </button>
+
+              <h3 className="text-xl font-bold uppercase tracking-tight text-[var(--text-strong)] mb-1 flex items-center gap-2">
+                <Plus size={18} className="text-blue-400" />
+                <span>Add Prospect Manually</span>
+              </h3>
+              <p className="text-xs text-[var(--text-secondary)] mb-6 font-light">
+                Add an independent local business you found on Google Maps or Instagram to configure demo links and outreach copy.
+              </p>
+
+              <form onSubmit={handleAddManualLead} className="space-y-4">
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                    Business Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={newManualLead.businessName}
+                    onChange={(e) => setNewManualLead({ ...newManualLead, businessName: e.target.value })}
+                    placeholder="e.g. Paramount Marble & Tile"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-blue-500 focus:outline-none"
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                      City
+                    </label>
+                    <input
+                      type="text"
+                      value={newManualLead.city}
+                      onChange={(e) => setNewManualLead({ ...newManualLead, city: e.target.value })}
+                      placeholder="e.g. New York"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-blue-500 focus:outline-none"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                      Industry
+                    </label>
+                    <input
+                      type="text"
+                      value={newManualLead.industry}
+                      onChange={(e) => setNewManualLead({ ...newManualLead, industry: e.target.value })}
+                      placeholder="e.g. Marble & Granite"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-blue-500 focus:outline-none"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                      Contact Email
+                    </label>
+                    <input
+                      type="email"
+                      value={newManualLead.contactEmail}
+                      onChange={(e) => setNewManualLead({ ...newManualLead, contactEmail: e.target.value })}
+                      placeholder="owner@example.com"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-blue-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                      Phone Number
+                    </label>
+                    <input
+                      type="text"
+                      value={newManualLead.phone}
+                      onChange={(e) => setNewManualLead({ ...newManualLead, phone: e.target.value })}
+                      placeholder="+1 (212) 555-0199"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-blue-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                    Choose Demo Showcase Preset
+                  </label>
+                  <select
+                    value={selectedDemoIndex}
+                    onChange={(e) => {
+                      const idx = Number(e.target.value);
+                      setSelectedDemoIndex(idx);
+                      const demo = AVAILABLE_DEMOS[idx];
+                      if (demo) {
+                        setNewManualLead({ ...newManualLead, demoUrl: demo.demoUrl });
+                      }
+                    }}
+                    className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs text-[var(--text-strong)] focus:border-blue-500 focus:outline-none"
+                  >
+                    {AVAILABLE_DEMOS.map((demo, idx) => (
+                      <option key={idx} value={idx}>
+                        {demo.title} ({demo.category})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="pt-2 flex items-center justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddLeadModal(false)}
+                    className="px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-semibold text-[var(--text-secondary)] hover:text-white transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider shadow-lg"
+                  >
+                    Add to Pipeline
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         )}
 

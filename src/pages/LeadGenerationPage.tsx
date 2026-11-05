@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   processLeadWithGemini, 
+  scanGoogleBusinessProfiles,
   type LeadInput, 
-  type QualifiedLead 
+  type QualifiedLead,
+  type DiscoveredBusinessLead,
+  type GoogleBusinessScanParams
 } from '../services/leadGenerationService';
 import { 
   Bot, 
@@ -15,7 +18,16 @@ import {
   ExternalLink,
   Target,
   BarChart3,
-  History
+  History,
+  MapPin,
+  Building2,
+  Globe2,
+  Phone,
+  Star,
+  CheckCircle2,
+  ArrowRight,
+  Filter,
+  Send
 } from 'lucide-react';
 import { SEOMeta } from '../components/SEOMeta';
 
@@ -43,7 +55,32 @@ const PRESET_LEADS: LeadInput[] = [
   }
 ];
 
+const SCANNER_PRESETS = [
+  { country: "USA", city: "New York", industry: "Marble & Granite" },
+  { country: "UK", city: "London", industry: "Boutique Interior Architecture" },
+  { country: "USA", city: "Miami", industry: "Exotic & Marine Detailing" },
+  { country: "UAE", city: "Dubai", industry: "Luxury Kitchen & Joinery" },
+  { country: "USA", city: "Dallas", industry: "Commercial Roofing & Solar" }
+];
+
 export const LeadGenerationPage: React.FC = () => {
+  // Navigation tab: Google Business Scanner vs Single Lead Audit
+  const [activeTab, setActiveTab] = useState<'scanner' | 'single'>('scanner');
+
+  // Scanner State
+  const [scanParams, setScanParams] = useState<GoogleBusinessScanParams>({
+    country: "USA",
+    city: "New York",
+    industry: "Marble & Granite",
+    targetNoWebsiteOnly: true
+  });
+  const [isScanning, setIsScanning] = useState(false);
+  const [discoveredLeads, setDiscoveredLeads] = useState<DiscoveredBusinessLead[]>([]);
+  const [selectedDiscoveredLead, setSelectedDiscoveredLead] = useState<DiscoveredBusinessLead | null>(null);
+  const [emailTab, setEmailTab] = useState<'initial' | 'followup'>('initial');
+  const [copiedPitch, setCopiedPitch] = useState(false);
+
+  // Single Audit State
   const [formData, setFormData] = useState<LeadInput>({
     businessName: '',
     websiteUrl: '',
@@ -58,6 +95,34 @@ export const LeadGenerationPage: React.FC = () => {
   const [leadHistory, setLeadHistory] = useState<QualifiedLead[]>([]);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Auto-run initial New York Marble & Granite scan so user sees results immediately
+  useEffect(() => {
+    handleRunGoogleScan({
+      country: "USA",
+      city: "New York",
+      industry: "Marble & Granite",
+      targetNoWebsiteOnly: true
+    });
+  }, []);
+
+  const handleRunGoogleScan = async (overrideParams?: GoogleBusinessScanParams) => {
+    const params = overrideParams || scanParams;
+    setIsScanning(true);
+    setErrorMessage(null);
+    try {
+      const results = await scanGoogleBusinessProfiles(params, selectedWorkload);
+      setDiscoveredLeads(results);
+      if (results.length > 0) {
+        setSelectedDiscoveredLead(results[0]);
+      }
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(err.message || "Failed to scan Google Business Profiles.");
+    } finally {
+      setIsScanning(false);
+    }
+  };
 
   const handleRunAudit = async (leadToProcess?: LeadInput) => {
     const input = leadToProcess || formData;
@@ -90,32 +155,45 @@ export const LeadGenerationPage: React.FC = () => {
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
+  const copyDiscoveredPitch = () => {
+    if (!selectedDiscoveredLead) return;
+    const p = selectedDiscoveredLead.personalizedPitch;
+    const isInitial = emailTab === 'initial';
+    const textToCopy = isInitial
+      ? `Subject: ${p.subject}\n\n${p.body.replace('[DEMO_LINK]', window.location.origin + selectedDiscoveredLead.personalizedDemoUrl)}`
+      : `Subject: ${p.followUpSubject}\n\n${p.followUpBody.replace('[DEMO_LINK]', window.location.origin + selectedDiscoveredLead.personalizedDemoUrl)}`;
+    
+    navigator.clipboard.writeText(textToCopy);
+    setCopiedPitch(true);
+    setTimeout(() => setCopiedPitch(false), 2000);
+  };
+
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-strong)] pb-24 pt-12 px-4 sm:px-8">
       <SEOMeta 
-        title="Digifox AI Lead Generation System | Gemini Engine"
-        description="Automated business intelligence, website audit diagnostics, demo matching, and personalized cold outreach powered 100% by Google Gemini models."
+        title="Digifox AI Lead Generation Engine | Google Business Scanner"
+        description="Scan Google Business Profiles in any city, detect businesses without websites, generate personalized demo websites, and prepare high-converting sales emails powered by Google Gemini."
       />
 
       <div className="max-w-7xl mx-auto">
         
         {/* Header Strip */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-[var(--border-strong)] mb-10">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-[var(--border-strong)] mb-8">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center gap-1.5">
                 <Cpu size={13} />
-                <span>Gemini-Only Architecture</span>
+                <span>Gemini-Only Multi-Agent Architecture</span>
               </span>
               <span className="text-xs text-[var(--text-secondary)] font-mono">
                 No OpenAI Required
               </span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-[var(--text-strong)]">
-              Digifox AI <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Lead Generation System</span>
+              Digifox AI <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Lead Generation Engine</span>
             </h1>
-            <p className="mt-2 text-sm sm:text-base text-[var(--text-secondary)] font-light max-w-2xl">
-              Evaluate prospective client websites, score revenue upside, diagnose conversion bottlenecks, auto-match live Digifox showcases, and generate conversion-engineered outreach.
+            <p className="mt-2 text-sm sm:text-base text-[var(--text-secondary)] font-light max-w-3xl">
+              Scan Google Business Profiles in any city worldwide, identify profitable businesses without websites, auto-generate interactive demo prototypes, and deploy automated outreach sequences for $1,400–$2,000 package sales.
             </p>
           </div>
 
@@ -124,7 +202,7 @@ export const LeadGenerationPage: React.FC = () => {
               href="/portfolio"
               className="px-4 py-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-xs font-semibold hover:border-blue-400 transition-colors flex items-center gap-1.5"
             >
-              <span>Explore Demos</span>
+              <span>Demo Library</span>
               <ExternalLink size={13} />
             </a>
             <a 
@@ -134,6 +212,33 @@ export const LeadGenerationPage: React.FC = () => {
               Home
             </a>
           </div>
+        </div>
+
+        {/* Mode Selector Tabs */}
+        <div className="flex flex-wrap items-center gap-3 mb-8">
+          <button
+            onClick={() => setActiveTab('scanner')}
+            className={`px-5 py-3 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center gap-2.5 transition-all cursor-pointer ${
+              activeTab === 'scanner'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xl shadow-blue-500/20'
+                : 'bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[var(--text-secondary)] hover:text-white'
+            }`}
+          >
+            <MapPin size={16} />
+            <span>Google Business Profile Scanner (City & Niche)</span>
+          </button>
+          
+          <button
+            onClick={() => setActiveTab('single')}
+            className={`px-5 py-3 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center gap-2.5 transition-all cursor-pointer ${
+              activeTab === 'single'
+                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-xl shadow-purple-500/20'
+                : 'bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[var(--text-secondary)] hover:text-white'
+            }`}
+          >
+            <BarChart3 size={16} />
+            <span>Single Website Audit & Lead Scorer</span>
+          </button>
         </div>
 
         {/* Gemini Model Allocation Matrix Bar */}
@@ -148,11 +253,11 @@ export const LeadGenerationPage: React.FC = () => {
           >
             <div className="flex items-center justify-between text-xs mb-1">
               <span className="font-bold uppercase tracking-wider text-blue-400">Gemini 3.5 Flash-Lite</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-500/10 text-blue-300">Fast & Low Cost</span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-blue-500/10 text-blue-300">Fast & Scalable</span>
             </div>
-            <div className="text-sm font-bold text-[var(--text-strong)]">Bulk Extraction & Classification</div>
+            <div className="text-sm font-bold text-[var(--text-strong)]">Bulk Business Discovery & Triage</div>
             <p className="text-xs text-[var(--text-secondary)] mt-1 font-light">
-              High-volume triage, fast categorization, and initial lead filtering.
+              High-volume profile extraction, website presence checks, and fast qualification.
             </p>
           </div>
 
@@ -168,9 +273,9 @@ export const LeadGenerationPage: React.FC = () => {
               <span className="font-bold uppercase tracking-wider text-indigo-400">Gemini 3.8 Flash</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-500/10 text-indigo-300">Primary Core</span>
             </div>
-            <div className="text-sm font-bold text-[var(--text-strong)]">Main AI Operations & Reasoning</div>
+            <div className="text-sm font-bold text-[var(--text-strong)]">Scoring, Demo Matcher & Copywriting</div>
             <p className="text-xs text-[var(--text-secondary)] mt-1 font-light">
-              Audit scoring, bottleneck diagnosis, demo matching, and outreach copy.
+              Calculates revenue opportunity (0–100), selects demo showcase, and writes tailored cold emails.
             </p>
           </div>
 
@@ -186,89 +291,69 @@ export const LeadGenerationPage: React.FC = () => {
               <span className="font-bold uppercase tracking-wider text-purple-400">Gemini 3.1 Pro</span>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-500/10 text-purple-300">Deep Reasoning</span>
             </div>
-            <div className="text-sm font-bold text-[var(--text-strong)]">Advanced Strategic Analysis</div>
+            <div className="text-sm font-bold text-[var(--text-strong)]">Deep Market & B2B Competitive Strategy</div>
             <p className="text-xs text-[var(--text-secondary)] mt-1 font-light">
-              Multi-tiered enterprise audits, competitive positioning, and high-stakes accounts.
+              Advanced competitor teardown and multi-stakeholder enterprise pitch angles.
             </p>
           </div>
         </div>
 
-        {/* Input & Form Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-16">
-          
-          {/* Left Form (5 Cols) */}
-          <div className="lg:col-span-5 p-6 sm:p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl">
-            <h2 className="text-xl font-bold uppercase tracking-wide text-[var(--text-strong)] mb-4 flex items-center gap-2">
-              <Target size={20} className="text-blue-400" />
-              <span>Target Lead Details</span>
-            </h2>
+        {/* TAB 1: GOOGLE BUSINESS SCANNER */}
+        {activeTab === 'scanner' && (
+          <div className="space-y-8">
+            
+            {/* Search Filter Card */}
+            <div className="p-6 sm:p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div>
+                  <h2 className="text-xl font-bold uppercase tracking-tight text-[var(--text-strong)] flex items-center gap-2">
+                    <Building2 className="text-blue-400" size={20} />
+                    <span>Target Local Market Parameters</span>
+                  </h2>
+                  <p className="text-xs text-[var(--text-secondary)] font-light mt-1">
+                    Select any country, city, and industry to scan Google Business Profiles for high-potential businesses without websites.
+                  </p>
+                </div>
 
-            {/* Presets */}
-            <div className="mb-6">
-              <span className="text-xs text-[var(--text-secondary)] font-medium block mb-2">
-                Quick Test Preset Leads:
-              </span>
-              <div className="flex flex-wrap gap-2">
-                {PRESET_LEADS.map((preset) => (
-                  <button
-                    key={preset.businessName}
-                    type="button"
-                    onClick={() => {
-                      setFormData(preset);
-                      handleRunAudit(preset);
-                    }}
-                    className="px-2.5 py-1 rounded-lg bg-[var(--bg-base)] border border-[var(--border-strong)] text-[11px] font-medium hover:border-blue-400 hover:text-blue-400 transition-colors cursor-pointer"
-                  >
-                    {preset.businessName}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <form 
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleRunAudit();
-              }} 
-              className="flex flex-col gap-4"
-            >
-              <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
-                  Business Name *
-                </label>
-                <input 
-                  type="text" 
-                  value={formData.businessName}
-                  onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
-                  placeholder="e.g. Horizon Private Aviation"
-                  className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-blue-500 focus:outline-none"
-                  required
-                />
+                {/* Quick Presets */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[11px] font-bold uppercase text-[var(--text-secondary)] flex items-center gap-1">
+                    <Filter size={12} />
+                    <span>Presets:</span>
+                  </span>
+                  {SCANNER_PRESETS.map((p, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        const newParams = { ...p, targetNoWebsiteOnly: true };
+                        setScanParams(newParams);
+                        handleRunGoogleScan(newParams);
+                      }}
+                      className="px-2.5 py-1 rounded-lg bg-[var(--bg-base)] border border-[var(--border-strong)] text-[11px] font-medium hover:border-blue-400 hover:text-blue-400 transition-colors cursor-pointer"
+                    >
+                      {p.city} · {p.industry}
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
-                  Website URL
-                </label>
-                <input 
-                  type="text" 
-                  value={formData.websiteUrl}
-                  onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
-                  placeholder="https://brand.com"
-                  className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-blue-500 focus:outline-none"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleRunGoogleScan();
+                }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end"
+              >
                 <div>
                   <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
-                    Industry / Niche *
+                    Country
                   </label>
-                  <input 
-                    type="text" 
-                    value={formData.industryOrNiche}
-                    onChange={(e) => setFormData({ ...formData, industryOrNiche: e.target.value })}
-                    placeholder="e.g. Luxury Travel"
+                  <input
+                    type="text"
+                    value={scanParams.country}
+                    onChange={(e) => setScanParams({ ...scanParams, country: e.target.value })}
+                    placeholder="e.g. USA, UK, UAE"
                     className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-blue-500 focus:outline-none"
                     required
                   />
@@ -276,256 +361,735 @@ export const LeadGenerationPage: React.FC = () => {
 
                 <div>
                   <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
-                    Location
+                    City
                   </label>
-                  <input 
-                    type="text" 
-                    value={formData.location}
-                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    placeholder="e.g. New York, USA"
+                  <input
+                    type="text"
+                    value={scanParams.city}
+                    onChange={(e) => setScanParams({ ...scanParams, city: e.target.value })}
+                    placeholder="e.g. New York, London, Miami"
                     className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-blue-500 focus:outline-none"
+                    required
                   />
                 </div>
-              </div>
 
-              <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
-                  Client Notes / Known Pain Points
-                </label>
-                <textarea 
-                  rows={3}
-                  value={formData.notesOrPainPoints}
-                  onChange={(e) => setFormData({ ...formData, notesOrPainPoints: e.target.value })}
-                  placeholder="e.g. Outdated design, slow load time, no 3D showcase, high drop-off on mobile..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-blue-500 focus:outline-none resize-none"
-                />
-              </div>
-
-              {errorMessage && (
-                <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs">
-                  {errorMessage}
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                    Industry / Niche
+                  </label>
+                  <input
+                    type="text"
+                    value={scanParams.industry}
+                    onChange={(e) => setScanParams({ ...scanParams, industry: e.target.value })}
+                    placeholder="e.g. Marble & Granite, Roofing"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-blue-500 focus:outline-none"
+                    required
+                  />
                 </div>
-              )}
 
-              <button
-                type="submit"
-                disabled={isProcessing}
-                className="w-full mt-2 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer disabled:opacity-50"
-              >
-                {isProcessing ? (
-                  <>
-                    <Bot className="animate-spin" size={16} />
-                    <span>Analyzing with Gemini...</span>
-                  </>
-                ) : (
-                  <>
-                    <Sparkles size={16} />
-                    <span>Run Gemini Lead Audit</span>
-                  </>
-                )}
-              </button>
-            </form>
-
-            {leadHistory.length > 1 && (
-              <div className="mt-6 pt-6 border-t border-[var(--border-strong)]">
-                <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-3">
-                  <History size={13} />
-                  <span>Session History ({leadHistory.length})</span>
-                </div>
                 <div className="flex flex-col gap-2">
-                  {leadHistory.map((h, idx) => (
+                  <label className="flex items-center gap-2 cursor-pointer text-xs text-[var(--text-secondary)] select-none">
+                    <input
+                      type="checkbox"
+                      checked={scanParams.targetNoWebsiteOnly}
+                      onChange={(e) => setScanParams({ ...scanParams, targetNoWebsiteOnly: e.target.checked })}
+                      className="rounded accent-blue-600 w-4 h-4"
+                    />
+                    <span className="font-semibold text-emerald-400">Target: No Website Detected</span>
+                  </label>
+
+                  <button
+                    type="submit"
+                    disabled={isScanning}
+                    className="w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    {isScanning ? (
+                      <>
+                        <Bot size={15} className="animate-spin" />
+                        <span>Scanning Google...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles size={15} />
+                        <span>Scan Google Business</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* Results Grid (Discovered Leads vs Selected Dossier) */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              
+              {/* Left Column: Discovered Leads List (5 cols) */}
+              <div className="lg:col-span-5 space-y-4">
+                <div className="flex items-center justify-between pb-2 border-b border-[var(--border-strong)]">
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--text-strong)] flex items-center gap-2">
+                    <Globe2 size={16} className="text-blue-400" />
+                    <span>Discovered Prospects ({discoveredLeads.length})</span>
+                  </h3>
+                  <span className="text-[11px] font-mono text-emerald-400">
+                    High Website Potential
+                  </span>
+                </div>
+
+                {isScanning ? (
+                  <div className="p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-center space-y-3">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 mx-auto animate-pulse">
+                      <Bot size={24} />
+                    </div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-[var(--text-strong)]">
+                      Scanning Google Business Profiles
+                    </p>
+                    <p className="text-xs text-[var(--text-secondary)] font-light">
+                      Extracting public business data, checking websites, matching demo prototypes & computing opportunity scores...
+                    </p>
+                  </div>
+                ) : discoveredLeads.length === 0 ? (
+                  <div className="p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-center text-xs text-[var(--text-secondary)]">
+                    No leads found. Try a different city or industry.
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {discoveredLeads.map((lead) => {
+                      const isSelected = selectedDiscoveredLead?.id === lead.id;
+                      return (
+                        <div
+                          key={lead.id}
+                          onClick={() => setSelectedDiscoveredLead(lead)}
+                          className={`p-4 rounded-2xl border transition-all cursor-pointer ${
+                            isSelected
+                              ? 'bg-blue-950/20 border-blue-500 shadow-xl'
+                              : 'bg-[var(--bg-surface)] border-[var(--border-strong)] hover:border-white/20'
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-3 mb-2">
+                            <div>
+                              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 inline-block mb-1">
+                                {lead.websiteStatus}
+                              </span>
+                              <h4 className="text-base font-bold text-[var(--text-strong)] leading-snug">
+                                {lead.businessName}
+                              </h4>
+                            </div>
+                            <div className="text-right">
+                              <span className="text-xs font-mono font-bold text-blue-400 block">
+                                {lead.opportunityScore}/100
+                              </span>
+                              <span className="text-[10px] uppercase text-[var(--text-secondary)]">Score</span>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[var(--text-secondary)] font-light mb-3">
+                            <span className="flex items-center gap-1">
+                              <MapPin size={12} className="text-blue-400" />
+                              <span className="truncate max-w-[180px]">{lead.address}</span>
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Star size={12} className="text-amber-400 fill-amber-400" />
+                              <span>{lead.rating} ({lead.reviewCount} reviews)</span>
+                            </span>
+                          </div>
+
+                          <div className="flex items-center justify-between text-xs pt-2 border-t border-[var(--border-strong)]/30">
+                            <span className="text-[11px] font-mono text-[var(--text-secondary)]">
+                              Demo: {lead.matchedDemo?.title?.slice(0, 22)}...
+                            </span>
+                            <span className="text-blue-400 font-semibold flex items-center gap-1">
+                              <span>View Dossier</span>
+                              <ArrowRight size={12} />
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Right Column: Selected Prospect Dossier & Outreach Generator (7 cols) */}
+              <div className="lg:col-span-7">
+                {selectedDiscoveredLead ? (
+                  <div className="space-y-6">
+                    
+                    {/* Top Qualification Card */}
+                    <div className="p-6 sm:p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-strong)]">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center gap-1">
+                              <CheckCircle2 size={11} />
+                              <span>High Sales Potential</span>
+                            </span>
+                            <span className="text-xs text-[var(--text-secondary)] font-mono">
+                              {selectedDiscoveredLead.city}, {selectedDiscoveredLead.country}
+                            </span>
+                          </div>
+                          <h3 className="text-2xl font-bold text-[var(--text-strong)]">
+                            {selectedDiscoveredLead.businessName}
+                          </h3>
+                          <p className="text-xs text-[var(--text-secondary)] mt-1 flex items-center gap-3">
+                            <span className="flex items-center gap-1">
+                              <Phone size={12} className="text-blue-400" />
+                              <span>{selectedDiscoveredLead.phone}</span>
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Star size={12} className="text-amber-400 fill-amber-400" />
+                              <span>{selectedDiscoveredLead.rating} Google Rating ({selectedDiscoveredLead.reviewCount} verified reviews)</span>
+                            </span>
+                          </p>
+                        </div>
+
+                        <div className="p-4 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-center min-w-[120px]">
+                          <span className="text-[10px] uppercase font-bold text-[var(--text-secondary)] block">
+                            Opportunity
+                          </span>
+                          <span className="text-3xl font-black text-blue-400">
+                            {selectedDiscoveredLead.opportunityScore}
+                          </span>
+                          <span className="text-[10px] text-emerald-400 font-bold block mt-0.5">
+                            Priority Alpha
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* AI Opportunity Analysis */}
+                      <div className="py-5 border-b border-[var(--border-strong)]">
+                        <span className="text-[11px] font-bold uppercase text-[var(--text-secondary)] block mb-1">
+                          AI Business Analysis & Strategic Gap:
+                        </span>
+                        <p className="text-sm text-[var(--text-strong)] font-light leading-relaxed">
+                          {selectedDiscoveredLead.aiRecommendation}
+                        </p>
+                      </div>
+
+                      {/* Matched Demo Website Card */}
+                      <div className="pt-5">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-[11px] font-bold uppercase text-[var(--text-secondary)] flex items-center gap-1.5">
+                            <Sparkles size={13} className="text-amber-400" />
+                            <span>Personalized Demo Website Prototype</span>
+                          </span>
+                          <a
+                            href={selectedDiscoveredLead.personalizedDemoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs font-semibold text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                          >
+                            <span>Open Fullscreen Preview</span>
+                            <ExternalLink size={12} />
+                          </a>
+                        </div>
+
+                        <div className="p-4 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] flex flex-col sm:flex-row items-center gap-4">
+                          <img
+                            src={selectedDiscoveredLead.matchedDemo?.previewImage || '/image-1783080075680-896100451.png'}
+                            alt="Demo Preview"
+                            className="w-full sm:w-28 h-20 object-cover rounded-xl border border-[var(--border-strong)]"
+                          />
+                          <div className="flex-1 text-center sm:text-left">
+                            <h4 className="text-sm font-bold text-[var(--text-strong)]">
+                              {selectedDiscoveredLead.matchedDemo?.title}
+                            </h4>
+                            <span className="text-xs text-blue-400 block font-mono">
+                              {selectedDiscoveredLead.matchedDemo?.category}
+                            </span>
+                            <p className="text-xs text-[var(--text-secondary)] mt-1 font-light">
+                              Ready-to-deliver showcase to sell Digifox's $1,400–$2,000 package.
+                            </p>
+                          </div>
+                          <a
+                            href={selectedDiscoveredLead.personalizedDemoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-lg whitespace-nowrap"
+                          >
+                            <Eye size={13} />
+                            <span>Test Prototype</span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Cold Outreach Email Sequence */}
+                    <div className="p-6 sm:p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-[var(--border-strong)]">
+                        <div>
+                          <h4 className="text-base font-bold uppercase tracking-tight text-[var(--text-strong)] flex items-center gap-2">
+                            <Mail size={16} className="text-indigo-400" />
+                            <span>Automated Sales Outreach Sequence</span>
+                          </h4>
+                          <span className="text-xs text-[var(--text-secondary)] font-light">
+                            Personalized with client city, Google rating, and interactive prototype link.
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <div className="flex bg-[var(--bg-base)] p-1 rounded-xl border border-[var(--border-strong)]">
+                            <button
+                              type="button"
+                              onClick={() => setEmailTab('initial')}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                                emailTab === 'initial' ? 'bg-blue-600 text-white' : 'text-[var(--text-secondary)]'
+                              }`}
+                            >
+                              Step 1: Pitch
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setEmailTab('followup')}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                                emailTab === 'followup' ? 'bg-blue-600 text-white' : 'text-[var(--text-secondary)]'
+                              }`}
+                            >
+                              Step 2: Follow-up
+                            </button>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={copyDiscoveredPitch}
+                            className="px-3 py-2 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-bold text-[var(--text-strong)] hover:border-emerald-400 hover:text-emerald-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                          >
+                            {copiedPitch ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                            <span>{copiedPitch ? 'Copied' : 'Copy Email'}</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Rendered Email Content */}
+                      <div className="p-5 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs sm:text-sm font-sans space-y-3">
+                        <div>
+                          <strong className="text-[var(--text-strong)] uppercase font-mono text-xs">Subject: </strong>
+                          <span className="text-[var(--text-strong)] font-semibold">
+                            {emailTab === 'initial'
+                              ? selectedDiscoveredLead.personalizedPitch.subject
+                              : selectedDiscoveredLead.personalizedPitch.followUpSubject}
+                          </span>
+                        </div>
+
+                        <div className="border-t border-[var(--border-strong)]/30 pt-3 text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
+                          {emailTab === 'initial'
+                            ? selectedDiscoveredLead.personalizedPitch.body.replace(
+                                '[DEMO_LINK]',
+                                `${window.location.origin}${selectedDiscoveredLead.personalizedDemoUrl}`
+                              )
+                            : selectedDiscoveredLead.personalizedPitch.followUpBody.replace(
+                                '[DEMO_LINK]',
+                                `${window.location.origin}${selectedDiscoveredLead.personalizedDemoUrl}`
+                              )}
+                        </div>
+
+                        <div className="pt-3 border-t border-[var(--border-strong)]/30 flex flex-wrap items-center justify-between gap-3 text-xs text-[var(--text-secondary)]">
+                          <span className="font-mono">
+                            Target Email: <strong className="text-[var(--text-strong)]">{selectedDiscoveredLead.contactEmail}</strong> ({selectedDiscoveredLead.contactEmailStatus})
+                          </span>
+                          <a
+                            href={`mailto:${selectedDiscoveredLead.contactEmail}?subject=${encodeURIComponent(
+                              selectedDiscoveredLead.personalizedPitch.subject
+                            )}&body=${encodeURIComponent(
+                              selectedDiscoveredLead.personalizedPitch.body.replace(
+                                '[DEMO_LINK]',
+                                `${window.location.origin}${selectedDiscoveredLead.personalizedDemoUrl}`
+                              )
+                            )}`}
+                            className="text-xs text-blue-400 hover:underline flex items-center gap-1 font-semibold"
+                          >
+                            <Send size={12} />
+                            <span>Launch Email Client</span>
+                          </a>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                ) : (
+                  <div className="p-12 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-center text-xs text-[var(--text-secondary)]">
+                    Select a prospect from the left list to review their dossier and sales outreach copy.
+                  </div>
+                )}
+              </div>
+
+            </div>
+
+          </div>
+        )}
+
+        {/* TAB 2: SINGLE LEAD AUDIT & QUALIFICATION */}
+        {activeTab === 'single' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* Left Form (5 Cols) */}
+            <div className="lg:col-span-5 p-6 sm:p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl">
+              <h2 className="text-xl font-bold uppercase tracking-tight text-[var(--text-strong)] mb-2 flex items-center gap-2">
+                <Target className="text-purple-400" size={20} />
+                <span>Single Prospect Audit</span>
+              </h2>
+              <p className="text-xs text-[var(--text-secondary)] font-light mb-6">
+                Enter an existing company name, website, or industry to run deep conversion analysis.
+              </p>
+
+              {/* Quick Presets */}
+              <div className="mb-6">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-2 block">
+                  Quick Load Demo Lead:
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {PRESET_LEADS.map((preset) => (
                     <button
-                      key={idx}
+                      key={preset.businessName}
                       type="button"
-                      onClick={() => setCurrentLead(h)}
-                      className={`text-left p-2.5 rounded-xl border text-xs flex items-center justify-between transition-colors cursor-pointer ${
-                        currentLead?.businessName === h.businessName 
-                          ? 'bg-blue-500/10 border-blue-500/40 text-blue-400' 
-                          : 'bg-[var(--bg-base)] border-[var(--border-strong)]/40 text-[var(--text-secondary)] hover:border-[var(--border-strong)]'
-                      }`}
+                      onClick={() => {
+                        setFormData(preset);
+                        handleRunAudit(preset);
+                      }}
+                      className="px-2.5 py-1 rounded-lg bg-[var(--bg-base)] border border-[var(--border-strong)] text-[11px] font-medium hover:border-purple-400 hover:text-purple-400 transition-colors cursor-pointer"
                     >
-                      <span className="font-semibold truncate">{h.businessName}</span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-black/40">
-                        Score: {h.leadScore}
-                      </span>
+                      {preset.businessName}
                     </button>
                   ))}
                 </div>
               </div>
-            )}
-          </div>
 
-          {/* Right Results Dashboard (7 Cols) */}
-          <div className="lg:col-span-7">
-            {isProcessing && (
-              <div className="p-12 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] flex flex-col items-center justify-center text-center">
-                <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-4 animate-pulse">
-                  <Bot size={32} />
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleRunAudit();
+                }} 
+                className="flex flex-col gap-4"
+              >
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                    Business Name *
+                  </label>
+                  <input 
+                    type="text" 
+                    value={formData.businessName}
+                    onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
+                    placeholder="e.g. Apex Private Jet Charter"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-purple-500 focus:outline-none"
+                    required
+                  />
                 </div>
-                <h3 className="text-xl font-bold uppercase text-[var(--text-strong)] mb-2">
-                  Gemini Engine at Work
-                </h3>
-                <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-md font-light">
-                  Executing structural audit, computing opportunity scores, matching Digifox showcases, and crafting customized cold outreach copy...
-                </p>
-              </div>
-            )}
 
-            {!isProcessing && !currentLead && (
-              <div className="p-12 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] flex flex-col items-center justify-center text-center">
-                <BarChart3 size={36} className="text-[var(--text-secondary)]/40 mb-4" />
-                <h3 className="text-lg font-bold text-[var(--text-strong)] mb-1">
-                  No Lead Analyzed Yet
-                </h3>
-                <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-md font-light">
-                  Select one of the presets on the left or enter a prospect's name and industry to run the Gemini analysis.
-                </p>
-              </div>
-            )}
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                    Website URL (Leave blank if prospect has no website)
+                  </label>
+                  <input 
+                    type="text" 
+                    value={formData.websiteUrl}
+                    onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
+                    placeholder="https://example.com"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-purple-500 focus:outline-none"
+                  />
+                </div>
 
-            {!isProcessing && currentLead && (
-              <div className="flex flex-col gap-6">
-                
-                {/* Score & Tier Header Card */}
-                <div className="p-6 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border-strong)]/40">
-                    <div>
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-secondary)]">
-                        Qualified Prospect
-                      </span>
-                      <h3 className="text-2xl font-black uppercase text-[var(--text-strong)]">
-                        {currentLead.businessName}
-                      </h3>
-                      <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)] mt-0.5">
-                        <span>{currentLead.industry}</span>
-                        <span>•</span>
-                        <span>{currentLead.location}</span>
-                      </div>
-                    </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                      Industry / Niche *
+                    </label>
+                    <input 
+                      type="text" 
+                      value={formData.industryOrNiche}
+                      onChange={(e) => setFormData({ ...formData, industryOrNiche: e.target.value })}
+                      placeholder="e.g. Luxury Aviation"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-purple-500 focus:outline-none"
+                      required
+                    />
+                  </div>
 
-                    <div className="flex items-center gap-3">
-                      <div className="text-right">
-                        <div className="text-3xl font-black bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                          {currentLead.leadScore}/100
-                        </div>
-                        <span className="text-[10px] uppercase font-semibold text-[var(--text-secondary)]">
-                          Opportunity Score
+                  <div>
+                    <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                      Target Location
+                    </label>
+                    <input 
+                      type="text" 
+                      value={formData.location}
+                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      placeholder="e.g. New York, USA"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-purple-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
+                    Client Notes / Known Pain Points
+                  </label>
+                  <textarea 
+                    rows={3}
+                    value={formData.notesOrPainPoints}
+                    onChange={(e) => setFormData({ ...formData, notesOrPainPoints: e.target.value })}
+                    placeholder="e.g. Outdated design, slow load time, no 3D showcase, high drop-off on mobile..."
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm focus:border-purple-500 focus:outline-none resize-none"
+                  />
+                </div>
+
+                {errorMessage && (
+                  <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs">
+                    {errorMessage}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isProcessing}
+                  className="w-full mt-2 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-95 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer disabled:opacity-50"
+                >
+                  {isProcessing ? (
+                    <>
+                      <Bot size={16} className="animate-spin" />
+                      <span>Auditing with Gemini...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles size={16} />
+                      <span>Run Gemini Lead Audit</span>
+                    </>
+                  )}
+                </button>
+              </form>
+
+              {leadHistory.length > 1 && (
+                <div className="mt-6 pt-6 border-t border-[var(--border-strong)]">
+                  <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-3">
+                    <History size={13} />
+                    <span>Session History ({leadHistory.length})</span>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    {leadHistory.map((h, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setCurrentLead(h)}
+                        className={`text-left p-2.5 rounded-xl border text-xs flex items-center justify-between transition-colors cursor-pointer ${
+                          currentLead?.businessName === h.businessName 
+                            ? 'bg-purple-500/10 border-purple-500/40 text-purple-400' 
+                            : 'bg-[var(--bg-base)] border-[var(--border-strong)]/40 text-[var(--text-secondary)] hover:border-[var(--border-strong)]'
+                        }`}
+                      >
+                        <span className="font-semibold truncate">{h.businessName}</span>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-black/40">
+                          Score: {h.leadScore}
                         </span>
-                      </div>
-                      <div className="px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs font-bold uppercase tracking-wider text-blue-300">
-                        {currentLead.priorityTier}
-                      </div>
-                    </div>
-                  </div>
-
-                  <p className="mt-4 text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed font-light">
-                    {currentLead.summary}
-                  </p>
-                </div>
-
-                {/* Auto-Matched Demo Showcase Card */}
-                <div className="p-6 rounded-3xl bg-gradient-to-br from-blue-950/20 via-[var(--bg-surface)] to-purple-950/20 border border-blue-500/30 shadow-xl">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Sparkles size={16} className="text-blue-400" />
-                    <span className="text-xs font-bold uppercase tracking-widest text-blue-400">
-                      Best-Matching Digifox Showcase
-                    </span>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-5 items-center justify-between">
-                    <div>
-                      <h4 className="text-lg font-black uppercase text-[var(--text-strong)]">
-                        {currentLead.matchedDemo.title}
-                      </h4>
-                      <span className="text-xs text-[var(--text-secondary)] font-medium block mt-0.5">
-                        {currentLead.matchedDemo.category}
-                      </span>
-                      <p className="text-xs text-[var(--text-secondary)]/90 mt-2 font-light leading-relaxed max-w-lg">
-                        {currentLead.matchedDemo.whyItFits}
-                      </p>
-                    </div>
-
-                    <a
-                      href={currentLead.matchedDemo.demoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shrink-0 transition-transform hover:scale-105"
-                    >
-                      <Eye size={14} />
-                      <span>Preview Demo</span>
-                    </a>
-                  </div>
-                </div>
-
-                {/* Audit Findings Grid */}
-                <div className="p-6 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl">
-                  <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--text-secondary)] mb-4">
-                    Website & Conversion Audit
-                  </h4>
-
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
-                    <div className="p-3 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)]/40">
-                      <span className="text-[10px] text-[var(--text-secondary)] uppercase block">Visual Score</span>
-                      <span className="text-lg font-bold text-[var(--text-strong)]">{currentLead.audit.visualAppealScore}/100</span>
-                    </div>
-                    <div className="p-3 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)]/40">
-                      <span className="text-[10px] text-[var(--text-secondary)] uppercase block">Mobile Speed</span>
-                      <span className="text-lg font-bold text-[var(--text-strong)]">{currentLead.audit.lcpEstimate}</span>
-                    </div>
-                    <div className="p-3 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)]/40">
-                      <span className="text-[10px] text-[var(--text-secondary)] uppercase block">Responsiveness</span>
-                      <span className="text-lg font-bold text-[var(--text-strong)]">{currentLead.audit.mobileResponsiveness}</span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <span className="text-[11px] font-bold uppercase text-[var(--text-secondary)]">Detected Bottlenecks:</span>
-                    {currentLead.audit.conversionBottlenecks.map((b, i) => (
-                      <div key={i} className="text-xs text-[var(--text-secondary)] flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                        <span>{b}</span>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>
+              )}
+            </div>
 
-                {/* Personalized Outreach Email */}
-                <div className="p-6 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <Mail size={16} className="text-emerald-400" />
-                      <span className="text-xs font-bold uppercase tracking-widest text-emerald-400">
-                        Generated Cold Outreach Email
+            {/* Right Results Dashboard (7 Cols) */}
+            <div className="lg:col-span-7">
+              {isProcessing && (
+                <div className="p-12 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] flex flex-col items-center justify-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-4 animate-pulse">
+                    <Bot size={32} />
+                  </div>
+                  <h3 className="text-xl font-bold uppercase text-[var(--text-strong)] mb-2">
+                    Gemini Engine at Work
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-md font-light">
+                    Executing structural audit, computing opportunity scores, matching Digifox showcases, and crafting customized cold outreach copy...
+                  </p>
+                </div>
+              )}
+
+              {!isProcessing && !currentLead && (
+                <div className="p-12 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] flex flex-col items-center justify-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] flex items-center justify-center text-[var(--text-secondary)] mb-4">
+                    <Target size={28} />
+                  </div>
+                  <h3 className="text-lg font-bold uppercase text-[var(--text-strong)] mb-1">
+                    No Single Prospect Evaluated Yet
+                  </h3>
+                  <p className="text-xs text-[var(--text-secondary)] max-w-sm font-light">
+                    Select one of the demo presets on the left or enter a prospect to generate real-time AI scoring and cold outreach copy.
+                  </p>
+                </div>
+              )}
+
+              {!isProcessing && currentLead && (
+                <div className="space-y-6">
+                  
+                  {/* Lead Score Card */}
+                  <div className="p-6 sm:p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl relative overflow-hidden">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-strong)]">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                            currentLead.priorityTier.includes('VIP') 
+                              ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400' 
+                              : 'bg-blue-500/10 border border-blue-500/30 text-blue-400'
+                          }`}>
+                            {currentLead.priorityTier}
+                          </span>
+                          <span className="text-xs text-[var(--text-secondary)] font-mono">
+                            {currentLead.modelUsed}
+                          </span>
+                        </div>
+                        <h3 className="text-2xl font-bold text-[var(--text-strong)]">
+                          {currentLead.businessName}
+                        </h3>
+                        <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                          {currentLead.industry} · {currentLead.location}
+                        </p>
+                      </div>
+
+                      <div className="p-4 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-center min-w-[120px]">
+                        <span className="text-[10px] uppercase font-bold text-[var(--text-secondary)] block">
+                          Opportunity Score
+                        </span>
+                        <span className="text-4xl font-black text-purple-400">
+                          {currentLead.leadScore}
+                        </span>
+                        <span className="text-[10px] text-[var(--text-secondary)] block mt-0.5 font-mono">
+                          / 100 Points
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="py-5 border-b border-[var(--border-strong)]">
+                      <span className="text-[11px] font-bold uppercase text-[var(--text-secondary)] block mb-1">
+                        Executive Summary:
+                      </span>
+                      <p className="text-sm text-[var(--text-strong)] font-light leading-relaxed">
+                        {currentLead.summary}
+                      </p>
+                    </div>
+
+                    <div className="pt-5">
+                      <span className="text-[11px] font-bold uppercase text-[var(--text-secondary)] block mb-2">
+                        Key Conversion Pain Points:
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {currentLead.painPoints.map((point, i) => (
+                          <div key={i} className="p-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)]/40 text-xs text-[var(--text-secondary)] flex items-start gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5 shrink-0" />
+                            <span>{point}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Matched Demo Showcase */}
+                  <div className="p-6 sm:p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-purple-400 block mb-0.5">
+                          Digifox Showcase Match
+                        </span>
+                        <h4 className="text-lg font-bold text-[var(--text-strong)]">
+                          {currentLead.matchedDemo.title}
+                        </h4>
+                      </div>
+                      <span className="px-3 py-1 rounded-full text-[11px] font-mono bg-purple-500/10 border border-purple-500/20 text-purple-300">
+                        {currentLead.matchedDemo.category}
                       </span>
                     </div>
-                    <button
-                      onClick={copyOutreachEmail}
-                      className="px-3 py-1.5 rounded-lg bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-semibold hover:border-emerald-400 text-[var(--text-secondary)] hover:text-emerald-400 flex items-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      {copiedEmail ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
-                      <span>{copiedEmail ? 'Copied' : 'Copy Email'}</span>
-                    </button>
+
+                    <div className="flex flex-col sm:flex-row items-center gap-5 p-4 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)]/40 mb-4">
+                      <img 
+                        src={currentLead.matchedDemo.previewImage} 
+                        alt={currentLead.matchedDemo.title} 
+                        className="w-full sm:w-36 h-24 object-cover rounded-xl border border-[var(--border-strong)]"
+                      />
+                      <div className="flex-1 text-center sm:text-left">
+                        <span className="text-[10px] font-bold uppercase text-[var(--text-secondary)] block mb-1">
+                          Why This Demo Closes The Deal:
+                        </span>
+                        <p className="text-xs text-[var(--text-strong)] font-light leading-relaxed">
+                          {currentLead.matchedDemo.whyItFits}
+                        </p>
+                      </div>
+                      <a 
+                        href={currentLead.matchedDemo.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-lg whitespace-nowrap cursor-pointer"
+                      >
+                        <Eye size={14} />
+                        <span>Preview Live</span>
+                      </a>
+                    </div>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)]/40 text-xs sm:text-sm font-sans space-y-3 text-[var(--text-secondary)]">
-                    <div>
-                      <strong className="text-[var(--text-strong)]">Subject: </strong> 
-                      <span>{currentLead.personalizedOutreachEmail.subject}</span>
+                  {/* Audit Findings Grid */}
+                  <div className="p-6 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl">
+                    <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--text-secondary)] mb-4">
+                      Website & Conversion Audit
+                    </h4>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
+                      <div className="p-3 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)]/40">
+                        <span className="text-[10px] text-[var(--text-secondary)] uppercase block">Visual Score</span>
+                        <span className="text-lg font-bold text-[var(--text-strong)]">{currentLead.audit.visualAppealScore}/100</span>
+                      </div>
+                      <div className="p-3 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)]/40">
+                        <span className="text-[10px] text-[var(--text-secondary)] uppercase block">Mobile Speed</span>
+                        <span className="text-lg font-bold text-[var(--text-strong)]">{currentLead.audit.lcpEstimate}</span>
+                      </div>
+                      <div className="p-3 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)]/40">
+                        <span className="text-[10px] text-[var(--text-secondary)] uppercase block">Responsiveness</span>
+                        <span className="text-lg font-bold text-[var(--text-strong)]">{currentLead.audit.mobileResponsiveness}</span>
+                      </div>
                     </div>
-                    <div className="border-t border-[var(--border-strong)]/30 pt-3 leading-relaxed whitespace-pre-line">
-                      {currentLead.personalizedOutreachEmail.body}
+
+                    <div className="space-y-1.5">
+                      <span className="text-[11px] font-bold uppercase text-[var(--text-secondary)]">Detected Bottlenecks:</span>
+                      {currentLead.audit.conversionBottlenecks.map((b, i) => (
+                        <div key={i} className="text-xs text-[var(--text-secondary)] flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                          <span>{b}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
+
+                  {/* Personalized Outreach Email */}
+                  <div className="p-6 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-xl">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <Mail size={16} className="text-emerald-400" />
+                        <span className="text-xs font-bold uppercase tracking-widest text-emerald-400">
+                          Generated Cold Outreach Email
+                        </span>
+                      </div>
+                      <button
+                        onClick={copyOutreachEmail}
+                        className="px-3 py-1.5 rounded-lg bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-semibold hover:border-emerald-400 text-[var(--text-secondary)] hover:text-emerald-400 flex items-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        {copiedEmail ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                        <span>{copiedEmail ? 'Copied' : 'Copy Email'}</span>
+                      </button>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)]/40 text-xs sm:text-sm font-sans space-y-3 text-[var(--text-secondary)]">
+                      <div>
+                        <strong className="text-[var(--text-strong)]">Subject: </strong> 
+                        <span>{currentLead.personalizedOutreachEmail.subject}</span>
+                      </div>
+                      <div className="border-t border-[var(--border-strong)]/30 pt-3 leading-relaxed whitespace-pre-line">
+                        {currentLead.personalizedOutreachEmail.body}
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
+              )}
+            </div>
 
-              </div>
-            )}
           </div>
-
-        </div>
+        )}
 
       </div>
     </div>
   );
 };
+
 export default LeadGenerationPage;

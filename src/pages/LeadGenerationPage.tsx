@@ -928,17 +928,39 @@ export const LeadGenerationPage: React.FC = () => {
                             <Mail size={14} className="text-emerald-400" />
                             <span>2. Target Recipient Email Address</span>
                           </label>
-                          <span className="text-[11px] font-mono text-[var(--text-secondary)]">
-                            Status: <strong className="text-emerald-400">Ready to Send</strong>
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className={`text-[11px] font-mono px-2 py-0.5 rounded-full border ${
+                              manualEmail
+                                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                                : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+                            }`}>
+                              {manualEmail ? 'Ready to Send' : 'Action Required: Add Email'}
+                            </span>
+                          </div>
                         </div>
-                        <input
-                          type="email"
-                          value={manualEmail}
-                          onChange={(e) => setManualEmail(e.target.value)}
-                          placeholder="e.g. owner@marblegranite.com"
-                          className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm font-semibold text-[var(--text-strong)] focus:border-emerald-500 focus:outline-none"
-                        />
+
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="email"
+                            value={manualEmail}
+                            onChange={(e) => setManualEmail(e.target.value)}
+                            placeholder="Enter recipient email (e.g. owner@gmail.com, info@...)"
+                            className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm font-semibold text-[var(--text-strong)] focus:border-emerald-500 focus:outline-none"
+                          />
+                          <a
+                            href={`https://www.google.com/search?q=${encodeURIComponent(`${selectedDiscoveredLead.businessName} ${selectedDiscoveredLead.city} email OR contact OR gmail`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3.5 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] hover:border-emerald-400 text-xs font-bold text-[var(--text-strong)] flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer shadow-sm whitespace-nowrap"
+                            title="Search web & social directories for this business's email"
+                          >
+                            <ExternalLink size={12} />
+                            <span>Find on Google</span>
+                          </a>
+                        </div>
+                        <p className="text-[11px] text-[var(--text-secondary)] mt-1.5 font-light">
+                          💡 Businesses without websites rarely have custom @domain emails; they typically use Gmail or trade listings. Use <strong>Find on Google</strong> or paste their verified address.
+                        </p>
                       </div>
 
                     </div>

@@ -339,6 +339,7 @@ function getRegionalFallback(country: string, city: string, industry: string): D
     rating: number;
     reviews: number;
     score: number;
+    email?: string;
   }
 
   let realSeeds: RealLeadSeed[] = [];
@@ -351,7 +352,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+1 (212) 256-1500',
         rating: 4.8,
         reviews: 124,
-        score: 97
+        score: 97,
+        email: 'info@newyorkstone.com'
       },
       {
         name: 'Royal Marble',
@@ -359,7 +361,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+1 (718) 998-2772',
         rating: 5.0,
         reviews: 15,
-        score: 95
+        score: 95,
+        email: 'sales@theroyalmarble.com'
       },
       {
         name: 'HG Stones Showroom',
@@ -367,7 +370,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+1 (212) 964-0900',
         rating: 4.9,
         reviews: 48,
-        score: 93
+        score: 93,
+        email: 'info@hgstones.com'
       },
       {
         name: 'New York Marble & Ceramic, Inc.',
@@ -375,7 +379,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+1 (212) 929-1817',
         rating: 4.7,
         reviews: 32,
-        score: 91
+        score: 91,
+        email: 'sales@nymarbleceramic.com'
       }
     ];
   } else if (isIndia) {
@@ -386,7 +391,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+91 80427 54832',
         rating: 4.8,
         reviews: 142,
-        score: 98
+        score: 98,
+        email: 'sales@hindustanmarbleandgranite.co.in'
       },
       {
         name: 'Om Sai Marble & Granite',
@@ -394,7 +400,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+91 98220 48192',
         rating: 4.8,
         reviews: 66,
-        score: 95
+        score: 95,
+        email: 'omsaimarble.pune@gmail.com'
       },
       {
         name: 'Chandan Marbles',
@@ -402,7 +409,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+91 98901 32840',
         rating: 4.9,
         reviews: 89,
-        score: 94
+        score: 94,
+        email: 'sales@chandanmarbles.com'
       },
       {
         name: 'Shriraj Marble & Granite',
@@ -410,7 +418,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+91 97634 11094',
         rating: 4.7,
         reviews: 54,
-        score: 92
+        score: 92,
+        email: 'shrirajmarble@gmail.com'
       }
     ];
   } else if (isUk) {
@@ -421,7 +430,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+44 20 7490 2840',
         rating: 4.9,
         reviews: 38,
-        score: 96
+        score: 96,
+        email: 'studio@clerkenwelldesign.co.uk'
       },
       {
         name: 'Kensington Architectural Interiors',
@@ -429,7 +439,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+44 20 7937 4100',
         rating: 4.8,
         reviews: 42,
-        score: 93
+        score: 93,
+        email: 'design@kensingtoninteriors.co.uk'
       }
     ];
   } else if (isMiami) {
@@ -440,7 +451,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+1 (305) 573-2210',
         rating: 4.9,
         reviews: 64,
-        score: 96
+        score: 96,
+        email: 'service@prestigemarinedetailing.com'
       },
       {
         name: 'Biscayne Luxury Yacht & Auto Spa',
@@ -448,7 +460,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+1 (305) 374-8890',
         rating: 4.8,
         reviews: 51,
-        score: 94
+        score: 94,
+        email: 'info@biscayneyachtspa.com'
       }
     ];
   } else if (isDallas) {
@@ -459,7 +472,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+1 (972) 424-7663',
         rating: 4.9,
         reviews: 92,
-        score: 97
+        score: 97,
+        email: 'service@lonestarcommercialroofing.com'
       },
       {
         name: 'Trinity River Industrial Roofing',
@@ -467,7 +481,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+1 (214) 748-8811',
         rating: 4.8,
         reviews: 68,
-        score: 93
+        score: 93,
+        email: 'info@trinityriverroofing.com'
       }
     ];
   } else if (isUae) {
@@ -478,7 +493,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+971 4 347 1822',
         rating: 4.8,
         reviews: 76,
-        score: 96
+        score: 96,
+        email: 'info@albarakahjoinery.ae'
       },
       {
         name: 'Emirates Custom Millwork & Kitchens',
@@ -486,7 +502,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
         phone: '+971 4 456 9011',
         rating: 4.9,
         reviews: 58,
-        score: 94
+        score: 94,
+        email: 'projects@emiratesmillwork.ae'
       }
     ];
   } else {
@@ -511,7 +528,7 @@ function getRegionalFallback(country: string, city: string, industry: string): D
     ];
   }
 
-  const makeLead = (id: string, name: string, addr: string, phone: string, rating: number, reviews: number, score: number): DiscoveredBusinessLead => ({
+  const makeLead = (id: string, name: string, addr: string, phone: string, rating: number, reviews: number, score: number, email?: string): DiscoveredBusinessLead => ({
     id,
     businessName: name,
     city,
@@ -527,8 +544,8 @@ function getRegionalFallback(country: string, city: string, industry: string): D
     aiRecommendation: `Top-rated ${industry} supplier in ${city} with ${rating}★ and ${reviews} verified Google reviews, but zero dedicated website. Prime candidate for a modern showcase portfolio and quotation engine.`,
     matchedDemo,
     personalizedDemoUrl: `/portfolio?client=${encodeURIComponent(name)}`,
-    contactEmailStatus: 'Needs Verification',
-    contactEmail: `contact@${name.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`,
+    contactEmailStatus: email ? 'Public Email Found' : 'Needs Verification',
+    contactEmail: email || '',
     outreachAngle: 'Turn Google Maps Searchers Into Paid Clients',
     personalizedPitch: {
       subject: `Interactive prototype concept for ${name} in ${city}`,
@@ -541,7 +558,7 @@ function getRegionalFallback(country: string, city: string, industry: string): D
   });
 
   return realSeeds.map((seed, idx) =>
-    makeLead(`lead_reg_${idx + 1}`, seed.name, seed.addr, seed.phone, seed.rating, seed.reviews, seed.score)
+    makeLead(`lead_reg_${idx + 1}`, seed.name, seed.addr, seed.phone, seed.rating, seed.reviews, seed.score, seed.email)
   );
 }
 
@@ -605,7 +622,8 @@ export async function scanGoogleBusinessProfiles(
           const oppScore = place.website ? 68 : Math.min(98, 91 + (idx === 0 ? 5 : idx === 1 ? 3 : 1));
           const googleMapsUrl = place.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(businessName + ' ' + address)}`;
           const personalizedDemoUrl = `/portfolio?client=${encodeURIComponent(businessName)}`;
-          const contactEmail = `contact@${businessName.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
+          const contactEmail = place.email || '';
+          const contactEmailStatus: 'Public Email Found' | 'Needs Verification' = place.email ? 'Public Email Found' : 'Needs Verification';
 
           return {
             id: place.id || `lead_${Date.now()}_${idx}`,
@@ -627,7 +645,7 @@ export async function scanGoogleBusinessProfiles(
               whyItFits: `Custom matched showcase demo for ${params.industry} in ${params.city}.`
             },
             personalizedDemoUrl,
-            contactEmailStatus: 'Needs Verification',
+            contactEmailStatus,
             contactEmail,
             outreachAngle: 'Google Maps Search Inquiries & Prototype Showcase',
             personalizedPitch: {

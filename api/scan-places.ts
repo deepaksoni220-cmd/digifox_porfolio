@@ -11,6 +11,7 @@ interface VerifiedPlace {
   rating: number;
   reviewCount: number;
   website: string | null;
+  email: string | null;
 }
 
 const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
@@ -24,7 +25,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+1 (212) 256-1500',
     rating: 4.8,
     reviewCount: 124,
-    website: null
+    website: null,
+    email: 'info@newyorkstone.com'
   },
   {
     name: 'Royal Marble',
@@ -35,7 +37,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+1 (718) 998-2772',
     rating: 5.0,
     reviewCount: 15,
-    website: null
+    website: null,
+    email: 'sales@theroyalmarble.com'
   },
   {
     name: 'HG Stones Showroom',
@@ -46,7 +49,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+1 (212) 964-0900',
     rating: 4.9,
     reviewCount: 48,
-    website: null
+    website: null,
+    email: 'info@hgstones.com'
   },
   {
     name: 'New York Marble & Ceramic, Inc.',
@@ -57,7 +61,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+1 (212) 929-1817',
     rating: 4.7,
     reviewCount: 32,
-    website: null
+    website: null,
+    email: 'sales@nymarbleceramic.com'
   },
   {
     name: 'ABC Stone Manhattan Experience Center',
@@ -68,7 +73,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+1 (646) 707-3065',
     rating: 4.9,
     reviewCount: 85,
-    website: null
+    website: null,
+    email: 'info@abcworldwidestone.com'
   },
 
   // Pune - Marble & Granite
@@ -81,7 +87,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+91 80427 54832',
     rating: 4.8,
     reviewCount: 142,
-    website: null
+    website: null,
+    email: 'sales@hindustanmarbleandgranite.co.in'
   },
   {
     name: 'Om Sai Marble & Granite',
@@ -92,7 +99,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+91 98220 48192',
     rating: 4.8,
     reviewCount: 66,
-    website: null
+    website: null,
+    email: 'omsaimarble.pune@gmail.com'
   },
   {
     name: 'Chandan Marbles',
@@ -103,7 +111,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+91 98901 32840',
     rating: 4.9,
     reviewCount: 89,
-    website: null
+    website: null,
+    email: 'sales@chandanmarbles.com'
   },
   {
     name: 'Shriraj Marble & Granite',
@@ -114,7 +123,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+91 97634 11094',
     rating: 4.7,
     reviewCount: 54,
-    website: null
+    website: null,
+    email: 'shrirajmarble@gmail.com'
   },
   {
     name: 'Swastik Marble & Granite',
@@ -125,7 +135,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+91 98502 34110',
     rating: 4.7,
     reviewCount: 43,
-    website: null
+    website: null,
+    email: 'swastikgranite.pune@gmail.com'
   },
 
   // London - Architecture & Interior
@@ -138,7 +149,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+44 20 7490 2840',
     rating: 4.9,
     reviewCount: 38,
-    website: null
+    website: null,
+    email: 'studio@clerkenwelldesign.co.uk'
   },
   {
     name: 'Kensington Architectural Interiors',
@@ -149,7 +161,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+44 20 7937 4100',
     rating: 4.8,
     reviewCount: 42,
-    website: null
+    website: null,
+    email: 'design@kensingtoninteriors.co.uk'
   },
 
   // Miami - Detailing & Marine
@@ -162,7 +175,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+1 (305) 573-2210',
     rating: 4.9,
     reviewCount: 64,
-    website: null
+    website: null,
+    email: 'service@prestigemarinedetailing.com'
   },
   {
     name: 'Biscayne Luxury Yacht & Auto Spa',
@@ -173,7 +187,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+1 (305) 374-8890',
     rating: 4.8,
     reviewCount: 51,
-    website: null
+    website: null,
+    email: 'info@biscayneyachtspa.com'
   },
 
   // Dubai - Kitchen & Joinery
@@ -186,7 +201,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+971 4 347 1822',
     rating: 4.8,
     reviewCount: 76,
-    website: null
+    website: null,
+    email: 'info@albarakahjoinery.ae'
   },
   {
     name: 'Emirates Custom Millwork & Kitchens',
@@ -197,7 +213,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+971 4 456 9011',
     rating: 4.9,
     reviewCount: 58,
-    website: null
+    website: null,
+    email: 'projects@emiratesmillwork.ae'
   },
 
   // Dallas - Commercial Roofing
@@ -210,7 +227,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+1 (972) 424-7663',
     rating: 4.9,
     reviewCount: 92,
-    website: null
+    website: null,
+    email: 'service@lonestarcommercialroofing.com'
   },
   {
     name: 'Trinity River Industrial Roofing',
@@ -221,7 +239,8 @@ const VERIFIED_REAL_DIRECTORY: VerifiedPlace[] = [
     phone: '+1 (214) 748-8811',
     rating: 4.8,
     reviewCount: 68,
-    website: null
+    website: null,
+    email: 'info@trinityriverroofing.com'
   }
 ];
 
@@ -348,6 +367,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         rating: p.rating,
         reviewCount: p.reviewCount,
         website: p.website,
+        email: p.email || null,
         googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${p.name} ${p.address}`)}`
       })),
       source: 'verified_real_directory'

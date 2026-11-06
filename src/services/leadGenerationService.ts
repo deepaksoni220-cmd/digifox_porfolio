@@ -351,6 +351,15 @@ export interface DiscoveredBusinessLead {
   contactEmailStatus: 'Needs Verification' | 'Public Email Found' | 'Contact Form Only';
   contactEmail?: string;
   outreachAngle: string;
+  sentCount?: number;
+  lastSentAt?: string;
+  lastSentRecipient?: string;
+  sentHistory?: Array<{
+    type: 'initial' | 'followup';
+    recipient: string;
+    sentAt: string;
+    subject: string;
+  }>;
   personalizedPitch: {
     subject: string;
     hook: string;

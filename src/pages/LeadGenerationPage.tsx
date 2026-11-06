@@ -207,6 +207,25 @@ export const LeadGenerationPage: React.FC = () => {
     });
   }, []);
 
+  const enrichWithStoredSentStatus = (leads: DiscoveredBusinessLead[]): DiscoveredBusinessLead[] => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('digifox_sent_leads_records') || '{}');
+      return leads.map(l => {
+        if (stored[l.id]) {
+          return {
+            ...l,
+            sentCount: stored[l.id].sentCount,
+            lastSentAt: stored[l.id].lastSentAt,
+            lastSentRecipient: stored[l.id].lastSentRecipient
+          };
+        }
+        return l;
+      });
+    } catch {
+      return leads;
+    }
+  };
+
   const handleRunGoogleScan = async (overrideParams?: GoogleBusinessScanParams) => {
     const params = overrideParams || scanParams;
     setIsScanning(true);
@@ -217,9 +236,10 @@ export const LeadGenerationPage: React.FC = () => {
         googlePlacesApiKey: googlePlacesApiKey || undefined,
         apifyToken: apifyToken || undefined
       }, selectedWorkload);
-      setDiscoveredLeads(results);
-      if (results.length > 0) {
-        setSelectedDiscoveredLead(results[0]);
+      const enriched = enrichWithStoredSentStatus(results);
+      setDiscoveredLeads(enriched);
+      if (enriched.length > 0) {
+        setSelectedDiscoveredLead(enriched[0]);
       }
     } catch (err: any) {
       console.error(err);
@@ -308,8 +328,9 @@ export const LeadGenerationPage: React.FC = () => {
         return;
       }
 
-      setDiscoveredLeads(results);
-      setSelectedDiscoveredLead(results[0]);
+      const enriched = enrichWithStoredSentStatus(results);
+      setDiscoveredLeads(enriched);
+      setSelectedDiscoveredLead(enriched[0]);
       setShowJsonImportModal(false);
     } catch (err: any) {
       console.error(err);
@@ -341,7 +362,44 @@ export const LeadGenerationPage: React.FC = () => {
         appPassword: workspaceAppPassword || undefined,
         senderName: 'Digifox'
       });
-      setSendSuccessMessage(`Email sent successfully via Google Workspace (${res.sentFrom || 'Workspace SMTP'})! Message ID: ${res.messageId || 'OK'}`);
+
+      const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const recordItem = {
+        type: emailTab,
+        recipient: manualEmail,
+        sentAt: new Date().toISOString(),
+        subject
+      };
+
+      if (selectedDiscoveredLead) {
+        const nextSentCount = (selectedDiscoveredLead.sentCount || 0) + 1;
+        const updatedLead: DiscoveredBusinessLead = {
+          ...selectedDiscoveredLead,
+          contactEmail: manualEmail,
+          contactEmailStatus: 'Public Email Found',
+          sentCount: nextSentCount,
+          lastSentAt: nowStr,
+          lastSentRecipient: manualEmail,
+          sentHistory: [...(selectedDiscoveredLead.sentHistory || []), recordItem]
+        };
+
+        setSelectedDiscoveredLead(updatedLead);
+        setDiscoveredLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l));
+
+        try {
+          const storedRecords = JSON.parse(localStorage.getItem('digifox_sent_leads_records') || '{}');
+          storedRecords[selectedDiscoveredLead.id] = {
+            sentCount: nextSentCount,
+            lastSentAt: nowStr,
+            lastSentRecipient: manualEmail
+          };
+          localStorage.setItem('digifox_sent_leads_records', JSON.stringify(storedRecords));
+        } catch {
+          // ignore
+        }
+      }
+
+      setSendSuccessMessage(`Email sent successfully via Google Workspace (${res.sentFrom || 'Workspace SMTP'})! Send counter updated.`);
       setTimeout(() => setSendSuccessMessage(null), 7000);
     } catch (err: any) {
       console.error(err);
@@ -349,6 +407,46 @@ export const LeadGenerationPage: React.FC = () => {
     } finally {
       setIsSendingEmail(false);
     }
+  };
+
+  const handleMarkAsSent = () => {
+    if (!selectedDiscoveredLead) return;
+    const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const targetAddr = manualEmail || selectedDiscoveredLead.contactEmail || 'Workspace Mail';
+    const nextSentCount = (selectedDiscoveredLead.sentCount || 0) + 1;
+    const recordItem = {
+      type: emailTab,
+      recipient: targetAddr,
+      sentAt: new Date().toISOString(),
+      subject: emailTab === 'initial' ? manualSubject : manualFollowUpSubject
+    };
+
+    const updatedLead: DiscoveredBusinessLead = {
+      ...selectedDiscoveredLead,
+      contactEmail: targetAddr,
+      sentCount: nextSentCount,
+      lastSentAt: nowStr,
+      lastSentRecipient: targetAddr,
+      sentHistory: [...(selectedDiscoveredLead.sentHistory || []), recordItem]
+    };
+
+    setSelectedDiscoveredLead(updatedLead);
+    setDiscoveredLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l));
+
+    try {
+      const storedRecords = JSON.parse(localStorage.getItem('digifox_sent_leads_records') || '{}');
+      storedRecords[selectedDiscoveredLead.id] = {
+        sentCount: nextSentCount,
+        lastSentAt: nowStr,
+        lastSentRecipient: targetAddr
+      };
+      localStorage.setItem('digifox_sent_leads_records', JSON.stringify(storedRecords));
+    } catch {
+      // ignore
+    }
+
+    setSendSuccessMessage(`Marked as sent to ${targetAddr}! Send count updated (${nextSentCount}x).`);
+    setTimeout(() => setSendSuccessMessage(null), 5000);
   };
 
   const handleAddManualLead = (e: React.FormEvent) => {
@@ -497,8 +595,9 @@ export const LeadGenerationPage: React.FC = () => {
         return;
       }
 
-      setDiscoveredLeads(result.leads);
-      setSelectedDiscoveredLead(result.leads[0]);
+      const enriched = enrichWithStoredSentStatus(result.leads);
+      setDiscoveredLeads(enriched);
+      setSelectedDiscoveredLead(enriched[0]);
       setShowJsonImportModal(false);
     } catch (err: any) {
       setJsonImportError(`Failed to import leads: ${err.message}`);
@@ -939,9 +1038,17 @@ export const LeadGenerationPage: React.FC = () => {
                         >
                           <div className="flex items-start justify-between gap-3 mb-2">
                             <div>
-                              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 inline-block mb-1">
-                                {lead.websiteStatus}
-                              </span>
+                              <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 inline-block">
+                                  {lead.websiteStatus}
+                                </span>
+                                {lead.sentCount && lead.sentCount > 0 ? (
+                                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/40 text-purple-300 inline-flex items-center gap-1 shadow-sm">
+                                    <CheckCircle2 size={10} className="text-purple-400" />
+                                    <span>Sent ({lead.sentCount}x)</span>
+                                  </span>
+                                ) : null}
+                              </div>
                               <h4 className="text-base font-bold text-[var(--text-strong)] leading-snug">
                                 {lead.businessName}
                               </h4>
@@ -978,7 +1085,7 @@ export const LeadGenerationPage: React.FC = () => {
                               <ExternalLink size={10} />
                             </a>
                             <span className="text-blue-400 font-semibold flex items-center gap-1">
-                              <span>Configure & Send</span>
+                              <span>{lead.sentCount && lead.sentCount > 0 ? 'Review & Re-Send' : 'Configure & Send'}</span>
                               <ArrowRight size={12} />
                             </span>
                           </div>
@@ -1278,6 +1385,24 @@ export const LeadGenerationPage: React.FC = () => {
                         </div>
                       </div>
 
+                      {/* Sent Tracking Banner if already dispatched */}
+                      {(selectedDiscoveredLead.sentCount || 0) > 0 && (
+                        <div className="mb-4 p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between gap-3 text-xs">
+                          <div className="flex items-center gap-2 text-emerald-300">
+                            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                            <span>
+                              <strong>Previously Dispatched ({selectedDiscoveredLead.sentCount}x):</strong> Last sent to{' '}
+                              <span className="font-semibold underline">{selectedDiscoveredLead.lastSentRecipient || manualEmail}</span>
+                              {selectedDiscoveredLead.lastSentAt ? ` at ${selectedDiscoveredLead.lastSentAt}` : ''}.
+                              You can freely edit the email below and click <strong>Re-Send</strong>.
+                            </span>
+                          </div>
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider shrink-0">
+                            Sent Logged
+                          </span>
+                        </div>
+                      )}
+
                       {/* Rendered & Editable Email Form */}
                       <div className="space-y-4">
                         <div>
@@ -1368,7 +1493,18 @@ export const LeadGenerationPage: React.FC = () => {
                               <span>Open in Workspace</span>
                             </a>
 
-                            {/* Automated Background SMTP Dispatch */}
+                            {/* Mark Sent Manually (for Gmail Web sends) */}
+                            <button
+                              type="button"
+                              onClick={handleMarkAsSent}
+                              title="Mark as sent if you dispatched via external Gmail"
+                              className="flex-1 lg:flex-none px-3.5 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-semibold text-[var(--text-secondary)] hover:text-emerald-400 hover:border-emerald-400 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                            >
+                              <CheckCircle2 size={13} />
+                              <span>Mark Sent</span>
+                            </button>
+
+                            {/* Automated Background SMTP Dispatch / Re-Send */}
                             <button
                               type="button"
                               onClick={handleSendViaWorkspaceSmtp}
@@ -1383,7 +1519,11 @@ export const LeadGenerationPage: React.FC = () => {
                               ) : (
                                 <>
                                   <Send size={13} />
-                                  <span>Send via Workspace API</span>
+                                  <span>
+                                    {(selectedDiscoveredLead.sentCount || 0) > 0
+                                      ? `🔁 Re-Send via Workspace (${selectedDiscoveredLead.sentCount} sent)`
+                                      : 'Send via Workspace API'}
+                                  </span>
                                 </>
                               )}
                             </button>

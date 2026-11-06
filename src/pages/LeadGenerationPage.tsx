@@ -3,6 +3,7 @@ import {
   processLeadWithGemini, 
   scanGoogleBusinessProfiles,
   sendWorkspaceEmail,
+  sendResendEmail,
   parseScraperData,
   generateEmailSuggestions,
   runApifyGooglePlacesScan,
@@ -43,7 +44,11 @@ import {
   Upload,
   FileSpreadsheet,
   FileText,
-  AlertCircle
+  AlertCircle,
+  Zap,
+  CheckSquare,
+  Square,
+  Loader2
 } from 'lucide-react';
 import { SEOMeta } from '../components/SEOMeta';
 
@@ -122,6 +127,38 @@ export const LeadGenerationPage: React.FC = () => {
       ? localStorage.getItem('digifox_apify_token') || (import.meta as any).env?.VITE_APIFY_TOKEN || '' 
       : (import.meta as any).env?.VITE_APIFY_TOKEN || ''
   );
+  const [resendApiKey, setResendApiKey] = useState(() => 
+    typeof localStorage !== 'undefined' 
+      ? localStorage.getItem('digifox_resend_api_key') || (import.meta as any).env?.VITE_RESEND_API_KEY || '' 
+      : (import.meta as any).env?.VITE_RESEND_API_KEY || ''
+  );
+  const [resendFromEmail, setResendFromEmail] = useState(() => 
+    typeof localStorage !== 'undefined' 
+      ? localStorage.getItem('digifox_resend_from_email') || 'Digifox <onboarding@resend.dev>' 
+      : 'Digifox <onboarding@resend.dev>'
+  );
+
+  // Email Provider Selection ('resend' | 'workspace')
+  const [emailProvider, setEmailProvider] = useState<'resend' | 'workspace'>('resend');
+
+  // Bulk Selection & Batch Dispatch State
+  const [selectedLeadIds, setSelectedLeadIds] = useState<string[]>([]);
+  const [showBulkModal, setShowBulkModal] = useState(false);
+  const [isBulkSending, setIsBulkSending] = useState(false);
+  const [bulkProgress, setBulkProgress] = useState<{
+    current: number;
+    total: number;
+    successCount: number;
+    failCount: number;
+    logs: Array<{ name: string; email: string; status: 'pending' | 'success' | 'error'; message?: string }>;
+  }>({
+    current: 0,
+    total: 0,
+    successCount: 0,
+    failCount: 0,
+    logs: []
+  });
+
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [sendSuccessMessage, setSendSuccessMessage] = useState<string | null>(null);
@@ -301,6 +338,8 @@ export const LeadGenerationPage: React.FC = () => {
     localStorage.setItem('digifox_apify_token', apifyToken);
     localStorage.setItem('digifox_workspace_sender_email', workspaceEmail);
     localStorage.setItem('digifox_workspace_app_password', workspaceAppPassword);
+    localStorage.setItem('digifox_resend_api_key', resendApiKey);
+    localStorage.setItem('digifox_resend_from_email', resendFromEmail);
     setShowSettingsModal(false);
   };
 
@@ -340,7 +379,7 @@ export const LeadGenerationPage: React.FC = () => {
     }
   };
 
-  const handleSendViaWorkspaceSmtp = async () => {
+  const handleSendEmail = async () => {
     if (!manualEmail) {
       setSendErrorMessage("Please provide a recipient email address.");
       return;
@@ -354,14 +393,33 @@ export const LeadGenerationPage: React.FC = () => {
     setSendSuccessMessage(null);
 
     try {
-      const res = await sendWorkspaceEmail({
-        to: manualEmail,
-        subject,
-        body,
-        senderEmail: workspaceEmail || undefined,
-        appPassword: workspaceAppPassword || undefined,
-        senderName: 'Digifox'
-      });
+      let sentFromDisplay = '';
+
+      if (emailProvider === 'resend') {
+        if (!resendApiKey.trim()) {
+          setShowSettingsModal(true);
+          throw new Error('Please enter your Resend API Key in Settings first.');
+        }
+        const res = await sendResendEmail({
+          apiKey: resendApiKey.trim(),
+          from: resendFromEmail.trim(),
+          to: manualEmail.trim(),
+          subject: subject.trim(),
+          body: body.trim(),
+          senderName: 'Digifox'
+        });
+        sentFromDisplay = `Resend (${res.sentFrom || resendFromEmail})`;
+      } else {
+        const res = await sendWorkspaceEmail({
+          to: manualEmail,
+          subject,
+          body,
+          senderEmail: workspaceEmail || undefined,
+          appPassword: workspaceAppPassword || undefined,
+          senderName: 'Digifox'
+        });
+        sentFromDisplay = `Google Workspace (${res.sentFrom || 'Workspace SMTP'})`;
+      }
 
       const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const recordItem = {
@@ -399,14 +457,162 @@ export const LeadGenerationPage: React.FC = () => {
         }
       }
 
-      setSendSuccessMessage(`Email sent successfully via Google Workspace (${res.sentFrom || 'Workspace SMTP'})! Send counter updated.`);
+      setSendSuccessMessage(`Email sent successfully via ${sentFromDisplay}! Send counter logged.`);
       setTimeout(() => setSendSuccessMessage(null), 7000);
     } catch (err: any) {
       console.error(err);
-      setSendErrorMessage(err.message || 'Failed to dispatch email. Please check your Google Workspace app password.');
+      setSendErrorMessage(err.message || 'Failed to dispatch email. Please check your settings.');
     } finally {
       setIsSendingEmail(false);
     }
+  };
+
+  // Bulk Selection Helpers
+  const toggleLeadSelection = (id: string) => {
+    setSelectedLeadIds(prev => 
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    );
+  };
+
+  const handleSelectAllLeads = () => {
+    if (selectedLeadIds.length === discoveredLeads.length) {
+      setSelectedLeadIds([]);
+    } else {
+      setSelectedLeadIds(discoveredLeads.map(l => l.id));
+    }
+  };
+
+  const handleSelectNoWebsiteLeads = () => {
+    const ids = discoveredLeads
+      .filter(l => l.websiteStatus === 'No Website Detected')
+      .map(l => l.id);
+    setSelectedLeadIds(ids);
+  };
+
+  const handleSelectWithEmailLeads = () => {
+    const ids = discoveredLeads
+      .filter(l => l.contactEmail && l.contactEmail.includes('@'))
+      .map(l => l.id);
+    setSelectedLeadIds(ids);
+  };
+
+  const handleClearLeadSelection = () => {
+    setSelectedLeadIds([]);
+  };
+
+  // Bulk Resend Dispatch Execution
+  const handleRunBulkResend = async () => {
+    const leadsToSend = discoveredLeads.filter(l => selectedLeadIds.includes(l.id));
+    if (leadsToSend.length === 0) return;
+
+    if (!resendApiKey.trim()) {
+      setShowSettingsModal(true);
+      setSendErrorMessage('Please enter your Resend API Key in Settings first.');
+      return;
+    }
+
+    setIsBulkSending(true);
+    setBulkProgress({
+      current: 0,
+      total: leadsToSend.length,
+      successCount: 0,
+      failCount: 0,
+      logs: leadsToSend.map(l => ({
+        name: l.businessName,
+        email: l.contactEmail || `contact@${l.businessName.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`,
+        status: 'pending'
+      }))
+    });
+
+    let successCount = 0;
+    let failCount = 0;
+    const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const storedRecords = JSON.parse(localStorage.getItem('digifox_sent_leads_records') || '{}');
+
+    for (let i = 0; i < leadsToSend.length; i++) {
+      const lead = leadsToSend[i];
+      const targetEmail = lead.contactEmail || `contact@${lead.businessName.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
+      const demoLink = lead.personalizedDemoUrl?.startsWith('http') 
+        ? lead.personalizedDemoUrl 
+        : `${window.location.origin}${lead.personalizedDemoUrl || '/portfolio'}`;
+      
+      const subject = lead.personalizedPitch?.subject || `Website inquiry for ${lead.businessName}`;
+      const body = (lead.personalizedPitch?.body || `Hello ${lead.businessName} team,\n\nWe prepared a custom modern prototype for you: [DEMO_LINK]\n\nBest,\nDigifox Team`).replaceAll('[DEMO_LINK]', demoLink);
+
+      try {
+        await sendResendEmail({
+          apiKey: resendApiKey.trim(),
+          from: resendFromEmail.trim(),
+          to: targetEmail.trim(),
+          subject: subject.trim(),
+          body: body.trim(),
+          senderName: 'Digifox'
+        });
+
+        successCount++;
+        const nextSentCount = (lead.sentCount || 0) + 1;
+        storedRecords[lead.id] = {
+          sentCount: nextSentCount,
+          lastSentAt: nowStr,
+          lastSentRecipient: targetEmail
+        };
+
+        setBulkProgress(prev => ({
+          ...prev,
+          current: i + 1,
+          successCount,
+          logs: prev.logs.map((item, idx) => 
+            idx === i ? { ...item, status: 'success', message: 'Delivered via Resend' } : item
+          )
+        }));
+
+        setDiscoveredLeads(prev => prev.map(l => {
+          if (l.id === lead.id) {
+            return {
+              ...l,
+              contactEmail: targetEmail,
+              sentCount: nextSentCount,
+              lastSentAt: nowStr,
+              lastSentRecipient: targetEmail,
+              sentHistory: [
+                ...(l.sentHistory || []),
+                {
+                  type: 'initial',
+                  recipient: targetEmail,
+                  sentAt: new Date().toISOString(),
+                  subject
+                }
+              ]
+            };
+          }
+          return l;
+        }));
+
+      } catch (err: any) {
+        failCount++;
+        setBulkProgress(prev => ({
+          ...prev,
+          current: i + 1,
+          failCount,
+          logs: prev.logs.map((item, idx) => 
+            idx === i ? { ...item, status: 'error', message: err.message || 'Send failed' } : item
+          )
+        }));
+      }
+
+      // 500ms pacing delay between sends
+      if (i < leadsToSend.length - 1) {
+        await new Promise(r => setTimeout(r, 500));
+      }
+    }
+
+    try {
+      localStorage.setItem('digifox_sent_leads_records', JSON.stringify(storedRecords));
+    } catch {
+      // ignore
+    }
+
+    setIsBulkSending(false);
   };
 
   const handleMarkAsSent = () => {
@@ -976,6 +1182,70 @@ export const LeadGenerationPage: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Bulk Selection and Action Toolbar */}
+                {discoveredLeads.length > 0 && (
+                  <div className="p-3 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] flex flex-wrap items-center justify-between gap-2.5 text-xs shadow-md">
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handleSelectAllLeads}
+                        className="flex items-center gap-1.5 font-bold text-[var(--text-strong)] hover:text-blue-400 transition-colors cursor-pointer"
+                      >
+                        {selectedLeadIds.length === discoveredLeads.length && discoveredLeads.length > 0 ? (
+                          <CheckSquare size={15} className="text-purple-400" />
+                        ) : (
+                          <Square size={15} className="text-[var(--text-secondary)]" />
+                        )}
+                        <span>{selectedLeadIds.length === discoveredLeads.length ? 'Deselect All' : 'Select All'}</span>
+                      </button>
+                      
+                      <span className="text-[var(--border-strong)]">|</span>
+                      
+                      <button
+                        type="button"
+                        onClick={handleSelectNoWebsiteLeads}
+                        className="text-[11px] font-medium text-[var(--text-secondary)] hover:text-emerald-400 transition-colors cursor-pointer"
+                        title="Select only leads without website"
+                      >
+                        No Website
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleSelectWithEmailLeads}
+                        className="text-[11px] font-medium text-[var(--text-secondary)] hover:text-blue-400 transition-colors cursor-pointer"
+                        title="Select only leads with email identified"
+                      >
+                        With Email
+                      </button>
+
+                      {selectedLeadIds.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={handleClearLeadSelection}
+                          className="text-[11px] font-medium text-red-400 hover:underline transition-colors cursor-pointer"
+                        >
+                          Clear
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-mono text-purple-300 font-bold">
+                        {selectedLeadIds.length} Selected
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setShowBulkModal(true)}
+                        disabled={selectedLeadIds.length === 0}
+                        className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-95 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-lg transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                      >
+                        <Zap size={13} className="text-yellow-300" />
+                        <span>Bulk Send ({selectedLeadIds.length})</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {isScanning ? (
                   <div className="p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-center space-y-3">
                     <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 mx-auto animate-pulse">
@@ -1026,32 +1296,50 @@ export const LeadGenerationPage: React.FC = () => {
                   <div className="space-y-3">
                     {discoveredLeads.map((lead) => {
                       const isSelected = selectedDiscoveredLead?.id === lead.id;
+                      const isChecked = selectedLeadIds.includes(lead.id);
                       return (
                         <div
                           key={lead.id}
                           onClick={() => setSelectedDiscoveredLead(lead)}
-                          className={`p-4 rounded-2xl border transition-all cursor-pointer ${
+                          className={`p-4 rounded-2xl border transition-all cursor-pointer relative ${
                             isSelected
                               ? 'bg-blue-950/20 border-blue-500 shadow-xl'
                               : 'bg-[var(--bg-surface)] border-[var(--border-strong)] hover:border-white/20'
                           }`}
                         >
                           <div className="flex items-start justify-between gap-3 mb-2">
-                            <div>
-                              <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 inline-block">
-                                  {lead.websiteStatus}
-                                </span>
-                                {lead.sentCount && lead.sentCount > 0 ? (
-                                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/40 text-purple-300 inline-flex items-center gap-1 shadow-sm">
-                                    <CheckCircle2 size={10} className="text-purple-400" />
-                                    <span>Sent ({lead.sentCount}x)</span>
+                            <div className="flex items-start gap-2.5">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleLeadSelection(lead.id);
+                                }}
+                                className="mt-0.5 text-[var(--text-secondary)] hover:text-purple-400 transition-colors cursor-pointer"
+                                title="Select for Bulk Resend"
+                              >
+                                {isChecked ? (
+                                  <CheckSquare size={16} className="text-purple-400" />
+                                ) : (
+                                  <Square size={16} />
+                                )}
+                              </button>
+                              <div>
+                                <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 inline-block">
+                                    {lead.websiteStatus}
                                   </span>
-                                ) : null}
+                                  {lead.sentCount && lead.sentCount > 0 ? (
+                                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/40 text-purple-300 inline-flex items-center gap-1 shadow-sm">
+                                      <CheckCircle2 size={10} className="text-purple-400" />
+                                      <span>Sent ({lead.sentCount}x)</span>
+                                    </span>
+                                  ) : null}
+                                </div>
+                                <h4 className="text-base font-bold text-[var(--text-strong)] leading-snug">
+                                  {lead.businessName}
+                                </h4>
                               </div>
-                              <h4 className="text-base font-bold text-[var(--text-strong)] leading-snug">
-                                {lead.businessName}
-                              </h4>
                             </div>
                             <div className="text-right">
                               <span className="text-xs font-mono font-bold text-blue-400 block">
@@ -1336,14 +1624,40 @@ export const LeadGenerationPage: React.FC = () => {
                         <div>
                           <h4 className="text-base font-bold uppercase tracking-tight text-[var(--text-strong)] flex items-center gap-2">
                             <Mail size={16} className="text-indigo-400" />
-                            <span>3. Edit Outreach Copy & Dispatch via Google Workspace</span>
+                            <span>3. Edit Outreach Copy & Dispatch</span>
                           </h4>
                           <span className="text-xs text-[var(--text-secondary)] font-light">
                             Directly edit the subject line or email body below. All changes are preserved.
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                          {/* Engine Provider Toggle */}
+                          <div className="flex bg-[var(--bg-base)] p-1 rounded-xl border border-[var(--border-strong)]">
+                            <button
+                              type="button"
+                              onClick={() => setEmailProvider('resend')}
+                              className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                                emailProvider === 'resend' ? 'bg-purple-600 text-white shadow-sm' : 'text-[var(--text-secondary)] hover:text-white'
+                              }`}
+                              title="Send via Resend.com API (High deliverability & Bulk support)"
+                            >
+                              <Zap size={11} className={emailProvider === 'resend' ? 'text-yellow-300' : ''} />
+                              <span>Resend API</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setEmailProvider('workspace')}
+                              className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                                emailProvider === 'workspace' ? 'bg-blue-600 text-white shadow-sm' : 'text-[var(--text-secondary)] hover:text-white'
+                              }`}
+                              title="Send via your authenticated Google Workspace SMTP"
+                            >
+                              <Mail size={11} />
+                              <span>Workspace</span>
+                            </button>
+                          </div>
+
                           <div className="flex bg-[var(--bg-base)] p-1 rounded-xl border border-[var(--border-strong)]">
                             <button
                               type="button"
@@ -1504,25 +1818,29 @@ export const LeadGenerationPage: React.FC = () => {
                               <span>Mark Sent</span>
                             </button>
 
-                            {/* Automated Background SMTP Dispatch / Re-Send */}
+                            {/* Automated Background Dispatch / Re-Send */}
                             <button
                               type="button"
-                              onClick={handleSendViaWorkspaceSmtp}
+                              onClick={handleSendEmail}
                               disabled={isSendingEmail}
-                              className="flex-1 lg:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap"
+                              className={`flex-1 lg:flex-none px-5 py-2.5 rounded-xl text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap ${
+                                emailProvider === 'resend'
+                                  ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-95'
+                                  : 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95'
+                              }`}
                             >
                               {isSendingEmail ? (
                                 <>
                                   <Bot size={13} className="animate-spin" />
-                                  <span>Sending via Workspace...</span>
+                                  <span>Sending via {emailProvider === 'resend' ? 'Resend' : 'Workspace'}...</span>
                                 </>
                               ) : (
                                 <>
-                                  <Send size={13} />
+                                  {emailProvider === 'resend' ? <Zap size={13} className="text-yellow-300" /> : <Send size={13} />}
                                   <span>
                                     {(selectedDiscoveredLead.sentCount || 0) > 0
-                                      ? `🔁 Re-Send via Workspace (${selectedDiscoveredLead.sentCount} sent)`
-                                      : 'Send via Workspace API'}
+                                      ? `🔁 Re-Send via ${emailProvider === 'resend' ? 'Resend' : 'Workspace'} (${selectedDiscoveredLead.sentCount} sent)`
+                                      : `Send via ${emailProvider === 'resend' ? 'Resend API' : 'Workspace API'}`}
                                   </span>
                                 </>
                               )}
@@ -1978,6 +2296,50 @@ export const LeadGenerationPage: React.FC = () => {
                   />
                   <span className="text-[10px] text-[var(--text-secondary)] mt-1 block">
                     Powers live scraping via the official <strong>compass/crawler-google-places</strong> Apify Actor and Apify MCP integration.
+                  </span>
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <Zap size={13} className="text-purple-400" />
+                      <span>Resend API Key (re_...)</span>
+                    </span>
+                    <a
+                      href="https://resend.com/api-keys"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] text-purple-400 hover:text-purple-300 underline lowercase"
+                    >
+                      resend.com/api-keys
+                    </a>
+                  </label>
+                  <input
+                    type="password"
+                    value={resendApiKey}
+                    onChange={(e) => setResendApiKey(e.target.value)}
+                    placeholder="re_xxxxxxxxxxxxxxxxx"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm font-mono focus:border-purple-500 focus:outline-none"
+                  />
+                  <span className="text-[10px] text-[var(--text-secondary)] mt-1 block">
+                    Powers transactional delivery & bulk email dispatching via Resend.
+                  </span>
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 flex items-center gap-1.5">
+                    <Mail size={13} className="text-purple-400" />
+                    <span>Resend From / Sender Address</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={resendFromEmail}
+                    onChange={(e) => setResendFromEmail(e.target.value)}
+                    placeholder="Digifox Agency <onboarding@resend.dev>"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm font-mono focus:border-purple-500 focus:outline-none"
+                  />
+                  <span className="text-[10px] text-[var(--text-secondary)] mt-1 block">
+                    Use <code>Digifox &lt;onboarding@resend.dev&gt;</code> for testing, or your verified domain e.g. <code>team@yourdomain.com</code>.
                   </span>
                 </div>
 
@@ -2577,6 +2939,145 @@ export const LeadGenerationPage: React.FC = () => {
                         ? `Import ${onlyNoWebsiteImport ? parsedPreviewStats.noWebsite : parsedPreviewStats.total} Leads`
                         : 'Import Scraper Leads'}
                     </span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        )}
+
+        {/* MODAL: BULK EMAIL DISPATCH (RESEND) */}
+        {showBulkModal && (
+          <div className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="w-full max-w-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-3xl p-6 sm:p-8 shadow-2xl relative max-h-[90vh] flex flex-col">
+              <button
+                type="button"
+                onClick={() => !isBulkSending && setShowBulkModal(false)}
+                disabled={isBulkSending}
+                className="absolute top-6 right-6 p-2 rounded-xl bg-[var(--bg-base)] text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer disabled:opacity-40"
+              >
+                <X size={16} />
+              </button>
+
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white shadow-lg">
+                  <Zap size={20} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold uppercase tracking-tight text-[var(--text-strong)]">
+                    Bulk Outreach Dispatcher (Resend API)
+                  </h3>
+                  <p className="text-xs text-[var(--text-secondary)] font-light">
+                    Send personalized cold emails in bulk with tailored interactive demos to all selected prospects.
+                  </p>
+                </div>
+              </div>
+
+              {/* Progress Summary Stats */}
+              <div className="grid grid-cols-3 gap-3 my-4">
+                <div className="p-3 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-center">
+                  <span className="text-[10px] uppercase font-bold text-[var(--text-secondary)] block">Target Leads</span>
+                  <span className="text-xl font-black text-purple-400">{selectedLeadIds.length}</span>
+                </div>
+                <div className="p-3 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-center">
+                  <span className="text-[10px] uppercase font-bold text-[var(--text-secondary)] block">Delivered</span>
+                  <span className="text-xl font-black text-emerald-400">{bulkProgress.successCount}</span>
+                </div>
+                <div className="p-3 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-center">
+                  <span className="text-[10px] uppercase font-bold text-[var(--text-secondary)] block">Failed / Skipped</span>
+                  <span className="text-xl font-black text-red-400">{bulkProgress.failCount}</span>
+                </div>
+              </div>
+
+              {/* Progress Bar */}
+              {isBulkSending && (
+                <div className="mb-4 space-y-1.5">
+                  <div className="flex justify-between text-xs font-mono text-[var(--text-secondary)]">
+                    <span>Sending {bulkProgress.current} of {bulkProgress.total}...</span>
+                    <span>{Math.round((bulkProgress.current / (bulkProgress.total || 1)) * 100)}%</span>
+                  </div>
+                  <div className="w-full h-2.5 bg-[var(--bg-base)] rounded-full overflow-hidden border border-[var(--border-strong)]">
+                    <div 
+                      className="h-full bg-gradient-to-r from-purple-500 via-indigo-500 to-emerald-400 transition-all duration-300"
+                      style={{ width: `${Math.round((bulkProgress.current / (bulkProgress.total || 1)) * 100)}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Lead Queue Preview / Live Logs */}
+              <div className="flex-1 overflow-y-auto space-y-2 border border-[var(--border-strong)]/60 rounded-2xl p-3 bg-[var(--bg-base)] my-2 min-h-[160px] max-h-[280px]">
+                {discoveredLeads.filter(l => selectedLeadIds.includes(l.id)).map((lead, idx) => {
+                  const logItem = bulkProgress.logs[idx];
+                  return (
+                    <div 
+                      key={lead.id} 
+                      className="p-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)]/40 flex items-center justify-between gap-3 text-xs"
+                    >
+                      <div className="truncate flex-1">
+                        <span className="font-bold text-[var(--text-strong)] block truncate">{lead.businessName}</span>
+                        <span className="text-[11px] text-[var(--text-secondary)] font-mono truncate block">
+                          {lead.contactEmail || `contact@${lead.businessName.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`}
+                        </span>
+                      </div>
+                      <div className="shrink-0 flex items-center gap-1.5">
+                        {logItem?.status === 'success' ? (
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                            <CheckCircle2 size={11} /> Sent
+                          </span>
+                        ) : logItem?.status === 'error' ? (
+                          <span className="px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                            <AlertCircle size={11} /> Error
+                          </span>
+                        ) : isBulkSending && bulkProgress.current === idx ? (
+                          <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 animate-pulse">
+                            <Loader2 size={11} className="animate-spin" /> Sending...
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded-full bg-[var(--bg-base)] text-[var(--text-secondary)] text-[10px] font-bold uppercase tracking-wider">
+                            Pending
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-4 border-t border-[var(--border-strong)]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="text-xs text-[var(--text-secondary)] font-light truncate">
+                  Sender: <strong className="text-[var(--text-strong)] font-mono">{resendFromEmail}</strong>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowBulkModal(false)}
+                    disabled={isBulkSending}
+                    className="px-4 py-2 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-xs font-semibold text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer disabled:opacity-40"
+                  >
+                    {bulkProgress.current > 0 && !isBulkSending ? 'Close' : 'Cancel'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleRunBulkResend}
+                    disabled={isBulkSending || selectedLeadIds.length === 0}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-xl transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    {isBulkSending ? (
+                      <>
+                        <Loader2 size={14} className="animate-spin" />
+                        <span>Sending {bulkProgress.current}/{bulkProgress.total}...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Zap size={14} className="text-yellow-300" />
+                        <span>Start Bulk Dispatch ({selectedLeadIds.length})</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </div>

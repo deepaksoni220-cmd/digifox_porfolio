@@ -331,6 +331,60 @@ export async function sendWorkspaceEmail(params: SendEmailParams): Promise<{ suc
   return await response.json();
 }
 
+export interface SendResendEmailParams {
+  apiKey?: string;
+  from?: string;
+  to: string;
+  subject: string;
+  body: string;
+  senderName?: string;
+}
+
+export interface BulkResendItem {
+  leadId: string;
+  to: string;
+  subject: string;
+  body: string;
+  businessName?: string;
+}
+
+export interface SendResendBulkParams {
+  apiKey?: string;
+  from?: string;
+  senderName?: string;
+  items: BulkResendItem[];
+}
+
+export async function sendResendEmail(params: SendResendEmailParams): Promise<{ success: boolean; messageId?: string; sentFrom?: string }> {
+  const response = await fetch('/api/send-resend-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params)
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || `Resend dispatch failed (${response.status})`);
+  }
+
+  return await response.json();
+}
+
+export async function sendResendBulkEmails(params: SendResendBulkParams): Promise<{ success: boolean; count: number; data?: any; sentFrom?: string }> {
+  const response = await fetch('/api/send-resend-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params)
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || `Bulk Resend dispatch failed (${response.status})`);
+  }
+
+  return await response.json();
+}
+
 export interface DiscoveredBusinessLead {
   id: string;
   businessName: string;

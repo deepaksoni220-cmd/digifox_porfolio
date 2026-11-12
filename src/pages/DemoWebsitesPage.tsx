@@ -164,11 +164,14 @@ export const DemoWebsitesPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  // View Mode: 'stage' (Embedded in-window stage) or 'grid' (Cards)
-  const [viewMode, setViewMode] = useState<'stage' | 'grid'>('stage');
+  // View Mode: 'grid' (Cards Showcase) by default, or 'stage'
+  const [viewMode, setViewMode] = useState<'stage' | 'grid'>('grid');
 
   // Active in-window site (for stage view and popup modal)
   const [activeWebsite, setActiveWebsite] = useState<DemoWebsite>(() => websites[0] || DEFAULT_DEMO_WEBSITES[0]);
+
+  // Stage Running state: websites do NOT auto-run in an iframe until explicitly opened
+  const [isStageRunning, setIsStageRunning] = useState(false);
 
   // Modal in-window viewer state
   const [showInWindowModal, setShowInWindowModal] = useState(false);
@@ -229,12 +232,13 @@ export const DemoWebsitesPage: React.FC = () => {
     });
   }, [websites, searchQuery, selectedCategory]);
 
-  const handleOpenInWindow = (site: DemoWebsite, asModal: boolean = false) => {
+  const handleOpenInWindow = (site: DemoWebsite, asModal: boolean = true) => {
     setActiveWebsite(site);
     setIframeKey((k) => k + 1);
     if (asModal) {
       setShowInWindowModal(true);
     } else {
+      setIsStageRunning(true);
       const stageEl = document.getElementById('in-window-stage');
       if (stageEl) {
         stageEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -384,19 +388,6 @@ export const DemoWebsitesPage: React.FC = () => {
             <div className="flex p-0.5 sm:p-1 rounded-xl sm:rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-sm">
               <button
                 type="button"
-                onClick={() => setViewMode('stage')}
-                className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
-                  viewMode === 'stage'
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-[var(--text-secondary)] hover:text-white'
-                }`}
-              >
-                <Monitor size={13} />
-                <span>In-Window Stage</span>
-              </button>
-
-              <button
-                type="button"
                 onClick={() => setViewMode('grid')}
                 className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
                   viewMode === 'grid'
@@ -405,7 +396,20 @@ export const DemoWebsitesPage: React.FC = () => {
                 }`}
               >
                 <LayoutGrid size={13} />
-                <span>Cards Grid</span>
+                <span>Cards Gallery</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setViewMode('stage')}
+                className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
+                  viewMode === 'stage'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'text-[var(--text-secondary)] hover:text-white'
+                }`}
+              >
+                <Monitor size={13} />
+                <span>Interactive Stage</span>
               </button>
             </div>
 
@@ -455,6 +459,7 @@ export const DemoWebsitesPage: React.FC = () => {
                     onClick={() => {
                       setActiveWebsite(site);
                       setIframeKey((k) => k + 1);
+                      setIsStageRunning(true);
                     }}
                     className={`flex items-center gap-2 px-3 py-2 rounded-2xl border text-xs text-left transition-all shrink-0 cursor-pointer snap-start ${
                       isActive
@@ -489,22 +494,24 @@ export const DemoWebsitesPage: React.FC = () => {
 
                 {/* Clean In-Window Stage Address Bar (No technical URL displayed) */}
                 <div className="flex-1 min-w-0 max-w-xl mx-auto flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[11px] sm:text-xs text-[var(--text-secondary)] shadow-inner">
-                  <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
+                  <span className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0 ${isStageRunning ? 'bg-emerald-400 animate-pulse' : 'bg-blue-400'}`} />
                   <span className="truncate text-[var(--text-strong)] font-semibold">
-                    Live Demo · {activeWebsite.title}
+                    {isStageRunning ? 'Live Running Demo' : 'Ready to Open'} · {activeWebsite.title}
                   </span>
                   <span className="hidden lg:inline-block text-[10px] uppercase font-bold text-blue-400 px-2 py-0.5 rounded-full bg-blue-500/10">
                     {activeWebsite.category}
                   </span>
                   
-                  <button
-                    type="button"
-                    onClick={handleReloadFrame}
-                    className="p-1 rounded hover:bg-white/10 text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer shrink-0 ml-0.5"
-                    title="Reload in Window"
-                  >
-                    <RotateCcw size={11} className="sm:w-3 sm:h-3" />
-                  </button>
+                  {isStageRunning && (
+                    <button
+                      type="button"
+                      onClick={handleReloadFrame}
+                      className="p-1 rounded hover:bg-white/10 text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer shrink-0 ml-0.5"
+                      title="Reload in Window"
+                    >
+                      <RotateCcw size={11} className="sm:w-3 sm:h-3" />
+                    </button>
+                  )}
                 </div>
 
                 {/* Viewport Device Controls & Fullscreen */}
@@ -548,10 +555,10 @@ export const DemoWebsitesPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Responsive Iframe Viewport Stage (No clipping, no double scrollbars) */}
+              {/* Responsive Iframe Viewport Stage (Only runs when explicitly opened) */}
               <div className="w-full h-[65vh] sm:h-[72vh] min-h-[440px] sm:min-h-[520px] max-h-[820px] bg-[#07080e] flex items-center justify-center p-0 sm:p-4 overflow-hidden relative">
                 <div
-                  className={`h-full transition-all duration-300 overflow-hidden shadow-2xl bg-[#0a0a0c] flex flex-col ${
+                  className={`h-full transition-all duration-300 overflow-hidden shadow-2xl bg-[#0a0a0c] flex flex-col relative ${
                     previewDevice === 'mobile'
                       ? 'w-full max-w-[390px] sm:max-w-[375px] sm:rounded-[36px] sm:border-[6px] sm:border-zinc-800'
                       : previewDevice === 'tablet'
@@ -559,13 +566,75 @@ export const DemoWebsitesPage: React.FC = () => {
                       : 'w-full sm:rounded-2xl sm:border border-[var(--border-strong)]'
                   }`}
                 >
-                  <iframe
-                    key={iframeKey}
-                    src={activeWebsite.url}
-                    title={activeWebsite.title}
-                    className="w-full h-full border-none bg-[#0a0a0c] block"
-                    sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                  />
+                  {!isStageRunning ? (
+                    <div className="w-full h-full relative flex flex-col items-center justify-center text-center p-6 bg-gradient-to-br from-[#0d0e18] via-[#08090f] to-[#040407] overflow-hidden">
+                      {/* Background Cover Image with Dim Overlay */}
+                      {activeWebsite.previewImage && (
+                        <img
+                          src={activeWebsite.previewImage}
+                          alt={activeWebsite.title}
+                          className="absolute inset-0 w-full h-full object-cover opacity-20 filter blur-xs"
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-black/60 pointer-events-none" />
+
+                      {/* Launch Card */}
+                      <div className="relative z-10 max-w-md mx-auto space-y-4 px-4">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-bold uppercase tracking-wider">
+                          <Layers size={12} />
+                          <span>{activeWebsite.category}</span>
+                        </div>
+
+                        <h3 className="text-xl sm:text-3xl font-black text-white uppercase tracking-tight">
+                          {activeWebsite.title}
+                        </h3>
+
+                        <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-light max-w-sm mx-auto leading-relaxed">
+                          {activeWebsite.description}
+                        </p>
+
+                        <div className="pt-3 flex flex-col sm:flex-row items-center justify-center gap-3">
+                          <button
+                            type="button"
+                            onClick={() => setIsStageRunning(true)}
+                            className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-blue-500/25 hover:scale-105 transition-all cursor-pointer"
+                          >
+                            <Play size={14} className="fill-white" />
+                            <span>Launch Live Prototype</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setShowInWindowModal(true)}
+                            className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-xs font-semibold text-[var(--text-secondary)] hover:text-white transition-all flex items-center justify-center gap-2 cursor-pointer"
+                          >
+                            <Maximize2 size={13} />
+                            <span>Open In Full Modal</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full h-full relative">
+                      <iframe
+                        key={iframeKey}
+                        src={activeWebsite.url}
+                        title={activeWebsite.title}
+                        className="w-full h-full border-none bg-[#0a0a0c] block"
+                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                      />
+                      {/* Close Running Demo */}
+                      <button
+                        type="button"
+                        onClick={() => setIsStageRunning(false)}
+                        className="absolute top-3 right-3 z-20 px-3 py-1.5 rounded-xl bg-black/80 hover:bg-black text-white/80 hover:text-white border border-white/20 text-xs font-semibold backdrop-blur-md transition-all shadow-lg flex items-center gap-1.5 cursor-pointer"
+                        title="Close Running Demo"
+                      >
+                        <X size={13} />
+                        <span>Close Running Demo</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
 

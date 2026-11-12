@@ -37,36 +37,6 @@ export interface DemoWebsite {
 
 const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   {
-    id: 'demo-stone-marble',
-    title: 'Apex Architectural Stone & Marble',
-    url: '/portfolio',
-    category: 'Stone & Architecture',
-    description: 'High-end marble and granite catalog showcase with interactive slab gallery, luxury aesthetics, and quote generator.',
-    tags: ['Marble', 'Granite', 'Architecture', 'Luxury 3D', 'Slab Gallery'],
-    previewImage: '/image-1783080075680-896100451.png',
-    statusBadge: 'Interactive Demo'
-  },
-  {
-    id: 'demo-skyelite-aviation',
-    title: 'SkyElite Luxury Aviation',
-    url: '/templates/skyelite/index.html',
-    category: 'Luxury & Automotive',
-    description: '3D animated private jet booking portal with fleet viewer, charter quote calculator, and VIP aesthetics.',
-    tags: ['Private Jet', 'Aviation', '3D WebGL', 'VIP Concierge'],
-    previewImage: '/templates/thumbnails/hero-skyelite-preview-DHaZIgUv.gif',
-    statusBadge: 'WebGL Prototype'
-  },
-  {
-    id: 'demo-blacklane-limo',
-    title: 'Blacklane Style Chauffeur & Limousine',
-    url: '/templates/blacklane/index.html',
-    category: 'Luxury & Automotive',
-    description: 'Premier black car and limousine reservation portal featuring vehicle selector, real-time booking form, and dark luxury styling.',
-    tags: ['Chauffeur', 'Limousine', 'Fleet Booking', 'Luxury Travel'],
-    previewImage: '/blacklane-cover.jpg',
-    statusBadge: 'Interactive Demo'
-  },
-  {
     id: 'demo-biska-fashion',
     title: 'Biska Fashion & Streetwear Studio',
     url: '/templates/biska/index.html',
@@ -74,67 +44,115 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     description: 'Cutting-edge apparel brand storefront with lookbook, responsive product grid, cart drawer, and high-energy motion design.',
     tags: ['Fashion', 'Streetwear', 'Lookbook', 'Apparel Store'],
     previewImage: '/image-1783080085858-787642334.jpg',
-    statusBadge: 'Store Prototype'
+    statusBadge: 'Live Storefront'
   },
   {
-    id: 'demo-samarth-cactus',
-    title: 'Samarth Cactus & Exotic Plants',
-    url: 'https://www.samarthcactusnursery.com/',
-    category: 'E-Commerce & Retail',
-    description: 'Live high-converting Shopify store featuring rare succulents, plant care guides, multi-currency checkout, and direct customer support.',
-    tags: ['Shopify', 'Plants & Garden', 'D2C Retail', 'Live Store'],
-    previewImage: '/image-1783146270623-638183035.png',
-    statusBadge: 'Live Client Site'
+    id: 'demo-blacklane-limo',
+    title: 'Blacklane Luxury Chauffeur & Limousine',
+    url: '/templates/blacklane/index.html',
+    category: 'Luxury & Automotive',
+    description: 'Premier black car and limousine reservation portal featuring vehicle selector, real-time booking form, and dark luxury styling.',
+    tags: ['Chauffeur', 'Limousine', 'Fleet Booking', 'Luxury Travel'],
+    previewImage: '/blacklane-cover.jpg',
+    statusBadge: 'Live Prototype'
   },
   {
     id: 'demo-intik-burgers',
     title: 'Intik Gourmet Burgers & Dining',
     url: '/templates/intikburgers/index.html',
     category: 'Food & Dining',
-    description: 'Immersive restaurant & cloud kitchen showcase with visual food menu, table reservations, and delivery integration.',
+    description: 'Immersive restaurant & cloud kitchen showcase with visual food menu, burger ingredient assembly, and delivery integration.',
     tags: ['Restaurant', 'Gourmet Food', 'Menu System', 'Hospitality'],
     previewImage: '/image-1783080041291-918187806.png',
-    statusBadge: 'Dining Prototype'
+    statusBadge: 'Dining Experience'
+  },
+  {
+    id: 'demo-cars-melbourne',
+    title: 'BookCabs Melbourne VIP Fleet',
+    url: '/templates/cars/index.html',
+    category: 'Luxury & Automotive',
+    description: 'High-end chauffeur and luxury transport platform featuring interactive fleet selector, Lenis smooth scrolling, and booking quotes.',
+    tags: ['Melbourne VIP', 'Luxury Fleet', 'Chauffeur Booking', 'Lenis Scroll'],
+    previewImage: '/templates/demo-cars-vanta.png',
+    statusBadge: 'Interactive Fleet'
+  },
+  {
+    id: 'demo-studio-fashion',
+    title: 'Studio Fashion & Beauty eCommerce',
+    url: '/templates/studiofashion/index.html',
+    category: 'Fashion & Retail',
+    description: 'Minimalist luxury beauty and apparel storefront designed for high-conversion storytelling, editorial lookbooks, and checkout.',
+    tags: ['Beauty', 'Fashion Store', 'Editorial Lookbook', 'Conversion'],
+    previewImage: '/image-1783079742315-345189993.png',
+    statusBadge: 'Store Showcase'
   },
   {
     id: 'demo-motion-sneakers',
-    title: 'Motion Sneakers 3D Showcase',
+    title: 'Adidas Chile20 3D Sneaker Experience',
     url: '/templates/shoes/index.html',
     category: '3D & WebGL',
     description: 'Interactive 3D product showcase highlighting athletic footwear with customizable angles, colorways, and smooth camera transitions.',
     tags: ['3D Model', 'Footwear', 'Interactive WebGL', 'Product Demo'],
     previewImage: '/image-1783080020266-402606108.png',
-    statusBadge: '3D Showcase'
+    statusBadge: '3D WebGL'
   },
   {
     id: 'demo-nova-creative',
-    title: 'Nova Creative Digital Portfolio',
+    title: 'Adam Roberts Interactive Design Portfolio',
     url: '/templates/digpro/index.html',
     category: 'Creative & Agency',
     description: 'Avant-garde digital design agency portfolio with interactive cursor physics, case study reveals, and booking workflow.',
     tags: ['Agency', 'Creative Studio', 'Physics Cursors', 'Portfolio'],
     previewImage: '/image-1783080075680-896100451.png',
-    statusBadge: 'Agency Showcase'
+    statusBadge: 'Agency Portfolio'
+  },
+  {
+    id: 'demo-gsap-motion',
+    title: 'GSAP Kinetic Animation Studio',
+    url: '/templates/gsap/index.html',
+    category: 'Creative & Agency',
+    description: 'High-performance interactive web experience showcasing smooth GSAP scroll animations, parallax layers, and micro-interactions.',
+    tags: ['GSAP 3', 'Kinetic Typography', 'Scroll Trigger', 'Animations'],
+    previewImage: '/image-1783079897625-656293953.png',
+    statusBadge: 'Motion Studio'
+  },
+  {
+    id: 'demo-lesa-app',
+    title: 'Lesa Gifts & Lifestyle Mobile App',
+    url: '/templates/lesa/index.html',
+    category: 'E-Commerce & Retail',
+    description: 'Modern mobile-first e-commerce app prototype for curated gifts, personalized hampers, and express checkout.',
+    tags: ['Gifts', 'Lifestyle', 'Mobile App', 'Instant Checkout'],
+    previewImage: '/image-1783146270623-638183035.png',
+    statusBadge: 'Web App'
   }
 ];
 
-const STORAGE_KEY = 'digifox_custom_demo_websites';
+const STORAGE_KEY = 'digifox_demo_websites_v4';
 
 export const DemoWebsitesPage: React.FC = () => {
   const [websites, setWebsites] = useState<DemoWebsite[]>(() => {
     if (typeof localStorage === 'undefined') return DEFAULT_DEMO_WEBSITES;
     try {
+      // Clear legacy broken entries from previous versions
+      localStorage.removeItem('digifox_custom_demo_websites');
+      localStorage.removeItem('digifox_demo_websites_v2');
+      localStorage.removeItem('digifox_demo_websites_v3');
+
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Strip out any AI Builder entries
-          return parsed.filter(
+          // Filter out broken URLs that pointed to /portfolio or old broken paths
+          const valid = parsed.filter(
             (w: any) =>
               w.id !== 'demo-ai-builder' &&
+              w.url !== '/portfolio' &&
               !w.title?.toLowerCase().includes('ai builder') &&
-              !w.url?.includes('/ai-builder')
+              !w.url?.includes('/ai-builder') &&
+              !w.url?.includes('skyelite')
           );
+          if (valid.length > 0) return valid;
         }
       }
     } catch {
@@ -280,7 +298,14 @@ export const DemoWebsitesPage: React.FC = () => {
     if (window.confirm('Reset demo websites list to default showcase collection?')) {
       setWebsites(DEFAULT_DEMO_WEBSITES);
       setActiveWebsite(DEFAULT_DEMO_WEBSITES[0]);
-      localStorage.removeItem(STORAGE_KEY);
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem('digifox_custom_demo_websites');
+        localStorage.removeItem('digifox_demo_websites_v2');
+        localStorage.removeItem('digifox_demo_websites_v3');
+      } catch {
+        // ignore
+      }
     }
   };
 

@@ -44,7 +44,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     description: 'Cutting-edge apparel brand storefront with lookbook, responsive product grid, cart drawer, and high-energy motion design.',
     tags: ['Fashion', 'Streetwear', 'Lookbook', 'Apparel Store'],
     previewImage: '/image-1783080085858-787642334.jpg',
-    statusBadge: 'Live Storefront'
+    statusBadge: 'Static Preview'
   },
   {
     id: 'demo-blacklane-limo',
@@ -53,8 +53,8 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     category: 'Luxury & Automotive',
     description: 'Premier black car and limousine reservation portal featuring vehicle selector, real-time booking form, and dark luxury styling.',
     tags: ['Chauffeur', 'Limousine', 'Fleet Booking', 'Luxury Travel'],
-    previewImage: '/blacklane-cover.jpg',
-    statusBadge: 'Live Prototype'
+    previewImage: '/previews/preview-blacklane.png',
+    statusBadge: 'Static Preview'
   },
   {
     id: 'demo-intik-burgers',
@@ -63,8 +63,8 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     category: 'Food & Dining',
     description: 'Immersive restaurant & cloud kitchen showcase with visual food menu, burger ingredient assembly, and delivery integration.',
     tags: ['Restaurant', 'Gourmet Food', 'Menu System', 'Hospitality'],
-    previewImage: '/image-1783080041291-918187806.png',
-    statusBadge: 'Dining Experience'
+    previewImage: '/previews/preview-intikburgers.png',
+    statusBadge: 'Static Preview'
   },
   {
     id: 'demo-cars-melbourne',
@@ -74,7 +74,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     description: 'High-end chauffeur and luxury transport platform featuring interactive fleet selector, Lenis smooth scrolling, and booking quotes.',
     tags: ['Melbourne VIP', 'Luxury Fleet', 'Chauffeur Booking', 'Lenis Scroll'],
     previewImage: '/templates/demo-cars-vanta.png',
-    statusBadge: 'Interactive Fleet'
+    statusBadge: 'Static Preview'
   },
   {
     id: 'demo-studio-fashion',
@@ -84,7 +84,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     description: 'Minimalist luxury beauty and apparel storefront designed for high-conversion storytelling, editorial lookbooks, and checkout.',
     tags: ['Beauty', 'Fashion Store', 'Editorial Lookbook', 'Conversion'],
     previewImage: '/image-1783079742315-345189993.png',
-    statusBadge: 'Store Showcase'
+    statusBadge: 'Static Preview'
   },
   {
     id: 'demo-motion-sneakers',
@@ -94,7 +94,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     description: 'Interactive 3D product showcase highlighting athletic footwear with customizable angles, colorways, and smooth camera transitions.',
     tags: ['3D Model', 'Footwear', 'Interactive WebGL', 'Product Demo'],
     previewImage: '/image-1783080020266-402606108.png',
-    statusBadge: '3D WebGL'
+    statusBadge: 'Static Preview'
   },
   {
     id: 'demo-nova-creative',
@@ -104,7 +104,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     description: 'Avant-garde digital design agency portfolio with interactive cursor physics, case study reveals, and booking workflow.',
     tags: ['Agency', 'Creative Studio', 'Physics Cursors', 'Portfolio'],
     previewImage: '/image-1783080075680-896100451.png',
-    statusBadge: 'Agency Portfolio'
+    statusBadge: 'Static Preview'
   },
   {
     id: 'demo-gsap-motion',
@@ -113,8 +113,8 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     category: 'Creative & Agency',
     description: 'High-performance interactive web experience showcasing smooth GSAP scroll animations, parallax layers, and micro-interactions.',
     tags: ['GSAP 3', 'Kinetic Typography', 'Scroll Trigger', 'Animations'],
-    previewImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop',
-    statusBadge: 'Motion Studio'
+    previewImage: '/previews/preview-gsap.png',
+    statusBadge: 'Static Preview'
   },
   {
     id: 'demo-lesa-app',
@@ -124,11 +124,11 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     description: 'Modern mobile-first e-commerce app prototype for curated gifts, personalized hampers, and express checkout.',
     tags: ['Gifts', 'Lifestyle', 'Mobile App', 'Instant Checkout'],
     previewImage: '/image-1783146270623-638183035.png',
-    statusBadge: 'Web App'
+    statusBadge: 'Static Preview'
   }
 ];
 
-const STORAGE_KEY = 'digifox_demo_websites_v5';
+const STORAGE_KEY = 'digifox_demo_websites_v6';
 
 export const DemoWebsitesPage: React.FC = () => {
   const [websites, setWebsites] = useState<DemoWebsite[]>(() => {
@@ -139,6 +139,7 @@ export const DemoWebsitesPage: React.FC = () => {
       localStorage.removeItem('digifox_demo_websites_v2');
       localStorage.removeItem('digifox_demo_websites_v3');
       localStorage.removeItem('digifox_demo_websites_v4');
+      localStorage.removeItem('digifox_demo_websites_v5');
 
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
@@ -171,13 +172,9 @@ export const DemoWebsitesPage: React.FC = () => {
   // Active in-window site (for stage view and popup modal)
   const [activeWebsite, setActiveWebsite] = useState<DemoWebsite>(() => websites[0] || DEFAULT_DEMO_WEBSITES[0]);
 
-  // Stage Running state: websites do NOT auto-run in an iframe until explicitly opened
-  const [isStageRunning, setIsStageRunning] = useState(false);
-
   // Modal in-window viewer state
   const [showInWindowModal, setShowInWindowModal] = useState(false);
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
-  const [iframeKey, setIframeKey] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Add Demo Modal State
@@ -235,11 +232,9 @@ export const DemoWebsitesPage: React.FC = () => {
 
   const handleOpenInWindow = (site: DemoWebsite, asModal: boolean = true) => {
     setActiveWebsite(site);
-    setIframeKey((k) => k + 1);
     if (asModal) {
       setShowInWindowModal(true);
     } else {
-      setIsStageRunning(true);
       const stageEl = document.getElementById('in-window-stage');
       if (stageEl) {
         stageEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -247,10 +242,6 @@ export const DemoWebsitesPage: React.FC = () => {
         setShowInWindowModal(true);
       }
     }
-  };
-
-  const handleReloadFrame = () => {
-    setIframeKey((k) => k + 1);
   };
 
   const handleAddWebsite = (e: React.FormEvent) => {
@@ -309,6 +300,7 @@ export const DemoWebsitesPage: React.FC = () => {
         localStorage.removeItem('digifox_demo_websites_v2');
         localStorage.removeItem('digifox_demo_websites_v3');
         localStorage.removeItem('digifox_demo_websites_v4');
+      localStorage.removeItem('digifox_demo_websites_v5');
       } catch {
         // ignore
       }
@@ -460,8 +452,6 @@ export const DemoWebsitesPage: React.FC = () => {
                     type="button"
                     onClick={() => {
                       setActiveWebsite(site);
-                      setIframeKey((k) => k + 1);
-                      setIsStageRunning(true);
                     }}
                     className={`flex items-center gap-2 px-3 py-2 rounded-2xl border text-xs text-left transition-all shrink-0 cursor-pointer snap-start ${
                       isActive
@@ -496,24 +486,13 @@ export const DemoWebsitesPage: React.FC = () => {
 
                 {/* Clean In-Window Stage Address Bar (No technical URL displayed) */}
                 <div className="flex-1 min-w-0 max-w-xl mx-auto flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[11px] sm:text-xs text-[var(--text-secondary)] shadow-inner">
-                  <span className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0 ${isStageRunning ? 'bg-emerald-400 animate-pulse' : 'bg-blue-400'}`} />
+                  <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
                   <span className="truncate text-[var(--text-strong)] font-semibold">
-                    {isStageRunning ? 'Live Running Demo' : 'Ready to Open'} · {activeWebsite.title}
+                    Static Preview · {activeWebsite.title}
                   </span>
-                  <span className="hidden lg:inline-block text-[10px] uppercase font-bold text-blue-400 px-2 py-0.5 rounded-full bg-blue-500/10">
-                    {activeWebsite.category}
+                  <span className="hidden lg:inline-block text-[10px] uppercase font-bold text-emerald-400 px-2 py-0.5 rounded-full bg-emerald-500/10">
+                    Original Capture
                   </span>
-                  
-                  {isStageRunning && (
-                    <button
-                      type="button"
-                      onClick={handleReloadFrame}
-                      className="p-1 rounded hover:bg-white/10 text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer shrink-0 ml-0.5"
-                      title="Reload in Window"
-                    >
-                      <RotateCcw size={11} className="sm:w-3 sm:h-3" />
-                    </button>
-                  )}
                 </div>
 
                 {/* Viewport Device Controls & Fullscreen */}
@@ -557,7 +536,7 @@ export const DemoWebsitesPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Responsive Iframe Viewport Stage (Only runs when explicitly opened) */}
+              {/* Responsive Static Preview Viewport Stage */}
               <div className="w-full h-[65vh] sm:h-[72vh] min-h-[440px] sm:min-h-[520px] max-h-[820px] bg-[#07080e] flex items-center justify-center p-0 sm:p-4 overflow-hidden relative">
                 <div
                   className={`h-full transition-all duration-300 overflow-hidden shadow-2xl bg-[#0a0a0c] flex flex-col relative ${
@@ -568,75 +547,33 @@ export const DemoWebsitesPage: React.FC = () => {
                       : 'w-full sm:rounded-2xl sm:border border-[var(--border-strong)]'
                   }`}
                 >
-                  {!isStageRunning ? (
-                    <div className="w-full h-full relative flex flex-col items-center justify-center text-center p-6 bg-gradient-to-br from-[#0d0e18] via-[#08090f] to-[#040407] overflow-hidden">
-                      {/* Background Cover Image with Dim Overlay */}
-                      {activeWebsite.previewImage && (
-                        <img
-                          src={activeWebsite.previewImage}
-                          alt={activeWebsite.title}
-                          className="absolute inset-0 w-full h-full object-cover opacity-20 filter blur-xs"
-                        />
-                      )}
-                      <div className="absolute inset-0 bg-black/60 pointer-events-none" />
-
-                      {/* Launch Card */}
-                      <div className="relative z-10 max-w-md mx-auto space-y-4 px-4">
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-bold uppercase tracking-wider">
-                          <Layers size={12} />
-                          <span>{activeWebsite.category}</span>
-                        </div>
-
-                        <h3 className="text-xl sm:text-3xl font-black text-white uppercase tracking-tight">
-                          {activeWebsite.title}
-                        </h3>
-
-                        <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-light max-w-sm mx-auto leading-relaxed">
-                          {activeWebsite.description}
-                        </p>
-
-                        <div className="pt-3 flex flex-col sm:flex-row items-center justify-center gap-3">
-                          <button
-                            type="button"
-                            onClick={() => setIsStageRunning(true)}
-                            className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-blue-500/25 hover:scale-105 transition-all cursor-pointer"
-                          >
-                            <Play size={14} className="fill-white" />
-                            <span>Launch Live Prototype</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => setShowInWindowModal(true)}
-                            className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-xs font-semibold text-[var(--text-secondary)] hover:text-white transition-all flex items-center justify-center gap-2 cursor-pointer"
-                          >
-                            <Maximize2 size={13} />
-                            <span>Open In Full Modal</span>
-                          </button>
-                        </div>
-                      </div>
+                  {/* Browser Address Banner for Static View */}
+                  <div className="px-4 py-2 border-b border-[var(--border-strong)]/60 bg-[#0d0e14] flex items-center justify-between text-xs shrink-0">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="font-semibold text-zinc-300 text-[11px]">
+                        Static Original Website Preview · {previewDevice.toUpperCase()}
+                      </span>
                     </div>
-                  ) : (
-                    <div className="w-full h-full relative">
-                      <iframe
-                        key={iframeKey}
-                        src={activeWebsite.url}
-                        title={activeWebsite.title}
-                        className="w-full h-full border-none bg-[#0a0a0c] block"
-                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                      />
-                      {/* Close Running Demo */}
-                      <button
-                        type="button"
-                        onClick={() => setIsStageRunning(false)}
-                        className="absolute top-3 right-3 z-20 px-3 py-1.5 rounded-xl bg-black/80 hover:bg-black text-white/80 hover:text-white border border-white/20 text-xs font-semibold backdrop-blur-md transition-all shadow-lg flex items-center gap-1.5 cursor-pointer"
-                        title="Close Running Demo"
-                      >
-                        <X size={13} />
-                        <span>Close Running Demo</span>
-                      </button>
-                    </div>
-                  )}
+                    <button
+                      type="button"
+                      onClick={() => setShowInWindowModal(true)}
+                      className="text-[10px] text-blue-400 hover:text-blue-300 font-bold uppercase tracking-wider flex items-center gap-1 cursor-pointer"
+                    >
+                      <Maximize2 size={11} />
+                      <span>Full Modal</span>
+                    </button>
+                  </div>
+
+                  {/* Scrollable Static Image Preview */}
+                  <div className="w-full flex-1 overflow-y-auto overflow-x-hidden bg-[#050608] scrollbar-thin scrollbar-thumb-zinc-700">
+                    <img
+                      src={activeWebsite.previewImage || '/previews/preview-blacklane.png'}
+                      alt={activeWebsite.title}
+                      className="w-full h-auto object-top block select-none pointer-events-auto"
+                      loading="eager"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -906,7 +843,6 @@ export const DemoWebsitesPage: React.FC = () => {
                       const found = websites.find((w) => w.id === e.target.value);
                       if (found) {
                         setActiveWebsite(found);
-                        setIframeKey((k) => k + 1);
                       }
                     }}
                     className="hidden sm:block text-xs font-bold text-[var(--text-strong)] bg-[var(--bg-surface)] border border-[var(--border-strong)] px-2.5 py-1.5 rounded-xl cursor-pointer focus:outline-none"
@@ -919,21 +855,15 @@ export const DemoWebsitesPage: React.FC = () => {
                   </select>
                 </div>
 
-                {/* Clean Simulated Address Bar: No technical URLs */}
+                {/* Clean Simulated Address Bar: Static Original Website */}
                 <div className="flex-1 min-w-0 max-w-lg mx-auto flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[11px] sm:text-xs text-[var(--text-secondary)] shadow-inner">
                   <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
                   <span className="truncate text-[var(--text-strong)] font-semibold">
-                    Live Demo · {activeWebsite.title}
+                    Static Preview · {activeWebsite.title}
                   </span>
-                  
-                  <button
-                    type="button"
-                    onClick={handleReloadFrame}
-                    className="p-1 rounded hover:bg-white/10 text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer shrink-0 ml-0.5"
-                    title="Reload in Window"
-                  >
-                    <RotateCcw size={11} className="sm:w-3 sm:h-3" />
-                  </button>
+                  <span className="hidden xs:inline px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">
+                    Original Capture
+                  </span>
                 </div>
 
                 {/* Viewport Device Controls, Fullscreen & Close */}
@@ -985,10 +915,10 @@ export const DemoWebsitesPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Responsive Iframe Container */}
+              {/* Responsive Static Preview Viewport Container */}
               <div className="flex-1 bg-[#07080e] flex items-center justify-center p-0 sm:p-4 overflow-hidden relative">
                 <div
-                  className={`h-full transition-all duration-300 overflow-hidden shadow-2xl bg-[#0a0a0c] flex flex-col ${
+                  className={`h-full transition-all duration-300 overflow-hidden shadow-2xl bg-[#0a0a0c] flex flex-col relative ${
                     previewDevice === 'mobile'
                       ? 'w-full max-w-[390px] sm:max-w-[375px] sm:rounded-[36px] sm:border-[6px] sm:border-zinc-800'
                       : previewDevice === 'tablet'
@@ -996,13 +926,25 @@ export const DemoWebsitesPage: React.FC = () => {
                       : 'w-full sm:rounded-2xl sm:border border-[var(--border-strong)]'
                   }`}
                 >
-                  <iframe
-                    key={iframeKey}
-                    src={activeWebsite.url}
-                    title={activeWebsite.title}
-                    className="w-full h-full border-none bg-[#0a0a0c] block"
-                    sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                  />
+                  {/* Subtle top indicator inside viewport */}
+                  <div className="px-3 py-1.5 bg-[#0e0f17] border-b border-[var(--border-strong)]/50 flex items-center justify-between text-[11px] shrink-0">
+                    <span className="text-zinc-400 font-mono text-[10px]">
+                      🔒 {activeWebsite.title} · Static Capture
+                    </span>
+                    <span className="text-[10px] text-zinc-500 font-sans">
+                      Scroll to inspect full site
+                    </span>
+                  </div>
+
+                  {/* Scrollable Static Image Preview */}
+                  <div className="w-full flex-1 overflow-y-auto overflow-x-hidden bg-[#050608] scrollbar-thin scrollbar-thumb-zinc-700">
+                    <img
+                      src={activeWebsite.previewImage || '/previews/preview-blacklane.png'}
+                      alt={activeWebsite.title}
+                      className="w-full h-auto object-top block select-none pointer-events-auto"
+                      loading="eager"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -1024,7 +966,6 @@ export const DemoWebsitesPage: React.FC = () => {
                       type="button"
                       onClick={() => {
                         setActiveWebsite(w);
-                        setIframeKey((k) => k + 1);
                       }}
                       className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold transition-colors cursor-pointer ${
                         activeWebsite.id === w.id

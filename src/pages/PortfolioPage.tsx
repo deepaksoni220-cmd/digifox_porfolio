@@ -24,7 +24,7 @@ import { ThemeToggle } from '../components/ThemeToggle';
 import { PageFooter } from '../components/PageFooter';
 import { Media } from '../components/Media';
 import siteData from '../data.json';
-import { launchProtectedReference, maskReferenceUrl, canEmbedInWindow } from '../services/protectedReferenceService';
+import { launchProtectedReference, maskReferenceUrl } from '../services/protectedReferenceService';
 
 const CATEGORIES = [
   "All",
@@ -976,22 +976,14 @@ export const PortfolioPage: React.FC = () => {
                 </button>
               </div>
 
-              {/* Modal Body Preview (Interactive Iframe for local templates or high-res Image) */}
-              <div className="relative aspect-[16/10] sm:aspect-[16/9] bg-black overflow-hidden flex items-center justify-center">
-                {canEmbedInWindow(selectedProject.url) ? (
-                  <iframe
-                    src={selectedProject.url}
-                    title={selectedProject.title}
-                    className="w-full h-full border-none"
-                    allow="autoplay; fullscreen; xr-spatial-tracking"
-                  />
-                ) : (
-                  <Media
-                    src={selectedProject.image}
-                    alt={selectedProject.title}
-                    className="w-full h-full object-cover"
-                  />
-                )}
+              {/* Modal Body Preview (Static Preview of Original Website) */}
+              <div className="relative aspect-[16/10] sm:aspect-[16/9] max-h-[62vh] bg-black overflow-y-auto overflow-x-hidden flex items-start justify-center scrollbar-thin scrollbar-thumb-zinc-700">
+                <img
+                  src={selectedProject.image}
+                  alt={selectedProject.title}
+                  className="w-full h-auto object-top block"
+                  loading="eager"
+                />
               </div>
 
               {/* Modal Footer (Protected: zero technical URLs exposed) */}
@@ -999,7 +991,7 @@ export const PortfolioPage: React.FC = () => {
                 <div className="text-center sm:text-left">
                   <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-bold uppercase tracking-wider mb-1">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>Protection Layer Active</span>
+                    <span>🔒 Static Verified Capture</span>
                   </div>
                   <p className="text-sm font-bold text-[var(--text-strong)] font-mono truncate max-w-xs sm:max-w-sm">
                     {maskReferenceUrl(selectedProject.url)}

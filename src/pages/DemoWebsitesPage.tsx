@@ -45,6 +45,7 @@ export const getWhiteLabelTitle = (site: DemoWebsite): string => {
     'digifox-spatial-spool': 'Cinematic Kinetic Motion Design Agency',
     'digifox-spatial-descent': 'Ultra-Luxury Coupé Automotive Experience',
     'digifox-spatial-thumbstop': 'High-Impact Vertical Ads & Media Agency',
+    'digifox-spatial-flight': 'Artisanal Vineyard & Wine Flight Experience',
     'digifox-aurelle-jewelry': 'Bespoke 3D Diamond & Luxury Jewelry Store',
     'digifox-samarth-cactus': 'Rare Botanical & Plant Nursery E-Commerce',
     'digifox-lotus-gold': 'FMCG Superfood Brand & Distribution Portal',
@@ -93,6 +94,7 @@ export const getWhiteLabelDescription = (site: DemoWebsite): string => {
     'digifox-spatial-spool': 'Premier design studio website for brands and places with fluid Three.js motion, cinematic scroll storytelling, and WebGL2 experiences.',
     'digifox-spatial-descent': 'Ultra-luxury two-seat coupé reveal platform with fluid paint customizer, real-time finance calculator, and test drive booking.',
     'digifox-spatial-thumbstop': 'Short-form vertical video advertising and creative production studio showcasing interactive five-color worlds.',
+    'digifox-spatial-flight': 'Artisanal wine brand showcase with interactive 3D bottle wheel, label inspection, and reserve flight tasting.',
     'digifox-aurelle-jewelry': 'High-jewelry 3D web platform featuring real-time diamond refraction, dark editorial aesthetic, and interactive ring customizer.',
     'digifox-samarth-cactus': 'High-conversion botanical e-commerce nursery storefront with live catalog synchronization, rare succulent listings, and express checkout.',
     'digifox-lotus-gold': 'FMCG brand portal with dynamic product presentation, nutrition storytelling, distribution inquiry funnel, and wholesale ordering.',
@@ -118,6 +120,7 @@ export const getWhiteLabelShortChip = (site: DemoWebsite): string => {
     'digifox-spatial-spool': 'Spool Agency',
     'digifox-spatial-descent': 'Automotive 3D',
     'digifox-spatial-thumbstop': 'Vertical Ads',
+    'digifox-spatial-flight': 'Wine Flight 3D',
     'digifox-aurelle-jewelry': 'Diamond 3D',
     'digifox-samarth-cactus': 'Botanical',
     'digifox-lotus-gold': 'FMCG Food',
@@ -150,6 +153,7 @@ export const getFrameSimulatedUrl = (site: DemoWebsite): string => {
     'digifox-spatial-spool': 'agency/spool-motion-design',
     'digifox-spatial-descent': 'automotive/coupe-experience',
     'digifox-spatial-thumbstop': 'agency/vertical-ads-studio',
+    'digifox-spatial-flight': 'food-beverage/wine-flight',
     'digifox-aurelle-jewelry': 'luxury-jewelry/diamond-customizer',
     'digifox-samarth-cactus': 'botanical-nursery/rare-catalog',
     'digifox-lotus-gold': 'fmcg-brand/food-distribution',
@@ -228,6 +232,16 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     tags: ['Agency', 'Vertical Ads', 'Commercial Media', 'Motion', 'Video Production'],
     previewImage: '/previews/preview-thumbstop.png',
     statusBadge: 'Agency 3D'
+  },
+  {
+    id: 'digifox-spatial-flight',
+    title: 'Artisanal Vineyard & Wine Flight Experience',
+    url: '/showcase/ref_spatial_flight',
+    category: 'Food & FMCG',
+    description: 'Artisanal wine brand showcase with interactive 3D bottle wheel, label inspection, and reserve flight tasting.',
+    tags: ['Food & Beverage', 'Wine Flight', '3D Bottles', 'Artisanal', 'Interactive Wheel'],
+    previewImage: '/previews/preview-spatial_flight.png',
+    statusBadge: 'Wine Flight 3D'
   },
   {
     id: 'digifox-aurelle-jewelry',
@@ -443,7 +457,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   }
 ];
 
-const STORAGE_KEY = 'digifox_demo_websites_v16';
+const STORAGE_KEY = 'digifox_demo_websites_v17';
 
 export const DemoWebsitesPage: React.FC = () => {
   const [websites, setWebsites] = useState<DemoWebsite[]>(() => {
@@ -465,6 +479,7 @@ export const DemoWebsitesPage: React.FC = () => {
       localStorage.removeItem('digifox_demo_websites_v13');
       localStorage.removeItem('digifox_demo_websites_v14');
       localStorage.removeItem('digifox_demo_websites_v15');
+      localStorage.removeItem('digifox_demo_websites_v16');
 
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {

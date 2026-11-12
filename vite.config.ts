@@ -97,6 +97,7 @@ function localDevApiPlugin() {
               ref_spool_agency: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCA1LDA6GjY9JSkscVFMWVs',
               ref_the_descent: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCctJnIyUCwwJCIgcFBWUFJKai4rPyk',
               ref_thumbstop: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCctNjI0Ris8MWM9MV1dTBlaMCsz',
+              ref_spatial_flight: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cDUpKjg-QXA6LygxJxdQQFpe',
               ref_aurelle_jewelry: 'LDIrIjZ8cHwhKjg_UzArbCYxKFxURk5BMCktN2swOiEmJjN4VC8jbg',
               ref_agency_coaches: 'LDIrIjZ8cHwhKjg_UzArbCgxMlYVQRlEITQ8NyloPiM1bA',
               ref_online_store_3d: 'LDIrIjZ8cHwhKjg_UzArdCg7MVVRWlIcMiMtMSAqcTI1M3A',
@@ -138,6 +139,8 @@ function localDevApiPlugin() {
               refererHeader = 'https://spatialsites.co/kits/the-descent/demo';
             } else if (token === 'ref_thumbstop') {
               refererHeader = 'https://spatialsites.co/kits/thumbstop/demo';
+            } else if (token === 'ref_spatial_flight') {
+              refererHeader = 'https://spatialsites.co/kits/flight/demo';
             }
 
             const targetResp = await fetch(targetUrl, {
@@ -164,6 +167,8 @@ function localDevApiPlugin() {
               baseHref = '/api/proxy-site/the-descent/';
             } else if (token === 'ref_thumbstop') {
               baseHref = '/api/proxy-site/thumbstop/';
+            } else if (token === 'ref_spatial_flight') {
+              baseHref = '/api/proxy-site/flight/';
             } else {
               baseHref = `${respParsed.origin}${respParsed.pathname.endsWith('/') ? respParsed.pathname : respParsed.pathname + '/'}`;
             }
@@ -185,7 +190,7 @@ function localDevApiPlugin() {
             //     We keep all the server-rendered HTML (SSR) intact — it already contains
             //     the fully-rendered visible page content.  Only the hydration bootstrap
             //     scripts are removed so the page displays as a rich static snapshot. ────
-            const isSpatialSite = token === 'ref_spatial_apparels' || token === 'ref_teasel_spatial' || token === 'ref_spool_agency' || token === 'ref_the_descent' || token === 'ref_thumbstop';
+            const isSpatialSite = token === 'ref_spatial_apparels' || token === 'ref_teasel_spatial' || token === 'ref_spool_agency' || token === 'ref_the_descent' || token === 'ref_thumbstop' || token === 'ref_spatial_flight';
             const isNextJs = html.includes('__next') || html.includes('_next/') || html.includes('__NEXT_DATA__');
             if (isNextJs && !isSpatialSite) {
               // Remove <script> tags that bootstrap Next.js client router / RSC
@@ -229,6 +234,8 @@ function localDevApiPlugin() {
               kit = 'the-descent';
             } else if (rawPath.startsWith('thumbstop/')) {
               kit = 'thumbstop';
+            } else if (rawPath.startsWith('flight/')) {
+              kit = 'flight';
             }
 
             let dest = 'empty';

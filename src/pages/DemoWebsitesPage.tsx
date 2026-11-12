@@ -195,7 +195,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'digifox-spatial-spool',
     title: 'Cinematic Kinetic Motion Design Agency',
     url: '/showcase/ref_spool_agency',
-    category: '3D Animated Websites',
+    category: 'Agency & Studio',
     description: 'Premier design studio website for brands and places with fluid Three.js motion, cinematic scroll storytelling, and WebGL2 experiences.',
     tags: ['Agency', 'Studio', 'Three.js', 'WebGL2', 'Motion Design'],
     previewImage: '/previews/preview-spool_agency.png',
@@ -205,7 +205,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'digifox-aurelle-jewelry',
     title: 'Bespoke 3D Diamond & Luxury Jewelry Store',
     url: '/showcase/ref_aurelle_jewelry',
-    category: '3D Animated Websites',
+    category: 'Jewelry & Luxury',
     description: 'High-jewelry 3D web platform featuring real-time diamond refraction, dark editorial aesthetic, and interactive ring customizer.',
     tags: ['3D WebGL', 'Diamond Jewelry', 'Luxury Store', 'E-Commerce'],
     previewImage: '/previews/preview-ref_aurelle_jewelry.png',
@@ -215,9 +215,9 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'digifox-samarth-cactus',
     title: 'Rare Botanical & Plant Nursery E-Commerce',
     url: '/showcase/ref_samarth_cactus',
-    category: 'Shopify Websites',
+    category: 'E-Commerce & Retail',
     description: 'High-conversion botanical e-commerce nursery storefront with live catalog synchronization, rare succulent listings, and express checkout.',
-    tags: ['Shopify', 'Botanical Nursery', 'E-Commerce', 'Mobile Optimized'],
+    tags: ['Botanical Nursery', 'E-Commerce', 'Mobile Optimized', 'Storefront'],
     previewImage: '/previews/preview-ref_samarth_cactus.png',
     statusBadge: 'Live Client Site'
   },
@@ -225,9 +225,9 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'digifox-lotus-gold',
     title: 'FMCG Superfood Brand & Distribution Portal',
     url: '/showcase/ref_lotus_gold',
-    category: 'WordPress Websites',
+    category: 'Food & FMCG',
     description: 'FMCG brand portal with dynamic product presentation, nutrition storytelling, distribution inquiry funnel, and wholesale ordering.',
-    tags: ['WordPress', 'FMCG Food', 'Brand Identity', 'Product Grid'],
+    tags: ['FMCG Food', 'Brand Identity', 'Product Grid', 'Wholesale'],
     previewImage: '/previews/preview-ref_lotus_gold.png',
     statusBadge: 'Live Client Site'
   },
@@ -235,9 +235,9 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'digifox-ninety-degree',
     title: 'Architectural Natural Stone & Granite Showcase',
     url: '/showcase/ref_ninety_degree',
-    category: 'WordPress Websites',
+    category: 'Architecture & Construction',
     description: 'Premium architectural natural stone and granite fabrication portal featuring stone slab gallery, case studies, and quote engine.',
-    tags: ['WordPress', 'Architecture', 'Stone & Marble', 'Commercial'],
+    tags: ['Architecture', 'Stone & Marble', 'Commercial', 'Fabrication'],
     previewImage: '/previews/preview-ref_ninety_degree.png',
     statusBadge: 'Live Client Site'
   },
@@ -245,9 +245,9 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'digifox-abacus-master',
     title: 'International Mental Math Academy Portal',
     url: '/showcase/ref_abacus_master',
-    category: 'WordPress Websites',
+    category: 'Education & Academy',
     description: 'International mental math education platform with student course enrollment, interactive curriculum breakdown, and inquiry system.',
-    tags: ['WordPress', 'Education', 'Academy Portal', 'Global Reach'],
+    tags: ['Education', 'Academy Portal', 'Global Reach', 'Enrollment'],
     previewImage: '/previews/preview-ref_abacus_master.png',
     statusBadge: 'Live Client Site'
   },
@@ -255,9 +255,9 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'digifox-rukmi-jewellery',
     title: 'Artisan 925 Sterling Silver Jewellery Boutique',
     url: '/showcase/ref_rukmi_jewellery',
-    category: 'Shopify Websites',
+    category: 'Jewelry & Luxury',
     description: 'Artisan 925 sterling silver jewelry storefront featuring gift drawer, multi-currency display, and mobile-first navigation.',
-    tags: ['Shopify', 'Silver Jewellery', 'Artisan Store', 'Mobile First'],
+    tags: ['Silver Jewellery', 'Artisan Store', 'Mobile First', 'Luxury'],
     previewImage: '/previews/preview-ref_rukmi_jewellery.png',
     statusBadge: 'Live Client Site'
   },
@@ -265,9 +265,9 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'digifox-property-realestate',
     title: 'Luxury Real Estate & Villa Architecture Showcase',
     url: '/showcase/ref_property_realestate',
-    category: 'WordPress Websites',
+    category: 'Real Estate & Properties',
     description: 'Elite residential real estate showcase with property portfolio, interactive neighborhood views, and private viewing appointments.',
-    tags: ['WordPress', 'Real Estate', 'Villa Showcase', 'Lead Engine'],
+    tags: ['Real Estate', 'Villa Showcase', 'Lead Engine', 'Properties'],
     previewImage: '/image-1783079877455-126209707.png',
     statusBadge: 'Digifox Production'
   },
@@ -275,7 +275,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'digifox-world-agency',
     title: 'Flagship 5D Digital Agency & Studio Experience',
     url: '/',
-    category: '3D Animated Websites',
+    category: 'Agency & Studio',
     description: 'Flagship 5D digital agency platform highlighting full-stack engineering, performance marketing, 3D WebGL development, and AI design.',
     tags: ['Flagship Agency', '3D WebGL', 'Performance', 'Full Stack'],
     previewImage: '/image-1783079897625-656293953.png',
@@ -285,9 +285,9 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'digifox-agency-coaches',
     title: 'Executive Coaching & High-Ticket Consulting Portal',
     url: '/showcase/ref_agency_coaches',
-    category: '3D Animated Websites',
+    category: 'Coaching & Consulting',
     description: 'High-impact dark luxury coaching and consulting platform with client testimonials, audio-visual masterclasses, and booking workflow.',
-    tags: ['3D Animated', 'Coaching Platform', 'High Ticket', 'Booking System'],
+    tags: ['Coaching Platform', 'High Ticket', 'Booking System', 'Consulting'],
     previewImage: '/image-1783081181632-620110443.png',
     statusBadge: 'Digifox Production'
   },
@@ -295,9 +295,9 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'digifox-online-store-3d',
     title: 'Interactive 360° 3D Consumer Electronics Store',
     url: '/showcase/ref_online_store_3d',
-    category: '3D Animated Websites',
+    category: 'E-Commerce & Retail',
     description: 'Futuristic consumer electronic and accessories storefront with 360-degree rotation, exploded part disassembly, and instant cart.',
-    tags: ['3D WebGL', 'Product Explosion', 'E-Commerce', 'Dark UI'],
+    tags: ['Consumer Electronics', 'Product Explosion', 'E-Commerce', 'Dark UI'],
     previewImage: '/image-1783081097015-89310139.png',
     statusBadge: 'Digifox Production'
   },
@@ -305,7 +305,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'digifox-backend-fullstack',
     title: 'Full-Stack Cloud E-Commerce Engine',
     url: '/showcase/ref_backend_fullstack',
-    category: '3D Animated Websites',
+    category: 'E-Commerce & Retail',
     description: 'Production full-stack e-commerce engine with inventory management, Supabase/Firebase database, stripe checkout, and dynamic stock.',
     tags: ['Full Stack', 'Cloud Database', 'Automated Orders', 'Storefront'],
     previewImage: '/image-1783080979986-78210779.png',
@@ -315,7 +315,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'digifox-3d-portfolio',
     title: 'Interactive WebGL 3D Gravity Portfolio',
     url: '/showcase/ref_3d_portfolio',
-    category: '3D Animated Websites',
+    category: 'Agency & Studio',
     description: 'Immersive 3D space scene portfolio with interactive gravity particles, floating project pods, and smooth camera waypoints.',
     tags: ['3D WebGL', 'Three.js', 'Particle Physics', 'Portfolio'],
     previewImage: '/image-1783080973853-739149021.png',
@@ -327,7 +327,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'demo-blacklane-limo',
     title: 'VIP Chauffeur & Global Fleet Reservation Platform',
     url: '/templates/blacklane/index.html',
-    category: '3D Animated Websites',
+    category: 'Automotive & Travel',
     description: 'Premier black car and limousine reservation portal featuring vehicle selector, real-time booking form, and dark luxury styling.',
     tags: ['Chauffeur', 'Limousine', 'Fleet Booking', 'Luxury Travel'],
     previewImage: '/previews/preview-blacklane.png',
@@ -337,7 +337,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'demo-intik-burgers',
     title: 'Gourmet Dining & Cloud Kitchen 3D Showcase',
     url: '/templates/intikburgers/index.html',
-    category: '3D Animated Websites',
+    category: 'Food & FMCG',
     description: 'Immersive restaurant & cloud kitchen showcase with visual food menu, burger ingredient assembly, and delivery integration.',
     tags: ['Restaurant', 'Gourmet Food', 'Menu System', 'Hospitality'],
     previewImage: '/previews/preview-intikburgers.png',
@@ -347,7 +347,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'demo-gsap-motion',
     title: 'Kinetic Motion & Interactive Studio Experience',
     url: '/templates/gsap/index.html',
-    category: '3D Animated Websites',
+    category: 'Agency & Studio',
     description: 'High-performance interactive web experience showcasing smooth GSAP scroll animations, parallax layers, and micro-interactions.',
     tags: ['GSAP 3', 'Kinetic Typography', 'Scroll Trigger', 'Animations'],
     previewImage: '/previews/preview-gsap.png',
@@ -357,7 +357,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'demo-biska-fashion',
     title: 'Modern Streetwear & Apparel Lookbook Store',
     url: '/templates/biska/index.html',
-    category: '3D Animated Websites',
+    category: 'Fashion',
     description: 'Cutting-edge apparel brand storefront with lookbook, responsive product grid, cart drawer, and high-energy motion design.',
     tags: ['Fashion', 'Streetwear', 'Lookbook', 'Apparel Store'],
     previewImage: '/image-1783080085858-787642334.jpg',
@@ -367,7 +367,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'demo-studio-fashion',
     title: 'Minimalist Editorial Fashion & Beauty Store',
     url: '/templates/studiofashion/index.html',
-    category: '3D Animated Websites',
+    category: 'Fashion',
     description: 'Minimalist luxury beauty and apparel storefront designed for high-conversion storytelling, editorial lookbooks, and checkout.',
     tags: ['Beauty', 'Fashion Store', 'Editorial Lookbook', 'Conversion'],
     previewImage: '/image-1783079742315-345189993.png',
@@ -377,7 +377,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'demo-cars-melbourne',
     title: 'Executive Fleet & Luxury Chauffeur Platform',
     url: '/templates/cars/index.html',
-    category: '3D Animated Websites',
+    category: 'Automotive & Travel',
     description: 'High-end chauffeur and luxury transport platform featuring interactive fleet selector, Lenis smooth scrolling, and booking quotes.',
     tags: ['Melbourne VIP', 'Luxury Fleet', 'Chauffeur Booking', 'Lenis Scroll'],
     previewImage: '/templates/demo-cars-vanta.png',
@@ -387,7 +387,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'demo-motion-sneakers',
     title: 'Interactive 3D Athletic Footwear Experience',
     url: '/templates/shoes/index.html',
-    category: '3D Animated Websites',
+    category: 'Fashion',
     description: 'Interactive 3D product showcase highlighting athletic footwear with customizable angles, colorways, and smooth camera transitions.',
     tags: ['3D Model', 'Footwear', 'Interactive WebGL', 'Product Demo'],
     previewImage: '/image-1783080020266-402606108.png',
@@ -397,7 +397,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'demo-nova-creative',
     title: 'Avant-Garde Interactive Design Studio Portfolio',
     url: '/templates/digpro/index.html',
-    category: '3D Animated Websites',
+    category: 'Agency & Studio',
     description: 'Avant-garde digital design agency portfolio with interactive cursor physics, case study reveals, and booking workflow.',
     tags: ['Agency', 'Creative Studio', 'Physics Cursors', 'Portfolio'],
     previewImage: '/image-1783080075680-896100451.png',
@@ -407,7 +407,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'demo-lesa-app',
     title: 'Curated Gifts & Lifestyle Mobile Storefront',
     url: '/templates/lesa/index.html',
-    category: 'Shopify Websites',
+    category: 'E-Commerce & Retail',
     description: 'Modern mobile-first e-commerce app prototype for curated gifts, personalized hampers, and express checkout.',
     tags: ['Gifts', 'Lifestyle', 'Mobile App', 'Instant Checkout'],
     previewImage: '/image-1783146270623-638183035.png',
@@ -415,7 +415,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   }
 ];
 
-const STORAGE_KEY = 'digifox_demo_websites_v13';
+const STORAGE_KEY = 'digifox_demo_websites_v14';
 
 export const DemoWebsitesPage: React.FC = () => {
   const [websites, setWebsites] = useState<DemoWebsite[]>(() => {
@@ -434,6 +434,7 @@ export const DemoWebsitesPage: React.FC = () => {
       localStorage.removeItem('digifox_demo_websites_v10');
       localStorage.removeItem('digifox_demo_websites_v11');
       localStorage.removeItem('digifox_demo_websites_v12');
+      localStorage.removeItem('digifox_demo_websites_v13');
 
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
@@ -490,7 +491,7 @@ export const DemoWebsitesPage: React.FC = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newUrl, setNewUrl] = useState('');
-  const [newCategory, setNewCategory] = useState('3D Animated Websites');
+  const [newCategory, setNewCategory] = useState('Fashion');
   const [newDescription, setNewDescription] = useState('');
   const [newTags, setNewTags] = useState('');
   const [newPreviewImage, setNewPreviewImage] = useState('');
@@ -678,7 +679,7 @@ export const DemoWebsitesPage: React.FC = () => {
           </h1>
 
           <p className="text-xs sm:text-base text-[var(--text-secondary)] font-light leading-relaxed max-w-2xl mx-auto px-2">
-            Explore authentic Digifox client websites, 3D animated platforms, and Shopify stores directly in this window. High-resolution static captures allow seamless inspection across Desktop, Tablet, and Mobile devices without external redirects.
+            Explore authentic Digifox client websites, 3D interactive experiences, and commercial portals directly in this window. High-resolution live streams and interactive viewports allow seamless inspection across Desktop, Tablet, and Mobile devices without external redirects.
           </p>
 
           {/* Action Bar & View Switcher */}
@@ -1484,10 +1485,16 @@ export const DemoWebsitesPage: React.FC = () => {
                       onChange={(e) => setNewCategory(e.target.value)}
                       className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm text-[var(--text-strong)] focus:border-blue-500 focus:outline-none cursor-pointer"
                     >
-                      <option value="3D Animated Websites">3D Animated Websites</option>
-                      <option value="Shopify Websites">Shopify Websites</option>
-                      <option value="WordPress Websites">WordPress Websites</option>
-                      <option value="Other Demos">Other Demos</option>
+                      <option value="Fashion">Fashion</option>
+                      <option value="Jewelry & Luxury">Jewelry & Luxury</option>
+                      <option value="Agency & Studio">Agency & Studio</option>
+                      <option value="E-Commerce & Retail">E-Commerce & Retail</option>
+                      <option value="Food & FMCG">Food & FMCG</option>
+                      <option value="Architecture & Construction">Architecture & Construction</option>
+                      <option value="Real Estate & Properties">Real Estate & Properties</option>
+                      <option value="Automotive & Travel">Automotive & Travel</option>
+                      <option value="Education & Academy">Education & Academy</option>
+                      <option value="Coaching & Consulting">Coaching & Consulting</option>
                     </select>
                   </div>
 

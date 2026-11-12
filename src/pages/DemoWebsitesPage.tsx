@@ -2,11 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, 
-  Copy, 
-  Check, 
   Search, 
   Plus, 
-  Globe, 
   Filter, 
   X, 
   Sparkles, 
@@ -15,7 +12,6 @@ import {
   Monitor, 
   RotateCcw, 
   Trash2, 
-  Share2,
   Tag,
   Laptop,
   Maximize2,
@@ -114,21 +110,11 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     id: 'demo-nova-creative',
     title: 'Nova Creative Digital Portfolio',
     url: '/templates/digpro/index.html',
-    category: 'Tech & SaaS',
+    category: 'Creative & Agency',
     description: 'Avant-garde digital design agency portfolio with interactive cursor physics, case study reveals, and booking workflow.',
     tags: ['Agency', 'Creative Studio', 'Physics Cursors', 'Portfolio'],
     previewImage: '/image-1783080075680-896100451.png',
     statusBadge: 'Agency Showcase'
-  },
-  {
-    id: 'demo-ai-builder',
-    title: 'Digifox AI Website Builder & WebMake Studio',
-    url: '/ai-builder',
-    category: 'Tech & SaaS',
-    description: 'Autonomous AI website generation suite with live interactive visual editor, prompt-to-site architecture, and automated SEO dashboard.',
-    tags: ['AI Builder', 'NextGen SaaS', 'Auto SEO', 'Studio'],
-    previewImage: '/templates/thumbnails/hero-skyelite-preview-DHaZIgUv.gif',
-    statusBadge: 'Live Platform'
   }
 ];
 
@@ -142,7 +128,13 @@ export const DemoWebsitesPage: React.FC = () => {
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          // Strip out any AI Builder entries
+          return parsed.filter(
+            (w: any) =>
+              w.id !== 'demo-ai-builder' &&
+              !w.title?.toLowerCase().includes('ai builder') &&
+              !w.url?.includes('/ai-builder')
+          );
         }
       }
     } catch {
@@ -153,8 +145,6 @@ export const DemoWebsitesPage: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
-  const [copiedAll, setCopiedAll] = useState(false);
 
   // View Mode: 'stage' (Embedded in-window stage) or 'grid' (Cards)
   const [viewMode, setViewMode] = useState<'stage' | 'grid'>('stage');
@@ -181,10 +171,16 @@ export const DemoWebsitesPage: React.FC = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Save to localStorage whenever websites change
+  // Save to localStorage whenever websites change (always excluding AI Builder)
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(websites));
+      const cleanList = websites.filter(
+        (w) =>
+          w.id !== 'demo-ai-builder' &&
+          !w.title.toLowerCase().includes('ai builder') &&
+          !w.url.includes('/ai-builder')
+      );
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanList));
     } catch {
       // ignore
     }
@@ -207,7 +203,6 @@ export const DemoWebsitesPage: React.FC = () => {
       const matchesSearch =
         !q ||
         site.title.toLowerCase().includes(q) ||
-        site.url.toLowerCase().includes(q) ||
         site.description.toLowerCase().includes(q) ||
         site.category.toLowerCase().includes(q) ||
         site.tags.some((t) => t.toLowerCase().includes(q));
@@ -216,30 +211,12 @@ export const DemoWebsitesPage: React.FC = () => {
     });
   }, [websites, searchQuery, selectedCategory]);
 
-  const handleCopyLink = (url: string) => {
-    const fullUrl = url.startsWith('http') ? url : `${window.location.origin}${url}`;
-    navigator.clipboard.writeText(fullUrl);
-    setCopiedUrl(url);
-    setTimeout(() => setCopiedUrl(null), 2000);
-  };
-
-  const handleCopyAllLinks = () => {
-    const lines = filteredWebsites.map((site) => {
-      const fullUrl = site.url.startsWith('http') ? site.url : `${window.location.origin}${site.url}`;
-      return `• ${site.title} (${site.category}): ${fullUrl}`;
-    });
-    navigator.clipboard.writeText(lines.join('\n'));
-    setCopiedAll(true);
-    setTimeout(() => setCopiedAll(false), 2500);
-  };
-
   const handleOpenInWindow = (site: DemoWebsite, asModal: boolean = false) => {
     setActiveWebsite(site);
     setIframeKey((k) => k + 1);
     if (asModal) {
       setShowInWindowModal(true);
     } else {
-      // scroll to stage view smoothly
       const stageEl = document.getElementById('in-window-stage');
       if (stageEl) {
         stageEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -300,7 +277,7 @@ export const DemoWebsitesPage: React.FC = () => {
   };
 
   const handleResetToDefaults = () => {
-    if (window.confirm('Reset demo websites list to original showcase collection?')) {
+    if (window.confirm('Reset demo websites list to default showcase collection?')) {
       setWebsites(DEFAULT_DEMO_WEBSITES);
       setActiveWebsite(DEFAULT_DEMO_WEBSITES[0]);
       localStorage.removeItem(STORAGE_KEY);
@@ -310,8 +287,8 @@ export const DemoWebsitesPage: React.FC = () => {
   return (
     <main className="min-h-screen bg-[var(--bg-base)] text-[var(--text-strong)] relative overflow-hidden pb-24 pt-20">
       <SEOMeta
-        title="Demo Websites & In-Window Live Showcase | Digifox 5D"
-        description="Interact with all demo websites and client prototypes directly in-window. Test responsive desktop, tablet, and mobile views without opening external windows."
+        title="Demo Websites & In-Window Showcase | Digifox 5D"
+        description="Interact with live demo websites and prototypes directly in-window. Test responsive desktop, tablet, and mobile views without opening external windows."
         url="https://digifox.world/demo-websites"
       />
 
@@ -336,12 +313,6 @@ export const DemoWebsitesPage: React.FC = () => {
             className="hidden sm:inline-flex text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] hover:text-white transition-colors"
           >
             Portfolio
-          </a>
-          <a
-            href="/ai-builder"
-            className="hidden sm:inline-flex text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] hover:text-white transition-colors"
-          >
-            AI Builder
           </a>
           <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
             In-Window Showcase
@@ -381,7 +352,7 @@ export const DemoWebsitesPage: React.FC = () => {
               className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-xl hover:shadow-blue-500/20 transition-all cursor-pointer"
             >
               <Plus size={15} />
-              <span>Add Demo Website URL</span>
+              <span>Add Demo Website</span>
             </button>
 
             {/* View Mode Switcher */}
@@ -412,16 +383,6 @@ export const DemoWebsitesPage: React.FC = () => {
                 <span>Cards Grid</span>
               </button>
             </div>
-
-            <button
-              type="button"
-              onClick={handleCopyAllLinks}
-              className="px-4 py-2.5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] hover:border-emerald-500/40 text-xs font-bold uppercase tracking-wider text-[var(--text-strong)] hover:text-emerald-400 transition-all flex items-center gap-2 cursor-pointer shadow-sm"
-              title="Copy all currently filtered demo URLs to clipboard"
-            >
-              {copiedAll ? <Check size={14} className="text-emerald-400" /> : <Share2 size={14} />}
-              <span>{copiedAll ? 'Links Copied!' : 'Copy All Links'}</span>
-            </button>
 
             {websites.length !== DEFAULT_DEMO_WEBSITES.length && (
               <button
@@ -503,24 +464,20 @@ export const DemoWebsitesPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Interactive In-Window URL Address Bar */}
-                <div className="flex-1 max-w-xl mx-auto flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-xs font-mono text-[var(--text-secondary)] shadow-inner">
-                  <Globe size={13} className="text-blue-400 shrink-0" />
-                  <span className="truncate flex-1 text-[var(--text-strong)] font-semibold">{activeWebsite.url}</span>
+                {/* Clean In-Window Stage Address Bar (No technical URL displayed) */}
+                <div className="flex-1 max-w-xl mx-auto flex items-center justify-center gap-2 px-3.5 py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-xs text-[var(--text-secondary)] shadow-inner">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
+                  <span className="truncate text-[var(--text-strong)] font-semibold">
+                    Live Prototype · {activeWebsite.title}
+                  </span>
+                  <span className="hidden sm:inline-block text-[10px] uppercase font-bold text-blue-400 px-2 py-0.5 rounded-full bg-blue-500/10">
+                    {activeWebsite.category}
+                  </span>
                   
                   <button
                     type="button"
-                    onClick={() => handleCopyLink(activeWebsite.url)}
-                    className="p-1 rounded hover:bg-white/10 text-[var(--text-secondary)] hover:text-white transition-colors"
-                    title="Copy URL"
-                  >
-                    {copiedUrl === activeWebsite.url ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
-                  </button>
-
-                  <button
-                    type="button"
                     onClick={handleReloadFrame}
-                    className="p-1 rounded hover:bg-white/10 text-[var(--text-secondary)] hover:text-white transition-colors"
+                    className="p-1 rounded hover:bg-white/10 text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer ml-1"
                     title="Reload in Window"
                   >
                     <RotateCcw size={12} />
@@ -614,7 +571,7 @@ export const DemoWebsitesPage: React.FC = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search demo websites by name, niche, tag, or URL..."
+                placeholder="Search demo websites by name, niche, or category..."
                 className="w-full pl-11 pr-10 py-3 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-sm text-[var(--text-strong)] placeholder:text-[var(--text-secondary)]/60 focus:border-blue-500 focus:outline-none transition-all shadow-sm"
               />
               {searchQuery && (
@@ -630,7 +587,6 @@ export const DemoWebsitesPage: React.FC = () => {
 
             {/* Quick Stats Pill */}
             <div className="hidden md:flex items-center gap-2 px-4 py-3 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-xs font-mono text-[var(--text-secondary)] shrink-0">
-              <Globe size={14} className="text-blue-400" />
               <span>
                 Showing <strong className="text-[var(--text-strong)]">{filteredWebsites.length}</strong> of {websites.length} Websites
               </span>
@@ -674,7 +630,7 @@ export const DemoWebsitesPage: React.FC = () => {
             </div>
             <h3 className="text-lg font-bold text-[var(--text-strong)]">No Demo Websites Found</h3>
             <p className="text-xs text-[var(--text-secondary)] font-light leading-relaxed">
-              No demo websites match "{searchQuery}". Try a different keyword, choose another category, or add a new demo website URL below.
+              No demo websites match "{searchQuery}". Try a different keyword, choose another category, or add a new demo website below.
             </p>
             <div className="flex items-center justify-center gap-3 pt-2">
               <button
@@ -692,15 +648,13 @@ export const DemoWebsitesPage: React.FC = () => {
                 onClick={() => setShowAddModal(true)}
                 className="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-500 transition-colors cursor-pointer"
               >
-                + Add Demo URL
+                + Add Demo Website
               </button>
             </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {filteredWebsites.map((site, index) => {
-              const isExternal = site.url.startsWith('http');
-              const isCopied = copiedUrl === site.url;
               const isCurrentlyActive = activeWebsite.id === site.id;
 
               return (
@@ -730,9 +684,6 @@ export const DemoWebsitesPage: React.FC = () => {
                       />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-950/30 via-purple-950/20 to-[var(--bg-surface)] p-6 text-center">
-                        <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-2">
-                          <Globe size={22} />
-                        </div>
                         <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-strong)] line-clamp-1">
                           {site.title}
                         </span>
@@ -758,7 +709,7 @@ export const DemoWebsitesPage: React.FC = () => {
                       </span>
                     </div>
 
-                    {/* In-Window Hover Overlay (NO separate tabs) */}
+                    {/* In-Window Hover Overlay */}
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-xs p-4">
                       <button
                         type="button"
@@ -774,7 +725,7 @@ export const DemoWebsitesPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Card Content */}
+                  {/* Card Content (Zero Technical URLs displayed) */}
                   <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                     <div>
                       <div className="flex items-start justify-between gap-2 mb-2">
@@ -802,7 +753,7 @@ export const DemoWebsitesPage: React.FC = () => {
 
                       {/* Tags */}
                       {site.tags && site.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5 mb-4">
+                        <div className="flex flex-wrap gap-1.5 mb-2">
                           {site.tags.map((tag) => (
                             <span
                               key={tag}
@@ -816,69 +767,19 @@ export const DemoWebsitesPage: React.FC = () => {
                       )}
                     </div>
 
-                    {/* URL DISPLAY AS INTERACTIVE IN-WINDOW LINK BOX */}
-                    <div className="mt-2 pt-4 border-t border-[var(--border-strong)]/60">
-                      <div className="text-[10px] uppercase font-bold tracking-wider text-[var(--text-secondary)] mb-1.5 flex items-center justify-between">
-                        <span className="flex items-center gap-1">
-                          <Globe size={11} className="text-blue-400" />
-                          <span>Website URL Link:</span>
-                        </span>
-                        <span className="text-[10px] font-mono text-emerald-400 font-medium">
-                          {isExternal ? 'External URL' : 'Internal Route'}
-                        </span>
-                      </div>
-
-                      {/* Interactive Clickable URL Box that triggers IN-WINDOW display */}
-                      <div 
+                    {/* Clean Action: Display in Window (Zero raw URLs displayed) */}
+                    <div className="mt-4 pt-3 border-t border-[var(--border-strong)]/60">
+                      <button
+                        type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleOpenInWindow(site, true);
                         }}
-                        className="flex items-center gap-1.5 p-2 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] group/url hover:border-blue-500/50 transition-all cursor-pointer"
-                        title={`Click to display ${site.title} in Window`}
+                        className="w-full py-2.5 px-4 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-blue-500/25 cursor-pointer"
                       >
-                        <div className="flex-1 font-mono text-xs text-blue-400 hover:text-blue-300 font-semibold truncate flex items-center gap-1.5">
-                          <span className="truncate">{site.url}</span>
-                          <Monitor size={12} className="shrink-0 opacity-70 group-hover/url:opacity-100 text-blue-400" />
-                        </div>
-
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCopyLink(site.url);
-                          }}
-                          className="px-2 py-1 rounded-lg bg-[var(--bg-surface)] hover:bg-emerald-500/20 text-[11px] font-semibold text-[var(--text-secondary)] hover:text-emerald-400 transition-colors flex items-center gap-1 shrink-0 cursor-pointer border border-transparent hover:border-emerald-500/30"
-                          title="Copy Link to Clipboard"
-                        >
-                          {isCopied ? (
-                            <>
-                              <Check size={12} className="text-emerald-400" />
-                              <span className="text-[10px] text-emerald-400">Copied</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy size={12} />
-                              <span className="text-[10px]">Copy</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-
-                      {/* Bottom Action CTA: Display in Window (NO separate tabs) */}
-                      <div className="mt-3 pt-1">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenInWindow(site, true);
-                          }}
-                          className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer"
-                        >
-                          <Monitor size={14} />
-                          <span>Display in Window</span>
-                        </button>
-                      </div>
+                        <Monitor size={14} />
+                        <span>Display in Window</span>
+                      </button>
                     </div>
 
                   </div>
@@ -935,24 +836,17 @@ export const DemoWebsitesPage: React.FC = () => {
                   </select>
                 </div>
 
-                {/* Simulated Address Bar */}
-                <div className="flex-1 max-w-lg mx-auto flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-xs font-mono text-[var(--text-secondary)] shadow-inner">
-                  <Globe size={13} className="text-blue-400 shrink-0" />
-                  <span className="truncate flex-1 text-[var(--text-strong)] font-semibold">{activeWebsite.url}</span>
+                {/* Clean Simulated Address Bar: No technical URLs */}
+                <div className="flex-1 max-w-lg mx-auto flex items-center justify-center gap-2 px-3.5 py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-xs text-[var(--text-secondary)] shadow-inner">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
+                  <span className="truncate text-[var(--text-strong)] font-semibold">
+                    Live Prototype · {activeWebsite.title}
+                  </span>
                   
                   <button
                     type="button"
-                    onClick={() => handleCopyLink(activeWebsite.url)}
-                    className="p-1 rounded hover:bg-white/10 text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
-                    title="Copy URL"
-                  >
-                    {copiedUrl === activeWebsite.url ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
-                  </button>
-
-                  <button
-                    type="button"
                     onClick={handleReloadFrame}
-                    className="p-1 rounded hover:bg-white/10 text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
+                    className="p-1 rounded hover:bg-white/10 text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer ml-1"
                     title="Reload in Window"
                   >
                     <RotateCcw size={12} />
@@ -1065,7 +959,7 @@ export const DemoWebsitesPage: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* ─── MODAL: ADD NEW DEMO WEBSITE URL ─────────────────────────────────── */}
+      {/* ─── MODAL: ADD NEW DEMO WEBSITE ─────────────────────────────────────── */}
       <AnimatePresence>
         {showAddModal && (
           <div className="fixed inset-0 z-[10000] bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
@@ -1089,7 +983,7 @@ export const DemoWebsitesPage: React.FC = () => {
                   <Plus size={18} />
                 </div>
                 <h3 className="text-xl font-bold uppercase tracking-tight text-[var(--text-strong)]">
-                  Add Demo Website URL
+                  Add Demo Website
                 </h3>
               </div>
               <p className="text-xs text-[var(--text-secondary)] mb-6 font-light">
@@ -1113,7 +1007,7 @@ export const DemoWebsitesPage: React.FC = () => {
 
                 <div>
                   <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-1 block">
-                    Website URL (Link) *
+                    Target Site Embed Route / Link *
                   </label>
                   <input
                     type="text"
@@ -1124,7 +1018,7 @@ export const DemoWebsitesPage: React.FC = () => {
                     className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-base)] border border-[var(--border-strong)] text-sm font-mono text-[var(--text-strong)] focus:border-blue-500 focus:outline-none"
                   />
                   <span className="text-[10px] text-[var(--text-secondary)] mt-1 block">
-                    Can be a full external link (https://...) or an internal project template route.
+                    Used internally by the in-window frame to display the live site.
                   </span>
                 </div>
 
@@ -1144,7 +1038,7 @@ export const DemoWebsitesPage: React.FC = () => {
                       <option value="E-Commerce & Retail">E-Commerce & Retail</option>
                       <option value="Food & Dining">Food & Dining</option>
                       <option value="3D & WebGL">3D & WebGL</option>
-                      <option value="Tech & SaaS">Tech & SaaS</option>
+                      <option value="Creative & Agency">Creative & Agency</option>
                       <option value="Healthcare & Wellness">Healthcare & Wellness</option>
                       <option value="Real Estate & Homes">Real Estate & Homes</option>
                       <option value="Other Demos">Other Demos</option>

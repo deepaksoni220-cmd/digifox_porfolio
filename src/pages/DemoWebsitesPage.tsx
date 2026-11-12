@@ -37,41 +37,165 @@ export interface DemoWebsite {
   statusBadge?: string;
 }
 
+// ─── WHITE-LABEL MASKING HELPERS (ZERO CLIENT NAMES IN FRAME WINDOW) ─────────
+export const getWhiteLabelTitle = (site: DemoWebsite): string => {
+  const maskMap: Record<string, string> = {
+    'digifox-spatial-apparels': '3D Interactive Fashion & Luxury Apparel',
+    'digifox-aurelle-jewelry': 'Bespoke 3D Diamond & Luxury Jewelry Store',
+    'digifox-samarth-cactus': 'Rare Botanical & Plant Nursery E-Commerce',
+    'digifox-lotus-gold': 'FMCG Superfood Brand & Distribution Portal',
+    'digifox-ninety-degree': 'Architectural Natural Stone & Granite Showcase',
+    'digifox-abacus-master': 'International Mental Math Academy Portal',
+    'digifox-rukmi-jewellery': 'Artisan 925 Sterling Silver Jewellery Boutique',
+    'digifox-property-realestate': 'Luxury Real Estate & Villa Architecture Showcase',
+    'digifox-world-agency': 'Flagship 5D Digital Agency & Studio Experience',
+    'digifox-agency-coaches': 'Executive Coaching & High-Ticket Consulting Portal',
+    'digifox-online-store-3d': 'Interactive 360° 3D Consumer Electronics Store',
+    'digifox-backend-fullstack': 'Full-Stack Cloud E-Commerce Engine',
+    'digifox-3d-portfolio': 'Interactive WebGL 3D Gravity Portfolio',
+    'demo-blacklane-limo': 'VIP Chauffeur & Global Fleet Reservation Platform',
+    'demo-intik-burgers': 'Gourmet Dining & Cloud Kitchen 3D Showcase',
+    'demo-gsap-motion': 'Kinetic Motion & Interactive Studio Experience',
+    'demo-biska-fashion': 'Modern Streetwear & Apparel Lookbook Store',
+    'demo-studio-fashion': 'Minimalist Editorial Fashion & Beauty Store',
+    'demo-cars-melbourne': 'Executive Fleet & Luxury Chauffeur Platform',
+    'demo-motion-sneakers': 'Interactive 3D Athletic Footwear Experience',
+    'demo-nova-creative': 'Avant-Garde Interactive Design Studio Portfolio',
+    'demo-lesa-app': 'Curated Gifts & Lifestyle Mobile Storefront'
+  };
+
+  if (maskMap[site.id]) return maskMap[site.id];
+
+  return site.title
+    .replace(/Spatial Apparels(\s*-\s*)?/gi, '3D Spatial Fashion ')
+    .replace(/Aurelle\s*/gi, 'Bespoke ')
+    .replace(/Samarth Cactus\s*/gi, 'Rare Botanical ')
+    .replace(/Lotus Gold Makana\s*/gi, 'FMCG Superfood ')
+    .replace(/Ninety Degree\s*/gi, 'Architectural ')
+    .replace(/Abacus Master\s*/gi, 'Global Math Academy ')
+    .replace(/Rukmi\s*/gi, 'Artisan Silver ')
+    .replace(/Blacklane\s*/gi, 'VIP Chauffeur ')
+    .replace(/Intik\s*/gi, 'Gourmet ')
+    .replace(/Biska\s*/gi, 'Modern ')
+    .replace(/BookCabs\s*/gi, 'Executive Fleet ')
+    .replace(/Adidas Chile20\s*/gi, 'Athletic 3D ')
+    .trim();
+};
+
+export const getWhiteLabelDescription = (site: DemoWebsite): string => {
+  const descMap: Record<string, string> = {
+    'digifox-spatial-apparels': 'Interactive 3D fashion rail and luxury apparel showcase featuring smooth curve navigation, wardrobe inspection, and realtime cloth physics.',
+    'digifox-aurelle-jewelry': 'High-jewelry 3D web platform featuring real-time diamond refraction, dark editorial aesthetic, and interactive ring customizer.',
+    'digifox-samarth-cactus': 'High-conversion botanical e-commerce nursery storefront with live catalog synchronization, rare succulent listings, and express checkout.',
+    'digifox-lotus-gold': 'FMCG brand portal with dynamic product presentation, nutrition storytelling, distribution inquiry funnel, and wholesale ordering.',
+    'digifox-ninety-degree': 'Premium architectural natural stone and granite fabrication portal featuring stone slab gallery, case studies, and quote engine.',
+    'digifox-abacus-master': 'International mental math education platform with student course enrollment, interactive curriculum breakdown, and inquiry system.',
+    'digifox-rukmi-jewellery': 'Artisan 925 sterling silver jewelry storefront featuring gift drawer, multi-currency display, and mobile-first navigation.',
+    'demo-blacklane-limo': 'Premier black car and limousine reservation portal featuring vehicle selector, real-time booking form, and dark luxury styling.',
+    'demo-intik-burgers': 'Immersive restaurant & cloud kitchen showcase with visual food menu, burger ingredient assembly, and delivery integration.',
+    'demo-biska-fashion': 'Cutting-edge apparel brand storefront with lookbook, responsive product grid, cart drawer, and high-energy motion design.',
+    'demo-cars-melbourne': 'High-end chauffeur and luxury transport platform featuring interactive fleet selector, Lenis smooth scrolling, and booking quotes.',
+    'demo-motion-sneakers': 'Interactive 3D product showcase highlighting athletic footwear with customizable angles, colorways, and smooth camera transitions.',
+    'demo-nova-creative': 'Avant-garde digital design agency portfolio with interactive cursor physics, case study reveals, and booking workflow.'
+  };
+
+  if (descMap[site.id]) return descMap[site.id];
+  return site.description;
+};
+
+export const getWhiteLabelShortChip = (site: DemoWebsite): string => {
+  const shortMap: Record<string, string> = {
+    'digifox-spatial-apparels': 'Fashion 3D',
+    'digifox-aurelle-jewelry': 'Diamond 3D',
+    'digifox-samarth-cactus': 'Botanical',
+    'digifox-lotus-gold': 'FMCG Food',
+    'digifox-ninety-degree': 'Stone & Marble',
+    'digifox-abacus-master': 'Math Academy',
+    'digifox-rukmi-jewellery': 'Silver 925',
+    'digifox-property-realestate': 'Real Estate',
+    'digifox-world-agency': 'Agency 5D',
+    'digifox-agency-coaches': 'Coaching 3D',
+    'digifox-online-store-3d': 'Electronics 3D',
+    'digifox-backend-fullstack': 'Cloud Store',
+    'digifox-3d-portfolio': 'Portfolio 3D',
+    'demo-blacklane-limo': 'Chauffeur',
+    'demo-intik-burgers': 'Dining 3D',
+    'demo-gsap-motion': 'Kinetic Motion',
+    'demo-biska-fashion': 'Streetwear',
+    'demo-studio-fashion': 'Beauty Store',
+    'demo-cars-melbourne': 'Fleet VIP',
+    'demo-motion-sneakers': 'Footwear 3D',
+    'demo-nova-creative': 'Studio 3D',
+    'demo-lesa-app': 'Lifestyle App'
+  };
+  return shortMap[site.id] || site.category.split(' ')[0] || 'Demo';
+};
+
+export const getFrameSimulatedUrl = (site: DemoWebsite): string => {
+  const cleanSlugMap: Record<string, string> = {
+    'digifox-spatial-apparels': 'fashion-3d/interactive-rail',
+    'digifox-aurelle-jewelry': 'luxury-jewelry/diamond-customizer',
+    'digifox-samarth-cactus': 'botanical-nursery/rare-catalog',
+    'digifox-lotus-gold': 'fmcg-brand/food-distribution',
+    'digifox-ninety-degree': 'architecture/natural-stone-gallery',
+    'digifox-abacus-master': 'global-academy/learning-portal',
+    'digifox-rukmi-jewellery': 'silver-boutique/artisan-store',
+    'digifox-property-realestate': 'real-estate/luxury-villas',
+    'digifox-world-agency': 'agency/flagship-studio-5d',
+    'digifox-agency-coaches': 'consulting/executive-platform',
+    'digifox-online-store-3d': 'electronics/interactive-3d-store',
+    'digifox-backend-fullstack': 'fullstack/cloud-ecommerce',
+    'digifox-3d-portfolio': 'webgl/gravity-portfolio',
+    'demo-blacklane-limo': 'mobility/vip-chauffeur-fleet',
+    'demo-intik-burgers': 'hospitality/gourmet-dining-3d',
+    'demo-gsap-motion': 'motion/kinetic-typography-studio',
+    'demo-biska-fashion': 'streetwear/lookbook-storefront',
+    'demo-studio-fashion': 'beauty-editorial/luxury-showcase',
+    'demo-cars-melbourne': 'transport/executive-fleet-booking',
+    'demo-motion-sneakers': 'product-3d/footwear-configurator',
+    'demo-nova-creative': 'creative-studio/design-portfolio',
+    'demo-lesa-app': 'mobile-commerce/curated-lifestyle'
+  };
+
+  const path = cleanSlugMap[site.id] || `${(site.category || 'prototype').toLowerCase().replace(/[^a-z0-9]+/g, '-')}/${site.id.replace(/^(digifox|demo)-/, '').toLowerCase()}`;
+  return `https://preview.digifox.world/${path}`;
+};
+
 const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   // ─── DIGIFOX CLIENT & PRODUCTION WEBSITES ─────────────────────────────────
   {
     id: 'digifox-spatial-apparels',
-    title: 'Spatial Apparels - 3D Fashion Rail',
+    title: '3D Interactive Fashion & Luxury Apparel',
     url: '/showcase/ref_spatial_apparels',
     category: 'Fashion',
-    description: 'Spatial 3D fashion rail and apparel experience featuring interactive wardrobe physics, smooth curve rail navigation, and luxury product storytelling.',
-    tags: ['Fashion', 'Apparel', '3D Spatial', 'Interactive WebGL', 'Luxury'],
+    description: 'Interactive 3D fashion rail and luxury apparel showcase featuring smooth curve navigation, wardrobe inspection, and realtime cloth physics.',
+    tags: ['Fashion', 'Luxury Apparel', '3D Spatial', 'Interactive WebGL', 'Three.js'],
     previewImage: '/previews/preview-spatial_apparels.png',
     statusBadge: 'Fashion 3D'
   },
   {
     id: 'digifox-aurelle-jewelry',
-    title: 'Aurelle Luxury Diamond & Jewelry 3D Store',
+    title: 'Bespoke 3D Diamond & Luxury Jewelry Store',
     url: '/showcase/ref_aurelle_jewelry',
     category: '3D Animated Websites',
-    description: 'Bespoke high-jewelry 3D web platform featuring real-time diamond refraction, luxury dark editorial aesthetic, and interactive product customizer.',
+    description: 'High-jewelry 3D web platform featuring real-time diamond refraction, dark editorial aesthetic, and interactive ring customizer.',
     tags: ['3D WebGL', 'Diamond Jewelry', 'Luxury Store', 'E-Commerce'],
     previewImage: '/previews/preview-ref_aurelle_jewelry.png',
     statusBadge: 'Digifox Production'
   },
   {
     id: 'digifox-samarth-cactus',
-    title: 'Samarth Cactus Nursery Official Store',
+    title: 'Rare Botanical & Plant Nursery E-Commerce',
     url: '/showcase/ref_samarth_cactus',
     category: 'Shopify Websites',
-    description: 'High-conversion botanical Shopify e-commerce nursery store with live catalog sync, rare plant listings, and express checkout flow.',
+    description: 'High-conversion botanical e-commerce nursery storefront with live catalog synchronization, rare succulent listings, and express checkout.',
     tags: ['Shopify', 'Botanical Nursery', 'E-Commerce', 'Mobile Optimized'],
     previewImage: '/previews/preview-ref_samarth_cactus.png',
     statusBadge: 'Live Client Site'
   },
   {
     id: 'digifox-lotus-gold',
-    title: 'Lotus Gold Makana Brand Portal',
+    title: 'FMCG Superfood Brand & Distribution Portal',
     url: '/showcase/ref_lotus_gold',
     category: 'WordPress Websites',
     description: 'FMCG brand portal with dynamic product presentation, nutrition storytelling, distribution inquiry funnel, and wholesale ordering.',
@@ -81,7 +205,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'digifox-ninety-degree',
-    title: 'Ninety Degree Stone & Architecture',
+    title: 'Architectural Natural Stone & Granite Showcase',
     url: '/showcase/ref_ninety_degree',
     category: 'WordPress Websites',
     description: 'Premium architectural natural stone and granite fabrication portal featuring stone slab gallery, case studies, and quote engine.',
@@ -91,7 +215,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'digifox-abacus-master',
-    title: 'Abacus Master Canada Learning Academy',
+    title: 'International Mental Math Academy Portal',
     url: '/showcase/ref_abacus_master',
     category: 'WordPress Websites',
     description: 'International mental math education platform with student course enrollment, interactive curriculum breakdown, and inquiry system.',
@@ -101,17 +225,17 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'digifox-rukmi-jewellery',
-    title: 'Rukmi Silver Jewellery Boutique',
+    title: 'Artisan 925 Sterling Silver Jewellery Boutique',
     url: '/showcase/ref_rukmi_jewellery',
     category: 'Shopify Websites',
-    description: 'Artisan 925 sterling silver jewelry Shopify storefront featuring gift drawer, multi-currency display, and mobile-first navigation.',
+    description: 'Artisan 925 sterling silver jewelry storefront featuring gift drawer, multi-currency display, and mobile-first navigation.',
     tags: ['Shopify', 'Silver Jewellery', 'Artisan Store', 'Mobile First'],
     previewImage: '/previews/preview-ref_rukmi_jewellery.png',
     statusBadge: 'Live Client Site'
   },
   {
     id: 'digifox-property-realestate',
-    title: 'Digifox Luxury Real Estate & Villa Portal',
+    title: 'Luxury Real Estate & Villa Architecture Showcase',
     url: '/showcase/ref_property_realestate',
     category: 'WordPress Websites',
     description: 'Elite residential real estate showcase with property portfolio, interactive neighborhood views, and private viewing appointments.',
@@ -121,7 +245,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'digifox-world-agency',
-    title: 'Digifox Official Agency Portal & Studio',
+    title: 'Flagship 5D Digital Agency & Studio Experience',
     url: '/',
     category: '3D Animated Websites',
     description: 'Flagship 5D digital agency platform highlighting full-stack engineering, performance marketing, 3D WebGL development, and AI design.',
@@ -131,7 +255,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'digifox-agency-coaches',
-    title: 'Agency & Executive Coaching 3D Platform',
+    title: 'Executive Coaching & High-Ticket Consulting Portal',
     url: '/showcase/ref_agency_coaches',
     category: '3D Animated Websites',
     description: 'High-impact dark luxury coaching and consulting platform with client testimonials, audio-visual masterclasses, and booking workflow.',
@@ -141,7 +265,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'digifox-online-store-3d',
-    title: '3D Interactive Product Store',
+    title: 'Interactive 360° 3D Consumer Electronics Store',
     url: '/showcase/ref_online_store_3d',
     category: '3D Animated Websites',
     description: 'Futuristic consumer electronic and accessories storefront with 360-degree rotation, exploded part disassembly, and instant cart.',
@@ -151,7 +275,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'digifox-backend-fullstack',
-    title: 'Full-Stack Cloud E-Commerce Storefront',
+    title: 'Full-Stack Cloud E-Commerce Engine',
     url: '/showcase/ref_backend_fullstack',
     category: '3D Animated Websites',
     description: 'Production full-stack e-commerce engine with inventory management, Supabase/Firebase database, stripe checkout, and dynamic stock.',
@@ -161,7 +285,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'digifox-3d-portfolio',
-    title: 'Digifox 3D Interactive Portfolio',
+    title: 'Interactive WebGL 3D Gravity Portfolio',
     url: '/showcase/ref_3d_portfolio',
     category: '3D Animated Websites',
     description: 'Immersive 3D space scene portfolio with interactive gravity particles, floating project pods, and smooth camera waypoints.',
@@ -173,7 +297,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   // ─── DIGIFOX INTERACTIVE PROTOTYPES & DEMOS ──────────────────────────────
   {
     id: 'demo-blacklane-limo',
-    title: 'Blacklane Luxury Chauffeur & Limousine',
+    title: 'VIP Chauffeur & Global Fleet Reservation Platform',
     url: '/templates/blacklane/index.html',
     category: '3D Animated Websites',
     description: 'Premier black car and limousine reservation portal featuring vehicle selector, real-time booking form, and dark luxury styling.',
@@ -183,7 +307,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'demo-intik-burgers',
-    title: 'Intik Gourmet Burgers & Dining 3D',
+    title: 'Gourmet Dining & Cloud Kitchen 3D Showcase',
     url: '/templates/intikburgers/index.html',
     category: '3D Animated Websites',
     description: 'Immersive restaurant & cloud kitchen showcase with visual food menu, burger ingredient assembly, and delivery integration.',
@@ -193,7 +317,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'demo-gsap-motion',
-    title: 'GSAP Kinetic Animation Studio',
+    title: 'Kinetic Motion & Interactive Studio Experience',
     url: '/templates/gsap/index.html',
     category: '3D Animated Websites',
     description: 'High-performance interactive web experience showcasing smooth GSAP scroll animations, parallax layers, and micro-interactions.',
@@ -203,7 +327,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'demo-biska-fashion',
-    title: 'Biska Fashion & Streetwear Studio',
+    title: 'Modern Streetwear & Apparel Lookbook Store',
     url: '/templates/biska/index.html',
     category: '3D Animated Websites',
     description: 'Cutting-edge apparel brand storefront with lookbook, responsive product grid, cart drawer, and high-energy motion design.',
@@ -213,7 +337,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'demo-studio-fashion',
-    title: 'Studio Fashion & Luxury Editorial',
+    title: 'Minimalist Editorial Fashion & Beauty Store',
     url: '/templates/studiofashion/index.html',
     category: '3D Animated Websites',
     description: 'Minimalist luxury beauty and apparel storefront designed for high-conversion storytelling, editorial lookbooks, and checkout.',
@@ -223,7 +347,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'demo-cars-melbourne',
-    title: 'BookCabs Melbourne VIP Fleet',
+    title: 'Executive Fleet & Luxury Chauffeur Platform',
     url: '/templates/cars/index.html',
     category: '3D Animated Websites',
     description: 'High-end chauffeur and luxury transport platform featuring interactive fleet selector, Lenis smooth scrolling, and booking quotes.',
@@ -233,7 +357,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'demo-motion-sneakers',
-    title: 'Adidas Chile20 3D Sneaker Experience',
+    title: 'Interactive 3D Athletic Footwear Experience',
     url: '/templates/shoes/index.html',
     category: '3D Animated Websites',
     description: 'Interactive 3D product showcase highlighting athletic footwear with customizable angles, colorways, and smooth camera transitions.',
@@ -243,7 +367,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'demo-nova-creative',
-    title: 'Adam Roberts Interactive Design Portfolio',
+    title: 'Avant-Garde Interactive Design Studio Portfolio',
     url: '/templates/digpro/index.html',
     category: '3D Animated Websites',
     description: 'Avant-garde digital design agency portfolio with interactive cursor physics, case study reveals, and booking workflow.',
@@ -253,7 +377,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   },
   {
     id: 'demo-lesa-app',
-    title: 'Lesa Gifts & Lifestyle Mobile App',
+    title: 'Curated Gifts & Lifestyle Mobile Storefront',
     url: '/templates/lesa/index.html',
     category: 'Shopify Websites',
     description: 'Modern mobile-first e-commerce app prototype for curated gifts, personalized hampers, and express checkout.',
@@ -263,7 +387,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   }
 ];
 
-const STORAGE_KEY = 'digifox_demo_websites_v10';
+const STORAGE_KEY = 'digifox_demo_websites_v11';
 
 export const DemoWebsitesPage: React.FC = () => {
   const [websites, setWebsites] = useState<DemoWebsite[]>(() => {
@@ -279,6 +403,7 @@ export const DemoWebsitesPage: React.FC = () => {
       localStorage.removeItem('digifox_demo_websites_v7');
       localStorage.removeItem('digifox_demo_websites_v8');
       localStorage.removeItem('digifox_demo_websites_v9');
+      localStorage.removeItem('digifox_demo_websites_v10');
 
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
@@ -592,7 +717,7 @@ export const DemoWebsitesPage: React.FC = () => {
                   <span className="hidden xs:inline">Now In Window:</span>
                 </span>
                 <span className="px-2.5 py-1 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs font-bold text-blue-400 truncate">
-                  {activeWebsite.title}
+                  {getWhiteLabelTitle(activeWebsite)}
                 </span>
               </div>
 
@@ -619,7 +744,7 @@ export const DemoWebsitesPage: React.FC = () => {
                     }`}
                   >
                     <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
-                    <span className="truncate max-w-[140px] sm:max-w-[170px]">{site.title}</span>
+                    <span className="truncate max-w-[140px] sm:max-w-[170px]">{getWhiteLabelTitle(site)}</span>
                     <span className={`text-[9px] px-1.5 py-0.2 rounded-full uppercase tracking-wider ${isActive ? 'bg-white/20 text-white' : 'bg-[var(--bg-base)] text-[var(--text-secondary)]'}`}>
                       {site.category.split(' ')[0]}
                     </span>
@@ -638,24 +763,25 @@ export const DemoWebsitesPage: React.FC = () => {
                   <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500/80" />
                   <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500/80" />
                   <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500/80" />
-                  <div className="hidden md:block text-xs font-bold text-[var(--text-strong)] truncate max-w-[180px] ml-1.5">
-                    {activeWebsite.title}
+                  <div className="hidden md:flex items-center gap-1.5 text-xs font-bold text-[var(--text-strong)] truncate max-w-[200px] ml-1.5 select-none">
+                    <Sparkles size={11} className="text-blue-400 shrink-0" />
+                    <span className="truncate">{getWhiteLabelTitle(activeWebsite)}</span>
                   </div>
                 </div>
 
-                {/* Clean In-Window Stage Address Bar (No technical URL displayed) */}
+                {/* Clean In-Window Stage Address Bar (Zero Client Website Names) */}
                 <div className="flex-1 min-w-0 max-w-xl mx-auto flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[11px] sm:text-xs text-[var(--text-secondary)] shadow-inner">
                   <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
-                  <span className="truncate text-[var(--text-strong)] font-semibold">
-                    {displayMode === 'live' && canEmbedInWindow(activeWebsite.url) ? '⚡ Live Running' : '🔒 Verified Snapshot'} · {activeWebsite.title}
+                  <span className="font-mono text-[11px] sm:text-xs text-[var(--text-strong)] font-semibold truncate select-none">
+                    {getFrameSimulatedUrl(activeWebsite)}
                   </span>
                   {canEmbedInWindow(activeWebsite.url) ? (
-                    <span className="hidden lg:inline-block text-[10px] uppercase font-bold text-emerald-400 px-2 py-0.5 rounded-full bg-emerald-500/10">
-                      Live Running
+                    <span className="hidden lg:inline-block text-[10px] uppercase font-bold text-emerald-400 px-2 py-0.5 rounded-full bg-emerald-500/10 shrink-0">
+                      ⚡ Active Stream
                     </span>
                   ) : (
-                    <span className="hidden lg:inline-block text-[10px] uppercase font-bold text-blue-400 px-2 py-0.5 rounded-full bg-blue-500/10">
-                      Client Site
+                    <span className="hidden lg:inline-block text-[10px] uppercase font-bold text-blue-400 px-2 py-0.5 rounded-full bg-blue-500/10 shrink-0">
+                      🔒 Verified Snapshot
                     </span>
                   )}
                 </div>
@@ -774,7 +900,7 @@ export const DemoWebsitesPage: React.FC = () => {
                     <iframe
                       key={activeWebsite.id + iframeKey + previewDevice}
                       src={liveEmbedUrl}
-                      title={activeWebsite.title}
+                      title={getWhiteLabelTitle(activeWebsite)}
                       className="w-full h-full border-none bg-[#0a0a0c] block"
                       allow="autoplay; fullscreen; xr-spatial-tracking"
                     />
@@ -782,7 +908,7 @@ export const DemoWebsitesPage: React.FC = () => {
                     <div className="w-full flex-1 overflow-y-auto overflow-x-hidden bg-[#050608] scrollbar-thin scrollbar-thumb-zinc-700 relative">
                       <img
                         src={activeWebsite.previewImage || '/previews/preview-blacklane.png'}
-                        alt={activeWebsite.title}
+                        alt={getWhiteLabelTitle(activeWebsite)}
                         className="w-full h-auto object-top block select-none pointer-events-auto"
                         loading="eager"
                       />
@@ -791,15 +917,15 @@ export const DemoWebsitesPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Active Website Detail Strip */}
+              {/* Active Website Detail Strip (White-Labeled) */}
               <div className="px-3.5 sm:px-5 py-2.5 sm:py-3.5 border-t border-[var(--border-strong)] bg-[var(--bg-base)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-3 text-xs">
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-[var(--text-strong)]">{activeWebsite.title}</span>
+                  <span className="font-bold text-[var(--text-strong)]">{getWhiteLabelTitle(activeWebsite)}</span>
                   <span className="text-[var(--text-secondary)]">·</span>
                   <span className="text-[var(--text-secondary)]">{activeWebsite.category}</span>
                 </div>
                 <div className="text-[var(--text-secondary)] font-light text-[11px] line-clamp-1 sm:line-clamp-none">
-                  {activeWebsite.description}
+                  {getWhiteLabelDescription(activeWebsite)}
                 </div>
               </div>
 
@@ -921,7 +1047,7 @@ export const DemoWebsitesPage: React.FC = () => {
                     {site.previewImage ? (
                       <img
                         src={site.previewImage}
-                        alt={site.title}
+                        alt={getWhiteLabelTitle(site)}
                         className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                         onError={(e) => {
@@ -931,7 +1057,7 @@ export const DemoWebsitesPage: React.FC = () => {
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-950/30 via-purple-950/20 to-[var(--bg-surface)] p-6 text-center">
                         <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-strong)] line-clamp-1">
-                          {site.title}
+                          {getWhiteLabelTitle(site)}
                         </span>
                         <span className="text-[11px] font-mono text-[var(--text-secondary)] mt-1">
                           {site.category}
@@ -964,7 +1090,7 @@ export const DemoWebsitesPage: React.FC = () => {
                     <div>
                       <div className="flex items-start justify-between gap-2 mb-2">
                         <h3 className="text-lg font-bold text-[var(--text-strong)] group-hover:text-blue-400 transition-colors leading-snug">
-                          {site.title}
+                          {getWhiteLabelTitle(site)}
                         </h3>
                         {site.isCustom && (
                           <button
@@ -982,7 +1108,7 @@ export const DemoWebsitesPage: React.FC = () => {
                       </div>
 
                       <p className="text-xs text-[var(--text-secondary)] font-light leading-relaxed mb-4 line-clamp-2">
-                        {site.description}
+                        {getWhiteLabelDescription(site)}
                       </p>
 
                       {/* Tags */}
@@ -1059,29 +1185,29 @@ export const DemoWebsitesPage: React.FC = () => {
                         setActiveWebsite(found);
                       }
                     }}
-                    className="hidden sm:block text-xs font-bold text-[var(--text-strong)] bg-[var(--bg-surface)] border border-[var(--border-strong)] px-2.5 py-1.5 rounded-xl cursor-pointer focus:outline-none"
+                    className="hidden sm:block text-xs font-bold text-[var(--text-strong)] bg-[var(--bg-surface)] border border-[var(--border-strong)] px-2.5 py-1.5 rounded-xl cursor-pointer focus:outline-none max-w-[240px] truncate"
                   >
                     {websites.map((w) => (
                       <option key={w.id} value={w.id}>
-                        {w.title} ({w.category})
+                        {getWhiteLabelTitle(w)}
                       </option>
                     ))}
                   </select>
                 </div>
 
-                {/* Clean Simulated Address Bar: Live Running or Static */}
+                {/* Clean Simulated Address Bar: Zero Client Website Names */}
                 <div className="flex-1 min-w-0 max-w-lg mx-auto flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[11px] sm:text-xs text-[var(--text-secondary)] shadow-inner">
                   <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
-                  <span className="truncate text-[var(--text-strong)] font-semibold">
-                    {displayMode === 'live' && canEmbedInWindow(activeWebsite.url) ? '⚡ Live Running' : '🔒 Verified Snapshot'} · {activeWebsite.title}
+                  <span className="font-mono text-[11px] sm:text-xs text-[var(--text-strong)] font-semibold truncate select-none">
+                    {getFrameSimulatedUrl(activeWebsite)}
                   </span>
                   {canEmbedInWindow(activeWebsite.url) ? (
-                    <span className="hidden xs:inline px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">
-                      Interactive 3D
+                    <span className="hidden xs:inline px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-bold shrink-0">
+                      ⚡ Active Stream
                     </span>
                   ) : (
-                    <span className="hidden xs:inline px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400 text-[10px] font-bold">
-                      Client Site
+                    <span className="hidden xs:inline px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400 text-[10px] font-bold shrink-0">
+                      🔒 Snapshot
                     </span>
                   )}
                 </div>
@@ -1203,7 +1329,7 @@ export const DemoWebsitesPage: React.FC = () => {
                     <iframe
                       key={activeWebsite.id + iframeKey + previewDevice}
                       src={liveEmbedUrl}
-                      title={activeWebsite.title}
+                      title={getWhiteLabelTitle(activeWebsite)}
                       className="w-full h-full border-none bg-[#0a0a0c] block"
                       allow="autoplay; fullscreen; xr-spatial-tracking"
                     />
@@ -1211,7 +1337,7 @@ export const DemoWebsitesPage: React.FC = () => {
                     <div className="w-full flex-1 overflow-y-auto overflow-x-hidden bg-[#050608] scrollbar-thin scrollbar-thumb-zinc-700 relative">
                       <img
                         src={activeWebsite.previewImage || '/previews/preview-blacklane.png'}
-                        alt={activeWebsite.title}
+                        alt={getWhiteLabelTitle(activeWebsite)}
                         className="w-full h-auto object-top block select-none pointer-events-auto"
                         loading="eager"
                       />
@@ -1223,7 +1349,7 @@ export const DemoWebsitesPage: React.FC = () => {
               {/* Bottom In-Window Strip with Quick Switcher */}
               <div className="px-3 sm:px-5 py-2 sm:py-3 border-t border-[var(--border-strong)] bg-[var(--bg-base)] flex items-center justify-between gap-2 text-xs overflow-x-auto scrollbar-none">
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="font-bold text-[var(--text-strong)] truncate max-w-[140px] sm:max-w-[200px]">{activeWebsite.title}</span>
+                  <span className="font-bold text-[var(--text-strong)] truncate max-w-[140px] sm:max-w-[200px]">{getWhiteLabelTitle(activeWebsite)}</span>
                   <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase">
                     {activeWebsite.category.split(' ')[0]}
                   </span>
@@ -1232,7 +1358,7 @@ export const DemoWebsitesPage: React.FC = () => {
                 {/* Quick Next / Switch Demo buttons */}
                 <div className="flex items-center gap-1.5 shrink-0">
                   <span className="hidden xs:inline text-[11px] text-[var(--text-secondary)] mr-1">Switch:</span>
-                  {websites.slice(0, 5).map((w) => (
+                  {websites.slice(0, 6).map((w) => (
                     <button
                       key={w.id}
                       type="button"
@@ -1245,7 +1371,7 @@ export const DemoWebsitesPage: React.FC = () => {
                           : 'bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-white'
                       }`}
                     >
-                      {w.title.split(' ')[0]}
+                      {getWhiteLabelShortChip(w)}
                     </button>
                   ))}
                 </div>

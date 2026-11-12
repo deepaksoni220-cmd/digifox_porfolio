@@ -139,11 +139,11 @@ function localDevApiPlugin() {
             });
 
             let html = await targetResp.text();
+            const respParsed = new URL(targetResp.url || targetUrl);
             let baseHref = '';
             if (token === 'ref_spatial_apparels') {
               baseHref = '/api/proxy-site/spatial-rail/';
             } else {
-              const respParsed = new URL(targetResp.url || targetUrl);
               baseHref = `${respParsed.origin}${respParsed.pathname.endsWith('/') ? respParsed.pathname : respParsed.pathname + '/'}`;
             }
             const baseTag = `<base href="${baseHref}">`;
@@ -158,6 +158,27 @@ function localDevApiPlugin() {
 
             html = html.replace(/<meta[^>]*http-equiv=["']?(?:content-security-policy|x-frame-options)["']?[^>]*>/gi, '');
             html = html.replace(/window\.top\s*===\s*window/g, 'false');
+
+            // ─── Neutralize Next.js / Nuxt / framework client JS that causes hydration
+            //     errors when running inside an iframe with a foreign <base>.
+            //     We keep all the server-rendered HTML (SSR) intact — it already contains
+            //     the fully-rendered visible page content.  Only the hydration bootstrap
+            //     scripts are removed so the page displays as a rich static snapshot. ────
+            const isNextJs = html.includes('__next') || html.includes('_next/') || html.includes('__NEXT_DATA__');
+            if (isNextJs && token !== 'ref_spatial_apparels') {
+              // Remove <script> tags that bootstrap Next.js client router / RSC
+              html = html.replace(/<script[^>]*src=["'][^"']*\/_next\/[^"']*["'][^>]*><\/script>/gi, '');
+              html = html.replace(/<script[^>]*>self\.__next_f\.push\([\s\S]*?<\/script>/gi, '');
+              html = html.replace(/<script[^>]*>\(self\.__next.*?<\/script>/gi, '');
+              // Remove inline <script> that calls __next hydration
+              html = html.replace(/<script[^>]*id="__NEXT_DATA__"[^>]*>[\s\S]*?<\/script>/gi, '');
+              // Inject a tiny style fix: make Next.js hidden SSR content visible
+              html = html.replace('</head>', `<style>
+                body { overflow: auto !important; }
+                [hidden] { display: none !important; }
+                a[href] { pointer-events: auto; cursor: pointer; }
+              </style>\n</head>`);
+            }
 
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
             res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');

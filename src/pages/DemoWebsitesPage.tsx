@@ -41,6 +41,8 @@ export interface DemoWebsite {
 export const getWhiteLabelTitle = (site: DemoWebsite): string => {
   const maskMap: Record<string, string> = {
     'digifox-spatial-apparels': '3D Interactive Fashion & Luxury Apparel',
+    'digifox-spatial-teasel': 'Interactive Botanical Basics & Apparel Rail',
+    'digifox-spatial-spool': 'Cinematic Kinetic Motion Design Agency',
     'digifox-aurelle-jewelry': 'Bespoke 3D Diamond & Luxury Jewelry Store',
     'digifox-samarth-cactus': 'Rare Botanical & Plant Nursery E-Commerce',
     'digifox-lotus-gold': 'FMCG Superfood Brand & Distribution Portal',
@@ -85,6 +87,8 @@ export const getWhiteLabelTitle = (site: DemoWebsite): string => {
 export const getWhiteLabelDescription = (site: DemoWebsite): string => {
   const descMap: Record<string, string> = {
     'digifox-spatial-apparels': 'Interactive 3D fashion rail and luxury apparel showcase featuring smooth curve navigation, wardrobe inspection, and realtime cloth physics.',
+    'digifox-spatial-teasel': 'Basics label showcase featuring turning tees and sweats on a spatial rail with fluid hover dynamics and WebGL rendering.',
+    'digifox-spatial-spool': 'Premier design studio website for brands and places with fluid Three.js motion, cinematic scroll storytelling, and WebGL2 experiences.',
     'digifox-aurelle-jewelry': 'High-jewelry 3D web platform featuring real-time diamond refraction, dark editorial aesthetic, and interactive ring customizer.',
     'digifox-samarth-cactus': 'High-conversion botanical e-commerce nursery storefront with live catalog synchronization, rare succulent listings, and express checkout.',
     'digifox-lotus-gold': 'FMCG brand portal with dynamic product presentation, nutrition storytelling, distribution inquiry funnel, and wholesale ordering.',
@@ -106,6 +110,8 @@ export const getWhiteLabelDescription = (site: DemoWebsite): string => {
 export const getWhiteLabelShortChip = (site: DemoWebsite): string => {
   const shortMap: Record<string, string> = {
     'digifox-spatial-apparels': 'Fashion 3D',
+    'digifox-spatial-teasel': 'Teasel 3D',
+    'digifox-spatial-spool': 'Spool Agency',
     'digifox-aurelle-jewelry': 'Diamond 3D',
     'digifox-samarth-cactus': 'Botanical',
     'digifox-lotus-gold': 'FMCG Food',
@@ -134,6 +140,8 @@ export const getWhiteLabelShortChip = (site: DemoWebsite): string => {
 export const getFrameSimulatedUrl = (site: DemoWebsite): string => {
   const cleanSlugMap: Record<string, string> = {
     'digifox-spatial-apparels': 'fashion-3d/interactive-rail',
+    'digifox-spatial-teasel': 'fashion-3d/teasel-rail',
+    'digifox-spatial-spool': 'agency/spool-motion-design',
     'digifox-aurelle-jewelry': 'luxury-jewelry/diamond-customizer',
     'digifox-samarth-cactus': 'botanical-nursery/rare-catalog',
     'digifox-lotus-gold': 'fmcg-brand/food-distribution',
@@ -172,6 +180,26 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     tags: ['Fashion', 'Luxury Apparel', '3D Spatial', 'Interactive WebGL', 'Three.js'],
     previewImage: '/previews/preview-spatial_apparels.png',
     statusBadge: 'Fashion 3D'
+  },
+  {
+    id: 'digifox-spatial-teasel',
+    title: 'Interactive Botanical Basics & Apparel Rail',
+    url: '/showcase/ref_teasel_spatial',
+    category: 'Fashion',
+    description: 'Basics label showcase featuring turning tees and sweats on a spatial rail with fluid hover dynamics and WebGL rendering.',
+    tags: ['Fashion', 'Apparel', '3D Spatial', 'WebGL', 'Basics'],
+    previewImage: '/previews/preview-spatial_apparels.png',
+    statusBadge: 'Fashion 3D'
+  },
+  {
+    id: 'digifox-spatial-spool',
+    title: 'Cinematic Kinetic Motion Design Agency',
+    url: '/showcase/ref_spool_agency',
+    category: '3D Animated Websites',
+    description: 'Premier design studio website for brands and places with fluid Three.js motion, cinematic scroll storytelling, and WebGL2 experiences.',
+    tags: ['Agency', 'Studio', 'Three.js', 'WebGL2', 'Motion Design'],
+    previewImage: '/previews/preview-gsap.png',
+    statusBadge: 'Agency 3D'
   },
   {
     id: 'digifox-aurelle-jewelry',
@@ -387,7 +415,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   }
 ];
 
-const STORAGE_KEY = 'digifox_demo_websites_v11';
+const STORAGE_KEY = 'digifox_demo_websites_v12';
 
 export const DemoWebsitesPage: React.FC = () => {
   const [websites, setWebsites] = useState<DemoWebsite[]>(() => {
@@ -404,6 +432,7 @@ export const DemoWebsitesPage: React.FC = () => {
       localStorage.removeItem('digifox_demo_websites_v8');
       localStorage.removeItem('digifox_demo_websites_v9');
       localStorage.removeItem('digifox_demo_websites_v10');
+      localStorage.removeItem('digifox_demo_websites_v11');
 
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {

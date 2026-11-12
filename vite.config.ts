@@ -93,6 +93,8 @@ function localDevApiPlugin() {
             const CIPHER_SALT = 'DF_REF_SEC_V5_SALT_98472';
             const PROTECTED_REGISTRY: Record<string, string> = {
               ref_spatial_apparels: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCA1Iis_VDN-My09MxZRWlNXPGg3Jigq',
+              ref_teasel_spatial: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCcgIiwzWXA6LygxJxdQQFpe',
+              ref_spool_agency: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCA1LDA6GjY9JSkscVFMWVs',
               ref_aurelle_jewelry: 'LDIrIjZ8cHwhKjg_UzArbCYxKFxURk5BMCktN2swOiEmJjN4VC8jbg',
               ref_agency_coaches: 'LDIrIjZ8cHwhKjg_UzArbCgxMlYVQRlEITQ8NyloPiM1bA',
               ref_online_store_3d: 'LDIrIjZ8cHwhKjg_UzArdCg7MVVRWlIcMiMtMSAqcTI1M3A',
@@ -123,9 +125,14 @@ function localDevApiPlugin() {
             }
 
             const targetParsed = new URL(targetUrl);
-            const refererHeader = token === 'ref_spatial_apparels'
-              ? 'https://spatialsites.co/kits/spatial-rail/demo'
-              : targetParsed.origin;
+            let refererHeader = targetParsed.origin;
+            if (token === 'ref_spatial_apparels') {
+              refererHeader = 'https://spatialsites.co/kits/spatial-rail/demo';
+            } else if (token === 'ref_teasel_spatial') {
+              refererHeader = 'https://spatialsites.co/kits/teasel/demo';
+            } else if (token === 'ref_spool_agency') {
+              refererHeader = 'https://spatialsites.co/kits/spool/demo';
+            }
 
             const targetResp = await fetch(targetUrl, {
               headers: {
@@ -143,6 +150,10 @@ function localDevApiPlugin() {
             let baseHref = '';
             if (token === 'ref_spatial_apparels') {
               baseHref = '/api/proxy-site/spatial-rail/';
+            } else if (token === 'ref_teasel_spatial') {
+              baseHref = '/api/proxy-site/teasel/';
+            } else if (token === 'ref_spool_agency') {
+              baseHref = '/api/proxy-site/spool/';
             } else {
               baseHref = `${respParsed.origin}${respParsed.pathname.endsWith('/') ? respParsed.pathname : respParsed.pathname + '/'}`;
             }
@@ -164,8 +175,9 @@ function localDevApiPlugin() {
             //     We keep all the server-rendered HTML (SSR) intact — it already contains
             //     the fully-rendered visible page content.  Only the hydration bootstrap
             //     scripts are removed so the page displays as a rich static snapshot. ────
+            const isSpatialSite = token === 'ref_spatial_apparels' || token === 'ref_teasel_spatial' || token === 'ref_spool_agency';
             const isNextJs = html.includes('__next') || html.includes('_next/') || html.includes('__NEXT_DATA__');
-            if (isNextJs && token !== 'ref_spatial_apparels') {
+            if (isNextJs && !isSpatialSite) {
               // Remove <script> tags that bootstrap Next.js client router / RSC
               html = html.replace(/<script[^>]*src=["'][^"']*\/_next\/[^"']*["'][^>]*><\/script>/gi, '');
               html = html.replace(/<script[^>]*>self\.__next_f\.push\([\s\S]*?<\/script>/gi, '');
@@ -198,6 +210,13 @@ function localDevApiPlugin() {
             const rawPath = req.url.replace('/api/proxy-site/', '');
             const targetUrl = `https://spatialsites.co/_sites/${rawPath}`;
             
+            let kit = 'spatial-rail';
+            if (rawPath.startsWith('teasel/')) {
+              kit = 'teasel';
+            } else if (rawPath.startsWith('spool/')) {
+              kit = 'spool';
+            }
+
             let dest = 'empty';
             let mode = 'no-cors';
             if (rawPath.endsWith('.js') || rawPath.endsWith('.mjs')) {
@@ -219,7 +238,7 @@ function localDevApiPlugin() {
                 'Sec-Fetch-Site': 'same-origin',
                 'Sec-Fetch-Mode': mode,
                 'Sec-Fetch-Dest': dest,
-                'Referer': 'https://spatialsites.co/_sites/spatial-rail/index.html',
+                'Referer': `https://spatialsites.co/_sites/${kit}/index.html`,
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
               }
             });

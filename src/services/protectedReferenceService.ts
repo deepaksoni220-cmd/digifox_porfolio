@@ -15,6 +15,8 @@ const CIPHER_SALT = 'DF_REF_SEC_V5_SALT_98472';
 // None of these ciphers contain plaintext domain names or protocols.
 const PROTECTED_REGISTRY: Record<string, string> = {
   ref_spatial_apparels: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCA1Iis_VDN-My09MxZRWlNXPGg3Jigq',
+  ref_teasel_spatial: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCcgIiwzWXA6LygxJxdQQFpe',
+  ref_spool_agency: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCA1LDA6GjY9JSkscVFMWVs',
   ref_aurelle_jewelry: 'LDIrIjZ8cHwhKjg_UzArbCYxKFxURk5BMCktN2swOiEmJjN4VC8jbg',
   ref_agency_coaches: 'LDIrIjZ8cHwhKjg_UzArbCgxMlYVQRlEITQ8NyloPiM1bA',
   ref_online_store_3d: 'LDIrIjZ8cHwhKjg_UzArdCg7MVVRWlIcMiMtMSAqcTI1M3A',

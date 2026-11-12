@@ -285,7 +285,7 @@ export const DemoWebsitesPage: React.FC = () => {
   };
 
   return (
-    <main className="min-h-screen bg-[var(--bg-base)] text-[var(--text-strong)] relative overflow-hidden pb-24 pt-20">
+    <main className="min-h-screen bg-[var(--bg-base)] text-[var(--text-strong)] relative overflow-x-hidden pb-24 pt-16 sm:pt-20">
       <SEOMeta
         title="Demo Websites & In-Window Showcase | Digifox 5D"
         description="Interact with live demo websites and prototypes directly in-window. Test responsive desktop, tablet, and mobile views without opening external windows."
@@ -298,23 +298,23 @@ export const DemoWebsitesPage: React.FC = () => {
       <div className="absolute bottom-[10%] left-[20%] w-[45%] h-[45%] bg-[radial-gradient(ellipse_at_center,_rgba(16,185,129,0.08)_0%,_transparent_70%)] pointer-events-none z-0" />
 
       {/* Fixed Top Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 py-3.5 bg-[var(--bg-base)]/85 backdrop-blur-md border-b border-[var(--border-strong)] shadow-md">
+      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-3 sm:px-8 py-2.5 sm:py-3.5 bg-[var(--bg-base)]/85 backdrop-blur-md border-b border-[var(--border-strong)] shadow-md">
         <a 
           href="/"
-          className="flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[var(--text-strong)] hover:text-[#3b82f6] transition-colors"
+          className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-black uppercase tracking-widest text-[var(--text-strong)] hover:text-[#3b82f6] transition-colors"
         >
-          <ArrowLeft size={16} />
+          <ArrowLeft size={15} />
           <span>Back to Digifox</span>
         </a>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <a
             href="/portfolio"
             className="hidden sm:inline-flex text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] hover:text-white transition-colors"
           >
             Portfolio
           </a>
-          <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
+          <span className="hidden xs:inline-block text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
             In-Window Showcase
           </span>
           <ThemeToggle />
@@ -322,64 +322,64 @@ export const DemoWebsitesPage: React.FC = () => {
       </header>
 
       {/* Main Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-6 sm:pt-10">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10 pt-4 sm:pt-10">
 
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center max-w-3xl mx-auto mb-10 sm:mb-14"
+          className="text-center max-w-3xl mx-auto mb-8 sm:mb-14"
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-emerald-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4 shadow-sm">
-            <Sparkles size={14} className="text-yellow-400 animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-emerald-500/10 border border-blue-500/20 text-blue-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-3 sm:mb-4 shadow-sm">
+            <Sparkles size={13} className="text-yellow-400 animate-pulse" />
             <span>Interactive In-Window Prototypes</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-[var(--text-strong)] mb-4">
+          <h1 className="text-2xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-[var(--text-strong)] mb-2.5 sm:mb-4">
             Demo <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Websites</span>
           </h1>
 
-          <p className="text-sm sm:text-base text-[var(--text-secondary)] font-light leading-relaxed max-w-2xl mx-auto">
+          <p className="text-xs sm:text-base text-[var(--text-secondary)] font-light leading-relaxed max-w-2xl mx-auto px-2">
             Interact with live demo websites directly within this window. No separate tabs or external redirects needed—test responsive layouts, interactive 3D, and store prototypes right here.
           </p>
 
           {/* Action Bar & View Switcher */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-4 sm:mt-6">
             <button
               type="button"
               onClick={() => setShowAddModal(true)}
-              className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-xl hover:shadow-blue-500/20 transition-all cursor-pointer"
+              className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 sm:gap-2 shadow-xl hover:shadow-blue-500/20 transition-all cursor-pointer"
             >
-              <Plus size={15} />
+              <Plus size={14} />
               <span>Add Demo Website</span>
             </button>
 
             {/* View Mode Switcher */}
-            <div className="flex p-1 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-sm">
+            <div className="flex p-0.5 sm:p-1 rounded-xl sm:rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] shadow-sm">
               <button
                 type="button"
                 onClick={() => setViewMode('stage')}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
                   viewMode === 'stage'
                     ? 'bg-blue-600 text-white shadow-md'
                     : 'text-[var(--text-secondary)] hover:text-white'
                 }`}
               >
-                <Monitor size={14} />
+                <Monitor size={13} />
                 <span>In-Window Stage</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setViewMode('grid')}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
                   viewMode === 'grid'
                     ? 'bg-blue-600 text-white shadow-md'
                     : 'text-[var(--text-secondary)] hover:text-white'
                 }`}
               >
-                <LayoutGrid size={14} />
+                <LayoutGrid size={13} />
                 <span>Cards Grid</span>
               </button>
             </div>
@@ -388,10 +388,10 @@ export const DemoWebsitesPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleResetToDefaults}
-                className="px-3.5 py-2.5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-xs text-[var(--text-secondary)] hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
+                className="px-3 sm:px-3.5 py-1.5 sm:py-2.5 rounded-xl sm:rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[11px] sm:text-xs text-[var(--text-secondary)] hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
                 title="Reset to default showcase list"
               >
-                <RotateCcw size={13} />
+                <RotateCcw size={12} />
                 <span>Reset</span>
               </button>
             )}
@@ -400,27 +400,27 @@ export const DemoWebsitesPage: React.FC = () => {
 
         {/* ─── IN-WINDOW LIVE STAGE (DISPLAY SITES DIRECTLY IN WINDOW) ───────── */}
         {viewMode === 'stage' && (
-          <div id="in-window-stage" className="mb-14 scroll-mt-24">
+          <div id="in-window-stage" className="mb-10 sm:mb-14 scroll-mt-20 sm:scroll-mt-24">
             
             {/* Quick Website Switcher Ribbon */}
-            <div className="mb-4 flex items-center justify-between gap-3 flex-wrap">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-1.5">
-                  <Play size={12} className="text-blue-400 fill-blue-400" />
-                  <span>Now Displaying In Window:</span>
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-1.5 shrink-0">
+                  <Play size={11} className="text-blue-400 fill-blue-400" />
+                  <span className="hidden xs:inline">Now In Window:</span>
                 </span>
-                <span className="px-3 py-1 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs font-bold text-blue-400">
+                <span className="px-2.5 py-1 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs font-bold text-blue-400 truncate">
                   {activeWebsite.title}
                 </span>
               </div>
 
-              <div className="text-xs font-mono text-[var(--text-secondary)]">
+              <div className="hidden sm:block text-xs font-mono text-[var(--text-secondary)]">
                 Click any site below to display instantly in this frame
               </div>
             </div>
 
             {/* Horizontal Website Selector Strip */}
-            <div className="flex items-center gap-2.5 overflow-x-auto pb-3 mb-4 scrollbar-thin">
+            <div className="-mx-3 px-3 sm:mx-0 sm:px-0 flex items-center gap-2 overflow-x-auto pb-3 mb-4 scrollbar-none snap-x">
               {websites.map((site) => {
                 const isActive = activeWebsite.id === site.id;
                 return (
@@ -431,14 +431,14 @@ export const DemoWebsitesPage: React.FC = () => {
                       setActiveWebsite(site);
                       setIframeKey((k) => k + 1);
                     }}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-2xl border text-xs text-left transition-all shrink-0 cursor-pointer ${
+                    className={`flex items-center gap-2 px-3 py-2 rounded-2xl border text-xs text-left transition-all shrink-0 cursor-pointer snap-start ${
                       isActive
                         ? 'bg-blue-600 text-white border-blue-400 shadow-lg shadow-blue-500/25 font-bold'
                         : 'bg-[var(--bg-surface)] border-[var(--border-strong)] text-[var(--text-secondary)] hover:text-white hover:border-white/20'
                     }`}
                   >
                     <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
-                    <span className="truncate max-w-[170px]">{site.title}</span>
+                    <span className="truncate max-w-[140px] sm:max-w-[170px]">{site.title}</span>
                     <span className={`text-[9px] px-1.5 py-0.2 rounded-full uppercase tracking-wider ${isActive ? 'bg-white/20 text-white' : 'bg-[var(--bg-base)] text-[var(--text-secondary)]'}`}>
                       {site.category.split(' ')[0]}
                     </span>
@@ -448,45 +448,43 @@ export const DemoWebsitesPage: React.FC = () => {
             </div>
 
             {/* In-Window Simulated Browser Frame */}
-            <div className="w-full rounded-3xl border border-[var(--border-strong)] bg-[var(--bg-surface)] overflow-hidden shadow-2xl flex flex-col">
+            <div className="w-full rounded-2xl sm:rounded-3xl border border-[var(--border-strong)] bg-[var(--bg-surface)] overflow-hidden shadow-2xl flex flex-col">
               
               {/* Browser Navigation Toolbar */}
-              <div className="px-4 sm:px-6 py-3 border-b border-[var(--border-strong)] bg-[var(--bg-base)] flex items-center justify-between gap-4">
-                {/* Window Dots & Site Title */}
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded-full bg-red-500/80" />
-                    <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                    <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
-                  </div>
-                  <div className="hidden sm:block text-xs font-bold text-[var(--text-strong)] truncate max-w-[200px]">
+              <div className="px-2.5 sm:px-6 py-2.5 sm:py-3 border-b border-[var(--border-strong)] bg-[var(--bg-base)] flex items-center justify-between gap-1.5 sm:gap-4">
+                {/* Window Dots & Title */}
+                <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                  <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500/80" />
+                  <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500/80" />
+                  <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500/80" />
+                  <div className="hidden md:block text-xs font-bold text-[var(--text-strong)] truncate max-w-[180px] ml-1.5">
                     {activeWebsite.title}
                   </div>
                 </div>
 
                 {/* Clean In-Window Stage Address Bar (No technical URL displayed) */}
-                <div className="flex-1 max-w-xl mx-auto flex items-center justify-center gap-2 px-3.5 py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-xs text-[var(--text-secondary)] shadow-inner">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
+                <div className="flex-1 min-w-0 max-w-xl mx-auto flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[11px] sm:text-xs text-[var(--text-secondary)] shadow-inner">
+                  <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
                   <span className="truncate text-[var(--text-strong)] font-semibold">
-                    Live Prototype · {activeWebsite.title}
+                    Live Demo · {activeWebsite.title}
                   </span>
-                  <span className="hidden sm:inline-block text-[10px] uppercase font-bold text-blue-400 px-2 py-0.5 rounded-full bg-blue-500/10">
+                  <span className="hidden lg:inline-block text-[10px] uppercase font-bold text-blue-400 px-2 py-0.5 rounded-full bg-blue-500/10">
                     {activeWebsite.category}
                   </span>
                   
                   <button
                     type="button"
                     onClick={handleReloadFrame}
-                    className="p-1 rounded hover:bg-white/10 text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer ml-1"
+                    className="p-1 rounded hover:bg-white/10 text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer shrink-0 ml-0.5"
                     title="Reload in Window"
                   >
-                    <RotateCcw size={12} />
+                    <RotateCcw size={11} className="sm:w-3 sm:h-3" />
                   </button>
                 </div>
 
                 {/* Viewport Device Controls & Fullscreen */}
-                <div className="flex items-center gap-2">
-                  <div className="flex bg-[var(--bg-surface)] p-1 rounded-xl border border-[var(--border-strong)]">
+                <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                  <div className="hidden sm:flex bg-[var(--bg-surface)] p-1 rounded-xl border border-[var(--border-strong)]">
                     <button
                       type="button"
                       onClick={() => setPreviewDevice('desktop')}
@@ -516,43 +514,44 @@ export const DemoWebsitesPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setShowInWindowModal(true)}
-                    className="p-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+                    className="p-1.5 sm:p-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-sm cursor-pointer flex items-center gap-1"
                     title="Expand Full In-Window Stage"
                   >
-                    <Maximize2 size={14} />
+                    <Maximize2 size={13} className="sm:w-3.5 sm:h-3.5" />
+                    <span className="hidden xs:inline text-[11px] font-semibold">Expand</span>
                   </button>
                 </div>
               </div>
 
-              {/* Responsive Iframe Viewport Stage */}
-              <div className="w-full h-[72vh] min-h-[520px] max-h-[820px] bg-black/80 flex items-center justify-center p-2 sm:p-4 overflow-hidden relative">
+              {/* Responsive Iframe Viewport Stage (No clipping, no double scrollbars) */}
+              <div className="w-full h-[65vh] sm:h-[72vh] min-h-[440px] sm:min-h-[520px] max-h-[820px] bg-[#07080e] flex items-center justify-center p-0 sm:p-4 overflow-hidden relative">
                 <div
-                  className={`h-full transition-all duration-300 rounded-2xl overflow-hidden shadow-2xl border border-[var(--border-strong)] bg-white ${
+                  className={`h-full transition-all duration-300 overflow-hidden shadow-2xl bg-[#0a0a0c] flex flex-col ${
                     previewDevice === 'mobile'
-                      ? 'w-[375px]'
+                      ? 'w-full max-w-[390px] sm:max-w-[375px] sm:rounded-[36px] sm:border-[6px] sm:border-zinc-800'
                       : previewDevice === 'tablet'
-                      ? 'w-[768px]'
-                      : 'w-full'
+                      ? 'w-full max-w-[768px] sm:rounded-2xl sm:border border-[var(--border-strong)]'
+                      : 'w-full sm:rounded-2xl sm:border border-[var(--border-strong)]'
                   }`}
                 >
                   <iframe
                     key={iframeKey}
                     src={activeWebsite.url}
                     title={activeWebsite.title}
-                    className="w-full h-full border-none bg-white"
+                    className="w-full h-full border-none bg-[#0a0a0c] block"
                     sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
                   />
                 </div>
               </div>
 
               {/* Active Website Detail Strip */}
-              <div className="px-5 py-3.5 border-t border-[var(--border-strong)] bg-[var(--bg-base)] flex flex-wrap items-center justify-between gap-3 text-xs">
-                <div className="flex items-center gap-3">
+              <div className="px-3.5 sm:px-5 py-2.5 sm:py-3.5 border-t border-[var(--border-strong)] bg-[var(--bg-base)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-3 text-xs">
+                <div className="flex items-center gap-2">
                   <span className="font-bold text-[var(--text-strong)]">{activeWebsite.title}</span>
                   <span className="text-[var(--text-secondary)]">·</span>
                   <span className="text-[var(--text-secondary)]">{activeWebsite.category}</span>
                 </div>
-                <div className="text-[var(--text-secondary)] font-light text-[11px]">
+                <div className="text-[var(--text-secondary)] font-light text-[11px] line-clamp-1 sm:line-clamp-none">
                   {activeWebsite.description}
                 </div>
               </div>
@@ -594,8 +593,8 @@ export const DemoWebsitesPage: React.FC = () => {
           </div>
 
           {/* Category Chips */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin">
-            <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] shrink-0 flex items-center gap-1.5 mr-1">
+          <div className="-mx-3 px-3 sm:mx-0 sm:px-0 flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-none snap-x">
+            <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] shrink-0 flex items-center gap-1.5 mr-1">
               <Filter size={12} className="text-blue-400" />
               <span>Category:</span>
             </span>
@@ -606,7 +605,7 @@ export const DemoWebsitesPage: React.FC = () => {
                   key={cat}
                   type="button"
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 snap-start shrink-0 ${
                     isSelected
                       ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20 font-bold'
                       : 'bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[var(--text-secondary)] hover:text-white hover:border-white/20'
@@ -794,26 +793,26 @@ export const DemoWebsitesPage: React.FC = () => {
       {/* ─── MODAL: FULL IN-WINDOW LIVE VIEWER (ALL SITES DISPLAYED HERE) ─── */}
       <AnimatePresence>
         {showInWindowModal && activeWebsite && (
-          <div className="fixed inset-0 z-[10000] bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-6">
+          <div className="fixed inset-0 z-[10000] bg-black/90 backdrop-blur-md flex items-center justify-center p-0 sm:p-4 md:p-6">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.2 }}
-              className={`bg-[var(--bg-surface)] border border-[var(--border-strong)] rounded-3xl shadow-2xl flex flex-col overflow-hidden transition-all duration-300 ${
+              className={`bg-[var(--bg-surface)] border-0 sm:border border-[var(--border-strong)] rounded-none sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden transition-all duration-300 ${
                 isFullscreen 
-                  ? 'w-[98vw] h-[96vh]' 
-                  : 'w-full max-w-6xl h-[92vh]'
+                  ? 'w-full h-full sm:w-[98vw] sm:h-[96vh]' 
+                  : 'w-full h-full sm:max-w-6xl sm:h-[92vh]'
               }`}
             >
               {/* Browser Bar */}
-              <div className="px-4 sm:px-6 py-3 border-b border-[var(--border-strong)] bg-[var(--bg-base)] flex items-center justify-between gap-4">
+              <div className="px-2.5 sm:px-6 py-2.5 sm:py-3 border-b border-[var(--border-strong)] bg-[var(--bg-base)] flex items-center justify-between gap-1.5 sm:gap-4">
                 {/* Window Dots & Quick Site Picker */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded-full bg-red-500/80" />
-                    <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                    <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                    <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500/80" />
+                    <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500/80" />
+                    <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500/80" />
                   </div>
 
                   {/* Dropdown to switch site in-window without leaving */}
@@ -837,24 +836,24 @@ export const DemoWebsitesPage: React.FC = () => {
                 </div>
 
                 {/* Clean Simulated Address Bar: No technical URLs */}
-                <div className="flex-1 max-w-lg mx-auto flex items-center justify-center gap-2 px-3.5 py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-xs text-[var(--text-secondary)] shadow-inner">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
+                <div className="flex-1 min-w-0 max-w-lg mx-auto flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[11px] sm:text-xs text-[var(--text-secondary)] shadow-inner">
+                  <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
                   <span className="truncate text-[var(--text-strong)] font-semibold">
-                    Live Prototype · {activeWebsite.title}
+                    Live Demo · {activeWebsite.title}
                   </span>
                   
                   <button
                     type="button"
                     onClick={handleReloadFrame}
-                    className="p-1 rounded hover:bg-white/10 text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer ml-1"
+                    className="p-1 rounded hover:bg-white/10 text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer shrink-0 ml-0.5"
                     title="Reload in Window"
                   >
-                    <RotateCcw size={12} />
+                    <RotateCcw size={11} className="sm:w-3 sm:h-3" />
                   </button>
                 </div>
 
                 {/* Viewport Device Controls, Fullscreen & Close */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                   <div className="hidden md:flex bg-[var(--bg-surface)] p-1 rounded-xl border border-[var(--border-strong)]">
                     <button
                       type="button"
@@ -885,56 +884,56 @@ export const DemoWebsitesPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setIsFullscreen(!isFullscreen)}
-                    className="p-2 rounded-xl bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
+                    className="p-1.5 sm:p-2 rounded-xl bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
                     title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen In-Window'}
                   >
-                    {isFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+                    {isFullscreen ? <Minimize2 size={13} className="sm:w-3.5 sm:h-3.5" /> : <Maximize2 size={13} className="sm:w-3.5 sm:h-3.5" />}
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setShowInWindowModal(false)}
-                    className="p-2 rounded-xl bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
+                    className="p-1.5 sm:p-2 rounded-xl bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
                     title="Close Window"
                   >
-                    <X size={16} />
+                    <X size={15} />
                   </button>
                 </div>
               </div>
 
               {/* Responsive Iframe Container */}
-              <div className="flex-1 bg-black/75 flex items-center justify-center p-2 sm:p-4 overflow-hidden relative">
+              <div className="flex-1 bg-[#07080e] flex items-center justify-center p-0 sm:p-4 overflow-hidden relative">
                 <div
-                  className={`h-full transition-all duration-300 rounded-2xl overflow-hidden shadow-2xl border border-[var(--border-strong)] bg-white ${
+                  className={`h-full transition-all duration-300 overflow-hidden shadow-2xl bg-[#0a0a0c] flex flex-col ${
                     previewDevice === 'mobile'
-                      ? 'w-[375px]'
+                      ? 'w-full max-w-[390px] sm:max-w-[375px] sm:rounded-[36px] sm:border-[6px] sm:border-zinc-800'
                       : previewDevice === 'tablet'
-                      ? 'w-[768px]'
-                      : 'w-full'
+                      ? 'w-full max-w-[768px] sm:rounded-2xl sm:border border-[var(--border-strong)]'
+                      : 'w-full sm:rounded-2xl sm:border border-[var(--border-strong)]'
                   }`}
                 >
                   <iframe
                     key={iframeKey}
                     src={activeWebsite.url}
                     title={activeWebsite.title}
-                    className="w-full h-full border-none bg-white"
+                    className="w-full h-full border-none bg-[#0a0a0c] block"
                     sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
                   />
                 </div>
               </div>
 
               {/* Bottom In-Window Strip with Quick Switcher */}
-              <div className="px-5 py-3 border-t border-[var(--border-strong)] bg-[var(--bg-base)] flex items-center justify-between gap-3 text-xs overflow-x-auto">
+              <div className="px-3 sm:px-5 py-2 sm:py-3 border-t border-[var(--border-strong)] bg-[var(--bg-base)] flex items-center justify-between gap-2 text-xs overflow-x-auto scrollbar-none">
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="font-bold text-[var(--text-strong)]">{activeWebsite.title}</span>
+                  <span className="font-bold text-[var(--text-strong)] truncate max-w-[140px] sm:max-w-[200px]">{activeWebsite.title}</span>
                   <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase">
-                    {activeWebsite.category}
+                    {activeWebsite.category.split(' ')[0]}
                   </span>
                 </div>
 
                 {/* Quick Next / Switch Demo buttons */}
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="text-[11px] text-[var(--text-secondary)] mr-1">Switch:</span>
+                  <span className="hidden xs:inline text-[11px] text-[var(--text-secondary)] mr-1">Switch:</span>
                   {websites.slice(0, 5).map((w) => (
                     <button
                       key={w.id}

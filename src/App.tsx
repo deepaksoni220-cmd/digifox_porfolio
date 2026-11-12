@@ -164,6 +164,8 @@ function App() {
               <Route path="/demos" element={<DemoWebsitesPage />} />
               <Route path="/demo-sites" element={<DemoWebsitesPage />} />
               <Route path="/demo" element={<DemoWebsitesPage />} />
+              <Route path="/showcase/:token" element={<PortfolioPage />} />
+              <Route path="/showcase" element={<PortfolioPage />} />
               <Route path="/admin" element={
                 <ProtectedPage>
                   <AdminPage />

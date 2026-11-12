@@ -64,121 +64,121 @@
     {
       "title": "Aurelle Luxury Diamond & Jewelry 3D Store",
       "category": "3D Animated Website",
-      "url": "https://digifox-jewelrystore.vercel.app/",
+      "url": "/showcase/ref_aurelle_jewelry",
       "image": "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop"
     },
     {
       "title": "Agency / Coaches  Porfolio website",
       "category": "3D Animated Website",
-      "url": "https://digifox-demo-u.vercel.app/",
+      "url": "/showcase/ref_agency_coaches",
       "image": "/image-1783081181632-620110443.png"
     },
     {
       "title": "Online Store 3d products",
       "category": "3D Animated Website",
-      "url": "https://digifox5donline.vercel.app/",
+      "url": "/showcase/ref_online_store_3d",
       "image": "/image-1783081097015-89310139.png"
     },
     {
       "title": "Online Store with Backend full stack",
       "category": "3D Animated Website",
-      "url": "https://digifox-storedemo-gqiq.vercel.app/",
+      "url": "/showcase/ref_backend_fullstack",
       "image": "/image-1783080979986-78210779.png"
     },
     {
       "title": "3d Portfolio",
       "category": "3D Animated Website",
-      "url": " https://digifox-porfolio.vercel.app/",
+      "url": "/showcase/ref_3d_portfolio",
       "image": "/image-1783080973853-739149021.png"
     },
     {
       "title": "3d online store ",
       "category": "3D Animated Website",
-      "url": "https://digifox-onlinestore.vercel.app/",
+      "url": "/showcase/ref_3d_onlinestore",
       "image": "/image-1783080344700-940209316.png"
     },
     {
       "title": "samarth cactus nursery",
       "category": "Shopify Website",
-      "url": "https://www.samarthcactusnursery.com/",
+      "url": "/showcase/ref_samarth_cactus",
       "image": "/image-1783146270623-638183035.png"
     },
     {
       "title": "Lotus Gold Makana",
       "category": "WordPress Website",
-      "url": "https://www.lotusgold.in",
+      "url": "/showcase/ref_lotus_gold",
       "image": "/image-1783146244153-491053701.png"
     },
     {
       "title": "Property / Real Estate website ",
       "category": "WordPress Website",
-      "url": "https://rzt.dwk.mybluehost.me/website_5cb6ce7c/",
+      "url": "/showcase/ref_property_realestate",
       "image": "/image-1783079877455-126209707.png"
     },
     {
       "title": "Ninety Degree Stone",
       "category": "WordPress Website",
-      "url": "https://www.ninetydegree.com",
+      "url": "/showcase/ref_ninety_degree",
       "image": "/image-1783146256120-367253868.png"
     },
     {
       "title": "Abacus Master Canada",
       "category": "WordPress Website",
-      "url": "https://www.abacusmastercanada.com",
+      "url": "/showcase/ref_abacus_master",
       "image": "/image-1783146263524-679423637.png"
     },
     {
       "title": "Digifox",
       "category": "WordPress Website",
-      "url": "https://www.digifox.world",
-      "image": "/image-1783079897625-656293953.png"
+      "url": "/",
+      "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop"
     },
     {
       "title": "Rukmi Silver Jewellery",
       "category": "Shopify Website",
-      "url": "https://www.rukmi.in",
+      "url": "/showcase/ref_rukmi_jewellery",
       "image": "/image-1783146278377-932607994.png"
     },
     {
       "title": "Fashion Studio & Luxury Editorial",
       "category": "3D Animated Website",
-      "url": "/templates/stylg%20demo%202/studio_fashion.aura.build/studio-fashion.aura.build/index.html",
+      "url": "/templates/studiofashion/index.html",
       "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop"
     },
     {
       "title": "Biska Luxury Clothing & Couture",
       "category": "3D Animated Website",
-      "url": "/templates/style%20demo%201/biska_luxury.aura.build/riska-luxury.aura.build/index.html",
+      "url": "/templates/biska/index.html",
       "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop"
     },
     {
       "title": "INTIK Burgers 3D Experience",
       "category": "3D Animated Website",
-      "url": "/templates/intik-burgers/index.html",
+      "url": "/templates/intikburgers/index.html",
       "image": "/templates/intik-burgers/assets/hero-burger.webp"
     },
     {
       "title": "SkyElite Flights & Aviation",
       "category": "3D Animated Website",
-      "url": "/templates/2d%20porfolio%20designg/dist/index.html",
-      "image": "https://motionsites.ai/assets/hero-skyelite-preview-DHaZIgUv.gif"
+      "url": "/templates/cars/index.html",
+      "image": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=800&auto=format&fit=crop"
     },
     {
       "title": "Sneaker & Shoes GSAP Interactive",
       "category": "3D Animated Website",
-      "url": "/templates/gsap%20one/index.html",
+      "url": "/templates/shoes/index.html",
       "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop"
     },
     {
       "title": "Vanta Luxury Cars & Fleet 3D",
       "category": "3D Animated Website",
-      "url": "/templates/demo%20cars%20vanta/index.html",
+      "url": "/templates/cars/index.html",
       "image": "/templates/demo-cars-vanta.png"
     },
     {
       "title": "Dig Creative Digital Portfolio",
       "category": "3D Animated Website",
-      "url": "/templates/2d%20digital%20portfolio/dist/index.html",
+      "url": "/templates/digpro/index.html",
       "image": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=800&auto=format&fit=crop"
     }
   ],

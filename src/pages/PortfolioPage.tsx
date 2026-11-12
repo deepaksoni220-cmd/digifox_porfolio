@@ -24,6 +24,7 @@ import { ThemeToggle } from '../components/ThemeToggle';
 import { PageFooter } from '../components/PageFooter';
 import { Media } from '../components/Media';
 import siteData from '../data.json';
+import { launchProtectedReference, maskReferenceUrl, canEmbedInWindow } from '../services/protectedReferenceService';
 
 const CATEGORIES = [
   "All",
@@ -455,17 +456,19 @@ export const PortfolioPage: React.FC = () => {
 
                   {/* Action Overlay */}
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-[2px] p-4">
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition-transform transform-gpu hover:scale-105"
-                      onClick={(e) => e.stopPropagation()}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        launchProtectedReference(item.url);
+                      }}
+                      className="px-4 py-2.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition-transform transform-gpu hover:scale-105 cursor-pointer"
                     >
                       <ExternalLink size={14} />
                       <span>Live Site</span>
-                    </a>
+                    </button>
                     <button
+                      type="button"
                       onClick={() => setSelectedProject(item)}
                       className="px-4 py-2.5 rounded-full bg-white/20 hover:bg-white/30 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 backdrop-blur-md border border-white/30 transition-transform transform-gpu hover:scale-105 cursor-pointer"
                     >
@@ -484,7 +487,7 @@ export const PortfolioPage: React.FC = () => {
                       </span>
                       <div className="flex items-center gap-1 text-[10px] text-emerald-400 font-semibold">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span>Active</span>
+                        <span>Protected</span>
                       </div>
                     </div>
 
@@ -494,18 +497,20 @@ export const PortfolioPage: React.FC = () => {
                   </div>
 
                   <div className="mt-5 pt-4 border-t border-[var(--border-strong)]/30 flex items-center justify-between">
-                    <span className="text-xs font-mono text-[var(--text-secondary)]/70 truncate max-w-[160px] sm:max-w-[200px]">
-                      {item.url.replace(/^https?:\/\//, '')}
+                    <span className="text-xs font-mono text-[var(--text-secondary)]/70 truncate max-w-[180px] sm:max-w-[220px]">
+                      {maskReferenceUrl(item.url)}
                     </span>
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-8 h-8 rounded-full bg-[var(--bg-base)] border border-[var(--border-strong)] flex items-center justify-center text-[var(--text-primary)] group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shadow-sm"
-                      title="Visit Website"
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        launchProtectedReference(item.url);
+                      }}
+                      className="w-8 h-8 rounded-full bg-[var(--bg-base)] border border-[var(--border-strong)] flex items-center justify-center text-[var(--text-primary)] group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shadow-sm cursor-pointer"
+                      title="Launch Protected Site"
                     >
                       <ArrowUpRight size={15} />
-                    </a>
+                    </button>
                   </div>
                 </div>
               </motion.div>
@@ -971,9 +976,9 @@ export const PortfolioPage: React.FC = () => {
                 </button>
               </div>
 
-              {/* Modal Body Preview (Interactive Iframe for templates or high-res Image) */}
+              {/* Modal Body Preview (Interactive Iframe for local templates or high-res Image) */}
               <div className="relative aspect-[16/10] sm:aspect-[16/9] bg-black overflow-hidden flex items-center justify-center">
-                {selectedProject.url?.includes('/templates/') || selectedProject.url?.endsWith('.html') ? (
+                {canEmbedInWindow(selectedProject.url) ? (
                   <iframe
                     src={selectedProject.url}
                     title={selectedProject.title}
@@ -989,12 +994,15 @@ export const PortfolioPage: React.FC = () => {
                 )}
               </div>
 
-              {/* Modal Footer */}
+              {/* Modal Footer (Protected: zero technical URLs exposed) */}
               <div className="p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[var(--bg-surface)]">
                 <div className="text-center sm:text-left">
-                  <p className="text-xs text-[var(--text-secondary)]">Destination Live URL:</p>
-                  <p className="text-sm font-bold text-blue-400 font-mono truncate max-w-xs sm:max-w-sm">
-                    {selectedProject.url}
+                  <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-bold uppercase tracking-wider mb-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>Protection Layer Active</span>
+                  </div>
+                  <p className="text-sm font-bold text-[var(--text-strong)] font-mono truncate max-w-xs sm:max-w-sm">
+                    {maskReferenceUrl(selectedProject.url)}
                   </p>
                 </div>
                 <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -1004,15 +1012,14 @@ export const PortfolioPage: React.FC = () => {
                   >
                     Close
                   </button>
-                  <a
-                    href={selectedProject.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 sm:flex-none px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-colors"
+                  <button
+                    type="button"
+                    onClick={() => launchProtectedReference(selectedProject.url)}
+                    className="flex-1 sm:flex-none px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-colors cursor-pointer"
                   >
                     <ExternalLink size={14} />
-                    <span>Open Live Site</span>
-                  </a>
+                    <span>Launch Verified Site</span>
+                  </button>
                 </div>
               </div>
             </motion.div>

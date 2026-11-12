@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Media } from '../components/Media';
 import siteData from '../data.json';
+import { launchProtectedReference, maskReferenceUrl } from '../services/protectedReferenceService';
 
 const CATEGORIES = [
   "WordPress Website",
@@ -33,7 +34,7 @@ export const PortfolioLinksSection: React.FC = () => {
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 border cursor-pointer ${
                 activeCategory === category 
                   ? 'bg-[var(--text-strong)] text-[var(--bg-base)] border-[var(--text-strong)] shadow-lg' 
                   : 'bg-[var(--bg-surface)] text-[var(--text-primary)] border-[var(--border-strong)] hover:text-[var(--text-strong)] hover:bg-[var(--bg-surface-elevated)]'
@@ -51,17 +52,17 @@ export const PortfolioLinksSection: React.FC = () => {
         >
           <AnimatePresence>
             {filteredLinks.map((item, index) => (
-              <motion.a
+              <motion.div
                 layout
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
                 key={item.url + index}
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative flex flex-col bg-[var(--bg-surface)] rounded-2xl overflow-hidden border border-[var(--border-subtle)] hover:border-[var(--border-strong)] transition-colors duration-300 block"
+                onClick={() => launchProtectedReference(item.url)}
+                role="button"
+                tabIndex={0}
+                className="group relative flex flex-col bg-[var(--bg-surface)] rounded-2xl overflow-hidden border border-[var(--border-subtle)] hover:border-blue-500/50 transition-colors duration-300 cursor-pointer shadow-lg hover:shadow-2xl"
               >
                 <div className="relative aspect-video overflow-hidden bg-[var(--bg-base)]">
                   <div className="absolute inset-0 bg-[#D9D9D9] group-hover:scale-105 transition-transform duration-700 ease-out">
@@ -73,9 +74,9 @@ export const PortfolioLinksSection: React.FC = () => {
                   </div>
                   {/* Overlay icon */}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <div className="bg-white/20 backdrop-blur-md rounded-full p-4 border border-white/30">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <div className="bg-blue-600/90 text-white backdrop-blur-md rounded-full px-4 py-2 border border-white/20 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xl">
+                      <span>Launch In-Window</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="15 3 21 3 21 9"></polyline>
                         <line x1="10" y1="14" x2="21" y2="3"></line>
                       </svg>
@@ -83,15 +84,28 @@ export const PortfolioLinksSection: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="p-5 border-t border-[var(--border-subtle)]">
-                  <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider font-semibold mb-2 block">
-                    {item.category}
-                  </span>
-                  <h3 className="text-xl font-bold text-[var(--text-strong)] group-hover:opacity-80 transition-opacity">
-                    {item.title}
-                  </h3>
+                <div className="p-5 border-t border-[var(--border-subtle)] flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider font-semibold">
+                        {item.category}
+                      </span>
+                      <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span>Protected</span>
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-bold text-[var(--text-strong)] group-hover:text-blue-400 transition-colors">
+                      {item.title}
+                    </h3>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-[var(--border-subtle)]/50 flex items-center justify-between text-xs text-[var(--text-secondary)] font-mono">
+                    <span>{maskReferenceUrl(item.url)}</span>
+                    <span className="text-blue-400 font-bold group-hover:translate-x-1 transition-transform">→</span>
+                  </div>
                 </div>
-              </motion.a>
+              </motion.div>
             ))}
           </AnimatePresence>
         </motion.div>

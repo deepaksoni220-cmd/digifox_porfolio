@@ -79,7 +79,7 @@ export const AVAILABLE_DEMOS = [
   {
     title: "Samarth Cactus & Exotic Plants",
     category: "High-Converting Shopify E-Commerce",
-    demoUrl: "https://www.samarthcactusnursery.com/",
+    demoUrl: "/templates/studiofashion/index.html",
     previewImage: "/image-1783146270623-638183035.png",
     fitFor: ["E-Commerce", "Nursery", "Plants", "Retail", "D2C Brands", "Shopify Store"]
   },

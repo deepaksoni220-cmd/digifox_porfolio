@@ -92,7 +92,7 @@ function localDevApiPlugin() {
             const token = urlObj.searchParams.get('token');
             const CIPHER_SALT = 'DF_REF_SEC_V5_SALT_98472';
             const PROTECTED_REGISTRY: Record<string, string> = {
-              ref_spatial_apparels: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdLy8rIWo1LzIxKj46GC0yKCB7O1xVWw',
+              ref_spatial_apparels: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCA1Iis_VDN-My09MxZRWlNXPGg3Jigq',
               ref_aurelle_jewelry: 'LDIrIjZ8cHwhKjg_UzArbCYxKFxURk5BMCktN2swOiEmJjN4VC8jbg',
               ref_agency_coaches: 'LDIrIjZ8cHwhKjg_UzArbCgxMlYVQRlEITQ8NyloPiM1bA',
               ref_online_store_3d: 'LDIrIjZ8cHwhKjg_UzArdCg7MVVRWlIcMiMtMSAqcTI1M3A',
@@ -124,6 +124,9 @@ function localDevApiPlugin() {
 
             const targetResp = await fetch(targetUrl, {
               headers: {
+                'Sec-Fetch-Site': 'same-origin',
+                'Sec-Fetch-Dest': 'iframe',
+                'Referer': 'https://spatialsites.co/kits/spatial-rail/demo',
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
               },
@@ -131,8 +134,13 @@ function localDevApiPlugin() {
             });
 
             let html = await targetResp.text();
-            const targetParsed = new URL(targetResp.url || targetUrl);
-            const baseHref = `${targetParsed.origin}${targetParsed.pathname.endsWith('/') ? targetParsed.pathname : targetParsed.pathname + '/'}`;
+            let baseHref = '';
+            if (token === 'ref_spatial_apparels') {
+              baseHref = '/api/proxy-site/spatial-rail/';
+            } else {
+              const targetParsed = new URL(targetResp.url || targetUrl);
+              baseHref = `${targetParsed.origin}${targetParsed.pathname.endsWith('/') ? targetParsed.pathname : targetParsed.pathname + '/'}`;
+            }
             const baseTag = `<base href="${baseHref}">`;
 
             if (html.includes('<head>')) {
@@ -144,6 +152,7 @@ function localDevApiPlugin() {
             }
 
             html = html.replace(/<meta[^>]*http-equiv=["']?(?:content-security-policy|x-frame-options)["']?[^>]*>/gi, '');
+            html = html.replace(/window\.top\s*===\s*window/g, 'false');
 
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
             res.removeHeader('X-Frame-Options');
@@ -152,6 +161,47 @@ function localDevApiPlugin() {
           } catch (err: any) {
             res.statusCode = 502;
             return res.end(`Failed to proxy frame: ${err.message}`);
+          }
+        }
+
+        if (req.url?.startsWith('/api/proxy-site/')) {
+          try {
+            const rawPath = req.url.replace('/api/proxy-site/', '');
+            const targetUrl = `https://spatialsites.co/_sites/${rawPath}`;
+            
+            let dest = 'empty';
+            let mode = 'no-cors';
+            if (rawPath.endsWith('.js') || rawPath.endsWith('.mjs')) {
+              dest = 'script';
+              mode = 'cors';
+            } else if (rawPath.endsWith('.css')) {
+              dest = 'style';
+              mode = 'no-cors';
+            } else if (rawPath.endsWith('.woff2') || rawPath.endsWith('.woff') || rawPath.endsWith('.ttf')) {
+              dest = 'font';
+              mode = 'cors';
+            } else if (rawPath.endsWith('.webp') || rawPath.endsWith('.png') || rawPath.endsWith('.jpg') || rawPath.endsWith('.svg')) {
+              dest = 'image';
+              mode = 'no-cors';
+            }
+
+            const aResp = await fetch(targetUrl, {
+              headers: {
+                'Sec-Fetch-Site': 'same-origin',
+                'Sec-Fetch-Mode': mode,
+                'Sec-Fetch-Dest': dest,
+                'Referer': 'https://spatialsites.co/_sites/spatial-rail/index.html',
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+              }
+            });
+            res.statusCode = aResp.status;
+            const contentType = aResp.headers.get('content-type');
+            if (contentType) res.setHeader('Content-Type', contentType);
+            const arrayBuf = await aResp.arrayBuffer();
+            return res.end(Buffer.from(arrayBuf));
+          } catch (err: any) {
+            res.statusCode = 502;
+            return res.end(`Asset proxy error: ${err.message}`);
           }
         }
         next();

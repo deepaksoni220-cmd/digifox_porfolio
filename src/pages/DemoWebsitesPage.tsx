@@ -42,7 +42,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   {
     id: 'digifox-spatial-apparels',
     title: 'Spatial Apparels - 3D Fashion Rail',
-    url: '/templates/spatial/index.html',
+    url: '/showcase/ref_spatial_apparels',
     category: 'Fashion',
     description: 'Spatial 3D fashion rail and apparel experience featuring interactive wardrobe physics, smooth curve rail navigation, and luxury product storytelling.',
     tags: ['Fashion', 'Apparel', '3D Spatial', 'Interactive WebGL', 'Luxury'],
@@ -263,7 +263,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   }
 ];
 
-const STORAGE_KEY = 'digifox_demo_websites_v9';
+const STORAGE_KEY = 'digifox_demo_websites_v10';
 
 export const DemoWebsitesPage: React.FC = () => {
   const [websites, setWebsites] = useState<DemoWebsite[]>(() => {
@@ -278,6 +278,7 @@ export const DemoWebsitesPage: React.FC = () => {
       localStorage.removeItem('digifox_demo_websites_v6');
       localStorage.removeItem('digifox_demo_websites_v7');
       localStorage.removeItem('digifox_demo_websites_v8');
+      localStorage.removeItem('digifox_demo_websites_v9');
 
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {

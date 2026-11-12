@@ -14,7 +14,7 @@ const CIPHER_SALT = 'DF_REF_SEC_V5_SALT_98472';
 // Opaque Reference Token Registry with Encrypted Payloads
 // None of these ciphers contain plaintext domain names or protocols.
 const PROTECTED_REGISTRY: Record<string, string> = {
-  ref_spatial_apparels: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdLy8rIWo1LzIxKj46GC0yKCB7O1xVWw',
+  ref_spatial_apparels: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCA1Iis_VDN-My09MxZRWlNXPGg3Jigq',
   ref_aurelle_jewelry: 'LDIrIjZ8cHwhKjg_UzArbCYxKFxURk5BMCktN2swOiEmJjN4VC8jbg',
   ref_agency_coaches: 'LDIrIjZ8cHwhKjg_UzArbCgxMlYVQRlEITQ8NyloPiM1bA',
   ref_online_store_3d: 'LDIrIjZ8cHwhKjg_UzArdCg7MVVRWlIcMiMtMSAqcTI1M3A',

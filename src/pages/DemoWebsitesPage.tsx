@@ -17,11 +17,14 @@ import {
   Maximize2,
   Minimize2,
   LayoutGrid,
-  Play
+  Play,
+  Eye,
+  ExternalLink
 } from 'lucide-react';
 import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { PageFooter } from '../components/PageFooter';
+import { canEmbedInWindow, launchProtectedReference } from '../services/protectedReferenceService';
 
 export interface DemoWebsite {
   id: string;
@@ -300,6 +303,12 @@ export const DemoWebsitesPage: React.FC = () => {
   const [showInWindowModal, setShowInWindowModal] = useState(false);
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [displayMode, setDisplayMode] = useState<'live' | 'static'>('live');
+  const [iframeKey, setIframeKey] = useState(0);
+
+  const handleReload = () => {
+    setIframeKey((k) => k + 1);
+  };
 
   // Add Demo Modal State
   const [showAddModal, setShowAddModal] = useState(false);
@@ -356,6 +365,8 @@ export const DemoWebsitesPage: React.FC = () => {
 
   const handleOpenInWindow = (site: DemoWebsite, asModal: boolean = true) => {
     setActiveWebsite(site);
+    setDisplayMode('live');
+    setIframeKey((k) => k + 1);
     if (asModal) {
       setShowInWindowModal(true);
     } else {
@@ -613,11 +624,17 @@ export const DemoWebsitesPage: React.FC = () => {
                 <div className="flex-1 min-w-0 max-w-xl mx-auto flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[11px] sm:text-xs text-[var(--text-secondary)] shadow-inner">
                   <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
                   <span className="truncate text-[var(--text-strong)] font-semibold">
-                    Static Preview · {activeWebsite.title}
+                    {displayMode === 'live' && canEmbedInWindow(activeWebsite.url) ? '⚡ Live Running' : '🔒 Verified Snapshot'} · {activeWebsite.title}
                   </span>
-                  <span className="hidden lg:inline-block text-[10px] uppercase font-bold text-emerald-400 px-2 py-0.5 rounded-full bg-emerald-500/10">
-                    Original Capture
-                  </span>
+                  {canEmbedInWindow(activeWebsite.url) ? (
+                    <span className="hidden lg:inline-block text-[10px] uppercase font-bold text-emerald-400 px-2 py-0.5 rounded-full bg-emerald-500/10">
+                      Live Running
+                    </span>
+                  ) : (
+                    <span className="hidden lg:inline-block text-[10px] uppercase font-bold text-blue-400 px-2 py-0.5 rounded-full bg-blue-500/10">
+                      Client Site
+                    </span>
+                  )}
                 </div>
 
                 {/* Viewport Device Controls & Fullscreen */}
@@ -651,6 +668,15 @@ export const DemoWebsitesPage: React.FC = () => {
 
                   <button
                     type="button"
+                    onClick={handleReload}
+                    className="p-1.5 sm:p-2 rounded-xl bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
+                    title="Reload Live Demo"
+                  >
+                    <RotateCcw size={13} />
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => setShowInWindowModal(true)}
                     className="p-1.5 sm:p-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-sm cursor-pointer flex items-center gap-1"
                     title="Expand Full In-Window Stage"
@@ -661,7 +687,7 @@ export const DemoWebsitesPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Responsive Static Preview Viewport Stage */}
+              {/* Responsive Live Running Viewport Stage */}
               <div className="w-full h-[65vh] sm:h-[72vh] min-h-[440px] sm:min-h-[520px] max-h-[820px] bg-[#07080e] flex items-center justify-center p-0 sm:p-4 overflow-hidden relative">
                 <div
                   className={`h-full transition-all duration-300 overflow-hidden shadow-2xl bg-[#0a0a0c] flex flex-col relative ${
@@ -672,33 +698,94 @@ export const DemoWebsitesPage: React.FC = () => {
                       : 'w-full sm:rounded-2xl sm:border border-[var(--border-strong)]'
                   }`}
                 >
-                  {/* Browser Address Banner for Static View */}
+                  {/* Subtle top indicator inside viewport */}
                   <div className="px-4 py-2 border-b border-[var(--border-strong)]/60 bg-[#0d0e14] flex items-center justify-between text-xs shrink-0">
                     <div className="flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                       <span className="font-semibold text-zinc-300 text-[11px]">
-                        Static Original Website Preview · {previewDevice.toUpperCase()}
+                        {displayMode === 'live' && canEmbedInWindow(activeWebsite.url)
+                          ? `⚡ Live Running Website · ${previewDevice.toUpperCase()}`
+                          : `🔒 Verified Client Snapshot · ${previewDevice.toUpperCase()}`}
                       </span>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => setShowInWindowModal(true)}
-                      className="text-[10px] text-blue-400 hover:text-blue-300 font-bold uppercase tracking-wider flex items-center gap-1 cursor-pointer"
-                    >
-                      <Maximize2 size={11} />
-                      <span>Full Modal</span>
-                    </button>
+
+                    <div className="flex items-center gap-2">
+                      {canEmbedInWindow(activeWebsite.url) && (
+                        <div className="flex p-0.5 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-strong)]">
+                          <button
+                            type="button"
+                            onClick={() => setDisplayMode('live')}
+                            className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 transition-all ${
+                              displayMode === 'live' ? 'bg-emerald-600 text-white shadow-sm' : 'text-[var(--text-secondary)] hover:text-white'
+                            }`}
+                          >
+                            <Play size={10} className="fill-current" />
+                            <span>Live</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDisplayMode('static')}
+                            className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 transition-all ${
+                              displayMode === 'static' ? 'bg-blue-600 text-white shadow-sm' : 'text-[var(--text-secondary)] hover:text-white'
+                            }`}
+                          >
+                            <Eye size={10} />
+                            <span>Static</span>
+                          </button>
+                        </div>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() => setShowInWindowModal(true)}
+                        className="text-[10px] text-blue-400 hover:text-blue-300 font-bold uppercase tracking-wider flex items-center gap-1 cursor-pointer"
+                      >
+                        <Maximize2 size={11} />
+                        <span>Full Modal</span>
+                      </button>
+                    </div>
                   </div>
 
-                  {/* Scrollable Static Image Preview */}
-                  <div className="w-full flex-1 overflow-y-auto overflow-x-hidden bg-[#050608] scrollbar-thin scrollbar-thumb-zinc-700">
-                    <img
-                      src={activeWebsite.previewImage || '/previews/preview-blacklane.png'}
-                      alt={activeWebsite.title}
-                      className="w-full h-auto object-top block select-none pointer-events-auto"
-                      loading="eager"
+                  {/* Viewport Content: Live Running iframe or static capture */}
+                  {displayMode === 'live' && canEmbedInWindow(activeWebsite.url) ? (
+                    <iframe
+                      key={activeWebsite.id + iframeKey + previewDevice}
+                      src={activeWebsite.url}
+                      title={activeWebsite.title}
+                      className="w-full h-full border-none bg-[#0a0a0c] block"
+                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                      allow="autoplay; fullscreen; xr-spatial-tracking"
                     />
-                  </div>
+                  ) : (
+                    <div className="w-full flex-1 overflow-y-auto overflow-x-hidden bg-[#050608] scrollbar-thin scrollbar-thumb-zinc-700 relative">
+                      <img
+                        src={activeWebsite.previewImage || '/previews/preview-blacklane.png'}
+                        alt={activeWebsite.title}
+                        className="w-full h-auto object-top block select-none pointer-events-auto"
+                        loading="eager"
+                      />
+                      {!canEmbedInWindow(activeWebsite.url) && (
+                        <div className="sticky bottom-4 left-0 right-0 max-w-sm mx-auto p-3 rounded-2xl bg-black/85 backdrop-blur-md border border-white/20 text-center shadow-2xl flex items-center justify-between gap-3">
+                          <div className="text-left">
+                            <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
+                              Live Client Deployment
+                            </div>
+                            <div className="text-xs font-bold text-white truncate max-w-[170px]">
+                              {activeWebsite.title}
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => launchProtectedReference(activeWebsite.url)}
+                            className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-lg transition-all cursor-pointer"
+                          >
+                            <ExternalLink size={12} />
+                            <span>Launch Live</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -980,15 +1067,21 @@ export const DemoWebsitesPage: React.FC = () => {
                   </select>
                 </div>
 
-                {/* Clean Simulated Address Bar: Static Original Website */}
+                {/* Clean Simulated Address Bar: Live Running or Static */}
                 <div className="flex-1 min-w-0 max-w-lg mx-auto flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-strong)] text-[11px] sm:text-xs text-[var(--text-secondary)] shadow-inner">
                   <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
                   <span className="truncate text-[var(--text-strong)] font-semibold">
-                    Static Preview · {activeWebsite.title}
+                    {displayMode === 'live' && canEmbedInWindow(activeWebsite.url) ? '⚡ Live Running' : '🔒 Verified Snapshot'} · {activeWebsite.title}
                   </span>
-                  <span className="hidden xs:inline px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">
-                    Original Capture
-                  </span>
+                  {canEmbedInWindow(activeWebsite.url) ? (
+                    <span className="hidden xs:inline px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">
+                      Interactive 3D
+                    </span>
+                  ) : (
+                    <span className="hidden xs:inline px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400 text-[10px] font-bold">
+                      Client Site
+                    </span>
+                  )}
                 </div>
 
                 {/* Viewport Device Controls, Fullscreen & Close */}
@@ -1022,6 +1115,15 @@ export const DemoWebsitesPage: React.FC = () => {
 
                   <button
                     type="button"
+                    onClick={handleReload}
+                    className="p-1.5 sm:p-2 rounded-xl bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
+                    title="Reload Live Demo"
+                  >
+                    <RotateCcw size={13} className="sm:w-3.5 sm:h-3.5" />
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => setIsFullscreen(!isFullscreen)}
                     className="p-1.5 sm:p-2 rounded-xl bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-white transition-colors cursor-pointer"
                     title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen In-Window'}
@@ -1040,7 +1142,7 @@ export const DemoWebsitesPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Responsive Static Preview Viewport Container */}
+              {/* Responsive Live Running Viewport Container */}
               <div className="flex-1 bg-[#07080e] flex items-center justify-center p-0 sm:p-4 overflow-hidden relative">
                 <div
                   className={`h-full transition-all duration-300 overflow-hidden shadow-2xl bg-[#0a0a0c] flex flex-col relative ${
@@ -1052,24 +1154,88 @@ export const DemoWebsitesPage: React.FC = () => {
                   }`}
                 >
                   {/* Subtle top indicator inside viewport */}
-                  <div className="px-3 py-1.5 bg-[#0e0f17] border-b border-[var(--border-strong)]/50 flex items-center justify-between text-[11px] shrink-0">
-                    <span className="text-zinc-400 font-mono text-[10px]">
-                      🔒 {activeWebsite.title} · Static Capture
-                    </span>
-                    <span className="text-[10px] text-zinc-500 font-sans">
-                      Scroll to inspect full site
-                    </span>
+                  <div className="px-4 py-2 bg-[#0e0f17] border-b border-[var(--border-strong)]/50 flex items-center justify-between text-[11px] shrink-0">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="text-zinc-300 font-semibold text-[11px]">
+                        {displayMode === 'live' && canEmbedInWindow(activeWebsite.url)
+                          ? `⚡ Live Running Website · ${previewDevice.toUpperCase()} View`
+                          : `🔒 Verified Client Snapshot · ${previewDevice.toUpperCase()} View`}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {canEmbedInWindow(activeWebsite.url) && (
+                        <div className="flex p-0.5 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-strong)]">
+                          <button
+                            type="button"
+                            onClick={() => setDisplayMode('live')}
+                            className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 transition-all ${
+                              displayMode === 'live' ? 'bg-emerald-600 text-white shadow-sm' : 'text-[var(--text-secondary)] hover:text-white'
+                            }`}
+                          >
+                            <Play size={10} className="fill-current" />
+                            <span>Live</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDisplayMode('static')}
+                            className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 transition-all ${
+                              displayMode === 'static' ? 'bg-blue-600 text-white shadow-sm' : 'text-[var(--text-secondary)] hover:text-white'
+                            }`}
+                          >
+                            <Eye size={10} />
+                            <span>Static</span>
+                          </button>
+                        </div>
+                      )}
+
+                      <span className="hidden sm:inline text-[10px] text-zinc-500 font-sans">
+                        {displayMode === 'live' && canEmbedInWindow(activeWebsite.url) ? 'Interactive 3D Simulation' : 'Scroll to inspect'}
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Scrollable Static Image Preview */}
-                  <div className="w-full flex-1 overflow-y-auto overflow-x-hidden bg-[#050608] scrollbar-thin scrollbar-thumb-zinc-700">
-                    <img
-                      src={activeWebsite.previewImage || '/previews/preview-blacklane.png'}
-                      alt={activeWebsite.title}
-                      className="w-full h-auto object-top block select-none pointer-events-auto"
-                      loading="eager"
+                  {/* Viewport Content: Live iframe for local templates or high-res static capture */}
+                  {displayMode === 'live' && canEmbedInWindow(activeWebsite.url) ? (
+                    <iframe
+                      key={activeWebsite.id + iframeKey + previewDevice}
+                      src={activeWebsite.url}
+                      title={activeWebsite.title}
+                      className="w-full h-full border-none bg-[#0a0a0c] block"
+                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                      allow="autoplay; fullscreen; xr-spatial-tracking"
                     />
-                  </div>
+                  ) : (
+                    <div className="w-full flex-1 overflow-y-auto overflow-x-hidden bg-[#050608] scrollbar-thin scrollbar-thumb-zinc-700 relative">
+                      <img
+                        src={activeWebsite.previewImage || '/previews/preview-blacklane.png'}
+                        alt={activeWebsite.title}
+                        className="w-full h-auto object-top block select-none pointer-events-auto"
+                        loading="eager"
+                      />
+                      {!canEmbedInWindow(activeWebsite.url) && (
+                        <div className="sticky bottom-4 left-0 right-0 max-w-sm mx-auto p-3 rounded-2xl bg-black/85 backdrop-blur-md border border-white/20 text-center shadow-2xl flex items-center justify-between gap-3">
+                          <div className="text-left">
+                            <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
+                              Live Client Deployment
+                            </div>
+                            <div className="text-xs font-bold text-white truncate max-w-[170px]">
+                              {activeWebsite.title}
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => launchProtectedReference(activeWebsite.url)}
+                            className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-lg transition-all cursor-pointer"
+                          >
+                            <ExternalLink size={12} />
+                            <span>Launch Live</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 

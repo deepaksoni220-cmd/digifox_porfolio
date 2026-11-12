@@ -188,7 +188,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     category: 'Fashion',
     description: 'Basics label showcase featuring turning tees and sweats on a spatial rail with fluid hover dynamics and WebGL rendering.',
     tags: ['Fashion', 'Apparel', '3D Spatial', 'WebGL', 'Basics'],
-    previewImage: '/previews/preview-spatial_apparels.png',
+    previewImage: '/previews/preview-teasel_spatial.png',
     statusBadge: 'Fashion 3D'
   },
   {
@@ -198,7 +198,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     category: '3D Animated Websites',
     description: 'Premier design studio website for brands and places with fluid Three.js motion, cinematic scroll storytelling, and WebGL2 experiences.',
     tags: ['Agency', 'Studio', 'Three.js', 'WebGL2', 'Motion Design'],
-    previewImage: '/previews/preview-gsap.png',
+    previewImage: '/previews/preview-spool_agency.png',
     statusBadge: 'Agency 3D'
   },
   {
@@ -415,7 +415,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   }
 ];
 
-const STORAGE_KEY = 'digifox_demo_websites_v12';
+const STORAGE_KEY = 'digifox_demo_websites_v13';
 
 export const DemoWebsitesPage: React.FC = () => {
   const [websites, setWebsites] = useState<DemoWebsite[]>(() => {
@@ -433,6 +433,7 @@ export const DemoWebsitesPage: React.FC = () => {
       localStorage.removeItem('digifox_demo_websites_v9');
       localStorage.removeItem('digifox_demo_websites_v10');
       localStorage.removeItem('digifox_demo_websites_v11');
+      localStorage.removeItem('digifox_demo_websites_v12');
 
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {

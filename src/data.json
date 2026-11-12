@@ -142,7 +142,7 @@
     {
       "title": "Spatial Apparels",
       "category": "Fashion",
-      "url": "/showcase/ref_spatial_apparels",
+      "url": "/templates/spatial/index.html",
       "image": "/previews/preview-spatial_apparels.png"
     },
     {

@@ -44,6 +44,7 @@ export const getWhiteLabelTitle = (site: DemoWebsite): string => {
     'digifox-spatial-teasel': 'Interactive Botanical Basics & Apparel Rail',
     'digifox-spatial-spool': 'Cinematic Kinetic Motion Design Agency',
     'digifox-spatial-descent': 'Ultra-Luxury Coupé Automotive Experience',
+    'digifox-spatial-thumbstop': 'High-Impact Vertical Ads & Media Agency',
     'digifox-aurelle-jewelry': 'Bespoke 3D Diamond & Luxury Jewelry Store',
     'digifox-samarth-cactus': 'Rare Botanical & Plant Nursery E-Commerce',
     'digifox-lotus-gold': 'FMCG Superfood Brand & Distribution Portal',
@@ -91,6 +92,7 @@ export const getWhiteLabelDescription = (site: DemoWebsite): string => {
     'digifox-spatial-teasel': 'Basics label showcase featuring turning tees and sweats on a spatial rail with fluid hover dynamics and WebGL rendering.',
     'digifox-spatial-spool': 'Premier design studio website for brands and places with fluid Three.js motion, cinematic scroll storytelling, and WebGL2 experiences.',
     'digifox-spatial-descent': 'Ultra-luxury two-seat coupé reveal platform with fluid paint customizer, real-time finance calculator, and test drive booking.',
+    'digifox-spatial-thumbstop': 'Short-form vertical video advertising and creative production studio showcasing interactive five-color worlds.',
     'digifox-aurelle-jewelry': 'High-jewelry 3D web platform featuring real-time diamond refraction, dark editorial aesthetic, and interactive ring customizer.',
     'digifox-samarth-cactus': 'High-conversion botanical e-commerce nursery storefront with live catalog synchronization, rare succulent listings, and express checkout.',
     'digifox-lotus-gold': 'FMCG brand portal with dynamic product presentation, nutrition storytelling, distribution inquiry funnel, and wholesale ordering.',
@@ -115,6 +117,7 @@ export const getWhiteLabelShortChip = (site: DemoWebsite): string => {
     'digifox-spatial-teasel': 'Teasel 3D',
     'digifox-spatial-spool': 'Spool Agency',
     'digifox-spatial-descent': 'Automotive 3D',
+    'digifox-spatial-thumbstop': 'Vertical Ads',
     'digifox-aurelle-jewelry': 'Diamond 3D',
     'digifox-samarth-cactus': 'Botanical',
     'digifox-lotus-gold': 'FMCG Food',
@@ -146,6 +149,7 @@ export const getFrameSimulatedUrl = (site: DemoWebsite): string => {
     'digifox-spatial-teasel': 'fashion-3d/teasel-rail',
     'digifox-spatial-spool': 'agency/spool-motion-design',
     'digifox-spatial-descent': 'automotive/coupe-experience',
+    'digifox-spatial-thumbstop': 'agency/vertical-ads-studio',
     'digifox-aurelle-jewelry': 'luxury-jewelry/diamond-customizer',
     'digifox-samarth-cactus': 'botanical-nursery/rare-catalog',
     'digifox-lotus-gold': 'fmcg-brand/food-distribution',
@@ -214,6 +218,16 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     tags: ['Automotive', 'Luxury Coupé', 'WebGL', 'Configurator', 'High-End'],
     previewImage: '/previews/preview-the_descent.png',
     statusBadge: 'Automotive 3D'
+  },
+  {
+    id: 'digifox-spatial-thumbstop',
+    title: 'High-Impact Vertical Ads & Media Agency',
+    url: '/showcase/ref_thumbstop',
+    category: 'Agency & Studio',
+    description: 'Short-form vertical video advertising and creative production studio showcasing interactive five-color worlds.',
+    tags: ['Agency', 'Vertical Ads', 'Commercial Media', 'Motion', 'Video Production'],
+    previewImage: '/previews/preview-thumbstop.png',
+    statusBadge: 'Agency 3D'
   },
   {
     id: 'digifox-aurelle-jewelry',
@@ -429,7 +443,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   }
 ];
 
-const STORAGE_KEY = 'digifox_demo_websites_v15';
+const STORAGE_KEY = 'digifox_demo_websites_v16';
 
 export const DemoWebsitesPage: React.FC = () => {
   const [websites, setWebsites] = useState<DemoWebsite[]>(() => {
@@ -450,6 +464,7 @@ export const DemoWebsitesPage: React.FC = () => {
       localStorage.removeItem('digifox_demo_websites_v12');
       localStorage.removeItem('digifox_demo_websites_v13');
       localStorage.removeItem('digifox_demo_websites_v14');
+      localStorage.removeItem('digifox_demo_websites_v15');
 
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {

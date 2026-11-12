@@ -85,6 +85,75 @@ function localDevApiPlugin() {
           });
           return;
         }
+
+        if (req.url?.startsWith('/api/embed-frame')) {
+          try {
+            const urlObj = new URL(req.url, 'http://localhost');
+            const token = urlObj.searchParams.get('token');
+            const CIPHER_SALT = 'DF_REF_SEC_V5_SALT_98472';
+            const PROTECTED_REGISTRY: Record<string, string> = {
+              ref_spatial_apparels: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdLy8rIWo1LzIxKj46GC0yKCB7O1xVWw',
+              ref_aurelle_jewelry: 'LDIrIjZ8cHwhKjg_UzArbCYxKFxURk5BMCktN2swOiEmJjN4VC8jbg',
+              ref_agency_coaches: 'LDIrIjZ8cHwhKjg_UzArbCgxMlYVQRlEITQ8NyloPiM1bA',
+              ref_online_store_3d: 'LDIrIjZ8cHwhKjg_UzArdCg7MVVRWlIcMiMtMSAqcTI1M3A',
+              ref_backend_fullstack: 'LDIrIjZ8cHwhKjg_UzArbD8gMEtdUFJfK2s4Iyw3cSUgMTwzWXEyMTx7',
+              ref_3d_portfolio: 'LDIrIjZ8cHwhKjg_UzArbDw7LV9XWF5dajA6ICYjM30kMy95',
+              ref_3d_onlinestore: 'LDIrIjZ8cHwhKjg_UzArbCM6M1BWUURGKzQ6fDMjLTAgL3E3RS98',
+              ref_samarth_cactus: 'LDIrIjZ8cHwyNCh4Rj4-ID4gN1pZV0NHNygqIDYjLSprIDA7Gg',
+              ref_lotus_gold: 'LDIrIjZ8cHwyNCh4WTAnND8zMFVcGl5caw',
+              ref_property_realestate: 'LDIrIjZ8cHw3OSt4USg4byEtPVVNUV9dNzJxPyBpKDYnMDYiUABmIi5iPFwPVxg',
+              ref_ninety_degree: 'LDIrIjZ8cHwyNCh4WzY9JDgtO1xfRlJXaiUwP2o',
+              ref_abacus_master: 'LDIrIjZ8cHwyNCh4VD0yIjknMlhLQFJAJycxMyEncTAqLnA',
+              ref_digifox_world: 'LDIrIjZ8cHwyNCh4UTY0KCo7JxdPW0VeIGk',
+              ref_rukmi_jewellery: 'LDIrIjZ8cHwyNCh4Ryo4LCV6NlcX',
+            };
+
+            const cipher = token ? PROTECTED_REGISTRY[token] : null;
+            if (!cipher) {
+              res.statusCode = 404;
+              return res.end('Reference not found');
+            }
+
+            let base64 = cipher.replace(/-/g, '+').replace(/_/g, '/');
+            while (base64.length % 4) base64 += '=';
+            const decoded = Buffer.from(base64, 'base64').toString('binary');
+            let targetUrl = '';
+            for (let i = 0; i < decoded.length; i++) {
+              targetUrl += String.fromCharCode(decoded.charCodeAt(i) ^ CIPHER_SALT.charCodeAt(i % CIPHER_SALT.length));
+            }
+
+            const targetResp = await fetch(targetUrl, {
+              headers: {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+              },
+              redirect: 'follow'
+            });
+
+            let html = await targetResp.text();
+            const targetParsed = new URL(targetResp.url || targetUrl);
+            const baseHref = `${targetParsed.origin}${targetParsed.pathname.endsWith('/') ? targetParsed.pathname : targetParsed.pathname + '/'}`;
+            const baseTag = `<base href="${baseHref}">`;
+
+            if (html.includes('<head>')) {
+              html = html.replace('<head>', `<head>\n  ${baseTag}`);
+            } else if (html.includes('<head ')) {
+              html = html.replace(/<head[^>]*>/, `$& \n  ${baseTag}`);
+            } else {
+              html = `${baseTag}\n${html}`;
+            }
+
+            html = html.replace(/<meta[^>]*http-equiv=["']?(?:content-security-policy|x-frame-options)["']?[^>]*>/gi, '');
+
+            res.setHeader('Content-Type', 'text/html; charset=utf-8');
+            res.removeHeader('X-Frame-Options');
+            res.removeHeader('Content-Security-Policy');
+            return res.end(html);
+          } catch (err: any) {
+            res.statusCode = 502;
+            return res.end(`Failed to proxy frame: ${err.message}`);
+          }
+        }
         next();
       });
     }

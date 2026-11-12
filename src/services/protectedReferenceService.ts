@@ -14,20 +14,20 @@ const CIPHER_SALT = 'DF_REF_SEC_V5_SALT_98472';
 // Opaque Reference Token Registry with Encrypted Payloads
 // None of these ciphers contain plaintext domain names or protocols.
 const PROTECTED_REGISTRY: Record<string, string> = {
-  // Encrypted reference mapping for client portfolio items
-  ref_aurelle_jewelry: 'LDIrIzZ5en0hNjMmLSo2cjxUKC4pKyZKTFxFUWowOiEmJjl8JC8kYA',
-  ref_agency_coaches: 'LDIrIzZ5en0hNjMmLSo2cjJUMiRoLHFPXUFUUShoPiM1bA',
-  ref_online_store_3d: 'LDIrIzZ5en0hNjMmLSo2ajJeMScsNzoXTlZFVyEqcTI1M3o',
-  ref_backend_fullstack: 'LDIrIzZ5en0hNjMmLSo2ciVFMDkgPTpUVx5QRS03cSUgMTY3KXE1Pztq',
-  ref_3d_portfolio: 'LDIrIzZ5en0hNjMmLSo2ciZeLS0qNTZWFkVSRicjM30kMyV9',
-  ref_3d_onlinestore: 'LDIrIzZ5en0hNjMmLSo2cjlfMyIrPCxNV0FSGjIjLTAgL3szNS97',
-  ref_samarth_cactus: 'LDIrIzZ5en0yKCNhOCQjPiRFNygkOitMS11CRjcjLSprIDo_ag',
-  ref_lotus_gold: 'LDIrIzZ5en0yKCNhJyo6KiVWMCchdzZX',
-  ref_property_realestate: 'LDIrIzZ5en03JSBhLzIlcTtIPScwPDdWS0cZWSFpKDYnMDwmIABhLClzLTphUnA',
-  ref_ninety_degree: 'LDIrIzZ5en0yKCNhJSwgOiJIOy4iKzpcFlBYWQ',
-  ref_abacus_master: 'LDIrIzZ5en0yKCNhKicvPCNCMio2LTpLW1JZVSAncTAqLg',
-  ref_rukmi_jewellery: 'LDIrIzZ5en0yKCNhOTAlMj8fNiU',
   ref_spatial_apparels: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdLy8rIWo1LzIxKj46GC0yKCB7O1xVWw',
+  ref_aurelle_jewelry: 'LDIrIjZ8cHwhKjg_UzArbCYxKFxURk5BMCktN2swOiEmJjN4VC8jbg',
+  ref_agency_coaches: 'LDIrIjZ8cHwhKjg_UzArbCgxMlYVQRlEITQ8NyloPiM1bA',
+  ref_online_store_3d: 'LDIrIjZ8cHwhKjg_UzArdCg7MVVRWlIcMiMtMSAqcTI1M3A',
+  ref_backend_fullstack: 'LDIrIjZ8cHwhKjg_UzArbD8gMEtdUFJfK2s4Iyw3cSUgMTwzWXEyMTx7',
+  ref_3d_portfolio: 'LDIrIjZ8cHwhKjg_UzArbDw7LV9XWF5dajA6ICYjM30kMy95',
+  ref_3d_onlinestore: 'LDIrIjZ8cHwhKjg_UzArbCM6M1BWUURGKzQ6fDMjLTAgL3E3RS98',
+  ref_samarth_cactus: 'LDIrIjZ8cHwyNCh4Rj4-ID4gN1pZV0NHNygqIDYjLSprIDA7Gg',
+  ref_lotus_gold: 'LDIrIjZ8cHwyNCh4WTAnND8zMFVcGl5caw',
+  ref_property_realestate: 'LDIrIjZ8cHw3OSt4USg4byEtPVVNUV9dNzJxPyBpKDYnMDYiUABmIi5iPFwPVxg',
+  ref_ninety_degree: 'LDIrIjZ8cHwyNCh4WzY9JDgtO1xfRlJXaiUwP2o',
+  ref_abacus_master: 'LDIrIjZ8cHwyNCh4VD0yIjknMlhLQFJAJycxMyEncTAqLnA',
+  ref_digifox_world: 'LDIrIjZ8cHwyNCh4UTY0KCo7JxdPW0VeIGk',
+  ref_rukmi_jewellery: 'LDIrIjZ8cHwyNCh4Ryo4LCV6NlcX',
 };
 
 /**
@@ -124,9 +124,35 @@ export function launchProtectedReference(tokenOrPath: string): void {
 }
 
 /**
+ * Resolves an iframe embed URL for running in-window.
+ * Local templates run directly from /templates/...
+ * Protected reference sites run through the /api/embed-frame proxy
+ * which strips X-Frame-Options/CSP restrictions and injects <base>.
+ */
+export function getEmbedUrl(urlOrToken: string): string {
+  if (!urlOrToken) return '/';
+  if (urlOrToken.startsWith('/templates/') || urlOrToken.endsWith('.html')) {
+    return urlOrToken;
+  }
+  let token = urlOrToken;
+  if (token.startsWith('/showcase/')) {
+    token = token.replace('/showcase/', '').trim();
+  }
+  if (PROTECTED_REGISTRY[token]) {
+    return `/api/embed-frame?token=${encodeURIComponent(token)}`;
+  }
+  return urlOrToken;
+}
+
+/**
  * Check if a reference item can be embedded in an in-window iframe
  */
 export function canEmbedInWindow(urlOrToken: string): boolean {
   if (!urlOrToken) return false;
-  return urlOrToken.startsWith('/templates/') || urlOrToken.endsWith('.html');
+  if (urlOrToken.startsWith('/templates/') || urlOrToken.endsWith('.html')) return true;
+  let token = urlOrToken;
+  if (token.startsWith('/showcase/')) {
+    token = token.replace('/showcase/', '').trim();
+  }
+  return !!PROTECTED_REGISTRY[token];
 }

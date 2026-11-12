@@ -18,13 +18,12 @@ import {
   Minimize2,
   LayoutGrid,
   Play,
-  Eye,
-  ExternalLink
+  Eye
 } from 'lucide-react';
 import { SEOMeta } from '../components/SEOMeta';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { PageFooter } from '../components/PageFooter';
-import { canEmbedInWindow, launchProtectedReference } from '../services/protectedReferenceService';
+import { canEmbedInWindow, getEmbedUrl } from '../services/protectedReferenceService';
 
 export interface DemoWebsite {
   id: string;
@@ -763,10 +762,9 @@ export const DemoWebsitesPage: React.FC = () => {
                   {displayMode === 'live' && canEmbedInWindow(activeWebsite.url) ? (
                     <iframe
                       key={activeWebsite.id + iframeKey + previewDevice}
-                      src={activeWebsite.url}
+                      src={getEmbedUrl(activeWebsite.url)}
                       title={activeWebsite.title}
                       className="w-full h-full border-none bg-[#0a0a0c] block"
-                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
                       allow="autoplay; fullscreen; xr-spatial-tracking"
                     />
                   ) : (
@@ -777,26 +775,6 @@ export const DemoWebsitesPage: React.FC = () => {
                         className="w-full h-auto object-top block select-none pointer-events-auto"
                         loading="eager"
                       />
-                      {!canEmbedInWindow(activeWebsite.url) && (
-                        <div className="sticky bottom-4 left-0 right-0 max-w-sm mx-auto p-3 rounded-2xl bg-black/85 backdrop-blur-md border border-white/20 text-center shadow-2xl flex items-center justify-between gap-3">
-                          <div className="text-left">
-                            <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
-                              Live Client Deployment
-                            </div>
-                            <div className="text-xs font-bold text-white truncate max-w-[170px]">
-                              {activeWebsite.title}
-                            </div>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => launchProtectedReference(activeWebsite.url)}
-                            className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-lg transition-all cursor-pointer"
-                          >
-                            <ExternalLink size={12} />
-                            <span>Launch Live</span>
-                          </button>
-                        </div>
-                      )}
                     </div>
                   )}
                 </div>
@@ -1213,10 +1191,9 @@ export const DemoWebsitesPage: React.FC = () => {
                   {displayMode === 'live' && canEmbedInWindow(activeWebsite.url) ? (
                     <iframe
                       key={activeWebsite.id + iframeKey + previewDevice}
-                      src={activeWebsite.url}
+                      src={getEmbedUrl(activeWebsite.url)}
                       title={activeWebsite.title}
                       className="w-full h-full border-none bg-[#0a0a0c] block"
-                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
                       allow="autoplay; fullscreen; xr-spatial-tracking"
                     />
                   ) : (
@@ -1227,26 +1204,6 @@ export const DemoWebsitesPage: React.FC = () => {
                         className="w-full h-auto object-top block select-none pointer-events-auto"
                         loading="eager"
                       />
-                      {!canEmbedInWindow(activeWebsite.url) && (
-                        <div className="sticky bottom-4 left-0 right-0 max-w-sm mx-auto p-3 rounded-2xl bg-black/85 backdrop-blur-md border border-white/20 text-center shadow-2xl flex items-center justify-between gap-3">
-                          <div className="text-left">
-                            <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
-                              Live Client Deployment
-                            </div>
-                            <div className="text-xs font-bold text-white truncate max-w-[170px]">
-                              {activeWebsite.title}
-                            </div>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => launchProtectedReference(activeWebsite.url)}
-                            className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-lg transition-all cursor-pointer"
-                          >
-                            <ExternalLink size={12} />
-                            <span>Launch Live</span>
-                          </button>
-                        </div>
-                      )}
                     </div>
                   )}
                 </div>

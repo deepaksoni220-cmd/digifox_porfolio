@@ -113,7 +113,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     category: 'Creative & Agency',
     description: 'High-performance interactive web experience showcasing smooth GSAP scroll animations, parallax layers, and micro-interactions.',
     tags: ['GSAP 3', 'Kinetic Typography', 'Scroll Trigger', 'Animations'],
-    previewImage: '/image-1783079897625-656293953.png',
+    previewImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop',
     statusBadge: 'Motion Studio'
   },
   {
@@ -128,7 +128,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   }
 ];
 
-const STORAGE_KEY = 'digifox_demo_websites_v4';
+const STORAGE_KEY = 'digifox_demo_websites_v5';
 
 export const DemoWebsitesPage: React.FC = () => {
   const [websites, setWebsites] = useState<DemoWebsite[]>(() => {
@@ -138,6 +138,7 @@ export const DemoWebsitesPage: React.FC = () => {
       localStorage.removeItem('digifox_custom_demo_websites');
       localStorage.removeItem('digifox_demo_websites_v2');
       localStorage.removeItem('digifox_demo_websites_v3');
+      localStorage.removeItem('digifox_demo_websites_v4');
 
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
@@ -307,6 +308,7 @@ export const DemoWebsitesPage: React.FC = () => {
         localStorage.removeItem('digifox_custom_demo_websites');
         localStorage.removeItem('digifox_demo_websites_v2');
         localStorage.removeItem('digifox_demo_websites_v3');
+        localStorage.removeItem('digifox_demo_websites_v4');
       } catch {
         // ignore
       }
@@ -802,20 +804,8 @@ export const DemoWebsitesPage: React.FC = () => {
                       </span>
                     </div>
 
-                    {/* In-Window Hover Overlay */}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-xs p-4">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleOpenInWindow(site, true);
-                        }}
-                        className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-xl hover:scale-105 transition-transform cursor-pointer"
-                      >
-                        <Monitor size={15} />
-                        <span>Display in Window</span>
-                      </button>
-                    </div>
+                    {/* Hover Glow Effect */}
+                    <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                   </div>
 
                   {/* Card Content (Zero Technical URLs displayed) */}

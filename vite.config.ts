@@ -99,6 +99,7 @@ function localDevApiPlugin() {
               ref_thumbstop: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCctNjI0Ris8MWM9MV1dTBlaMCsz',
               ref_spatial_flight: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cDUpKjg-QXA6LygxJxdQQFpe',
               ref_spatial_sip: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCA1Iis_VDN-MiUkcFBWUFJKai4rPyk',
+              ref_long_way_round: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cD8qLTh7Qj4qbD47KldcG15cICMnfC0yMj8',
               ref_aurelle_jewelry: 'LDIrIjZ8cHwhKjg_UzArbCYxKFxURk5BMCktN2swOiEmJjN4VC8jbg',
               ref_agency_coaches: 'LDIrIjZ8cHwhKjg_UzArbCgxMlYVQRlEITQ8NyloPiM1bA',
               ref_online_store_3d: 'LDIrIjZ8cHwhKjg_UzArdCg7MVVRWlIcMiMtMSAqcTI1M3A',
@@ -144,6 +145,8 @@ function localDevApiPlugin() {
               refererHeader = 'https://spatialsites.co/kits/flight/demo';
             } else if (token === 'ref_spatial_sip') {
               refererHeader = 'https://spatialsites.co/kits/spatial-sip/demo';
+            } else if (token === 'ref_long_way_round') {
+              refererHeader = 'https://spatialsites.co/kits/long-way-round/demo';
             }
 
             const targetResp = await fetch(targetUrl, {
@@ -174,6 +177,8 @@ function localDevApiPlugin() {
               baseHref = '/api/proxy-site/flight/';
             } else if (token === 'ref_spatial_sip') {
               baseHref = '/api/proxy-site/spatial-sip/';
+            } else if (token === 'ref_long_way_round') {
+              baseHref = '/api/proxy-site/long-way-round/';
             } else {
               baseHref = `${respParsed.origin}${respParsed.pathname.endsWith('/') ? respParsed.pathname : respParsed.pathname + '/'}`;
             }
@@ -195,7 +200,7 @@ function localDevApiPlugin() {
             //     We keep all the server-rendered HTML (SSR) intact — it already contains
             //     the fully-rendered visible page content.  Only the hydration bootstrap
             //     scripts are removed so the page displays as a rich static snapshot. ────
-            const isSpatialSite = token === 'ref_spatial_apparels' || token === 'ref_teasel_spatial' || token === 'ref_spool_agency' || token === 'ref_the_descent' || token === 'ref_thumbstop' || token === 'ref_spatial_flight' || token === 'ref_spatial_sip';
+            const isSpatialSite = token === 'ref_spatial_apparels' || token === 'ref_teasel_spatial' || token === 'ref_spool_agency' || token === 'ref_the_descent' || token === 'ref_thumbstop' || token === 'ref_spatial_flight' || token === 'ref_spatial_sip' || token === 'ref_long_way_round';
             const isNextJs = html.includes('__next') || html.includes('_next/') || html.includes('__NEXT_DATA__');
             if (isNextJs && !isSpatialSite) {
               // Remove <script> tags that bootstrap Next.js client router / RSC
@@ -243,6 +248,8 @@ function localDevApiPlugin() {
               kit = 'flight';
             } else if (rawPath.startsWith('spatial-sip/')) {
               kit = 'spatial-sip';
+            } else if (rawPath.startsWith('long-way-round/')) {
+              kit = 'long-way-round';
             }
 
             let dest = 'empty';

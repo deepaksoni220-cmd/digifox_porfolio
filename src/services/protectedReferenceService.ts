@@ -21,6 +21,7 @@ const PROTECTED_REGISTRY: Record<string, string> = {
   ref_thumbstop: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCctNjI0Ris8MWM9MV1dTBlaMCsz',
   ref_spatial_flight: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cDUpKjg-QXA6LygxJxdQQFpe',
   ref_spatial_sip: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cCA1Iis_VDN-MiUkcFBWUFJKai4rPyk',
+  ref_long_way_round: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdGzU2JiA1cD8qLTh7Qj4qbD47KldcG15cICMnfC0yMj8',
   ref_aurelle_jewelry: 'LDIrIjZ8cHwhKjg_UzArbCYxKFxURk5BMCktN2swOiEmJjN4VC8jbg',
   ref_agency_coaches: 'LDIrIjZ8cHwhKjg_UzArbCgxMlYVQRlEITQ8NyloPiM1bA',
   ref_online_store_3d: 'LDIrIjZ8cHwhKjg_UzArdCg7MVVRWlIcMiMtMSAqcTI1M3A',

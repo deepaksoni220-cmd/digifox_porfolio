@@ -47,6 +47,7 @@ export const getWhiteLabelTitle = (site: DemoWebsite): string => {
     'digifox-spatial-thumbstop': 'High-Impact Vertical Ads & Media Agency',
     'digifox-spatial-flight': 'Artisanal Vineyard & Wine Flight Experience',
     'digifox-spatial-sip': 'Interactive 3D Beverage & Can Configurator',
+    'digifox-spatial-longway': '3D Concept Store Room-by-Room Walkthrough',
     'digifox-aurelle-jewelry': 'Bespoke 3D Diamond & Luxury Jewelry Store',
     'digifox-samarth-cactus': 'Rare Botanical & Plant Nursery E-Commerce',
     'digifox-lotus-gold': 'FMCG Superfood Brand & Distribution Portal',
@@ -97,6 +98,7 @@ export const getWhiteLabelDescription = (site: DemoWebsite): string => {
     'digifox-spatial-thumbstop': 'Short-form vertical video advertising and creative production studio showcasing interactive five-color worlds.',
     'digifox-spatial-flight': 'Artisanal wine brand showcase with interactive 3D bottle wheel, label inspection, and reserve flight tasting.',
     'digifox-spatial-sip': 'Interactive 3D beverage can showcase featuring real-time physical lighting, 360-degree rotation, and dynamic flavor reveals.',
+    'digifox-spatial-longway': 'Interactive concept store experience allowing visitors to walk through boutique rooms room by room with realtime 3D spatial transitions.',
     'digifox-aurelle-jewelry': 'High-jewelry 3D web platform featuring real-time diamond refraction, dark editorial aesthetic, and interactive ring customizer.',
     'digifox-samarth-cactus': 'High-conversion botanical e-commerce nursery storefront with live catalog synchronization, rare succulent listings, and express checkout.',
     'digifox-lotus-gold': 'FMCG brand portal with dynamic product presentation, nutrition storytelling, distribution inquiry funnel, and wholesale ordering.',
@@ -124,6 +126,7 @@ export const getWhiteLabelShortChip = (site: DemoWebsite): string => {
     'digifox-spatial-thumbstop': 'Vertical Ads',
     'digifox-spatial-flight': 'Wine Flight 3D',
     'digifox-spatial-sip': 'Beverage 3D',
+    'digifox-spatial-longway': 'Concept Store 3D',
     'digifox-aurelle-jewelry': 'Diamond 3D',
     'digifox-samarth-cactus': 'Botanical',
     'digifox-lotus-gold': 'FMCG Food',
@@ -158,6 +161,7 @@ export const getFrameSimulatedUrl = (site: DemoWebsite): string => {
     'digifox-spatial-thumbstop': 'agency/vertical-ads-studio',
     'digifox-spatial-flight': 'food-beverage/wine-flight',
     'digifox-spatial-sip': 'food-beverage/spatial-sip',
+    'digifox-spatial-longway': 'concept-store/spatial-rooms',
     'digifox-aurelle-jewelry': 'luxury-jewelry/diamond-customizer',
     'digifox-samarth-cactus': 'botanical-nursery/rare-catalog',
     'digifox-lotus-gold': 'fmcg-brand/food-distribution',
@@ -256,6 +260,16 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     tags: ['Beverage', 'Can Configurator', '3D WebGL', 'Packaging', 'Three.js'],
     previewImage: '/previews/preview-spatial_sip.png',
     statusBadge: 'Beverage 3D'
+  },
+  {
+    id: 'digifox-spatial-longway',
+    title: '3D Concept Store Room-by-Room Walkthrough',
+    url: '/showcase/ref_long_way_round',
+    category: 'E-Commerce & Retail',
+    description: 'Interactive concept store experience allowing visitors to walk through boutique rooms room by room with realtime 3D spatial transitions.',
+    tags: ['Concept Store', 'Room Walkthrough', '3D Spatial', 'Retail Experience', 'WebGL'],
+    previewImage: '/previews/preview-long_way_round.png',
+    statusBadge: 'Concept Store 3D'
   },
   {
     id: 'digifox-aurelle-jewelry',
@@ -471,7 +485,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   }
 ];
 
-const STORAGE_KEY = 'digifox_demo_websites_v18';
+const STORAGE_KEY = 'digifox_demo_websites_v19';
 
 export const DemoWebsitesPage: React.FC = () => {
   const [websites, setWebsites] = useState<DemoWebsite[]>(() => {
@@ -495,6 +509,7 @@ export const DemoWebsitesPage: React.FC = () => {
       localStorage.removeItem('digifox_demo_websites_v15');
       localStorage.removeItem('digifox_demo_websites_v16');
       localStorage.removeItem('digifox_demo_websites_v17');
+      localStorage.removeItem('digifox_demo_websites_v18');
 
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {

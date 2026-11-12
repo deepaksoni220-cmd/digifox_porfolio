@@ -41,6 +41,16 @@ export interface DemoWebsite {
 const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   // ─── DIGIFOX CLIENT & PRODUCTION WEBSITES ─────────────────────────────────
   {
+    id: 'digifox-spatial-apparels',
+    title: 'Spatial Apparels - 3D Fashion Rail',
+    url: '/showcase/ref_spatial_apparels',
+    category: 'Fashion',
+    description: 'Spatial 3D fashion rail and apparel experience featuring interactive wardrobe physics, smooth curve rail navigation, and luxury product storytelling.',
+    tags: ['Fashion', 'Apparel', '3D Spatial', 'Interactive WebGL', 'Luxury'],
+    previewImage: '/previews/preview-spatial_apparels.png',
+    statusBadge: 'Fashion 3D'
+  },
+  {
     id: 'digifox-aurelle-jewelry',
     title: 'Aurelle Luxury Diamond & Jewelry 3D Store',
     url: '/showcase/ref_aurelle_jewelry',
@@ -254,7 +264,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   }
 ];
 
-const STORAGE_KEY = 'digifox_demo_websites_v7';
+const STORAGE_KEY = 'digifox_demo_websites_v8';
 
 export const DemoWebsitesPage: React.FC = () => {
   const [websites, setWebsites] = useState<DemoWebsite[]>(() => {
@@ -267,6 +277,7 @@ export const DemoWebsitesPage: React.FC = () => {
       localStorage.removeItem('digifox_demo_websites_v4');
       localStorage.removeItem('digifox_demo_websites_v5');
       localStorage.removeItem('digifox_demo_websites_v6');
+      localStorage.removeItem('digifox_demo_websites_v7');
 
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
@@ -437,6 +448,8 @@ export const DemoWebsitesPage: React.FC = () => {
         localStorage.removeItem('digifox_demo_websites_v4');
       localStorage.removeItem('digifox_demo_websites_v5');
       localStorage.removeItem('digifox_demo_websites_v6');
+      localStorage.removeItem('digifox_demo_websites_v7');
+      localStorage.removeItem('digifox_demo_websites_v8');
       } catch {
         // ignore
       }

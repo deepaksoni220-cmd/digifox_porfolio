@@ -27,6 +27,7 @@ const PROTECTED_REGISTRY: Record<string, string> = {
   ref_ninety_degree: 'LDIrIzZ5en0yKCNhJSwgOiJIOy4iKzpcFlBYWQ',
   ref_abacus_master: 'LDIrIzZ5en0yKCNhKicvPCNCMio2LTpLW1JZVSAncTAqLg',
   ref_rukmi_jewellery: 'LDIrIzZ5en0yKCNhOTAlMj8fNiU',
+  ref_spatial_apparels: 'LDIrIjZ8cHw2Mz4iXD4_MiUgOkoWV1gdLy8rIWo1LzIxKj46GC0yKCB7O1xVWw',
 };
 
 /**
@@ -98,6 +99,7 @@ export function maskReferenceUrl(urlOrToken?: string): string {
   if (urlOrToken.includes('/templates/digpro')) return '🔒 Live Design Portfolio';
   if (urlOrToken.includes('/templates/gsap')) return '🔒 Live Kinetic Studio';
   if (urlOrToken.includes('/templates/lesa')) return '🔒 Live Mobile Web App';
+  if (urlOrToken.includes('spatial_apparels')) return '🔒 Live Spatial Fashion Apparel';
 
   return '🔒 Verified Production Client';
 }

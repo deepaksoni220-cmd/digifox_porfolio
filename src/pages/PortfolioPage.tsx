@@ -28,6 +28,7 @@ import { launchProtectedReference, maskReferenceUrl } from '../services/protecte
 
 const CATEGORIES = [
   "All",
+  "Fashion",
   "3D Animated Website",
   "WordPress Website",
   "Shopify Website"
@@ -222,6 +223,8 @@ export const PortfolioPage: React.FC = () => {
 
   const getCategoryBadgeClass = (category: string) => {
     switch (category) {
+      case "Fashion":
+        return "bg-rose-500/10 text-rose-400 border-rose-500/30";
       case "3D Animated Website":
         return "bg-purple-500/10 text-purple-400 border-purple-500/30";
       case "Shopify Website":

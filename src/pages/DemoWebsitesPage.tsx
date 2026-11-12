@@ -322,6 +322,15 @@ export const DemoWebsitesPage: React.FC = () => {
     setIframeKey((k) => k + 1);
   };
 
+  const liveEmbedUrl = useMemo(() => {
+    const raw = getEmbedUrl(activeWebsite.url);
+    if (raw.includes('/api/embed-frame')) {
+      const sep = raw.includes('?') ? '&' : '?';
+      return `${raw}${sep}_k=${iframeKey}`;
+    }
+    return raw;
+  }, [activeWebsite.url, iframeKey]);
+
   // Add Demo Modal State
   const [showAddModal, setShowAddModal] = useState(false);
   const [newTitle, setNewTitle] = useState('');
@@ -764,7 +773,7 @@ export const DemoWebsitesPage: React.FC = () => {
                   {displayMode === 'live' && canEmbedInWindow(activeWebsite.url) ? (
                     <iframe
                       key={activeWebsite.id + iframeKey + previewDevice}
-                      src={getEmbedUrl(activeWebsite.url)}
+                      src={liveEmbedUrl}
                       title={activeWebsite.title}
                       className="w-full h-full border-none bg-[#0a0a0c] block"
                       allow="autoplay; fullscreen; xr-spatial-tracking"
@@ -1193,7 +1202,7 @@ export const DemoWebsitesPage: React.FC = () => {
                   {displayMode === 'live' && canEmbedInWindow(activeWebsite.url) ? (
                     <iframe
                       key={activeWebsite.id + iframeKey + previewDevice}
-                      src={getEmbedUrl(activeWebsite.url)}
+                      src={liveEmbedUrl}
                       title={activeWebsite.title}
                       className="w-full h-full border-none bg-[#0a0a0c] block"
                       allow="autoplay; fullscreen; xr-spatial-tracking"

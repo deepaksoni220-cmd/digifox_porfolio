@@ -122,11 +122,16 @@ function localDevApiPlugin() {
               targetUrl += String.fromCharCode(decoded.charCodeAt(i) ^ CIPHER_SALT.charCodeAt(i % CIPHER_SALT.length));
             }
 
+            const targetParsed = new URL(targetUrl);
+            const refererHeader = token === 'ref_spatial_apparels'
+              ? 'https://spatialsites.co/kits/spatial-rail/demo'
+              : targetParsed.origin;
+
             const targetResp = await fetch(targetUrl, {
               headers: {
                 'Sec-Fetch-Site': 'same-origin',
                 'Sec-Fetch-Dest': 'iframe',
-                'Referer': 'https://spatialsites.co/kits/spatial-rail/demo',
+                'Referer': refererHeader,
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
               },
@@ -138,8 +143,8 @@ function localDevApiPlugin() {
             if (token === 'ref_spatial_apparels') {
               baseHref = '/api/proxy-site/spatial-rail/';
             } else {
-              const targetParsed = new URL(targetResp.url || targetUrl);
-              baseHref = `${targetParsed.origin}${targetParsed.pathname.endsWith('/') ? targetParsed.pathname : targetParsed.pathname + '/'}`;
+              const respParsed = new URL(targetResp.url || targetUrl);
+              baseHref = `${respParsed.origin}${respParsed.pathname.endsWith('/') ? respParsed.pathname : respParsed.pathname + '/'}`;
             }
             const baseTag = `<base href="${baseHref}">`;
 
@@ -155,6 +160,9 @@ function localDevApiPlugin() {
             html = html.replace(/window\.top\s*===\s*window/g, 'false');
 
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
+            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
             res.removeHeader('X-Frame-Options');
             res.removeHeader('Content-Security-Policy');
             return res.end(html);

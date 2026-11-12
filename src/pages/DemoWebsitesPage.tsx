@@ -43,6 +43,7 @@ export const getWhiteLabelTitle = (site: DemoWebsite): string => {
     'digifox-spatial-apparels': '3D Interactive Fashion & Luxury Apparel',
     'digifox-spatial-teasel': 'Interactive Botanical Basics & Apparel Rail',
     'digifox-spatial-spool': 'Cinematic Kinetic Motion Design Agency',
+    'digifox-spatial-descent': 'Ultra-Luxury Coupé Automotive Experience',
     'digifox-aurelle-jewelry': 'Bespoke 3D Diamond & Luxury Jewelry Store',
     'digifox-samarth-cactus': 'Rare Botanical & Plant Nursery E-Commerce',
     'digifox-lotus-gold': 'FMCG Superfood Brand & Distribution Portal',
@@ -89,6 +90,7 @@ export const getWhiteLabelDescription = (site: DemoWebsite): string => {
     'digifox-spatial-apparels': 'Interactive 3D fashion rail and luxury apparel showcase featuring smooth curve navigation, wardrobe inspection, and realtime cloth physics.',
     'digifox-spatial-teasel': 'Basics label showcase featuring turning tees and sweats on a spatial rail with fluid hover dynamics and WebGL rendering.',
     'digifox-spatial-spool': 'Premier design studio website for brands and places with fluid Three.js motion, cinematic scroll storytelling, and WebGL2 experiences.',
+    'digifox-spatial-descent': 'Ultra-luxury two-seat coupé reveal platform with fluid paint customizer, real-time finance calculator, and test drive booking.',
     'digifox-aurelle-jewelry': 'High-jewelry 3D web platform featuring real-time diamond refraction, dark editorial aesthetic, and interactive ring customizer.',
     'digifox-samarth-cactus': 'High-conversion botanical e-commerce nursery storefront with live catalog synchronization, rare succulent listings, and express checkout.',
     'digifox-lotus-gold': 'FMCG brand portal with dynamic product presentation, nutrition storytelling, distribution inquiry funnel, and wholesale ordering.',
@@ -112,6 +114,7 @@ export const getWhiteLabelShortChip = (site: DemoWebsite): string => {
     'digifox-spatial-apparels': 'Fashion 3D',
     'digifox-spatial-teasel': 'Teasel 3D',
     'digifox-spatial-spool': 'Spool Agency',
+    'digifox-spatial-descent': 'Automotive 3D',
     'digifox-aurelle-jewelry': 'Diamond 3D',
     'digifox-samarth-cactus': 'Botanical',
     'digifox-lotus-gold': 'FMCG Food',
@@ -142,6 +145,7 @@ export const getFrameSimulatedUrl = (site: DemoWebsite): string => {
     'digifox-spatial-apparels': 'fashion-3d/interactive-rail',
     'digifox-spatial-teasel': 'fashion-3d/teasel-rail',
     'digifox-spatial-spool': 'agency/spool-motion-design',
+    'digifox-spatial-descent': 'automotive/coupe-experience',
     'digifox-aurelle-jewelry': 'luxury-jewelry/diamond-customizer',
     'digifox-samarth-cactus': 'botanical-nursery/rare-catalog',
     'digifox-lotus-gold': 'fmcg-brand/food-distribution',
@@ -200,6 +204,16 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
     tags: ['Agency', 'Studio', 'Three.js', 'WebGL2', 'Motion Design'],
     previewImage: '/previews/preview-spool_agency.png',
     statusBadge: 'Agency 3D'
+  },
+  {
+    id: 'digifox-spatial-descent',
+    title: 'Ultra-Luxury Coupé Automotive Experience',
+    url: '/showcase/ref_the_descent',
+    category: 'Automotive & Travel',
+    description: 'Ultra-luxury two-seat coupé reveal platform with fluid paint customizer, real-time finance calculator, and test drive booking.',
+    tags: ['Automotive', 'Luxury Coupé', 'WebGL', 'Configurator', 'High-End'],
+    previewImage: '/previews/preview-the_descent.png',
+    statusBadge: 'Automotive 3D'
   },
   {
     id: 'digifox-aurelle-jewelry',
@@ -415,7 +429,7 @@ const DEFAULT_DEMO_WEBSITES: DemoWebsite[] = [
   }
 ];
 
-const STORAGE_KEY = 'digifox_demo_websites_v14';
+const STORAGE_KEY = 'digifox_demo_websites_v15';
 
 export const DemoWebsitesPage: React.FC = () => {
   const [websites, setWebsites] = useState<DemoWebsite[]>(() => {
@@ -435,6 +449,7 @@ export const DemoWebsitesPage: React.FC = () => {
       localStorage.removeItem('digifox_demo_websites_v11');
       localStorage.removeItem('digifox_demo_websites_v12');
       localStorage.removeItem('digifox_demo_websites_v13');
+      localStorage.removeItem('digifox_demo_websites_v14');
 
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {

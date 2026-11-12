@@ -34,6 +34,7 @@ const TermsPage = lazy(() => import('./pages/TermsPage').then(m => ({ default: m
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage').then(m => ({ default: m.PrivacyPolicyPage })));
 const ContactUsPage = lazy(() => import('./pages/ContactUsPage').then(m => ({ default: m.ContactUsPage })));
 const PortfolioPage = lazy(() => import('./pages/PortfolioPage').then(m => ({ default: m.PortfolioPage })));
+const DemoWebsitesPage = lazy(() => import('./pages/DemoWebsitesPage').then(m => ({ default: m.DemoWebsitesPage })));
 const FeaturesPage = lazy(() => import('./pages/builder/FeaturesPage').then(m => ({ default: m.FeaturesPage })));
 const AutoSeoPage = lazy(() => import('./pages/builder/AutoSeoPage').then(m => ({ default: m.AutoSeoPage })));
 const SeoDashboardPage = lazy(() => import('./pages/builder/SeoDashboardPage').then(m => ({ default: m.SeoDashboardPage })));
@@ -159,6 +160,10 @@ function App() {
               <Route path="/our-work" element={<PortfolioPage />} />
               <Route path="/projects" element={<PortfolioPage />} />
               <Route path="/works" element={<PortfolioPage />} />
+              <Route path="/demo-websites" element={<DemoWebsitesPage />} />
+              <Route path="/demos" element={<DemoWebsitesPage />} />
+              <Route path="/demo-sites" element={<DemoWebsitesPage />} />
+              <Route path="/demo" element={<DemoWebsitesPage />} />
               <Route path="/admin" element={
                 <ProtectedPage>
                   <AdminPage />

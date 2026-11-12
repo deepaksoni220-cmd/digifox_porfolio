@@ -55,6 +55,10 @@ export const WebMakeFooter: React.FC = () => {
           {/* Col 4: Resources */}
           <div className="flex flex-col gap-3">
             <h4 className="text-xs font-black uppercase tracking-widest text-white/90 mb-1">Resources</h4>
+            <Link to="/demo-websites" className="text-xs text-white/60 hover:text-white transition-colors flex items-center gap-1.5">
+              <span>Demo Websites</span>
+              <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded uppercase bg-blue-500/20 text-blue-300 border border-blue-500/30">Live</span>
+            </Link>
             <Link to="/ai-builder/blogs" className="text-xs text-white/60 hover:text-white transition-colors">Blogs & Journal</Link>
             <Link to="/ai-builder/contact" className="text-xs text-white/60 hover:text-white transition-colors">Contact Support</Link>
           </div>

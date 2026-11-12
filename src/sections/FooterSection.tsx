@@ -61,6 +61,7 @@ export const FooterSection: React.FC = () => {
   const navLinks = [
     { name: "About", href: "/#about" },
     { name: "Portfolio", href: "/portfolio" },
+    { name: "Demo Websites", href: "/demo-websites" },
     { name: "Our Studio", href: "/#services" },
     { name: "Projects", href: "/#projects" },
     { name: "Basic vs Exclusive", href: "/basic_vs_exclusive" },
